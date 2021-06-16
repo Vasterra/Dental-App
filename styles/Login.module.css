@@ -1,0 +1,40 @@
+.login-image {
+    background-image: url(https://source.unsplash.com/random);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+.button-form {
+    background-color: #3f4b50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-transform: uppercase;
+}
+
+.button-form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0;
+}
+
+.input-form {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    margin: 10px;
+}
+
+.login-form-wrapper {
+    display: flex;
+    flex-direction: column;
+}

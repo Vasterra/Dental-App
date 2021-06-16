@@ -1,0 +1,45 @@
+.search-input {
+    width: 100%;
+    border: 0;
+    outline: none;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.search-panel-wrapper {
+    display: flex;
+    align-items: center;
+    flex-flow: wrap;
+    background: #FFFFFF 0 0 no-repeat padding-box;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.search-card-wrapper {
+    display: flex;
+    align-items: center;
+    flex-flow: wrap;
+    background: transparent;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.search-distance-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.search-card-block {
+    background: #FFFFFF 0 0 no-repeat padding-box;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    transition: 0.3s linear;
+    width: 300px;
+}
+
+.search-card-block:hover {
+    box-shadow: 0 0 10px rgb(73, 73, 73);
+}
