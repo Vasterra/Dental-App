@@ -1,37 +1,28 @@
 type Dentist
-@model @auth(rules: [{ allow: owner, operations: [create, delete, update] }]) {
+@model {
   id: ID!
-  firstName: String!
-  lastName: String!
-  phone: String!
-  qualifications: String!
-  bio: String!
-  website: String!
-  city: String!
-  street: String!
-  postIndex: String!
+  firstName: String
+  lastName: String
+  phone: String
+  qualifications: String
+  bio: String
+  website: String
+  city: String
+  street: String
+  postIndex: String
   email: String!
-  lat: String!
-  lng: String!
+  lat: String
+  lng: String
   registered: Boolean
   createAt: String
-  updatedAt: AWSDateTime!
-  services: [Services] @connection(name: "UserServices")
-  practices: [Practices] @connection(name: "UserPractices")
 }
 
-type Services @model @auth(rules: [{ allow: owner, operations: [create, delete, update] }]) {
+type Service @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   name: String!
-  updatedAt: AWSDateTime!
-  dentists: Dentist @connection(name: "UserServices")
-
 }
 
-type Practices @model @auth(rules: [{ allow: owner, operations: [create, delete, update] }]) {
+type Practice @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   name: String!
-  updatedAt: AWSDateTime!
-  dentists: Dentist @connection(name: "UserPractices")
-
 }

@@ -19,29 +19,8 @@ export const onCreateDentist = /* GraphQL */ `
       lng
       registered
       createAt
-      updatedAt
-      services {
-        items {
-          id
-          name
-          updatedAt
-          createdAt
-          owner
-        }
-        nextToken
-      }
-      practices {
-        items {
-          id
-          name
-          updatedAt
-          createdAt
-          owner
-        }
-        nextToken
-      }
       createdAt
-      owner
+      updatedAt
     }
   }
 `;
@@ -63,29 +42,8 @@ export const onUpdateDentist = /* GraphQL */ `
       lng
       registered
       createAt
-      updatedAt
-      services {
-        items {
-          id
-          name
-          updatedAt
-          createdAt
-          owner
-        }
-        nextToken
-      }
-      practices {
-        items {
-          id
-          name
-          updatedAt
-          createdAt
-          owner
-        }
-        nextToken
-      }
       createdAt
-      owner
+      updatedAt
     }
   }
 `;
@@ -107,250 +65,73 @@ export const onDeleteDentist = /* GraphQL */ `
       lng
       registered
       createAt
-      updatedAt
-      services {
-        items {
-          id
-          name
-          updatedAt
-          createdAt
-          owner
-        }
-        nextToken
-      }
-      practices {
-        items {
-          id
-          name
-          updatedAt
-          createdAt
-          owner
-        }
-        nextToken
-      }
       createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateService = /* GraphQL */ `
+  subscription OnCreateService($owner: String!) {
+    onCreateService(owner: $owner) {
+      id
+      name
+      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onCreateServices = /* GraphQL */ `
-  subscription OnCreateServices {
-    onCreateServices {
+export const onUpdateService = /* GraphQL */ `
+  subscription OnUpdateService($owner: String!) {
+    onUpdateService(owner: $owner) {
       id
       name
-      updatedAt
-      dentists {
-        id
-        firstName
-        lastName
-        phone
-        qualifications
-        bio
-        website
-        city
-        street
-        postIndex
-        email
-        lat
-        lng
-        registered
-        createAt
-        updatedAt
-        services {
-          nextToken
-        }
-        practices {
-          nextToken
-        }
-        createdAt
-        owner
-      }
       createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onUpdateServices = /* GraphQL */ `
-  subscription OnUpdateServices {
-    onUpdateServices {
+export const onDeleteService = /* GraphQL */ `
+  subscription OnDeleteService($owner: String!) {
+    onDeleteService(owner: $owner) {
       id
       name
-      updatedAt
-      dentists {
-        id
-        firstName
-        lastName
-        phone
-        qualifications
-        bio
-        website
-        city
-        street
-        postIndex
-        email
-        lat
-        lng
-        registered
-        createAt
-        updatedAt
-        services {
-          nextToken
-        }
-        practices {
-          nextToken
-        }
-        createdAt
-        owner
-      }
       createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onDeleteServices = /* GraphQL */ `
-  subscription OnDeleteServices {
-    onDeleteServices {
+export const onCreatePractice = /* GraphQL */ `
+  subscription OnCreatePractice($owner: String!) {
+    onCreatePractice(owner: $owner) {
       id
       name
-      updatedAt
-      dentists {
-        id
-        firstName
-        lastName
-        phone
-        qualifications
-        bio
-        website
-        city
-        street
-        postIndex
-        email
-        lat
-        lng
-        registered
-        createAt
-        updatedAt
-        services {
-          nextToken
-        }
-        practices {
-          nextToken
-        }
-        createdAt
-        owner
-      }
       createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onCreatePractices = /* GraphQL */ `
-  subscription OnCreatePractices {
-    onCreatePractices {
+export const onUpdatePractice = /* GraphQL */ `
+  subscription OnUpdatePractice($owner: String!) {
+    onUpdatePractice(owner: $owner) {
       id
       name
-      updatedAt
-      dentists {
-        id
-        firstName
-        lastName
-        phone
-        qualifications
-        bio
-        website
-        city
-        street
-        postIndex
-        email
-        lat
-        lng
-        registered
-        createAt
-        updatedAt
-        services {
-          nextToken
-        }
-        practices {
-          nextToken
-        }
-        createdAt
-        owner
-      }
       createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onUpdatePractices = /* GraphQL */ `
-  subscription OnUpdatePractices {
-    onUpdatePractices {
+export const onDeletePractice = /* GraphQL */ `
+  subscription OnDeletePractice($owner: String!) {
+    onDeletePractice(owner: $owner) {
       id
       name
-      updatedAt
-      dentists {
-        id
-        firstName
-        lastName
-        phone
-        qualifications
-        bio
-        website
-        city
-        street
-        postIndex
-        email
-        lat
-        lng
-        registered
-        createAt
-        updatedAt
-        services {
-          nextToken
-        }
-        practices {
-          nextToken
-        }
-        createdAt
-        owner
-      }
       createdAt
-      owner
-    }
-  }
-`;
-export const onDeletePractices = /* GraphQL */ `
-  subscription OnDeletePractices {
-    onDeletePractices {
-      id
-      name
       updatedAt
-      dentists {
-        id
-        firstName
-        lastName
-        phone
-        qualifications
-        bio
-        website
-        city
-        street
-        postIndex
-        email
-        lat
-        lng
-        registered
-        createAt
-        updatedAt
-        services {
-          nextToken
-        }
-        practices {
-          nextToken
-        }
-        createdAt
-        owner
-      }
-      createdAt
       owner
     }
   }

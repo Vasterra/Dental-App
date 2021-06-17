@@ -19,29 +19,8 @@ export const getDentist = /* GraphQL */ `
       lng
       registered
       createAt
-      updatedAt
-      services {
-        items {
-          id
-          name
-          updatedAt
-          createdAt
-          owner
-        }
-        nextToken
-      }
-      practices {
-        items {
-          id
-          name
-          updatedAt
-          createdAt
-          owner
-        }
-        nextToken
-      }
       createdAt
-      owner
+      updatedAt
     }
   }
 `;
@@ -68,164 +47,65 @@ export const listDentists = /* GraphQL */ `
         lng
         registered
         createAt
-        updatedAt
-        services {
-          nextToken
-        }
-        practices {
-          nextToken
-        }
         createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getService = /* GraphQL */ `
+  query GetService($id: ID!) {
+    getService(id: $id) {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listServices = /* GraphQL */ `
+  query ListServices(
+    $filter: ModelServiceFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listServices(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        createdAt
+        updatedAt
         owner
       }
       nextToken
     }
   }
 `;
-export const getServices = /* GraphQL */ `
-  query GetServices($id: ID!) {
-    getServices(id: $id) {
+export const getPractice = /* GraphQL */ `
+  query GetPractice($id: ID!) {
+    getPractice(id: $id) {
       id
       name
-      updatedAt
-      dentists {
-        id
-        firstName
-        lastName
-        phone
-        qualifications
-        bio
-        website
-        city
-        street
-        postIndex
-        email
-        lat
-        lng
-        registered
-        createAt
-        updatedAt
-        services {
-          nextToken
-        }
-        practices {
-          nextToken
-        }
-        createdAt
-        owner
-      }
       createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const listServicess = /* GraphQL */ `
-  query ListServicess(
-    $filter: ModelServicesFilterInput
+export const listPractices = /* GraphQL */ `
+  query ListPractices(
+    $filter: ModelPracticeFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listServicess(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listPractices(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         name
-        updatedAt
-        dentists {
-          id
-          firstName
-          lastName
-          phone
-          qualifications
-          bio
-          website
-          city
-          street
-          postIndex
-          email
-          lat
-          lng
-          registered
-          createAt
-          updatedAt
-          createdAt
-          owner
-        }
         createdAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const getPractices = /* GraphQL */ `
-  query GetPractices($id: ID!) {
-    getPractices(id: $id) {
-      id
-      name
-      updatedAt
-      dentists {
-        id
-        firstName
-        lastName
-        phone
-        qualifications
-        bio
-        website
-        city
-        street
-        postIndex
-        email
-        lat
-        lng
-        registered
-        createAt
         updatedAt
-        services {
-          nextToken
-        }
-        practices {
-          nextToken
-        }
-        createdAt
-        owner
-      }
-      createdAt
-      owner
-    }
-  }
-`;
-export const listPracticess = /* GraphQL */ `
-  query ListPracticess(
-    $filter: ModelPracticesFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPracticess(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        updatedAt
-        dentists {
-          id
-          firstName
-          lastName
-          phone
-          qualifications
-          bio
-          website
-          city
-          street
-          postIndex
-          email
-          lat
-          lng
-          registered
-          createAt
-          updatedAt
-          createdAt
-          owner
-        }
-        createdAt
         owner
       }
       nextToken

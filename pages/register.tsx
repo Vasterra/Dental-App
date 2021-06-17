@@ -4,10 +4,9 @@ import Avatar from "../components/Avatar";
 import Typography from "../components/Typography";
 import FooterForm from "../components/FooterForm";
 import {RightSide} from "../styles/Main.module";
-import {createDentist} from '../graphql/mutations'
 import ButtonForm from "../components/Buttons/ButtonForm";
-import {Grid, TextField} from "@material-ui/core";
-import {API, Auth} from "aws-amplify";
+import {Grid, Link, TextField} from "@material-ui/core";
+import {Auth} from "aws-amplify";
 import Router from "next/router";
 
 const Register = ({}) => {
@@ -30,7 +29,6 @@ const Register = ({}) => {
         }
       });
       setUser(user)
-      await createNewDentist();
     } catch (error) {
       console.log('error signing up:', error);
     }
@@ -46,30 +44,6 @@ const Register = ({}) => {
     }
   }
 
-  async function createNewDentist() {
-    await API.graphql({
-      query: createDentist,
-      variables: {
-        input: {
-          bio: "",
-          city: "",
-          confirmed: true,
-          email: email,
-          firstName: username,
-          lastName: "",
-          lat: "",
-          phone: phone_number,
-          postIndex: "",
-          qualifications: "",
-          registrationDate: "",
-          street: "",
-          website: "",
-          lng: ""
-        }
-      },
-    })
-  }
-
   return (
     <Layout title="Register page">
       <Grid container justify="center">
@@ -83,66 +57,68 @@ const Register = ({}) => {
             {
               !user &&
               <form onSubmit={signUp} className="login-form-wrapper">
-                  <TextField
-                      label="UserName"
-                      type="text"
-                      className="input-form"
-                      id="filled-username-input"
-                      placeholder="username"
-                      onChange={(e) => setUsername(e.target.value)}
-                      margin="normal"
-                      variant="outlined"
-                  />
-                  <TextField
-                      id="filled-password-input"
-                      label="Password"
-                      type="password"
-                      autoComplete="current-password"
-                      className="input-form"
-                      placeholder="password"
-                      onChange={(e) => setPassword(e.target.value)}
-                      margin="normal"
-                      variant="outlined"
-                  />
-                  <TextField
-                      id="filled-password-input"
-                      label="Email"
-                      type="email"
-                      className="input-form"
-                      placeholder="email"
-                      onChange={(e) => setEmail(e.target.value)}
-                      margin="normal"
-                      variant="outlined"
-                  />
-                  <TextField
-                      id="filled-password-input"
-                      label="Phone Number"
-                      type="phone"
-                      className="input-form"
-                      placeholder="phone number"
-                      onChange={(e) => setPhone_number(e.target.value)}
-                      margin="normal"
-                      variant="outlined"
-                  />
-                  <ButtonForm title='Sign In'>submit</ButtonForm>
+                <TextField
+                  label="UserName"
+                  type="text"
+                  className="input-form"
+                  id="filled-username-input"
+                  placeholder="username"
+                  onChange={(e) => setUsername(e.target.value)}
+                  margin="normal"
+                  variant="outlined"
+                />
+                <TextField
+                  id="filled-password-input"
+                  label="Password"
+                  type="password"
+                  autoComplete="current-password"
+                  className="input-form"
+                  placeholder="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  margin="normal"
+                  variant="outlined"
+                />
+                <TextField
+                  id="filled-password-input"
+                  label="Email"
+                  type="email"
+                  className="input-form"
+                  placeholder="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  margin="normal"
+                  variant="outlined"
+                />
+                <TextField
+                  id="filled-password-input"
+                  label="Phone Number"
+                  type="phone"
+                  className="input-form"
+                  placeholder="phone number"
+                  onChange={(e) => setPhone_number(e.target.value)}
+                  margin="normal"
+                  variant="outlined"
+                />
+                <ButtonForm title='Sign In'>submit</ButtonForm>
               </form>
             }
             {
               user &&
               <form onSubmit={confirmSignUp} className="login-form-wrapper">
-                  <TextField
-                      id="filled-password-input"
-                      label="Confirm"
-                      type="number"
-                      className="input-form"
-                      placeholder="confirm"
-                      onChange={(e) => setCode(e.target.value)}
-                      margin="normal"
-                      variant="outlined"
-                  />
-                  <ButtonForm title='Confirm'>Confirm</ButtonForm>
+                <TextField
+                  id="filled-password-input"
+                  label="Confirm"
+                  type="number"
+                  className="input-form"
+                  placeholder="confirm"
+                  onChange={(e) => setCode(e.target.value)}
+                  margin="normal"
+                  variant="outlined"
+                />
+                <ButtonForm title='Confirm'>Confirm</ButtonForm>
               </form>
             }
+            <Link href={"../login"}>Login your Dental account</Link>
+            <Link href={"../search"}>Go to search Dentist</Link>
             <FooterForm/>
           </RightSide>
         </Grid>
