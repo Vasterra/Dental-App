@@ -15,6 +15,13 @@ type Dentist
   lng: String
   registered: Boolean
   createAt: String
+  gallery: S3Object!
+}
+
+type S3Object @model {
+  buck: String!
+  region: String!
+  key: String!
 }
 
 type Service @model @auth(rules: [{ allow: owner }]) {

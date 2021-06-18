@@ -1,6 +1,6 @@
 {
     "identityPoolName": "dentalawsdf4894e3_identitypool_df4894e3",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "dentaldf4894e3",
     "userPoolName": "dentalawsdf4894e3_userpool_df4894e3",
     "autoVerifiedAttributes": [
