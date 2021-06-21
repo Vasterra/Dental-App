@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 //@ts-ignore
 import Gallery from 'react-grid-gallery';
 import styled from "styled-components";
@@ -13,21 +13,24 @@ const GalleryWrapper = styled("div")`
   border-radius: 10px;
 `;
 
-class GalleryComponent extends Component {
+type Props = {
+  downloadImages: Function
+  images: any
+}
 
-  render() {
-    return (
-      <GalleryWrapper style={{
-        display: "block",
-        minHeight: "1px",
-        width: "100%",
-        overflow: "auto"
-      }}>
+const GalleryComponent: React.FunctionComponent<Props> = ({images, downloadImages}) => {
 
-      </GalleryWrapper>
-    )
-  }
-
+  return (
+    <GalleryWrapper>
+      {/*<img src={filesList[1].key} alt="" />*/}
+      <Gallery
+        images={images}
+        enableLightbox={true}
+        enableImageSelection
+        // onSelectImage={selectImage}
+      />
+    </GalleryWrapper>
+  )
 }
 
 export default GalleryComponent;

@@ -45,8 +45,8 @@ const initState: any = {
 class MenuComponent extends React.Component {
   state = initState
 
-  componentDidMount() {
-    this.authListener();
+  async componentDidMount() {
+    await this.authListener();
   }
 
   async authListener() {

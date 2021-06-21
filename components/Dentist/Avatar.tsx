@@ -1,8 +1,10 @@
 import React, {Component, useState} from "react";
 import styled from "styled-components";
-import {Auth, Storage} from 'aws-amplify'
-import {CircularProgress} from "@material-ui/core";
-import {PhotoPicker} from "aws-amplify-react";
+import {Storage} from 'aws-amplify'
+import {Snackbar} from "@material-ui/core";
+import {DropzoneDialog} from "material-ui-dropzone";
+import {Alert} from "@material-ui/lab";
+
 const AvatarWrapper = styled("div")`
   display: flex;
   flex-direction: column;
@@ -11,8 +13,7 @@ const AvatarWrapper = styled("div")`
   padding: 10px;
   height: 100%;
   border-radius: 10px;
-  min-width: 200px;
-
+  min-width: 250px;
   @media (max-width: 630px) {
     width: 100%;
   }
@@ -48,16 +49,27 @@ const DentistInfoEmail = styled("div")`
   padding: 15px;
 `;
 
-const UploadButtonEmpty = styled("button")`{
+const UploadButtonEmpty = styled("span")`{
+  position: relative;
   width: 170px;
   cursor: pointer;
   background: #fff;
   height: 37px;
   border-radius: 30px;
   border: 1px solid #0d9da6;
-  align-items: center;
-  padding: 0 20px;
+  padding: 8px;
+  text-align: center;
   color: #000;
+
+  input[type="file"] {
+    -webkit-appearance: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 35px;
+    opacity: 0;
+    width: 100%;
+  }
 
   &:hover {
     background: #0d9da6;
@@ -67,48 +79,148 @@ const UploadButtonEmpty = styled("button")`{
 
 type Props = {
   dentist: any,
+  currentAvatar: any,
+  downloadAvatar: Function,
 }
 
-const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist}) => {
+const URL = 'https://dentalaws8d048db55006476992f9738820445883132022-dev.s3.eu-west-1.amazonaws.com/public/'
+
+const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, currentAvatar, downloadAvatar}) => {
+
   const [images, setImages] = useState('');
   const [percent, setPercent] = useState(0);
   const [imagePreview, setImagePreview] = useState();
+  const [open, setOpen] = useState(false);
+  const [downloadMessage, setDownloadMessage] = useState('');
+  const [statusSnackbar, setStatusSnackbar] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  async function uploadAvatar(e) {
-    const user = await Auth.currentAuthenticatedUser();
-    const file = e.target.files[0];
+  async function uploadAvatar(files) {
+    const file = files[0];
     try {
-      const result = await Storage.put('avatars/' + user.attributes.sub + '/' + file.name, file, {
+      await Storage.put('avatars/' + dentist.sub + '/' + file.name, file, {
+        level: 'public',
         contentType: 'image/png',
         progressCallback(progress) {
-          console.log(`Uploaded: ${progress.loaded}/${progress.total}`);
           const percentUploaded: number = Math.round((progress.loaded / progress.total) * 100)
           setPercent(percentUploaded)
         },
+      }).then(result => {
+        setImages(URL + 'avatars/' + dentist.sub + '/' + file.name)
+        downloadAvatar()
+        setDownloadMessage('Success!')
+        setStatusSnackbar('success')
+        setOpenSnackbar(true)
+        setOpen(false)
+      })
+      .catch((_error: any) => {
+        setDownloadMessage('File upload error')
+        setStatusSnackbar('error')
+        setOpenSnackbar(true)
       });
-      const { key }: any = result
-      setImagePreview(key)
-      console.log(result)
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
   }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false)
+  }
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const DentistPhotoMe = () => {
+    if (currentAvatar.length !== 0) {
+      return (
+        <>
+          <DentistAvatar src={URL + currentAvatar[currentAvatar.length - 1].key} alt="avatar"/>
+          <UploadButtonEmpty onClick={handleOpen}>
+            Change Avatar
+          </UploadButtonEmpty>
+          <DropzoneDialog
+            open={open}
+            onSave={uploadAvatar}
+            acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+            showPreviews={true}
+            maxFileSize={5000000}
+            onClose={handleClose}
+          />
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+          >
+            <Alert
+              variant="filled"
+              // @ts-ignore
+              severity={statusSnackbar}
+            >
+              {downloadMessage}
+            </Alert>
+          </Snackbar>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <DentistAvatarBlockEmpty/>
+          <UploadButtonEmpty onClick={handleOpen}>
+            Upload Avatar
+          </UploadButtonEmpty>
+          <DropzoneDialog
+            open={open}
+            onSave={uploadAvatar}
+            acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+            showPreviews={true}
+            maxFileSize={5000000}
+            onClose={handleClose}
+          />
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+          >
+            <Alert
+              variant="filled"
+              // @ts-ignore
+              severity={statusSnackbar}
+            >
+              {downloadMessage}
+            </Alert>
+          </Snackbar>
+        </>
+      )
+    }
+  }
+
+  const DentistPhotoWithoutMe = () => {
+    if (currentAvatar.length === 0) {
+      return <DentistAvatarBlockEmpty/>
+    } else {
+      return <DentistAvatar src={URL + currentAvatar[currentAvatar.length - 1].key} alt="avatar"/>
+    }
+  }
+
   return (
     <AvatarWrapper>
-      {imagePreview && (
-        <DentistAvatar src={imagePreview} alt="avatar"/>
-      )}
-      {/*<PhotoPicker*/}
-      {/*  title="Avatar"*/}
-      {/*  preview="hidden"*/}
-      {/*  onload={url : any => setImagePreview(url)}*/}
-      {/*/>*/}
-      <input
-        type="file"
-        onChange={uploadAvatar}
-      />
-      {/*<DentistInfoName>{displayName}</DentistInfoName>*/}
-      {/*<DentistInfoEmail>{data.email}</DentistInfoEmail>*/}
+      {!dentist && <DentistPhotoWithoutMe/>}
+      {dentist && <DentistPhotoMe/>}
+      <DentistInfoName>{dentist.firstName}</DentistInfoName>
+      <DentistInfoEmail>{dentist.email}</DentistInfoEmail>
     </AvatarWrapper>
   )
 }

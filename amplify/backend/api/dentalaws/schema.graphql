@@ -14,14 +14,8 @@ type Dentist
   lat: String
   lng: String
   registered: Boolean
+  sub: String
   createAt: String
-  gallery: S3Object!
-}
-
-type S3Object @model {
-  buck: String!
-  region: String!
-  key: String!
 }
 
 type Service @model @auth(rules: [{ allow: owner }]) {

@@ -9,6 +9,7 @@ import {Menu, MenuItem} from "@material-ui/core";
 import PopupState, {bindMenu, bindTrigger} from 'material-ui-popup-state';
 import {useEffect, useState} from "react";
 import {Auth, Hub} from "aws-amplify";
+import Router from "next/router";
 
 export default function Header() {
   const [signedInUser, setSignedInUser] = useState(false)
@@ -34,6 +35,7 @@ export default function Header() {
   async function signOut() {
     try {
       await Auth.signOut();
+      await Router.replace('/')
     } catch (error) {
       console.log('error signing out: ', error);
     }

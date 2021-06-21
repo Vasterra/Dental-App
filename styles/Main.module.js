@@ -32,7 +32,7 @@ export const Image = styled("div")`
   height: 100vh;
 `;
 
-export const BlockWrapperGreen = styled("div")`{
+export const BlockWrapperGreen = styled("div")`
   display: flex;
   width: 100%;
   justify-content: center;
@@ -42,23 +42,23 @@ export const BlockWrapperGreen = styled("div")`{
   padding: 20px;
 `;
 
-export const FlexWrapper = styled("section")`{
+export const FlexWrapper = styled("section")`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
 `;
 
-export const Box = styled("div")`{
+export const Box = styled("div")`
   max-width: 100%;
 `;
 
-export const MainContainer = styled("div")`{
+export const MainContainer = styled("div")`
   width: 100%;
   padding: 10px;
   background: #F0F0F0 0 0 no-repeat padding-box;
 `;
 
-export const FormBlockWrapper = styled("div")`{
+export const FormBlockWrapper = styled("div")`
   background: #FFFFFF 0 0 no-repeat padding-box;
   display: flex;
   width: 100%;
@@ -67,7 +67,7 @@ export const FormBlockWrapper = styled("div")`{
   margin-bottom: 10px;
 `;
 
-export const Search = styled("div")`{
+export const Search = styled("div")`
   height: 47px;
   border-radius: 30px;
   border: 1px solid #0d9da6;
@@ -76,9 +76,17 @@ export const Search = styled("div")`{
   align-items: center;
 `;
 
+export const CircularProgressWrapper = styled("div")`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
 export const Stripe = styled("div")`
   width: 229px;
   height: 0px;
   border: 1px solid #D5D5D5;
   margin: 20px 0;
 `;
+

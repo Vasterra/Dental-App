@@ -18,6 +18,7 @@ export const getDentist = /* GraphQL */ `
       lat
       lng
       registered
+      sub
       createAt
       createdAt
       updatedAt
@@ -46,6 +47,7 @@ export const listDentists = /* GraphQL */ `
         lat
         lng
         registered
+        sub
         createAt
         createdAt
         updatedAt

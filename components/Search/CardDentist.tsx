@@ -43,7 +43,7 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentists, setCurr
                         <SubtitleDescription>21 km away</SubtitleDescription>
                       </TitleDescription>
                       <ButtonBig>
-                        <a href={"../../dentist/account/" + data.id} target="_blank">Veiw Profile</a>
+                        <a href={"../../dentist/account/" + data.id} target="_blank">View Profile</a>
                       </ButtonBig>
                     </ImageDescription>
                   </CardBlock>

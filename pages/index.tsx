@@ -1,7 +1,11 @@
+import * as React from "react";
 import Search from "./search";
 
-export default function Home() {
+
+const IndexPage: React.FunctionComponent = () => {
   return (
     <Search />
-  )
-}
+  );
+};
+
+export default IndexPage;

@@ -29,10 +29,10 @@ const DentistInfoData = styled("div")`
 
 
 type Props = {
-  data: any,
+  dentist: any,
 }
 
-const AvatarProfileComponent: React.FunctionComponent<Props> = ({data}) => {
+const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist}) => {
   // const { dentist } = data;
   // const labels = [
   //   'Gender',
@@ -57,7 +57,7 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({data}) => {
       </DentistInfoBlock>
       <DentistInfoBlock>
         <DentistInfoLabel>Phone Number</DentistInfoLabel>
-        <DentistInfoData>{data.phone}</DentistInfoData>
+        <DentistInfoData>{dentist.phone}</DentistInfoData>
       </DentistInfoBlock>
       <DentistInfoBlock>
         <DentistInfoLabel>Street Address</DentistInfoLabel>
@@ -65,11 +65,11 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({data}) => {
       </DentistInfoBlock>
       <DentistInfoBlock>
         <DentistInfoLabel>City</DentistInfoLabel>
-        <DentistInfoData>{data.city}</DentistInfoData>
+        <DentistInfoData>{dentist.city}</DentistInfoData>
       </DentistInfoBlock>
       <DentistInfoBlock>
         <DentistInfoLabel>Zip Code</DentistInfoLabel>
-        <DentistInfoData>{data.code}</DentistInfoData>
+        <DentistInfoData>{dentist.code}</DentistInfoData>
       </DentistInfoBlock>
       <DentistInfoBlock>
         <DentistInfoLabel>Member Status</DentistInfoLabel>

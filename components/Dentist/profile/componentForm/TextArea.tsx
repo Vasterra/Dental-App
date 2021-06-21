@@ -4,7 +4,7 @@ import styled from "styled-components";
 const TextArea = styled("textarea")`{
   outline: none;
   margin: 0 0 15px 0;
-  width: 230px;
+  width: 100%;
   height: 90px;
   background: #FFFFFF 0% 0% no-repeat padding-box;
   border: 1px solid #0d9da6;
@@ -48,7 +48,7 @@ const AreaGroup: React.FC<AreaGroupProps> = ({
         placeholder={placeholder}
         onChange={props.handleChange}
         onBlur={props.handleBlur}
-        value={setValue}
+        value={setValue === null ? setValue = '' : setValue}
       />
     </Label>
   )

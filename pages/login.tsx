@@ -23,7 +23,11 @@ const Login = () => {
       const user = await Auth.signIn(username, password);
       setUser(user)
 
-      const dentists: any = await API.graphql({query: listDentists})
+      const dentists: any = await API.graphql({
+        query: listDentists,
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      })
       const dentistEmail = dentists.data.listDentists.items.find(item => item.email === user.attributes.email)
       if (dentists.data.listDentists.items.length !== 0) {
         if (!dentistEmail) {
@@ -32,23 +36,28 @@ const Login = () => {
       } else {
         await createNewDentist(user);
       }
-
     } catch (error) {
       console.log('error signing in', error);
     }
   }
 
   async function createNewDentist(user) {
+
     await API.graphql({
       query: createDentist,
       variables: {
         input: {
+          sub: user.username,
           email: user.attributes.email,
           firstName: username,
+          registered: true,
           phone: user.attributes.phone_number,
         }
       },
+      // @ts-ignore
+      authMode: 'AWS_IAM'
     })
+    await Router.replace('/search')
   }
 
   if (user) Router.replace('/')

@@ -11,7 +11,6 @@ import {convertCityCoords} from "../utils/search/converCityCoords";
 import CardDentist from "../components/Search/CardDentist";
 import {API} from "aws-amplify";
 import {listDentists, listServices} from "../graphql/queries";
-// import {listUsers} from "../graphql/queries";
 
 class Search extends Component {
   state: any = {
@@ -35,10 +34,19 @@ class Search extends Component {
         }
       })
     }
-    const services: any = await API.graphql({query: listServices})
-    this.setState({services: services.data.listServices.items})
+    // const services: any = await API.graphql({query: listServices})
+    // this.setState({services: services.data.listServices.items})
+    await this.getDentist();
+  }
 
-    const dentists: any = await API.graphql({query: listDentists})
+  async getDentist() {
+
+    const dentists: any = await API.graphql({
+      query: listDentists,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    })
+    console.log(dentists)
     this.setState({dentists: dentists.data.listDentists.items})
   }
 
@@ -60,7 +68,7 @@ class Search extends Component {
     this.setState({valueSlider: event.target.value === '' ? '' : Number(event.target.value)})
   };
 
-  getDentist = (dentists: any) => {
+  getDentistForService = (dentists: any) => {
     this.setState({searchDentist: dentists})
   }
 
@@ -128,36 +136,7 @@ class Search extends Component {
     return distanceDent
   }
 
-
-  // useEffect(() => {
-  //   getServices();
-  // })
-
-
-  // const [currentDentist, setCurrentDentist] = useState(undefined);
-  // const [searchDentists, setSearchDentists] = useState(undefined);
-  // const [ipCoords, setIpCoords] = useState(undefined);
-  // const [searchDentistsLocations, setSearchDentistsLocations] = useState(undefined);
-  // const [searchCoords, setSearchCoords]: any = useState();
-  // let searchValue = ''
-  // const [valueSlider, setValueSlider] = React.useState<number | string | Array<number | string>>(10);
-  // const {data, loading}: any = useQuerySearchDentistsQuery({
-  //   variables: {
-  //     lat: searchCoords?.lat,
-  //     lng: searchCoords?.lng
-  //   },
-  // });
-  // const [dentists, setDentists] = useState(undefined);
-  // useEffect(() => {
-  //   if (!loading && data) {
-  //     setSearchDentists(data.querySearchDentist)
-  //     setDentists(data.querySearchDentist)
-  //     setSearchDentistsLocations(data.querySearchDentist)
-  //   }
-  // }, [loading, data])
   render() {
-
-    console.log(this.state.searchValue)
     return (
       <Layout title="Search page">
         <Header/>
@@ -176,14 +155,14 @@ class Search extends Component {
                      </IconButton>
                     <InputSearch
                       placeholder="Search Google Maps"
-                       onChange={e =>         this.setState({searchValue: e.target.value})}
+                       onChange={e => this.setState({searchValue: e.target.value})}
                    onKeyDown={this.enterKeyDown}
                 />
                   </SearchBlock>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
                   <Services
-                    getDentist={this.getDentist}
+                    getDentist={this.getDentistForService}
                     dentists={this.state.searchDentists}
                     services={this.state.services}
                     searchDentistsLocations={this.state.searchDentistsLocations}
