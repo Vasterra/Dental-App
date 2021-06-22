@@ -18,8 +18,28 @@ export const getDentist = /* GraphQL */ `
       lat
       lng
       registered
-      sub
-      createAt
+      services {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      practices {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -47,8 +67,12 @@ export const listDentists = /* GraphQL */ `
         lat
         lng
         registered
-        sub
-        createAt
+        services {
+          nextToken
+        }
+        practices {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -60,6 +84,7 @@ export const getService = /* GraphQL */ `
   query GetService($id: ID!) {
     getService(id: $id) {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -76,6 +101,7 @@ export const listServices = /* GraphQL */ `
     listServices(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        dentistId
         name
         createdAt
         updatedAt
@@ -89,6 +115,7 @@ export const getPractice = /* GraphQL */ `
   query GetPractice($id: ID!) {
     getPractice(id: $id) {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -105,6 +132,7 @@ export const listPractices = /* GraphQL */ `
     listPractices(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        dentistId
         name
         createdAt
         updatedAt

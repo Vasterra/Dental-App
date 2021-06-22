@@ -59,7 +59,7 @@ class Search extends Component {
   handleBlur = () => {
     if (this.state.valueSlider < 0) {
       this.setState({valueSlider: 0})
-    } else  if (this.state.valueSlider < 100) {
+    } else if (this.state.valueSlider < 100) {
       this.setState({valueSlider: 100})
     }
   };
@@ -146,18 +146,18 @@ class Search extends Component {
             <SearchPanelWrapper>
               <Grid container alignItems="center" justify="space-between" spacing={2}>
                 <Grid item xs={12} sm={6} lg={3}>
-                   <SearchBlock>
-                     <IconButton
-                       onClick={this.changeSearch}
-                       aria-label="search"
-                       style={{width: '32px', height: '32px', zoom: 1.6, color: '#0d9da6'}}>
-                       <SearchIcon/>
-                     </IconButton>
+                  <SearchBlock>
+                    <IconButton
+                      onClick={this.changeSearch}
+                      aria-label="search"
+                      style={{width: '32px', height: '32px', zoom: 1.6, color: '#0d9da6'}}>
+                      <SearchIcon/>
+                    </IconButton>
                     <InputSearch
                       placeholder="Search Google Maps"
-                       onChange={e => this.setState({searchValue: e.target.value})}
-                   onKeyDown={this.enterKeyDown}
-                />
+                      onChange={e => this.setState({searchValue: e.target.value})}
+                      onKeyDown={this.enterKeyDown}
+                    />
                   </SearchBlock>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -205,13 +205,13 @@ class Search extends Component {
                 </Grid>
               </Grid>
             </SearchPanelWrapper>
-              <GoogleMapReactComponent
-                dentists={this.state.dentists}
-                me={this.state.dentists[0]}
-                currentDentist={this.state.currentDentist}
-                searchCoords={this.state.searchCoords}
-                ipCoords={this.state.ipCoords}
-              />
+            <GoogleMapReactComponent
+              dentists={this.state.dentists}
+              me={this.state.dentists[0]}
+              currentDentist={this.state.currentDentist}
+              searchCoords={this.state.searchCoords}
+              ipCoords={this.state.ipCoords}
+            />
             <CardDentist dentists={this.state.dentists} setCurrentDentist={this.setCurrentDentist}/>
           </Main>
         </Profile>

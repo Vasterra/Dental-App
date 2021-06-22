@@ -4,11 +4,11 @@ import {createPractice, deletePractice} from "../../../../graphql/mutations";
 import {ListWrapper, Input, Item, ConfirmButton} from "../../../../styles/Profile.module";
 
 type Props = {
-  practices: any,
-  getPractices: Function,
+  dentist: any,
+  getDentist: Function,
 }
 
-const PractiseConfig: React.FunctionComponent<Props> = ({practices, getPractices}) => {
+const PractiseConfig: React.FunctionComponent<Props> = ({dentist, getDentist}) => {
   const [practice, setPractice] = useState('');
   const disabled = practice.length === 0;
 
@@ -20,7 +20,7 @@ const PractiseConfig: React.FunctionComponent<Props> = ({practices, getPractices
       <Input type="text" name="practise" onChange={event => setPractice(event.target.value)}/>
       <ListWrapper>
         {
-          practices.map((el, key) => {
+          dentist.practices.items.map((el, key) => {
             return (
               <Item key={key} onClick={async () => {
                 await API.graphql({
@@ -33,7 +33,7 @@ const PractiseConfig: React.FunctionComponent<Props> = ({practices, getPractices
                   // @ts-ignore
                   authMode: 'AWS_IAM'
                 })
-                getPractices();
+                getDentist();
               }}>{el.name}</Item>
             )
           })
@@ -45,13 +45,14 @@ const PractiseConfig: React.FunctionComponent<Props> = ({practices, getPractices
             query: createPractice,
             variables: {
               input: {
-                name: practice
+                name: practice,
+                dentistId: dentist.id
               }
             },
             // @ts-ignore
             authMode: 'AWS_IAM'
           })
-          getPractices();
+          getDentist();
         }}>Confirm</ConfirmButton>
       }
     </>

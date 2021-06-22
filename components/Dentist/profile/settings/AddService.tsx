@@ -4,11 +4,11 @@ import {createService, deleteService} from "../../../../graphql/mutations";
 import {ListWrapper, Input, Item, ConfirmButton} from "../../../../styles/Profile.module";
 
 type Props = {
-  services: any,
-  getServices: Function,
+  dentist: any,
+  getDentist: Function,
 }
 
-const ServiceConfig: React.FunctionComponent<Props> = ({services, getServices}) => {
+const ServiceConfig: React.FunctionComponent<Props> = ({dentist, getDentist}) => {
   const [service, setService] = useState('');
   const disabled = service.length === 0;
 
@@ -20,7 +20,7 @@ const ServiceConfig: React.FunctionComponent<Props> = ({services, getServices}) 
       <Input type="text" name="practise" onChange={event => setService(event.target.value)}/>
       <ListWrapper>
         {
-          services.map((el, key) => {
+          dentist.services.items.map((el, key) => {
             return (
               <Item key={key} onClick={async () => {
                 await API.graphql({
@@ -33,7 +33,7 @@ const ServiceConfig: React.FunctionComponent<Props> = ({services, getServices}) 
                   // @ts-ignore
                   authMode: 'AWS_IAM'
                 })
-                getServices();
+                getDentist();
               }}>{el.name}</Item>
             )
           })
@@ -45,13 +45,14 @@ const ServiceConfig: React.FunctionComponent<Props> = ({services, getServices}) 
             query: createService,
             variables: {
               input: {
-                name: service
+                name: service,
+                dentistId: dentist.id
               }
             },
             // @ts-ignore
             authMode: 'AWS_IAM'
           })
-          getServices();
+          getDentist();
         }}>Confirm</ConfirmButton>
       }
     </>

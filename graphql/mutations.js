@@ -21,8 +21,28 @@ export const createDentist = /* GraphQL */ `
       lat
       lng
       registered
-      sub
-      createAt
+      services {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      practices {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -48,8 +68,28 @@ export const updateDentist = /* GraphQL */ `
       lat
       lng
       registered
-      sub
-      createAt
+      services {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      practices {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -75,8 +115,28 @@ export const deleteDentist = /* GraphQL */ `
       lat
       lng
       registered
-      sub
-      createAt
+      services {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      practices {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -89,6 +149,7 @@ export const createService = /* GraphQL */ `
   ) {
     createService(input: $input, condition: $condition) {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -103,6 +164,7 @@ export const updateService = /* GraphQL */ `
   ) {
     updateService(input: $input, condition: $condition) {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -117,6 +179,7 @@ export const deleteService = /* GraphQL */ `
   ) {
     deleteService(input: $input, condition: $condition) {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -131,6 +194,7 @@ export const createPractice = /* GraphQL */ `
   ) {
     createPractice(input: $input, condition: $condition) {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -145,6 +209,7 @@ export const updatePractice = /* GraphQL */ `
   ) {
     updatePractice(input: $input, condition: $condition) {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -159,6 +224,7 @@ export const deletePractice = /* GraphQL */ `
   ) {
     deletePractice(input: $input, condition: $condition) {
       id
+      dentistId
       name
       createdAt
       updatedAt

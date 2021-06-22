@@ -10,6 +10,7 @@ import ButtonForm from "../components/Buttons/ButtonForm";
 import Router from "next/router";
 import {createDentist} from "../graphql/mutations";
 import {listDentists} from "../graphql/queries";
+import {convertCityCoords} from "../utils/search/converCityCoords";
 
 const Login = () => {
 
@@ -42,22 +43,27 @@ const Login = () => {
   }
 
   async function createNewDentist(user) {
-
-    await API.graphql({
-      query: createDentist,
-      variables: {
-        input: {
-          sub: user.username,
-          email: user.attributes.email,
-          firstName: username,
-          registered: true,
-          phone: user.attributes.phone_number,
-        }
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
+    await convertCityCoords().then(async (result) => {
+      console.log(result)
+      await API.graphql({
+        query: createDentist,
+        variables: {
+          input: {
+            id: user.username,
+            email: user.attributes.email,
+            lat: result.lat,
+            lng: result.lng,
+            firstName: username,
+            registered: true,
+            phone: user.attributes.phone_number,
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      })
+      await Router.replace('/search')
     })
-    await Router.replace('/search')
+
   }
 
   if (user) Router.replace('/')

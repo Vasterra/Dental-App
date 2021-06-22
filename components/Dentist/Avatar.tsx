@@ -1,6 +1,6 @@
 import React, {Component, useState} from "react";
 import styled from "styled-components";
-import {Storage} from 'aws-amplify'
+import {Auth, Hub, Storage} from 'aws-amplify'
 import {Snackbar} from "@material-ui/core";
 import {DropzoneDialog} from "material-ui-dropzone";
 import {Alert} from "@material-ui/lab";
@@ -81,12 +81,13 @@ type Props = {
   dentist: any,
   currentAvatar: any,
   downloadAvatar: Function,
+  signedInUser: Boolean,
+  currentUser: any,
 }
 
 const URL = 'https://dentalaws8d048db55006476992f9738820445883132022-dev.s3.eu-west-1.amazonaws.com/public/'
 
-const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, currentAvatar, downloadAvatar}) => {
-
+const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, currentAvatar, downloadAvatar, signedInUser, currentUser}) => {
   const [images, setImages] = useState('');
   const [percent, setPercent] = useState(0);
   const [imagePreview, setImagePreview] = useState();
@@ -95,10 +96,12 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, curren
   const [statusSnackbar, setStatusSnackbar] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  const Me = dentist.id === currentUser.username;
+
   async function uploadAvatar(files) {
     const file = files[0];
     try {
-      await Storage.put('avatars/' + dentist.sub + '/' + file.name, file, {
+      await Storage.put('avatars/' + dentist.id + '/' + file.name, file, {
         level: 'public',
         contentType: 'image/png',
         progressCallback(progress) {
@@ -106,7 +109,7 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, curren
           setPercent(percentUploaded)
         },
       }).then(result => {
-        setImages(URL + 'avatars/' + dentist.sub + '/' + file.name)
+        setImages(URL + 'avatars/' + dentist.id + '/' + file.name)
         downloadAvatar()
         setDownloadMessage('Success!')
         setStatusSnackbar('success')
@@ -136,7 +139,7 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, curren
   }
 
   const DentistPhotoMe = () => {
-    if (currentAvatar.length !== 0) {
+    if (currentAvatar.length > 1) {
       return (
         <>
           <DentistAvatar src={URL + currentAvatar[currentAvatar.length - 1].key} alt="avatar"/>
@@ -208,7 +211,7 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, curren
   }
 
   const DentistPhotoWithoutMe = () => {
-    if (currentAvatar.length === 0) {
+    if (currentAvatar.length <= 1) {
       return <DentistAvatarBlockEmpty/>
     } else {
       return <DentistAvatar src={URL + currentAvatar[currentAvatar.length - 1].key} alt="avatar"/>
@@ -217,8 +220,8 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, curren
 
   return (
     <AvatarWrapper>
-      {!dentist && <DentistPhotoWithoutMe/>}
-      {dentist && <DentistPhotoMe/>}
+      {!Me && <DentistPhotoWithoutMe/>}
+      {Me && <DentistPhotoMe/>}
       <DentistInfoName>{dentist.firstName}</DentistInfoName>
       <DentistInfoEmail>{dentist.email}</DentistInfoEmail>
     </AvatarWrapper>

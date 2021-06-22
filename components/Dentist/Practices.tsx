@@ -57,7 +57,6 @@ const ServicesComponent: React.FunctionComponent<Props> = ({practices}) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const disabled = practices && practices.length <= 3
 
   return (

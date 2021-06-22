@@ -18,8 +18,28 @@ export const onCreateDentist = /* GraphQL */ `
       lat
       lng
       registered
-      sub
-      createAt
+      services {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      practices {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -42,8 +62,28 @@ export const onUpdateDentist = /* GraphQL */ `
       lat
       lng
       registered
-      sub
-      createAt
+      services {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      practices {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -66,17 +106,38 @@ export const onDeleteDentist = /* GraphQL */ `
       lat
       lng
       registered
-      sub
-      createAt
+      services {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      practices {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
   }
 `;
 export const onCreateService = /* GraphQL */ `
-  subscription OnCreateService($owner: String!) {
-    onCreateService(owner: $owner) {
+  subscription OnCreateService {
+    onCreateService {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -85,9 +146,10 @@ export const onCreateService = /* GraphQL */ `
   }
 `;
 export const onUpdateService = /* GraphQL */ `
-  subscription OnUpdateService($owner: String!) {
-    onUpdateService(owner: $owner) {
+  subscription OnUpdateService {
+    onUpdateService {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -96,9 +158,10 @@ export const onUpdateService = /* GraphQL */ `
   }
 `;
 export const onDeleteService = /* GraphQL */ `
-  subscription OnDeleteService($owner: String!) {
-    onDeleteService(owner: $owner) {
+  subscription OnDeleteService {
+    onDeleteService {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -107,9 +170,10 @@ export const onDeleteService = /* GraphQL */ `
   }
 `;
 export const onCreatePractice = /* GraphQL */ `
-  subscription OnCreatePractice($owner: String!) {
-    onCreatePractice(owner: $owner) {
+  subscription OnCreatePractice {
+    onCreatePractice {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -118,9 +182,10 @@ export const onCreatePractice = /* GraphQL */ `
   }
 `;
 export const onUpdatePractice = /* GraphQL */ `
-  subscription OnUpdatePractice($owner: String!) {
-    onUpdatePractice(owner: $owner) {
+  subscription OnUpdatePractice {
+    onUpdatePractice {
       id
+      dentistId
       name
       createdAt
       updatedAt
@@ -129,9 +194,10 @@ export const onUpdatePractice = /* GraphQL */ `
   }
 `;
 export const onDeletePractice = /* GraphQL */ `
-  subscription OnDeletePractice($owner: String!) {
-    onDeletePractice(owner: $owner) {
+  subscription OnDeletePractice {
+    onDeletePractice {
       id
+      dentistId
       name
       createdAt
       updatedAt

@@ -10,8 +10,8 @@ import Practises from "../../../components/Dentist/Practices";
 import {Component, useState} from "react";
 import {CircularProgress, Grid} from "@material-ui/core";
 import {FlexWrapper, Box, MainContainer, CircularProgressWrapper} from "../../../styles/Main.module";
-import {API, Auth, Storage} from "aws-amplify";
-import {listDentists, listPractices, listServices} from "../../../graphql/queries";
+import {API, Auth, Hub, Storage} from "aws-amplify";
+import {getDentist, listDentists, listPractices, listServices} from "../../../graphql/queries";
 import {withRouter} from "next/router";
 import GalleryComponent from "../../../components/Gallery";
 
@@ -22,45 +22,49 @@ class Account extends Component {
     services: [],
     practices: [],
     currentAvatar: [],
+    currentUser: {},
+    signedInUser: false,
+    isMe: false
   }
 
   componentDidMount() {
     this.getDentists()
       .then(() => this.downloadImages())
       .then(() => this.downloadAvatar())
-      .then(() => this.getPractices())
-      .then(() => this.getServices())
+      .then(() => this.authListener())
+  }
+
+  async authListener() {
+    Hub.listen('auth', (data) => {
+      switch (data.payload.event) {
+        case 'signIn':
+          return this.setState({signedInUser: true})
+        case 'signOut':
+          return this.setState({signedInUser: false})
+      }
+    })
+    try {
+      const currentUser = await Auth.currentAuthenticatedUser()
+      this.setState({currentUser: currentUser})
+      this.setState({signedInUser: true})
+      this.setState({isMe: currentUser.username === this.state.dentist.id})
+    } catch (err) {
+    }
   }
 
   async getDentists() {
     const {router}: any = this.props
-    const dentists: any = await API.graphql({
-      query: listDentists,
+    const {data}: any = await API.graphql({
+      query: getDentist,
+      variables: {
+        id: router.query.slug[0]
+      },
       // @ts-ignore
       authMode: 'AWS_IAM'
     })
-    const currentDentist = dentists.data.listDentists.items.find(dentist => router.query.slug[0] == dentist.sub)
-    console.log(currentDentist)
-    this.setState({dentist: currentDentist})
-  }
-
-  async getPractices() {
-    const practices: any = await API.graphql({
-      query: listPractices,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    })
-
-    this.setState({practices: practices.data.listPractices.items})
-  }
-
-  async getServices() {
-    const services: any = await API.graphql({
-      query: listServices,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    })
-    this.setState({services: services.data.listServices.items})
+    this.setState({dentist: data.getDentist})
+    this.setState({services: data.getDentist.services.items})
+    this.setState({practices: data.getDentist.practices.items})
   }
 
   async downloadAvatar() {
@@ -76,9 +80,8 @@ class Account extends Component {
 
   async downloadImages() {
     try {
-      await Storage.list('images/' + this.state.dentist.sub  + '/')
+      await Storage.list('images/' + this.state.dentist.sub + '/')
         .then(result => {
-          console.log(result)
           let filesList = [];
 
           if (result !== undefined) {
@@ -93,7 +96,6 @@ class Account extends Component {
               });
             });
           }
-          console.log(filesList)
           this.setState({images: filesList})
         })
     } catch (error) {
@@ -102,40 +104,44 @@ class Account extends Component {
   }
 
   render() {
+
     return (
-      <Layout title="Profile">
-        <Box>
-          <Header/>
-          <FlexWrapper>
-            <Drawer/>
-            <MainContainer>
-              <Breadcrumb point="Account"/>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={4} lg={2}>
-                  {this.state.dentist && <AvatarProfile
-                    dentist={this.state.dentist}
-                    currentAvatar={this.state.currentAvatar}
-                    downloadAvatar={this.downloadAvatar}
+      <Layout title="Account">
+        {this.state.dentist && <Box>
+            <Header/>
+            <FlexWrapper>
+              {this.state.isMe && <Drawer/>}
+                <MainContainer>
+                    <Breadcrumb point="Account"/>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={4} lg={2}>
+                          {this.state.dentist && <AvatarProfile
+                              dentist={this.state.dentist}
+                              currentAvatar={this.state.currentAvatar}
+                              downloadAvatar={this.downloadAvatar}
+                              signedInUser={this.state.signedInUser}
+                              currentUser={this.state.currentUser}
+                          />}
+                        </Grid>
+                        <Grid item xs={12} sm={8} lg={5}>
+                          {this.state.dentist && <DentistProfileInfo dentist={this.state.dentist}/>}
+                        </Grid>
+                        <Grid item xs={12} sm={6} lg={2}>
+                          {this.state.services && <Services services={this.state.services}/>}
+                        </Grid>
+                        <Grid item xs={12} sm={6} lg={2}>
+                          {this.state.practices && <Practises practices={this.state.practices}/>}
+                        </Grid>
+                    </Grid>
+                  {this.state.images && <GalleryComponent
+                      images={this.state.images}
+                      downloadImages={this.downloadImages}
                   />}
-                </Grid>
-                <Grid item xs={12} sm={8} lg={5}>
-                  {this.state.dentist && <DentistProfileInfo dentist={this.state.dentist}/>}
-                </Grid>
-                <Grid item xs={12} sm={6} lg={2}>
-                  {this.state.services && <Services services={this.state.services}/>}
-                </Grid>
-                <Grid item xs={12} sm={6} lg={2}>
-                  {this.state.practices && <Practises practices={this.state.practices}/>}
-                </Grid>
-              </Grid>
-              {this.state.images && <GalleryComponent
-                images={this.state.images}
-                downloadImages={this.downloadImages}
-              /> }
-              {!this.state.images && <CircularProgressWrapper><CircularProgress/></CircularProgressWrapper>}
-            </MainContainer>
-          </FlexWrapper>
-        </Box>
+                  {!this.state.images && <CircularProgressWrapper><CircularProgress/></CircularProgressWrapper>}
+                </MainContainer>
+            </FlexWrapper>
+        </Box>}
+        {!this.state.dentist && <>Dentist not found</>}
       </Layout>
     )
   }

@@ -27,7 +27,7 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentists, setCurr
           {dentists.map((data: any, key) => {
               return (
                 <Grid item xs={12} sm={6} lg={3} key={key}>
-                  <CardBlock key={data.sub} onClick={() => setCurrentDentist(data)}>
+                  <CardBlock key={data.id} onClick={() => setCurrentDentist(data)}>
                     <div className="water">
                       {/*<img className="image" src="/zub.jpeg" alt="image"/>*/}
                       <CardDentistImage data={data}/>
@@ -43,7 +43,7 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentists, setCurr
                         <SubtitleDescription>21 km away</SubtitleDescription>
                       </TitleDescription>
                       <ButtonBig>
-                        <a href={"../../dentist/account/" + data.sub} target="_blank">View Profile</a>
+                        <a href={"../../dentist/account/" + data.id} target="_blank">View Profile</a>
                       </ButtonBig>
                     </ImageDescription>
                   </CardBlock>
