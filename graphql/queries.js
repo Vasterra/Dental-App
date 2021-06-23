@@ -142,3 +142,101 @@ export const listPractices = /* GraphQL */ `
     }
   }
 `;
+export const getOrder = /* GraphQL */ `
+  query GetOrder($id: ID!) {
+    getOrder(id: $id) {
+      id
+      dentist
+      date
+      total
+      plans {
+        items {
+          id
+          plan_id
+          order_id
+          createdAt
+          updatedAt
+          customer
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      customer
+    }
+  }
+`;
+export const listOrders = /* GraphQL */ `
+  query ListOrders(
+    $filter: ModelOrderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOrders(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        dentist
+        date
+        total
+        plans {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        customer
+      }
+      nextToken
+    }
+  }
+`;
+export const getPlan = /* GraphQL */ `
+  query GetPlan($id: ID!) {
+    getPlan(id: $id) {
+      id
+      title
+      description
+      image
+      author
+      featured
+      price
+      orders {
+        items {
+          id
+          plan_id
+          order_id
+          createdAt
+          updatedAt
+          customer
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listPlans = /* GraphQL */ `
+  query ListPlans(
+    $filter: ModelPlanFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPlans(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        description
+        image
+        author
+        featured
+        price
+        orders {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

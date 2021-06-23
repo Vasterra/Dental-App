@@ -1,0 +1,13 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "auth": {
+      "dentalawsdf4894e3": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}
