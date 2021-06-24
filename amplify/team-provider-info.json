@@ -14,20 +14,6 @@
     "categories": {
       "auth": {
         "dentalawsdf4894e3": {}
-      },
-      "function": {
-        "processPayment": {
-          "deploymentBucketName": "amplify-dentalaws-dev-132022-deployment",
-          "s3Key": "amplify-builds/processPayment-49366b64583245706c59-build.zip"
-        },
-        "createOrder": {
-          "deploymentBucketName": "amplify-dentalaws-dev-132022-deployment",
-          "s3Key": "amplify-builds/createOrder-596346776e4665696e59-build.zip"
-        },
-        "dentalSearch": {
-          "deploymentBucketName": "amplify-dentalaws-dev-132022-deployment",
-          "s3Key": "amplify-builds/dentalSearch-76614c615350702f6a76-build.zip"
-        }
       }
     }
   }
