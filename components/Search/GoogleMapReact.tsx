@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-// @ts-ignore
 import GoogleMapReact from 'google-map-react';
 import Marker from "./Marker";
 import MeMarket from "./MeMarker";
@@ -32,23 +31,23 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
     if (this.props.ipCoords) {
       const {lat, lng} = this.props.ipCoords
       centerMe = {
-        lat,
-        lng
+        lat: Number(lat),
+        lng: Number(lng)
       }
     }
     if (this.props.searchCoords) {
       const {lat, lng} = this.props.searchCoords
       centerMe = {
-        lat,
-        lng
+        lat: Number(lat),
+        lng: Number(lng)
       }
     }
 
     if (this.props.currentDentist) {
       const {lat, lng} = this.props.currentDentist
       centerMe = {
-        lat,
-        lng
+        lat: Number(lat),
+        lng: Number(lng)
       }
     }
     return (
@@ -65,14 +64,14 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
               lng={centerMe.lng}
               text={'Me'}
             />
-            {this.props.dentists !== undefined ? this.props.dentists.map((dent: { lat: any; lng: any; name: any; }, key: React.Key | null | undefined): any => {
-              const {lat, lng, name} = dent;
+            {this.props.dentists !== undefined ? this.props.dentists.map((dent: { lat: any; lng: any; email: any; }, key: React.Key | null | undefined): any => {
+              const {lat, lng, email} = dent;
               return <Marker
                 // @ts-ignore
                 lat={lat}
                 lng={lng}
                 key={key}
-                text={name}
+                text={email}
                 selected={dent === this.props.currentDentist}
               />
             }) : <></>

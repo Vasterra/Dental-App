@@ -10,7 +10,7 @@ class Marker extends React.Component {
     }
     return (
       <>
-        return <div className={classes}>{text}</div>
+        <div className={classes}>{text}</div>
         <style jsx>{`
           .marker {
             display: inline;

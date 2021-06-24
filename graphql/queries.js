@@ -1,6 +1,50 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const searchCoordDentists = /* GraphQL */ `
+  query SearchCoordDentists($lat: Float, $lng: Float) {
+    searchCoordDentists(lat: $lat, lng: $lng) {
+      id
+      firstName
+      lastName
+      phone
+      qualifications
+      bio
+      website
+      city
+      street
+      postIndex
+      email
+      lat
+      lng
+      registered
+      services {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      practices {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const getDentist = /* GraphQL */ `
   query GetDentist($id: ID!) {
     getDentist(id: $id) {

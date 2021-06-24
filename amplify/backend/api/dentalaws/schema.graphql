@@ -121,3 +121,8 @@ type Mutation {
   @function(name: "processPayment-${env}")
   @function(name: "createOrder-${env}")
 }
+
+type Query {
+  searchCoordDentists(lat: Float, lng: Float): Dentist
+  @function(name: "dentalSearch-${env}")
+}

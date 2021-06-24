@@ -10,22 +10,22 @@ import Drawer from "../components/Drawer";
 import {convertCityCoords} from "../utils/search/converCityCoords";
 import CardDentist from "../components/Search/CardDentist";
 import {API} from "aws-amplify";
-import {listDentists, listServices} from "../graphql/queries";
+import {listDentists, listServices, searchCoordDentists} from "../graphql/queries";
 
 class Search extends Component {
   state: any = {
     services: [],
     dentists: [],
-    currentDentist: {},
-    ipCoords: {},
-    searchDentistsLocations: {},
-    searchDentists: {},
-    valueSlider: {},
-    searchCoords: {},
-    searchValue: {}
+    currentDentist: null,
+    ipCoords: null,
+    searchDentistsLocations: null,
+    searchDentists: null,
+    valueSlider: 100,
+    searchCoords: null,
+    searchValue: null
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     if (!this.state.ipCoords) {
       convertCityCoords().then((result) => {
         this.setState({ipCoords: result})
@@ -34,20 +34,20 @@ class Search extends Component {
         }
       })
     }
-    // const services: any = await API.graphql({query: listServices})
-    // this.setState({services: services.data.listServices.items})
-    await this.getDentist();
+    await this.getDentists();
   }
 
-  async getDentist() {
+  async getDentists() {
 
     const dentists: any = await API.graphql({
       query: listDentists,
       // @ts-ignore
       authMode: 'AWS_IAM'
     })
-    console.log(dentists)
     this.setState({dentists: dentists.data.listDentists.items})
+    const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, 100, dentists.data.listDentists.items)
+    this.setState({dentists: findCoordinatesDent})
+    this.setState({searchDentists: findCoordinatesDent})
   }
 
   enterKeyDown = (e: { keyCode: number; }) => {
@@ -80,7 +80,6 @@ class Search extends Component {
     fetch('https://maps.google.com/maps/api/geocode/json?sensor=false&address=' + this.state.searchValue + '&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY')
       .then(response => response.json())
       .then(result => {
-        console.log(result)
         this.setState({searchCoords: result.results[0].geometry.location})
         this.getDistance({}, this.state.valueSlider, result.results[0].geometry.location, this.state.searchDentists)
       })
@@ -90,6 +89,7 @@ class Search extends Component {
 
   getDistance = (_event: any, newValue: any, coordinate?: object | undefined, searchDent?: object) => {
     this.setState({valueSlider: newValue})
+
     let searchD: any = [];
     let coordinates: any = {};
 
@@ -104,10 +104,10 @@ class Search extends Component {
     } else {
       coordinates = this.state.searchCoords
     }
-
     if (!searchD) {
       return
     }
+
     const findCoordinatesDent: any = this.findCoordinatesDentists(coordinates, newValue, searchD)
     this.setState({dentists: findCoordinatesDent})
   }
