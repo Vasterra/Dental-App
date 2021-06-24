@@ -1,4 +1,4 @@
-import React, {Component, useState} from "react";
+import React, {Component, useEffect, useState} from "react";
 import styled from "styled-components";
 import {Auth, Hub, Storage} from 'aws-amplify'
 import {Snackbar} from "@material-ui/core";
@@ -85,42 +85,48 @@ type Props = {
   currentUser: any,
 }
 
-const URL = 'https://dentalaws8d048db55006476992f9738820445883132022-dev.s3.eu-west-1.amazonaws.com/public/'
-
-const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, currentAvatar, downloadAvatar, signedInUser, currentUser}) => {
-  const [images, setImages] = useState('');
-  const [percent, setPercent] = useState(0);
-  const [imagePreview, setImagePreview] = useState();
+const AvatarProfileComponent: React.FunctionComponent<Props> = ({
+                                                                  dentist,
+                                                                  currentAvatar,
+                                                                  downloadAvatar,
+                                                                  signedInUser,
+                                                                  currentUser
+                                                                }) => {
+  const [avatarImage, setAvatarImage] = useState();
   const [open, setOpen] = useState(false);
   const [downloadMessage, setDownloadMessage] = useState('');
   const [statusSnackbar, setStatusSnackbar] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  useEffect(() => {
+    setAvatarImage(currentAvatar)
+  }, [currentAvatar])
+
   const Me = dentist.id === currentUser.username;
 
   async function uploadAvatar(files) {
     const file = files[0];
+    const filename = file.name.split('.')
     try {
-      await Storage.put('avatars/' + dentist.id + '/' + file.name, file, {
+      await Storage.put('avatars/' + dentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
         level: 'public',
         contentType: 'image/png',
-        progressCallback(progress) {
-          const percentUploaded: number = Math.round((progress.loaded / progress.total) * 100)
-          setPercent(percentUploaded)
-        },
-      }).then(result => {
-        setImages(URL + 'avatars/' + dentist.id + '/' + file.name)
-        downloadAvatar()
+      }).then(async (result: any) => {
+        let signedFiles: any = Storage.get(result.key)
+        signedFiles = await signedFiles.then(item => {
+          return item
+        })
+        setAvatarImage(signedFiles)
         setDownloadMessage('Success!')
         setStatusSnackbar('success')
         setOpenSnackbar(true)
         setOpen(false)
       })
-      .catch((_error: any) => {
-        setDownloadMessage('File upload error')
-        setStatusSnackbar('error')
-        setOpenSnackbar(true)
-      });
+        .catch((_error: any) => {
+          setDownloadMessage('File upload error')
+          setStatusSnackbar('error')
+          setOpenSnackbar(true)
+        });
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
@@ -139,10 +145,10 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, curren
   }
 
   const DentistPhotoMe = () => {
-    if (currentAvatar.length > 1) {
+    if (avatarImage) {
       return (
         <>
-          <DentistAvatar src={URL + currentAvatar[currentAvatar.length - 1].key} alt="avatar"/>
+          <DentistAvatar src={avatarImage} alt="avatar"/>
           <UploadButtonEmpty onClick={handleOpen}>
             Change Avatar
           </UploadButtonEmpty>
@@ -211,11 +217,11 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({dentist, curren
   }
 
   const DentistPhotoWithoutMe = () => {
-    if (currentAvatar.length <= 1) {
-      return <DentistAvatarBlockEmpty/>
-    } else {
-      return <DentistAvatar src={URL + currentAvatar[currentAvatar.length - 1].key} alt="avatar"/>
-    }
+    console.log(avatarImage)
+    return <>
+      { !avatarImage && <DentistAvatarBlockEmpty/> }
+      { avatarImage && <DentistAvatar src={avatarImage} alt="avatar"/> }
+    </>
   }
 
   return (

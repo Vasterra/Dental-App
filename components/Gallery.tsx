@@ -14,23 +14,27 @@ const GalleryWrapper = styled("div")`
 `;
 
 type Props = {
-  downloadImages: Function
+  setDeleteImage?: any
   images: any
 }
 
-const GalleryComponent: React.FunctionComponent<Props> = ({images, downloadImages}) => {
+const GalleryComponent: React.FunctionComponent<Props> = ({images, setDeleteImage}) => {
 
+  const selectImage = (index: number) => {
+    images[index].isSelected = !images[index].isSelected;
+    console.log(images[index].name)
+    setDeleteImage(images[index].name)
+  }
   return (
     <GalleryWrapper>
-      {/*<img src={filesList[1].key} alt="" />*/}
       <Gallery
         images={images}
         enableLightbox={true}
         enableImageSelection
-        // onSelectImage={selectImage}
+        onSelectImage={selectImage}
       />
     </GalleryWrapper>
   )
-}
+};
 
 export default GalleryComponent;

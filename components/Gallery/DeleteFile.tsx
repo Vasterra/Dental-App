@@ -1,38 +1,34 @@
 import React, {useState} from 'react'
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import {Storage} from "aws-amplify";
 
 type Props = {
-  me: string
   deleteImage: {}
   getImages: Function
 }
 
-const DownloadDropzone: React.FunctionComponent<Props> = ({me, deleteImage, getImages}) => {
+const DownloadDropzone: React.FunctionComponent<Props> = ({deleteImage, getImages}) => {
 
   const [downloadMessage, setDownloadMessage] = useState('');
   const [statusSnackbar, setStatusSnackbar] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleImageDelete = async () => {
-    const URL = "http://localhost:4000/delete-file/" + me + '/' + deleteImage
-
-    const requestOptions = {
-      method: 'POST',
-    };
-
-    await fetch(URL, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        getImages()
-        setDownloadMessage(result.message)
-        setStatusSnackbar('success')
-        setOpenSnackbar(true)
-      })
-      .catch((_error: any) => {
-        setDownloadMessage('File delete error')
-        setStatusSnackbar('error')
-      });
+    if (typeof deleteImage === "string") {
+      await Storage.remove(deleteImage)
+        .then(result => {
+          console.log(result)
+          getImages()
+          setDownloadMessage(result.message)
+          setStatusSnackbar('success')
+          setOpenSnackbar(true)
+        })
+        .catch((_error: any) => {
+          setDownloadMessage('File delete error')
+          setStatusSnackbar('error')
+        });
+    }
   }
 
   return (

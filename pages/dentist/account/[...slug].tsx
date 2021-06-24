@@ -21,7 +21,7 @@ class Account extends Component {
     dentist: [],
     services: [],
     practices: [],
-    currentAvatar: [],
+    currentAvatar: null,
     currentUser: {},
     signedInUser: false,
     isMe: false
@@ -69,10 +69,10 @@ class Account extends Component {
 
   async downloadAvatar() {
     try {
-      await Storage.list('avatars/' + this.state.dentist.sub + '/')
-        .then(result => {
-          this.setState({currentAvatar: result})
-        })
+      const files =  await Storage.list('avatars/' + this.state.dentist.id + '/')
+      let signedFiles = files.map(f => Storage.get(f.key))
+      signedFiles = await Promise.all(signedFiles)
+      this.setState({currentAvatar: signedFiles[0]})
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
@@ -80,24 +80,21 @@ class Account extends Component {
 
   async downloadImages() {
     try {
-      await Storage.list('images/' + this.state.dentist.sub + '/')
-        .then(result => {
-          let filesList = [];
-
-          if (result !== undefined) {
-            result.forEach((file, key) => {
-              filesList.push({
-                thumbnail: file.key,
-                src: file.key,
-                name: file.key,
-                thumbnailWidth: 320,
-                thumbnailHeight: 212,
-                isSelected: false
-              });
-            });
-          }
-          this.setState({images: filesList})
-        })
+      if (this.state.dentist === null) return
+      const files = await Storage.list('images/' + this.state.dentist.id + '/')
+      let signedFiles = files.map(f => Storage.get(f.key))
+      signedFiles = await Promise.all(signedFiles)
+      let filesList = signedFiles.map(f => {
+        return {
+          thumbnail: f,
+          src: f,
+          name: f,
+          thumbnailWidth: 320,
+          thumbnailHeight: 212,
+          isSelected: false
+        }
+      })
+      this.setState({ images: filesList })
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
@@ -118,7 +115,7 @@ class Account extends Component {
                           {this.state.dentist && <AvatarProfile
                               dentist={this.state.dentist}
                               currentAvatar={this.state.currentAvatar}
-                              downloadAvatar={this.downloadAvatar}
+                              downloadAvatar={this.downloadAvatar.bind(this)}
                               signedInUser={this.state.signedInUser}
                               currentUser={this.state.currentUser}
                           />}
@@ -135,7 +132,6 @@ class Account extends Component {
                     </Grid>
                   {this.state.images && <GalleryComponent
                       images={this.state.images}
-                      downloadImages={this.downloadImages}
                   />}
                   {!this.state.images && <CircularProgressWrapper><CircularProgress/></CircularProgressWrapper>}
                 </MainContainer>

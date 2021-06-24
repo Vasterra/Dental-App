@@ -19,12 +19,14 @@ import {
 } from "../../../styles/Main.module";
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import {withRouter} from "next/router";
+import DeleteFile from "../../../components/Gallery/DeleteFile";
 
 class Gallery extends Component {
 
   state: any = {
     dentist: [],
-    images: null
+    images: null,
+    deleteImage: null
   }
 
   async componentDidMount() {
@@ -35,6 +37,10 @@ class Gallery extends Component {
       })
       .then(() => this.authListener(router))
       .then(() => this.downloadImages())
+  }
+
+  setDeleteImage(selectImages) {
+    this.setState({deleteImage: selectImages})
   }
 
   async authListener(router) {
@@ -68,24 +74,21 @@ class Gallery extends Component {
   async downloadImages() {
     try {
       if (this.state.dentist === null) return
-      await Storage.list('images/' + this.state.dentist.id + '/')
-        .then(result => {
-          let filesList = [];
-
-          if (result !== undefined) {
-            result.forEach((file, key) => {
-              filesList.push({
-                thumbnail: file.key,
-                src: file.key,
-                name: file.key,
-                thumbnailWidth: 320,
-                thumbnailHeight: 212,
-                isSelected: false
-              });
-            });
-          }
-          this.setState({images: filesList})
-        })
+      const files = await Storage.list('images/' + this.state.dentist.id + '/')
+      let signedFiles = files.map(f => Storage.get(f.key))
+      signedFiles = await Promise.all(signedFiles)
+      console.log('signedFiles: ', signedFiles)
+      let filesList = signedFiles.map((f, key) => {
+        return {
+          thumbnail: f,
+          src: f,
+          name: files[key].key,
+          thumbnailWidth: 320,
+          thumbnailHeight: 212,
+          isSelected: false
+        }
+      })
+      this.setState({ images: filesList })
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
@@ -122,9 +125,9 @@ class Gallery extends Component {
                               <Grid item xs={12} sm={6} lg={6}>
                                   <Grid container alignItems="center" justify="flex-end" spacing={1}>
                                       <Grid item xs={12} sm={5} lg={4}>
-                                        {/*<DeleteFile*/}
-                                        {/*  // @ts-ignore*/}
-                                        {/*  me={intId} deleteImage={deleteImage} getImages={getImages}/>*/}
+                                        <DeleteFile
+                                          // @ts-ignore
+                                          deleteImage={this.state.deleteImage} getImages={this.downloadImages.bind(this)}/>
                                       </Grid>
                                       <Grid item xs={12} sm={5} lg={4}>
                                           <DownloadDropzone
@@ -139,7 +142,7 @@ class Gallery extends Component {
                     {this.state.images &&
                     <GalleryComponent
                         images={this.state.images}
-                        downloadImages={this.downloadImages.bind(this)}
+                        setDeleteImage={this.setDeleteImage.bind(this)}
                     />}
                     {!this.state.images && <CircularProgressWrapper><CircularProgress/></CircularProgressWrapper>}
                   </MainContainer>
