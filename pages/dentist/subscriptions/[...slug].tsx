@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {withRouter} from "next/router";
 import {AmplifyAuthenticator} from "@aws-amplify/ui-react";
 import {Elements} from "@stripe/react-stripe-js";
-import CheckoutForm from "../../../components/Stripe/CheckoutForm";
+// import CheckoutForm from "../../../components/Stripe/CheckoutForm";
 import {loadStripe} from "@stripe/stripe-js";
 import {API} from "aws-amplify";
 import {getDentist} from "../../../graphql/queries";
@@ -37,8 +37,8 @@ class Subscription extends Component {
         <AmplifyAuthenticator>
           <Elements stripe={stripePromise}>
             <section>
-              {this.state.dentist &&  <CheckoutForm />}
-              {!this.state.dentist && <>Dentist not found</>}
+              {/*{this.state.dentist &&  <CheckoutForm />}*/}
+              {/*{!this.state.dentist && <>Dentist not found</>}*/}
             </section>
           </Elements>
         </AmplifyAuthenticator>
