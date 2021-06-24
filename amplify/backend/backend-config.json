@@ -1,6 +1,6 @@
 {
   "auth": {
-    "dentalawsdf4894e3": {
+    "dentalawse0104357": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -16,27 +16,18 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authdentalawsdf4894e3"
+              "userPoolId": "authdentalawse0104357"
             }
           },
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "API_KEY",
-              "apiKeyConfig": {
-                "apiKeyExpirationDays": 365,
-                "description": ""
-              }
-            }
-          ]
+          "additionalAuthenticationProviders": []
         }
       }
     }
   },
   "storage": {
-    "s3cc670a7e": {
+    "dentalaws": {
       "service": "S3",
       "providerPlugin": "awscloudformation"
     }
-  },
-  "function": {}
+  }
 }

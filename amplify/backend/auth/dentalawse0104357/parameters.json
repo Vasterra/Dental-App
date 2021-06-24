@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "dentalawsdf4894e3_identitypool_df4894e3",
-    "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "dentaldf4894e3",
-    "userPoolName": "dentalawsdf4894e3_userpool_df4894e3",
+    "identityPoolName": "dentalawse0104357_identitypool_e0104357",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "dentale0104357",
+    "userPoolName": "dentalawse0104357_userpool_e0104357",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "dentaldf4894e3_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "dentale0104357_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "df4894e3",
-    "resourceName": "dentalawsdf4894e3",
+    "sharedId": "e0104357",
+    "resourceName": "dentalawse0104357",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -45,23 +45,9 @@
             "Arn"
         ]
     },
-    "useDefault": "manual",
-    "usernameAttributes": [
-        "email"
-    ],
+    "useDefault": "default",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "dependsOn": [],
-    "thirdPartyAuth": false,
-    "userPoolGroups": false,
-    "adminQueries": false,
-    "triggers": "{}",
-    "hostedUI": false,
-    "parentStack": {
-        "Ref": "AWS::StackId"
-    },
-    "breakCircularDependency": true,
-    "permissions": [],
-    "authProviders": []
+    "dependsOn": []
 }
