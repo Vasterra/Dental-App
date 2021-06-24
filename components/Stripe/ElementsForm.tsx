@@ -1,12 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import PrintObject from './PrintObject';
 import {fetchPostJSON} from '../../utils/api-helpers';
 import * as config from '../../config';
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
-import {API, graphqlOperation} from "aws-amplify";
-import {processOrder} from "../../graphql/mutations";
-import {listPlans} from "../../graphql/queries";
-import {v4 as uuidv4} from "uuid";
 
 const CARD_OPTIONS = {
   iconStyle: 'solid',
@@ -42,25 +38,6 @@ const ElementsForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const stripe = useStripe();
   const elements = useElements();
-  const [plans, setPlans] = useState([]);
-  const [featured, setFeatured] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [cart, setCart] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [orderDetails, setOrderDetails] = useState({ cart, total, address: null, token: null });
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetchPlans();
-    const total = [...cart].reduce((total, { amount, price }) => {
-      return (total += amount * price);
-    }, 0);
-    setTotal(parseFloat(total.toFixed(2)));
-
-    if (orderDetails.token) {
-      checkout(orderDetails);
-    }
-  }, [cart, orderDetails]);
 
   const PaymentStatus = ({status}: { status: string }) => {
     switch (status) {
@@ -82,91 +59,46 @@ const ElementsForm = () => {
             <p className="error-message">{errorMessage}</p>
           </>
         );
+
       default:
         return null;
     }
   };
 
-  const fetchPlans = async () => {
-    try {
-      setLoading(true);
-      // Switch authMode to API_KEY for public access
-      const {data}: any = await API.graphql({
-        query: listPlans,
-        // @ts-ignore
-        authMode: "API_KEY"
-      });
-      const plans = data.listPlans.items;
-      const featured = plans.filter((book) => {
-        return !!book.featured;
-      });
-      setPlans(plans);
-      setFeatured(featured);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const checkout = async (orderDetails) => {
-    const payload = {
-      id: uuidv4(),
-      ...orderDetails
-    };
-    try {
-      await API.graphql(graphqlOperation(processOrder, {input: payload}));
-      console.log("Order is successful");
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const decreaseAmount = (id, amount) => {
-    let updatedCart = [];
-    if (amount === 1) {
-      updatedCart = [...cart].filter((item) => item.id !== id);
-    } else {
-      updatedCart = [...cart].map((item) => {
-        return item.id === id ? { ...item, amount: item.amount - 1 } : item;
-      });
-    }
-    setCart(updatedCart);
-  };
-
-  const increaseAmount = (id) => {
-    const updatedCart = [...cart].map((item) => {
-      return item.id === id ? { ...item, amount: item.amount + 1 } : item;
-    });
-    setCart(updatedCart);
-  };
-
-  const addToCart = (plan) => {
-    const { id, title, price, image } = plan;
-    const cartItem = [...cart].find((item) => item.id === id);
-    if (cartItem) {
-      increaseAmount(id);
-    } else {
-      const cartItems = [...cart, { id, title, image, price, amount: 1 }];
-      setCart(cartItems);
-    }
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
-
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e: { preventDefault: () => void; currentTarget: { reportValidity: () => any; }; }) => {
-    event.preventDefault();
-    const card = elements.getElement(CardElement);
-    const result = await stripe.createToken(card);
-    if (result.error) {
-      // Inform the user if there was an error.
-      setError(result.error.message);
-    } else {
-      setError(null);
-      // Send the token to your server.
-      const token = result.token;
-      setOrderDetails({ ...orderDetails, token: token.id });
+    e.preventDefault();
+
+    if (!e.currentTarget.reportValidity()) return;
+    setPayment({status: 'processing'});
+
+    const response = await fetchPostJSON('/api/payment_intents', {
+      amount: input.customDonation,
+    });
+    setPayment(response);
+
+    if (response.statusCode === 500) {
+      setPayment({status: 'error'});
+      setErrorMessage(response.message);
+      return;
+    }
+
+    const cardElement = elements!.getElement(CardElement);
+
+    const {error, paymentIntent} = await stripe!.confirmCardPayment(
+      response.client_secret,
+      {
+        payment_method: {
+          card: cardElement!
+        }
+      }
+    );
+    console.log(paymentIntent)
+    if (error) {
+      setPayment({status: 'error'});
+      // @ts-ignore
+      setErrorMessage(error.message);
+    } else if (paymentIntent) {
+      setPayment(paymentIntent);
     }
   };
 
