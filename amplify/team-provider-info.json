@@ -18,7 +18,7 @@
       "function": {
         "processPayment": {
           "deploymentBucketName": "amplify-dentalaws-dev-132022-deployment",
-          "s3Key": "amplify-builds/processPayment-4a443948697038313766-build.zip"
+          "s3Key": "amplify-builds/processPayment-49366b64583245706c59-build.zip"
         },
         "createOrder": {
           "deploymentBucketName": "amplify-dentalaws-dev-132022-deployment",
@@ -26,7 +26,7 @@
         },
         "dentalSearch": {
           "deploymentBucketName": "amplify-dentalaws-dev-132022-deployment",
-          "s3Key": "amplify-builds/dentalSearch-4b6f5141354c72796c75-build.zip"
+          "s3Key": "amplify-builds/dentalSearch-76614c615350702f6a76-build.zip"
         }
       }
     }

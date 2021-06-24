@@ -10,7 +10,7 @@ import Drawer from "../components/Drawer";
 import {convertCityCoords} from "../utils/search/converCityCoords";
 import CardDentist from "../components/Search/CardDentist";
 import {API} from "aws-amplify";
-import {listDentists, listServices, searchCoordDentists} from "../graphql/queries";
+import {listDentists,} from "../graphql/queries";
 
 class Search extends Component {
   state: any = {
