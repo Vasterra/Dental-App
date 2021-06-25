@@ -1,17 +1,6 @@
 projects:
-  dentalaws:
-    schemaPath: graphql/schema.json
-    includes:
-      - ./graphql/**/*.js
-    excludes:
-      - ./amplify/**
-    extensions:
-      amplify:
-        codeGenTarget: javascript
-        generatedFileName: ''
-        docsFilePath: ./graphql
   awsdental:
-    schemaPath: src/graphql/schema.json
+    schemaPath: graphql/schema.json
     includes:
       - graphql/**/*.js
     excludes:
