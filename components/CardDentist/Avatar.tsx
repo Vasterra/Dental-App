@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import styled from "styled-components";
+import {Storage} from "aws-amplify";
 
 const DentistAvatar = styled("img")`
   display: block;
@@ -23,39 +24,32 @@ type Props = {
 }
 
 const AvatarDentistComponent: React.FunctionComponent<Props> = ({data}) => {
-  const [images, setImages] = useState([]);
+  const [currentAvatar, setCurrentAvatar] = useState([]);
 
   React.useEffect(() => {
-    getImagesAvatar()
+    downloadAvatar()
   }, []);
 
-  const getImagesAvatar = async () => {
-    const URL: string = "http://localhost:4000/files/" + data.id + "/avatar/"
-    const requestOptions: {} = {
-      method: 'GET',
-      redirect: 'follow'
-    };
 
-    await fetch(URL, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        setImages(result[0].src)
-      })
-      .catch(() => {
-        DentistPhotoWithoutMe()
-      })
-  }
-
-  const DentistPhotoWithoutMe = () => {
-    if (images.length === 0) {
-      return <DentistAvatarBlockEmpty/>
+  const downloadAvatar = async () => {
+    try {
+      const files =  await Storage.list('avatars/' + data.id + '/')
+      let signedFiles = files.map(f => Storage.get(f.key))
+      signedFiles = await Promise.all(signedFiles)
+      setCurrentAvatar(signedFiles[0])
+    } catch (error) {
+      console.log('Error uploading file: ', error);
     }
-      {/*// @ts-ignore*/}
-      return <DentistAvatar src={images} alt="avatar"/>
   }
 
   return (
-    <DentistPhotoWithoutMe />
+    <>
+
+      {currentAvatar && <DentistAvatar
+          // @ts-ignore
+          src={currentAvatar} alt="avatar"/>}
+      {!currentAvatar && <DentistAvatarBlockEmpty/>}
+    </>
   )
 }
 

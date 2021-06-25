@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-// import AdminDrawer from "../AdminPanel/AdminDrawer";
+import {Storage} from "aws-amplify";
 
 const ImageWrapper = styled("div")`
   display: flex;
@@ -35,39 +35,40 @@ const CardDentistImage: React.FunctionComponent<Props> = ({data}) => {
   const [images, setImages] = useState([]);
 
   React.useEffect(() => {
-    getImagesAvatar()
+    downloadImages()
   }, []);
 
-  const getImagesAvatar = async () => {
-    const URL: string = "http://localhost:4000/files/" + data.id
-    const requestOptions: {} = {
-      method: 'GET',
-      redirect: 'follow'
-    };
-
-    await fetch(URL, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        setImages(result[0].src)
+  const downloadImages = async () => {
+    try {
+      if (data === null) return
+      const files = await Storage.list('images/' + data.id + '/')
+      let signedFiles = files.map(f => Storage.get(f.key))
+      signedFiles = await Promise.all(signedFiles)
+      let filesList = signedFiles.map(f => {
+        return {
+          thumbnail: f,
+          src: f,
+          name: f,
+          thumbnailWidth: 320,
+          thumbnailHeight: 212,
+          isSelected: false
+        }
       })
-      .catch((_error: any) => {
-      })
-  }
-
-  const Image = () => {
-    if (images.length === 0) {
-      return <DentistImageBlockEmpty/>
-    } else {
-      {/*// @ts-ignore*/}
-      return <DentistImage src={images} alt="avatar"/>
+      console.log(filesList)
+      setImages(filesList[0])
+    } catch (error) {
+      console.log('Error uploading file: ', error);
     }
   }
 
   return (
     <ImageWrapper>
-      <Image />
+      {images && <DentistImage
+        // @ts-ignore
+          src={images.src} alt="image"/>}
+      {!images && <DentistImageBlockEmpty/>}
     </ImageWrapper>
   )
 }
 
-export default CardDentistImage
+export default CardDentistImage;
