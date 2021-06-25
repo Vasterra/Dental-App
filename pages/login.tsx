@@ -49,7 +49,7 @@ const Login = () => {
         query: createDentist,
         variables: {
           input: {
-            id: user.username,
+            id: user.attributes.sub,
             email: user.attributes.email,
             lat: result.lat,
             lng: result.lng,

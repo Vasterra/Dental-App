@@ -25,7 +25,7 @@ class Search extends Component {
     searchValue: null
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     if (!this.state.ipCoords) {
       convertCityCoords().then((result) => {
         this.setState({ipCoords: result})

@@ -25,7 +25,6 @@ type Service
   id: ID!
   dentistId: ID!
   name: String!
-
 }
 
 type Practice
