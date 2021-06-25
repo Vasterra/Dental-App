@@ -232,3 +232,45 @@ export const deletePractice = /* GraphQL */ `
     }
   }
 `;
+export const createServiceForDental = /* GraphQL */ `
+  mutation CreateServiceForDental(
+    $input: CreateServiceForDentalInput!
+    $condition: ModelServiceForDentalConditionInput
+  ) {
+    createServiceForDental(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateServiceForDental = /* GraphQL */ `
+  mutation UpdateServiceForDental(
+    $input: UpdateServiceForDentalInput!
+    $condition: ModelServiceForDentalConditionInput
+  ) {
+    updateServiceForDental(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteServiceForDental = /* GraphQL */ `
+  mutation DeleteServiceForDental(
+    $input: DeleteServiceForDentalInput!
+    $condition: ModelServiceForDentalConditionInput
+  ) {
+    deleteServiceForDental(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

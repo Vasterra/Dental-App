@@ -1,21 +1,30 @@
+import {API} from "aws-amplify";
 import React, {useState} from "react";
 import styled from "styled-components";
+import {getDentist} from "../../graphql/queries";
 
 const ServiceWrapper = styled("div")`
   //margin: 10px 0;
 `;
 
 type Props = {
-  getDentist: Function,
+  setFindDentist: Function,
   dentists?: Array<string | boolean | number>
   searchDentistsLocations?: Array<string | boolean | number>
   searchCoords?: any
   services?: Array<string | boolean | number>
 }
 
-const ServicesComponent: React.FunctionComponent<Props> = ({services,getDentist, searchDentistsLocations, searchCoords}) => {
-
+const ServicesComponent: React.FunctionComponent<Props> = ({
+                                                             services,
+                                                             setFindDentist,
+                                                             dentists,
+                                                             searchDentistsLocations,
+                                                             searchCoords
+                                                           }) => {
   const [service, setService] = useState();
+  const [findDentists, setFinDentists] = useState();
+  const [findDentistOnService, setFindDentistOnService] = useState([]);
 
   if (services.length === 0) {
     return (
@@ -24,15 +33,17 @@ const ServicesComponent: React.FunctionComponent<Props> = ({services,getDentist,
   }
   const handleChange = async (e) => {
     let distanceDent: any[] = [];
-    if (e.target.value === 'choose service') {
-      getDentist(searchDentistsLocations)
-    }
+    let searchDent: any[] = [];
+
     setService(e.target.value)
 
-    services.forEach((value: any) => {
-      if (value.id === e.target.value) {
-        console.log(value)
-        value.map(val => val.dentist).map((dent: { lng: any; lat: any; }) => {
+    dentists.forEach(item => {
+      searchDent.push(getDentistsFind(item, e.target.value))
+    })
+    searchDent = await Promise.all(searchDent)
+    searchDent.forEach(dent => {
+      dent.services.items.forEach(val => {
+        if (val.name == e.target.value) {
           const a = {'Longitude': searchCoords.lng, 'Latitude': searchCoords.lat};
           const b = {'Longitude': dent.lng, 'Latitude': dent.lat};
           const distanceCur = (111.111 *
@@ -45,10 +56,27 @@ const ServicesComponent: React.FunctionComponent<Props> = ({services,getDentist,
           if (distanceCur < 100) {
             distanceDent.push(dent)
           }
-        })
-        getDentist(distanceDent);
-      }
+        }
+      })
     })
+    setFindDentist(distanceDent);
+  }
+
+  const getDentistsFind = async (dentist, currentService) => {
+    const search = []
+    const {data}: any = await API.graphql({
+      query: getDentist,
+      variables: {
+        id: dentist.id
+      },
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    })
+    // console.log('currentService', currentService)
+    // data.getDentist.services.items.forEach(val => {
+    //   val.name == currentService && search.push(data.getDentist)
+    // })
+    return data.getDentist
   }
 
   return (
@@ -57,7 +85,7 @@ const ServicesComponent: React.FunctionComponent<Props> = ({services,getDentist,
         <option value='choose service'>choose service</option>
         {services.map((data: any) => {
             return (
-              <option key={data.id} value={data.id}>{data.name}</option>
+              <option key={data.id} value={data.name}>{data.name}</option>
             )
           }
         )}

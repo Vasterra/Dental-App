@@ -10,11 +10,12 @@ import Drawer from "../components/Drawer";
 import {convertCityCoords} from "../utils/search/converCityCoords";
 import CardDentist from "../components/Search/CardDentist";
 import {API} from "aws-amplify";
-import {listDentists,} from "../graphql/queries";
+import {listDentists, listServiceForDentals,} from "../graphql/queries";
 
 class Search extends Component {
   state: any = {
     services: [],
+    servicesForSearch: [],
     dentists: [],
     currentDentist: null,
     ipCoords: null,
@@ -35,10 +36,23 @@ class Search extends Component {
       })
     }
     await this.getDentists();
+    await this.getListServiceForDentals();
+  }
+
+  async getListServiceForDentals() {
+    const {data}: any = await API.graphql({
+      query: listServiceForDentals,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    this.setState({servicesForSearch: data.listServiceForDentals.items})
+  }
+  
+  async setFindDentist(findDentist) {
+    this.setState({dentists: findDentist})
   }
 
   async getDentists() {
-
     const dentists: any = await API.graphql({
       query: listDentists,
       // @ts-ignore
@@ -162,9 +176,9 @@ class Search extends Component {
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
                   <Services
-                    getDentist={this.getDentistForService}
+                    setFindDentist={this.setFindDentist.bind(this)}
                     dentists={this.state.searchDentists}
-                    services={this.state.services}
+                    services={this.state.servicesForSearch}
                     searchDentistsLocations={this.state.searchDentistsLocations}
                     searchCoords={this.state.searchCoords}
                   />

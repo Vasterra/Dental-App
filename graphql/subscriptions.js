@@ -205,3 +205,36 @@ export const onDeletePractice = /* GraphQL */ `
     }
   }
 `;
+export const onCreateServiceForDental = /* GraphQL */ `
+  subscription OnCreateServiceForDental {
+    onCreateServiceForDental {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateServiceForDental = /* GraphQL */ `
+  subscription OnUpdateServiceForDental {
+    onUpdateServiceForDental {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteServiceForDental = /* GraphQL */ `
+  subscription OnDeleteServiceForDental {
+    onDeleteServiceForDental {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

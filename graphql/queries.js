@@ -142,3 +142,36 @@ export const listPractices = /* GraphQL */ `
     }
   }
 `;
+export const getServiceForDental = /* GraphQL */ `
+  query GetServiceForDental($id: ID!) {
+    getServiceForDental(id: $id) {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listServiceForDentals = /* GraphQL */ `
+  query ListServiceForDentals(
+    $filter: ModelServiceForDentalFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listServiceForDentals(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;

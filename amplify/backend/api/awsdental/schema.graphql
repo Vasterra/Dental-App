@@ -35,3 +35,10 @@ type Practice
   dentistId: ID!
   name: String!
 }
+
+type ServiceForDental
+@model
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  name: String!
+}
