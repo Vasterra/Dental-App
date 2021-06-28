@@ -53,13 +53,14 @@ class Search extends Component {
   }
 
   async getDentists() {
-    const dentists: any = await API.graphql({
+    const {data}: any = await API.graphql({
       query: listDentists,
       // @ts-ignore
       authMode: 'AWS_IAM'
     })
-    this.setState({dentists: dentists.data.listDentists.items})
-    const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, 100, dentists.data.listDentists.items)
+
+    const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, 100, data.listDentists.items)
+    console.log('findCoordinatesDent', findCoordinatesDent)
     this.setState({dentists: findCoordinatesDent})
     this.setState({searchDentists: findCoordinatesDent})
   }
@@ -178,6 +179,7 @@ class Search extends Component {
                   <Services
                     setFindDentist={this.setFindDentist.bind(this)}
                     dentists={this.state.searchDentists}
+                    getDentists={this.getDentists.bind(this)}
                     services={this.state.servicesForSearch}
                     searchDentistsLocations={this.state.searchDentistsLocations}
                     searchCoords={this.state.searchCoords}

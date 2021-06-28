@@ -9,6 +9,7 @@ const ServiceWrapper = styled("div")`
 
 type Props = {
   setFindDentist: Function,
+  getDentists: Function,
   dentists?: Array<string | boolean | number>
   searchDentistsLocations?: Array<string | boolean | number>
   searchCoords?: any
@@ -16,12 +17,13 @@ type Props = {
 }
 
 const ServicesComponent: React.FunctionComponent<Props> = ({
-                                                             services,
-                                                             setFindDentist,
-                                                             dentists,
-                                                             searchDentistsLocations,
-                                                             searchCoords
-                                                           }) => {
+     services,
+     setFindDentist,
+     getDentists,
+     dentists,
+     searchDentistsLocations,
+     searchCoords
+   }) => {
   const [service, setService] = useState();
   const [findDentists, setFinDentists] = useState();
   const [findDentistOnService, setFindDentistOnService] = useState([]);
@@ -37,9 +39,14 @@ const ServicesComponent: React.FunctionComponent<Props> = ({
 
     setService(e.target.value)
 
+    if (e.target.value == 'choose service') {
+      return getDentists(searchDentistsLocations)
+    }
+
     dentists.forEach(item => {
       searchDent.push(getDentistsFind(item, e.target.value))
     })
+
     searchDent = await Promise.all(searchDent)
     searchDent.forEach(dent => {
       dent.services.items.forEach(val => {
