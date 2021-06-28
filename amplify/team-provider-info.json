@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "awsdentale726916b": {}
+      },
+      "function": {
+        "createCustom": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/createCustom-546e32336c4475736135-build.zip"
+        }
       }
     }
   }

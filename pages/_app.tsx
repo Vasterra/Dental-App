@@ -12,7 +12,7 @@ class MyApp extends App<any> {
   render() {
     const {Component, pageProps, apolloClient} = this.props;
     const queryClient = new QueryClient()
-    const stripePromise = loadStripe("pk_test_51ISNerEE2uETn4H3tqYplaINZlDwEa8CM7ohtp7YbxF7KJnUysRK8rjssQxSbruzaL6uJz4951GhHoZcHM3qWcLN00drEQTQ5M");
+    const stripePromise = loadStripe("pk_test_51J15W0B5Yj7B7VjGcyWF6fMvy3UkvUUS5l6YJ3LQqLGFGZgK7UwNyVHLMMVi2HgDweAsAUxkhuukQBjWlTshTPmu00NmYIp1nd");
     return (
       <ApolloProvider client={apolloClient}>
         <QueryClientProvider client={queryClient}>
