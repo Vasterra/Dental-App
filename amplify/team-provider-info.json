@@ -16,14 +16,6 @@
         "awsdentale726916b": {}
       },
       "function": {
-        "createCustom": {
-          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
-          "s3Key": "amplify-builds/createCustom-546e32336c4475736135-build.zip"
-        },
-        "stripefunction": {
-          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
-          "s3Key": "amplify-builds/stripefunction-4a34614b306b36744a6f-build.zip"
-        },
         "createSubscription": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
           "s3Key": "amplify-builds/createSubscription-46457037735959695175-build.zip"
