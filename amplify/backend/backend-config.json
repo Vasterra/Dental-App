@@ -147,17 +147,6 @@
     }
   },
   "function": {
-    "createCustom": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": []
-    },
-    "stripefunction": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "createSubscription": {
       "build": true,
       "providerPlugin": "awscloudformation",
