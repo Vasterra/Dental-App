@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/webhooks",
+      "lambdaFunction": "webhooks",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/webhooks"
+    }
+  ],
+  "resourceName": "webhooks",
+  "apiName": "webhooks",
+  "functionArns": [
+    {
+      "lambdaFunction": "webhooks"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-awsdental-dev-82304-authRole",
+    "unAuthRoleName": "amplify-awsdental-dev-82304-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "webhooks",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}

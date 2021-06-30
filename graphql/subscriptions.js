@@ -18,6 +18,10 @@ export const onCreateDentist = /* GraphQL */ `
       lat
       lng
       registered
+      customerID
+      paymentMethodID
+      subscriptionID
+      hasPaidPlan
       services {
         items {
           id
@@ -62,6 +66,10 @@ export const onUpdateDentist = /* GraphQL */ `
       lat
       lng
       registered
+      customerID
+      paymentMethodID
+      subscriptionID
+      hasPaidPlan
       services {
         items {
           id
@@ -106,6 +114,10 @@ export const onDeleteDentist = /* GraphQL */ `
       lat
       lng
       registered
+      customerID
+      paymentMethodID
+      subscriptionID
+      hasPaidPlan
       services {
         items {
           id

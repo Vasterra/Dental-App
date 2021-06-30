@@ -18,6 +18,10 @@ export const getDentist = /* GraphQL */ `
       lat
       lng
       registered
+      customerID
+      paymentMethodID
+      subscriptionID
+      hasPaidPlan
       services {
         items {
           id
@@ -67,6 +71,10 @@ export const listDentists = /* GraphQL */ `
         lat
         lng
         registered
+        customerID
+        paymentMethodID
+        subscriptionID
+        hasPaidPlan
         services {
           nextToken
         }

@@ -19,6 +19,42 @@
         "createCustom": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
           "s3Key": "amplify-builds/createCustom-546e32336c4475736135-build.zip"
+        },
+        "stripefunction": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/stripefunction-4a34614b306b36744a6f-build.zip"
+        },
+        "createSubscription": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/createSubscription-46457037735959695175-build.zip"
+        },
+        "handleSubscription": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/handleSubscription-7549676c44392b6a696f-build.zip"
+        },
+        "retrieveSubscription": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/retrieveSubscription-5645766c4871614c7574-build.zip"
+        },
+        "webhooks": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/webhooks-64354c754f4978376f65-build.zip"
+        },
+        "updatePaymentMethod": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/updatePaymentMethod-67374176655343483137-build.zip"
+        },
+        "retryInvoice": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/retryInvoice-326a5230694a6e4f364b-build.zip"
+        },
+        "retrievePaymentMethod": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/retrievePaymentMethod-50676c2b4662446f3971-build.zip"
+        },
+        "createCustomer": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/createCustomer-75547730636c2b354f68-build.zip"
         }
       }
     }

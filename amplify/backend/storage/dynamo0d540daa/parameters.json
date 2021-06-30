@@ -1,0 +1,5 @@
+{
+    "tableName": "dynamo0d540daa",
+    "partitionKeyName": "stripeid",
+    "partitionKeyType": "N"
+}

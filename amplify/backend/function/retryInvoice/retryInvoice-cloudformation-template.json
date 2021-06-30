@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "createCustom",
+            "retryInvoice",
             {
               "Fn::Join": [
                 "",
                 [
-                  "createCustom",
+                  "retryInvoice",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "awsdentalLambdaRolebf4a0aaa",
+            "awsdentalLambdaRole03d14306",
             {
               "Fn::Join": [
                 "",
                 [
-                  "awsdentalLambdaRolebf4a0aaa",
+                  "awsdentalLambdaRole03d14306",
                   "-",
                   {
                     "Ref": "env"

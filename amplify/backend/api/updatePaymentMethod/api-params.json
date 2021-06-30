@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/updatePaymentMethod",
+      "lambdaFunction": "updatePaymentMethod",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/updatePaymentMethod"
+    }
+  ],
+  "resourceName": "updatePaymentMethod",
+  "apiName": "updatePaymentMethod",
+  "functionArns": [
+    {
+      "lambdaFunction": "updatePaymentMethod"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-awsdental-dev-82304-authRole",
+    "unAuthRoleName": "amplify-awsdental-dev-82304-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "updatePaymentMethod",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
