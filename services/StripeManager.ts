@@ -1,4 +1,5 @@
-import {Auth} from "aws-amplify";
+import {API, Auth} from "aws-amplify";
+import { updateDentist } from "../graphql/mutations";
 import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
 
@@ -15,18 +16,16 @@ class StripeManager {
       const request = await fetch('https://7jgeup4ehe.execute-api.eu-west-1.amazonaws.com/dev/createCustomer', {
         method: 'POST',
         headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "*"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           email,
-          id,
+          username: id,
         }),
       });
       const customer = (await request.json()) as IStripeCustomer;
       // Update your user in DB to store the customerID
       // updateUserInDB() is *your* implementation of updating a user in the DB
-      updateUserInDB({customerID: customer.id});
       return customer;
     } catch (error) {
       console.log('Failed to create customer');
@@ -41,8 +40,8 @@ class StripeManager {
     const {customerID}: any = dentist;
     if (!customerID) {
       const customer = await this.createCustomer(dentist);
-      console.log(dentist)
-      return dentist.id;
+      console.log(customer)
+      return customer;
     }
     return customerID;
   }
@@ -50,9 +49,8 @@ class StripeManager {
   public static async createSubscription(customerID: string, paymentMethodID: string) {
     const request = await fetch('https://xg92m8wtpa.execute-api.eu-west-1.amazonaws.com/dev/createSubscription', {
       method: 'POST',
-      credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         customerID,
@@ -68,28 +66,25 @@ class StripeManager {
     }
     // Update your user in DB to store the subscriptionID and enable paid plan
     // updateUserInDB() is *your* implementation of updating a user in the DB
-    updateUserInDB({
+    return {
       // @ts-ignore
       paymentMethodID,
       hasPaidPlan: true,
-      subscriptionID: subscription.id,
-    });
-    return subscription;
+      subscription,
+    };
   }
 
   public static async handleSubscription(subscriptionID: string, end: boolean) {
     const request = await fetch('https://khyv8heflf.execute-api.eu-west-1.amazonaws.com/dev/handleSubscription', {
       method: 'POST',
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "*"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         subscriptionID,
         end,
       }),
     });
-    console.log('request', request.json())
     return await request.json() as IStripeSubscription;
   }
 
@@ -97,8 +92,7 @@ class StripeManager {
     const request = await fetch('https://nblrn1i5a4.execute-api.eu-west-1.amazonaws.com/dev/retrieveSubscription', {
       method: 'POST',
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "*"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         subscriptionID,
@@ -107,9 +101,26 @@ class StripeManager {
     return await request.json() as IStripeSubscription;
   }
 
+  public static async getListSubscriptions(customerID: string) {
+    const request = await fetch('https://evzvxzj1sf.execute-api.eu-west-1.amazonaws.com/dev/getListSubscriptions', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        customerID,
+      }),
+    });
+
+    return await request.json();
+  }
+
   public static async updatePaymentMethod(customerID: string, paymentMethodID: string) {
     await fetch('https://vr4czqsb93.execute-api.eu-west-1.amazonaws.com/dev/updatePaymentMethod', {
       method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         customerID,
         paymentMethodID,
@@ -124,12 +135,11 @@ class StripeManager {
   public static async retreivePaymentInfo(paymentMethodID: string) {
     try {
       const request = await fetch(
-        'https://dqanjkofi9.execute-api.eu-west-1.amazonaws.com/dev/retreivePaymentInfo',
+        'https://dqanjkofi9.execute-api.eu-west-1.amazonaws.com/dev/retrievePaymentMethod',
         {
           method: 'POST',
           headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "*"
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             paymentMethodID,
@@ -150,6 +160,9 @@ class StripeManager {
   public static async retryInvoice(customerID: string, paymentMethodID: string, invoiceID: string) {
     const request = await fetch('https://69qwwhi060.execute-api.eu-west-1.amazonaws.com/dev/retryInvoice', {
       method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         customerID,
         paymentMethodID,

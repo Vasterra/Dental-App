@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "stripefunction",
+            "getListSubscriptions",
             {
               "Fn::Join": [
                 "",
                 [
-                  "stripefunction",
+                  "getListSubscriptions",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "awsdentalLambdaRoleffffdf2e",
+            "awsdentalLambdaRolefb202f79",
             {
               "Fn::Join": [
                 "",
                 [
-                  "awsdentalLambdaRoleffffdf2e",
+                  "awsdentalLambdaRolefb202f79",
                   "-",
                   {
                     "Ref": "env"

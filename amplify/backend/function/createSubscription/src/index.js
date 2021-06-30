@@ -36,11 +36,15 @@ exports.handler = async (
         // Create the subscription
         const subscription = await stripe.subscriptions.create({
             customer: customerID,
-            items: [{ price: 'prod_JkkduRtqS3SPgj' }],
+            items: [{ price: 'price_1J7F8DB5Yj7B7VjGReGfPhfK' }],
             expand: ['latest_invoice.payment_intent'],
         });
         callback(null, {
             statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
             body: JSON.stringify(subscription),
         });
     } catch (error) {

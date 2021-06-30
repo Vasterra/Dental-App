@@ -19,7 +19,6 @@ const stripePromise = loadStripe('pk_test_51J15W0B5Yj7B7VjGcyWF6fMvy3UkvUUS5l6YJ
 const Upgrade: React.FunctionComponent<Props> = ({dentist}) => {
   return (
     <div>
-      <h1>Upgrade now</h1>
       <Elements stripe={stripePromise}>
         <CheckoutFormStripe dentist={dentist}/>
       </Elements>

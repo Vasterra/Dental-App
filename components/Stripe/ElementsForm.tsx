@@ -2,7 +2,10 @@ import React, {useState} from 'react';
 import PrintObject from './PrintObject';
 import {fetchPostJSON} from '../../utils/api-helpers';
 import * as config from '../../config';
-import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
+import {CardElement, useStripe, useElements, CardNumberElement} from '@stripe/react-stripe-js';
+import StripeManager from '../../services/StripeManager';
+import { API } from 'aws-amplify';
+import { updateDentist } from '../../graphql/mutations';
 
 const CARD_OPTIONS = {
   iconStyle: 'solid',
@@ -28,83 +31,139 @@ const CARD_OPTIONS = {
   },
 };
 
-const ElementsForm = () => {
-  // @ts-ignore
-  const [input, setInput] = useState({
-    customDonation: Math.round(config.MAX_AMOUNT / config.AMOUNT_STEP),
-    cardholderName: '',
-  });
-  const [payment, setPayment] = useState({status: 'initial'});
-  const [errorMessage, setErrorMessage] = useState('');
+type Props = {
+  dentist: any,
+  typeCard: any,
+}
+
+const ElementsForm: React.FunctionComponent<Props> = ({dentist, typeCard}) => {
   const stripe = useStripe();
   const elements = useElements();
+  const [nameInput, setNameInput] = useState('card');
+  const [currentDentist, setCurrentDentist] = useState(dentist);
 
-  const PaymentStatus = ({status}: { status: string }) => {
-    switch (status) {
-      case 'processing':
-      case 'requires_payment_method':
-      case 'requires_confirmation':
-        return <h2>Processing...</h2>;
+  const [retry, setRetry] = useState(typeof window !== "undefined" ? !!localStorage.getItem('invoice_retry') : '');
 
-      case 'requires_action':
-        return <h2>Authenticating...</h2>;
+  const initialValues = {
+    id: dentist.id,
+    firstName: dentist.firstName,
+    lastName: dentist.lastName,
+    bio: dentist.bio,
+    email: dentist.email,
+    website: dentist.website,
+    city: dentist.city,
+    street: dentist.street,
+    postIndex: dentist.postIndex,
+    phone: dentist.phone,
+    qualifications: dentist.qualifications
+  }
 
-      case 'succeeded':
-        return <h2>Payment Succeeded 🥳</h2>;
-
-      case 'error':
-        return (
-          <>
-            <h2>Error 😭</h2>
-            <p className="error-message">{errorMessage}</p>
-          </>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e: { preventDefault: () => void; currentTarget: { reportValidity: () => any; }; }) => {
+  const handleSubmitPayment = async (e) => {
     e.preventDefault();
-
-    if (!e.currentTarget.reportValidity()) return;
-    setPayment({status: 'processing'});
-
-    const response = await fetchPostJSON('/api/payment_intents', {
-      amount: input.customDonation,
-    });
-    setPayment(response);
-
-    if (response.statusCode === 500) {
-      setPayment({status: 'error'});
-      setErrorMessage(response.message);
+    if (!stripe || !elements) {
       return;
     }
-
-    const cardElement = elements!.getElement(CardElement);
-
-    const {error, paymentIntent} = await stripe!.confirmCardPayment(
-      response.client_secret,
-      {
-        payment_method: {
-          card: cardElement!
-        }
+    try {
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: elements.getElement(CardNumberElement) as any,
+        billing_details: {
+          name: 'card'
+        },
+      });
+      if (error || !paymentMethod) {
+        throw Error(error?.message || 'Something is not right...');
       }
-    );
-    console.log(paymentIntent)
-    if (error) {
-      setPayment({status: 'error'});
-      // @ts-ignore
-      setErrorMessage(error.message);
-    } else if (paymentIntent) {
-      setPayment(paymentIntent);
+
+      const customer = await StripeManager.getStripeCustomerID(currentDentist);;
+
+      console.log('customer', customer)
+      console.log('paymentMethod', paymentMethod)
+      if (!customer.id) {
+        throw Error('Could not identify customer');
+      }
+
+      const paymentID = paymentMethod.id;
+      const {subscription, hasPaidPlan, paymentMethodID} = await StripeManager.createSubscription(customer.id, paymentID);
+
+      try {
+        await API.graphql({
+          query: updateDentist,
+          variables: {
+            input: {
+              ...initialValues,
+              customerID: customer.id,
+              paymentMethodID,
+              hasPaidPlan: true,
+              subscriptionID: subscription.id,
+            }
+          },
+          // @ts-ignore
+          authMode: 'AWS_IAM'
+        })
+      } catch (err) {
+      }
+      if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
+        setRetry(true);
+        localStorage.setItem('latest_invoice_id', subscription.latest_invoice.id);
+        throw Error('Your card was declined. Please try again or with another card');
+      }
+      if (subscription.status !== 'active') {
+        throw Error('Could not process payment.');
+      }
+    } catch (error) {
+      console.error(error);
+      // Let the user know that something went wrong here...
     }
   };
+
+  const handleRetryPayment = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
+    const invoiceID = localStorage.getItem('latest_invoice_id');
+    try {
+      if (!invoiceID) {
+        throw Error('Could not process payment. Please refresh and try again.');
+      }
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: elements.getElement(CardNumberElement) as any,
+        billing_details: {
+          name: 'card'
+        },
+      });
+      if (error || !paymentMethod) {
+        throw Error(error?.message || 'Something is not right...');
+      }
+      const { customerID } = dentist;
+      if (!customerID) {
+        throw Error('Could not identify customer');
+      }
+      const paymentID = paymentMethod.id;
+      await StripeManager.retryInvoice(customerID, paymentID, invoiceID);
+      localStorage.removeItem('latest_invoice_id');
+    } catch (error) {
+      console.error(error);
+      // Let the user know that something went wrong here...
+    }
+  };
+
+  const handleCancelSubscription = async (end: any) => {
+    try {
+      const subscription = await StripeManager.handleSubscription(dentist.subscriptionID, end);
+      // this.setState({subscription});
+    } catch (error) {
+      // Let the user know that something went wrong here...
+    }
+  };
+
+  const buttonAction = retry ? handleRetryPayment : handleSubmitPayment;
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={buttonAction}>
         <div className="pay-card border">
           <p className="text-form">Update Payment Information</p>
           <div className="card-numbers">
@@ -113,15 +172,6 @@ const ElementsForm = () => {
                 <CardElement
                   // @ts-ignore
                   options={CARD_OPTIONS}
-                  // @ts-ignore
-                  onChange={(e: { error: { message: any; }; }) => {
-                    if (e.error) {
-                      setPayment({status: 'error'});
-                      setErrorMessage(
-                        e.error.message
-                      );
-                    }
-                  }}
                 />
               </div>
             </div>
@@ -130,17 +180,12 @@ const ElementsForm = () => {
             <button className="button-small input-background">Cancel</button>
             <button
               className="button-small"
-              type="submit"
-              disabled={
-                !['initial', 'succeeded', 'error'].includes(payment.status) ||
-                !stripe
-              }>Confirm
+              type="submit">
+              Confirm
             </button>
           </div>
         </div>
       </form>
-      <PaymentStatus status={payment.status}/>
-      <PrintObject content={payment}/>
       <style jsx>{`
 
         .container {

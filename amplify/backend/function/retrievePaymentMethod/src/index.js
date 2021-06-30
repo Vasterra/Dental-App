@@ -27,6 +27,10 @@ exports.handler = async (
         const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodID);
         callback(null, {
             statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
             body: JSON.stringify(paymentMethod),
         });
     } catch (error) {

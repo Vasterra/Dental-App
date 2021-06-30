@@ -13,17 +13,19 @@ exports.handler = async (
         return;
     }
     const body = JSON.parse(event.body);
-    const { subscriptionID } = body;
-    if (!subscriptionID) {
+    const { customerID } = body;
+
+    if ( !customerID ) {
         callback(null, {
             statusCode: 400,
-            body: 'Missing subscription id',
+            body: 'Missing payment method or customer',
         });
         return;
     }
     try {
-        // Get the subscription
-        const subscription = await stripe.subscriptions.retrieve(subscriptionID);
+        const subscription = await stripe.subscriptions.list({
+            customer: customerID,
+        });
         callback(null, {
             statusCode: 200,
             headers: {

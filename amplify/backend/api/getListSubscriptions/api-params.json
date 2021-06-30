@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/getListSubscriptions",
+      "lambdaFunction": "getListSubscriptions",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/getListSubscriptions"
+    }
+  ],
+  "resourceName": "getListSubscriptions",
+  "apiName": "getListSubscriptions",
+  "functionArns": [
+    {
+      "lambdaFunction": "getListSubscriptions"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-awsdental-dev-82304-authRole",
+    "unAuthRoleName": "amplify-awsdental-dev-82304-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "getListSubscriptions",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}

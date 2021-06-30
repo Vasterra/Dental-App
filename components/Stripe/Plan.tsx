@@ -7,7 +7,8 @@ import {
   useStripe
 } from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
-import React, {useEffect, useState} from "react";
+import {withRouter} from "next/router";
+import React, {Component, useEffect, useState} from "react";
 import {IStripeSubscription} from "../../interfaces/IStripeSubscription";
 import StripeManager from "../../services/StripeManager";
 
@@ -17,67 +18,74 @@ type Props = {
   dentist: any,
 }
 
-const Plan: React.FunctionComponent<Props> = ({dentist}) => {
+class Plan extends React.Component<Props> {
 
-  const [cardInformation, setCardInformation] = useState<{
-    type: string;
-    digits: string;
-  }>();
-  const [subscription, setSubscription] = useState<IStripeSubscription>();
-  const fetchCardInformation = async () => {
+  state: any = {
+    cardInformation: {
+      type: '',
+      digits: '',
+    },
+    subscription: {}
+  }
+
+  async componentDidMount() {
+    await this.fetchCardInformation();
+    await this.fetchSubscription();
+  }
+
+  async fetchCardInformation() {
     try {
-      const info = await StripeManager.retreivePaymentInfo(dentist.paymentMethodID);
+      const info = await StripeManager.retreivePaymentInfo(this.props.dentist.paymentMethodID);
       if (info) {
-        setCardInformation(info);
+        this.setState({cardInformation: info});
       }
     } catch (error) {
       // Let the user know that something went wrong here...
     }
   };
-  const fetchSubscription = async () => {
+
+  async fetchSubscription() {
     try {
-      console.log(dentist)
-      const sub = await StripeManager.retrieveSubscription('prod_JkkduRtqS3SPgj');
+      const sub = await StripeManager.retrieveSubscription(this.props.dentist.subscriptionID);
       // const sub = await StripeManager.retrieveSubscription(dentist.subscriptionID);
       if (sub) {
-        setSubscription(sub);
+        this.setState({subscription: sub});
       }
     } catch (error) {
       // Let the user know that something went wrong here...
     }
   };
-  useEffect(() => {
-    fetchSubscription();
-    fetchCardInformation();
-  }, []);
-  const handleCancelSubscription = (end: boolean) => async () => {
 
-    //   try {
-    //     const subscription = await StripeManager.handleSubscription(dentist.subscriptionID, end);
-    //     setSubscription(subscription);
-    //   } catch (error) {
-    //     // Let the user know that something went wrong here...
-    //   }
+  async handleCancelSubscription(end: any) {
+    try {
+      const subscription = await StripeManager.handleSubscription(this.props.dentist.subscriptionID, end);
+      this.setState({subscription});
+    } catch (error) {
+      // Let the user know that something went wrong here...
+    }
   };
-  // console.log(dentist)
-  // console.log(subscription)
-  // const expirationDate = new Date(subscription.current_period_end * 1000).toDateString();
-  // const subscriptionWillEnd = subscription.cancel_at_period_end;
-  return (
-    <div>
-      {/*<div>The plan will expire on: {expirationDate}</div>*/}
-      {/*<div>Card: {cardInformation.type}</div>*/}
-      {/*<div>**** **** **** {cardInformation.digits}</div>*/}
-      {/*<Elements stripe={stripePromise}>*/}
-      {/*  <UpdateForm dentist={dentist}/>*/}
-      {/*</Elements>*/}
-      {/*<button onClick={handleCancelSubscription(!subscriptionWillEnd)}>*/}
-      {/*  {subscriptionWillEnd ? 'Continue' : 'Cancel'}*/}
-      {/*</button>*/}
-    </div>
-  );
+
+  render() {
+    const expirationDate = new Date(this.state.subscription.current_period_end * 1000).toDateString();
+    const subscriptionWillEnd = this.state.subscription.cancel_at_period_end;
+
+    return (
+      <div>
+        <div>The plan will expire on: {expirationDate}</div>
+        <div>Card: {this.state.cardInformation.type}</div>
+        <div>**** **** **** {this.state.cardInformation.digits}</div>
+        <Elements stripe={stripePromise}>
+          <UpdateForm dentist={this.props.dentist} typeCard={this.state.cardInformation.type}/>
+        </Elements>
+        {/*<button onClick={this.handleCancelSubscription(!subscriptionWillEnd)}>*/}
+        {/*  {subscriptionWillEnd ? 'Continue' : 'Cancel'}*/}
+        {/*</button>*/}
+      </div>
+    );
+  }
+
 };
-const UpdateForm = (dentist) => {
+const UpdateForm = (dentist, typeCard) => {
   // Include these hooks:
   const stripe = useStripe();
   const elements = useElements();
@@ -91,7 +99,7 @@ const UpdateForm = (dentist) => {
         type: 'card',
         card: elements.getElement(CardNumberElement) as any,
         billing_details: {
-          name: 'visa',
+          name: typeCard,
         },
       });
       if (error || !paymentMethod) {

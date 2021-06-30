@@ -134,6 +134,20 @@
           ]
         }
       ]
+    },
+    "getListSubscriptions": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "getListSubscriptions",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
     }
   },
   "storage": {
@@ -183,6 +197,11 @@
       "service": "Lambda"
     },
     "retryInvoice": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getListSubscriptions": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
