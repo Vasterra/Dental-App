@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/deletePlan",
+      "lambdaFunction": "deletePlan",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/deletePlan"
+    }
+  ],
+  "resourceName": "deletePlan",
+  "apiName": "deletePlan",
+  "functionArns": [
+    {
+      "lambdaFunction": "deletePlan"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-awsdental-dev-82304-authRole",
+    "unAuthRoleName": "amplify-awsdental-dev-82304-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "deletePlan",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}

@@ -18,7 +18,7 @@
       "function": {
         "createSubscription": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
-          "s3Key": "amplify-builds/createSubscription-4b4f53796a6851466442-build.zip"
+          "s3Key": "amplify-builds/createSubscription-484d4357324f72506170-build.zip"
         },
         "handleSubscription": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
@@ -51,6 +51,26 @@
         "getListSubscriptions": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
           "s3Key": "amplify-builds/getListSubscriptions-376673735945624c485a-build.zip"
+        },
+        "createPlan": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/createPlan-4e57705365634b316d6f-build.zip"
+        },
+        "retrievePlan": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/retrievePlan-5867744f793779613747-build.zip"
+        },
+        "listAllPlans": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/listAllPlans-53577165734c46535273-build.zip"
+        },
+        "deletePlan": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/deletePlan-77617a66613533335061-build.zip"
+        },
+        "updatePlan": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/updatePlan-47643346775634694c77-build.zip"
         }
       }
     }

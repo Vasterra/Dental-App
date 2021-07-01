@@ -75,7 +75,6 @@ class Subscription extends Component {
       // @ts-ignore
       authMode: 'AWS_IAM'
     })
-    console.log(data.getDentist)
     this.setState({dentist: data.getDentist})
   }
 
@@ -83,7 +82,6 @@ class Subscription extends Component {
   async fetchCardInformation() {
     try {
       const info = await StripeManager.retreivePaymentInfo(this.state.dentist.paymentMethodID);
-      console.log(info)
       if (info) {
         this.setState({cardInformation: info});
       }
@@ -95,8 +93,8 @@ class Subscription extends Component {
   async fetchSubscription() {
     try {
       const sub = await StripeManager.retrieveSubscription(this.state.dentist.subscriptionID);
-      const ddsdg = await StripeManager.getListSubscriptions(this.state.dentist.customerID)
-      console.log(ddsdg)
+      // const ddsdg = await StripeManager.getListSubscriptions(this.state.dentist.customerID)
+      // console.log(ddsdg)
       if (sub) {
         this.setState({subscription: sub});
       }
@@ -119,6 +117,7 @@ class Subscription extends Component {
   };
 
   render() {
+    console.log(this.state.subscription)
     const expirationDate = new Date(this.state.subscription.current_period_end * 1000).toDateString();
     const subscriptionWillEnd = this.state.subscription.cancel_at_period_end;
 
@@ -137,11 +136,9 @@ class Subscription extends Component {
                     <Typography variant="h6" gutterBottom>
                       Subscriptions
                     </Typography>
-                    <Typography variant="body1" gutterBottom>
-                      <div>The plan will expire on: {expirationDate}</div>
-                      <div>Card: {this.state.cardInformation.type}</div>
-                      <div>**** **** **** {this.state.cardInformation.digits}</div>
-                    </Typography>
+                    <Typography variant="body1" gutterBottom>The plan will expire on: {expirationDate}</Typography>
+                    <Typography variant="body1" gutterBottom>Card: {this.state.cardInformation.type}</Typography>
+                    <Typography variant="body1" gutterBottom>**** **** **** {this.state.cardInformation.digits}</Typography>
                     <Grid container alignItems="center" justify="space-between" spacing={2}>
                       <Grid item xs={12} sm={6} lg={3}>
                         {this.state.dentist && <Upgrade dentist={this.state.dentist}/>}

@@ -13,7 +13,7 @@ exports.handler = async (
         return;
     }
     const body = JSON.parse(event.body);
-    const { paymentMethodID, customerID } = body;
+    const { paymentMethodID, customerID, priceId } = body;
 
     if (!paymentMethodID || !customerID) {
         callback(null, {
@@ -36,7 +36,10 @@ exports.handler = async (
         // Create the subscription
         const subscription = await stripe.subscriptions.create({
             customer: customerID,
-            items: [{ price: 'price_1J7F8DB5Yj7B7VjGReGfPhfK' }],
+            items: [{
+                price: priceId,
+            }],
+            payment_behavior: 'default_incomplete',
             expand: ['latest_invoice.payment_intent'],
         });
         callback(null, {
@@ -45,9 +48,14 @@ exports.handler = async (
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*"
             },
-            body: JSON.stringify(subscription),
+            body: JSON.stringify(
+                {
+                    subscriptionId: subscription.id,
+                    clientSecret: subscription.latest_invoice.payment_intent.client_secret,
+                }
+            ),
         });
     } catch (error) {
-        callback(error);
+        callback({ error: { message: error.message } });
     }
 };

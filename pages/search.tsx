@@ -60,7 +60,6 @@ class Search extends Component {
     })
 
     const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, 100, data.listDentists.items)
-    console.log('findCoordinatesDent', findCoordinatesDent)
     this.setState({dentists: findCoordinatesDent})
     this.setState({searchDentists: findCoordinatesDent})
   }

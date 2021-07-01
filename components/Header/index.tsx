@@ -10,6 +10,7 @@ import PopupState, {bindMenu, bindTrigger} from 'material-ui-popup-state';
 import React, {useEffect, useState} from "react";
 import {Auth, Hub} from "aws-amplify";
 import Router from "next/router";
+import ApiManager from '../../services/ApiManager';
 
 const initState: any = {
   signedInUser: false,
