@@ -9,12 +9,11 @@ const Menu = styled("div")`{
   border-right: 1px solid #0d9da6;
   opacity: 1;
   text-align: center;
-  display: flex;
+  display: flex;  
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   align-self: flex-start;
-
+  
   a {
     text-align: center;
     font: normal normal normal 24px/32px Segoe UI;

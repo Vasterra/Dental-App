@@ -4,25 +4,42 @@ import Typography from "../components/Typography";
 import FooterForm from "../components/FooterForm";
 import {RightSide} from "../styles/Main.module";
 import Layout from "../components/Layout";
-import {Grid, Link, TextField} from "@material-ui/core";
+import {Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, TextField} from "@material-ui/core";
 import {API, Auth} from "aws-amplify";
 import ButtonForm from "../components/Buttons/ButtonForm";
 import Router from "next/router";
 import {createDentist} from "../graphql/mutations";
 import {listDentists} from "../graphql/queries";
 import {convertCityCoords} from "../utils/search/converCityCoords";
+import Header from "../components/Header";
+import Close from '@material-ui/icons/Close';
+
+interface State {
+  username: string;
+  password: string;
+  weight: string;
+  weightRange: string;
+  showPassword: boolean;
+  user: null;
+}
 
 const Login = () => {
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  const [values, setValues] = React.useState<State>({
+    username: '',
+    password: '',
+    weight: '',
+    weightRange: '',
+    showPassword: false,
+    user: null,
+  });
+
 
   async function signIn(event) {
     event.preventDefault();
     try {
-      const user = await Auth.signIn(username, password);
-      setUser(user)
+      const user = await Auth.signIn(values.username, values.password);
+      setValues({...values, user})
 
       const dentists: any = await API.graphql({
         query: listDentists,
@@ -53,7 +70,7 @@ const Login = () => {
             email: user.attributes.email,
             lat: result.lat,
             lng: result.lng,
-            firstName: username,
+            firstName: values.username,
             registered: true,
             phone: user.attributes.phone_number,
           }
@@ -63,49 +80,61 @@ const Login = () => {
       })
       await Router.replace('/search')
     })
-
   }
 
-  if (user) Router.replace('/')
+  const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  if (values.user) Router.replace('/')
 
   return (
     <Layout title="Login page">
+      <Header/>
       <Grid container justify="center">
-        <Grid item sm={6} lg={6}>
-          <div className="login-image"/>
-        </Grid>
-        <Grid item xs={12} sm={6} lg={6}>
-          <RightSide>
-            <Avatar/>
-            <Typography title='Login'/>
-            <form onSubmit={signIn} className="login-form-wrapper">
-              <TextField
-                label="Email"
-                type="text"
-                className="input-form"
-                id="filled-email-input"
-                placeholder="email"
-                onChange={(e) => setUsername(e.target.value)}
-                margin="normal"
-                variant="outlined"
-              />
-              <TextField
-                id="filled-password-input"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                className="input-form"
-                placeholder="password"
-                onChange={(e) => setPassword(e.target.value)}
-                margin="normal"
-                variant="outlined"
-              />
-              <ButtonForm title='Sign In'>Submit</ButtonForm>
-            </form>
-            <Link href={"../register"}>Create your Dental account</Link>
-            <Link href={"../search"}>Go to search Dentist</Link>
-            <FooterForm/>
-          </RightSide>
+        <Grid item xs={12} sm={12} lg={12}>
+          <div className="main bg-login main-height-full">
+            <div className="form-login">
+              <p className="form-login-title green">Login</p>
+              <p className="form-login-subtitle gray">Current FYD users</p>
+              <form onSubmit={signIn}>
+                <p className="form-login-input">
+                  <input
+                    type="email"
+                    name="email"
+                    value={values.username}
+                    id="email"
+                    placeholder="Email"
+                    onChange={(e) => setValues({...values, username: e.target.value})}
+                  />
+                  <Close className="form-login-input-close" onClick={() => setValues({...values, username: ''})}/>
+                </p>
+                <p className="form-login-input">
+                  <input
+                    type="password"
+                    name="password"
+                    value={values.password}
+                    id="password"
+                    placeholder="Password"
+                    onChange={(e) => setValues({...values, password: e.target.value})}
+                  />
+                  <Close className="form-login-input-close" onClick={() => setValues({...values, password: ''})}/>
+                </p>
+                <p className="form-login-buttons">
+                  <button type="submit" className="button-green">Login</button>
+                  <button className="button-white">Reset password</button>
+                </p>
+              </form>
+            </div>
+          </div>
         </Grid>
       </Grid>
     </Layout>
@@ -113,3 +142,7 @@ const Login = () => {
 };
 
 export default Login;
+function setValues(arg0: any) {
+    throw new Error("Function not implemented.");
+}
+

@@ -153,7 +153,7 @@ class Search extends Component {
   render() {
     return (
       <Layout title="Search page">
-        <Header/>
+        <Header />
         <Profile>
           <Drawer/>
           <Main>

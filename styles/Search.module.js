@@ -29,13 +29,13 @@ export const Profile = styled("section")`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  margin-top: 63px;
 `;
 
 export const Main = styled("div")`
   width: 100%;
   background: #F0F0F0 0% 0% no-repeat padding-box;
   padding: 15px;
-  height: 100vh;
 `;
 
 export const SearchBlock = styled("div")`
