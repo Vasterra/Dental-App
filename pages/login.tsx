@@ -34,8 +34,7 @@ const Login = () => {
     user: null,
   });
 
-
-  async function signIn(event) {
+  async function signIn(event: { preventDefault: () => void; }) {
     event.preventDefault();
     try {
       const user = await Auth.signIn(values.username, values.password);
@@ -46,7 +45,7 @@ const Login = () => {
         // @ts-ignore
         authMode: 'AWS_IAM'
       })
-      const dentistEmail = dentists.data.listDentists.items.find(item => item.email === user.attributes.email)
+      const dentistEmail = dentists.data.listDentists.items.find((item: { email: any; }) => item.email === user.attributes.email)
       if (dentists.data.listDentists.items.length !== 0) {
         if (!dentistEmail) {
           await createNewDentist(user);
@@ -59,7 +58,7 @@ const Login = () => {
     }
   }
 
-  async function createNewDentist(user) {
+  async function createNewDentist(user: { attributes: { sub: any; email: any; phone_number: any; }; }) {
     await convertCityCoords().then(async (result) => {
       console.log(result)
       await API.graphql({
@@ -108,11 +107,11 @@ const Login = () => {
               <form onSubmit={signIn}>
                 <p className="form-login-input">
                   <input
-                    type="email"
-                    name="email"
+                    type="text"
+                    name="username"
                     value={values.username}
-                    id="email"
-                    placeholder="Email"
+                    id="username"
+                    placeholder="Username"
                     onChange={(e) => setValues({...values, username: e.target.value})}
                   />
                   <Close className="form-login-input-close" onClick={() => setValues({...values, username: ''})}/>

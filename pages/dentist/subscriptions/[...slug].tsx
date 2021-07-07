@@ -104,7 +104,7 @@ class Subscription extends Component {
     }
   };
 
-  async handleCancelSubscription(e) {
+  async handleCancelSubscription(e: any) {
     try {
       const subscription = await StripeManager.handleSubscription(this.state.dentist.subscriptionID, this.state.subscription.cancel_at_period_end);
       this.setState({statusSnackbar: 'success'});

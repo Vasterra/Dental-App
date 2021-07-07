@@ -34,7 +34,7 @@ const AvatarDentistComponent: React.FunctionComponent<Props> = ({data}) => {
   const downloadAvatar = async () => {
     try {
       const files =  await Storage.list('avatars/' + data.id + '/')
-      let signedFiles = files.map(f => Storage.get(f.key))
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
       setCurrentAvatar(signedFiles[0])
     } catch (error) {

@@ -29,7 +29,7 @@ export const Profile = styled("section")`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  margin-top: 63px;
+  //margin-top: 63px;
 `;
 
 export const Main = styled("div")`

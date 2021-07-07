@@ -2,7 +2,6 @@ import React from "react";
 import {InputFormSettings, Label} from "../../../../styles/Form.module";
 
 interface InputGroupProps {
-  type: any
   title: any
   name: any
   placeholder: any
@@ -11,7 +10,6 @@ interface InputGroupProps {
 }
 
 const InputGroup: React.FC<InputGroupProps> = ({
-   type,
    title,
    name,
    placeholder,
@@ -20,16 +18,16 @@ const InputGroup: React.FC<InputGroupProps> = ({
  }) => {
 
   return (
-    <Label>{title}
-      <InputFormSettings
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        onChange={props.handleChange}
-        onBlur={props.handleBlur}
-        value={setValue === null ? setValue = '' : setValue}
+    <p className="form-profile-label">
+      <label className="form-profile-label" htmlFor="title">{title}</label>
+      <input className="form-profile-input"
+         name={name}
+         placeholder={placeholder}
+         onChange={props.handleChange}
+         onBlur={props.handleBlur}
+         value={setValue === null ? setValue = '' : setValue}
       />
-    </Label>
+    </p>
   )
 }
 

@@ -58,7 +58,7 @@ const ElementsForm: React.FunctionComponent<Props> = ({dentist, typeCard}) => {
     qualifications: dentist.qualifications
   }
 
-  const handleSubmitPayment = async (e) => {
+  const handleSubmitPayment = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (!stripe || !elements) {
       return;
@@ -77,8 +77,6 @@ const ElementsForm: React.FunctionComponent<Props> = ({dentist, typeCard}) => {
 
       const customer = await StripeManager.getStripeCustomerID(currentDentist);;
 
-      console.log('customer', customer)
-      console.log('paymentMethod', paymentMethod)
       if (!customer.id) {
         throw Error('Could not identify customer');
       }
@@ -117,7 +115,7 @@ const ElementsForm: React.FunctionComponent<Props> = ({dentist, typeCard}) => {
     }
   };
 
-  const handleRetryPayment = async (e) => {
+  const handleRetryPayment = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (!stripe || !elements) {
       return;

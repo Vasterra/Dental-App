@@ -1,51 +1,42 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
-export default function PositionedSnackbar() {
-    const [state, setState] = React.useState({
-        open: false,
-        vertical: 'top',
-        horizontal: 'center',
-    });
+export default function SimpleSnackbar() {
+  const [open, setOpen] = React.useState(true);
 
-    const { vertical, horizontal, open } = state;
-    // @ts-ignore
-    const handleClick = (newState) => () => {
-        setState({ open: true, ...newState });
-    };
+  const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
-    const handleClose = () => {
-        setState({ ...state, open: false });
-    };
+    setOpen(false);
+  };
 
-    const buttons = (
-      <React.Fragment>
-          <Button onClick={handleClick({ vertical: 'top', horizontal: 'center' })}>Top-Center</Button>
-          <Button onClick={handleClick({ vertical: 'top', horizontal: 'right' })}>Top-Right</Button>
-          <Button onClick={handleClick({ vertical: 'bottom', horizontal: 'right' })}>
-              Bottom-Right
-          </Button>
-          <Button onClick={handleClick({ vertical: 'bottom', horizontal: 'center' })}>
-              Bottom-Center
-          </Button>
-          <Button onClick={handleClick({ vertical: 'bottom', horizontal: 'left' })}>Bottom-Left</Button>
-          <Button onClick={handleClick({ vertical: 'top', horizontal: 'left' })}>Top-Left</Button>
-      </React.Fragment>
-    );
-
-    return (
-      <div>
-          {buttons}
-          <Snackbar
-            // @ts-ignore
-            anchorOrigin={{ vertical, horizontal }}
-            open={open}
-            severity="error"
-            onClose={handleClose}
-            message="I love snacks"
-            key={vertical + horizontal}
-          />
-      </div>
-    );
+  return (
+    <div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Note archived"
+        action={
+          <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleClose}>
+              UNDO
+            </Button>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
+    </div>
+  );
 }

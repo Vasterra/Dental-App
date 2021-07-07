@@ -33,11 +33,13 @@ export const onCreateDentist = /* GraphQL */ `
         }
         nextToken
       }
-      practices {
+      locations {
         items {
           id
           dentistId
-          name
+          city
+          address
+          postCode
           createdAt
           updatedAt
           owner
@@ -81,11 +83,13 @@ export const onUpdateDentist = /* GraphQL */ `
         }
         nextToken
       }
-      practices {
+      locations {
         items {
           id
           dentistId
-          name
+          city
+          address
+          postCode
           createdAt
           updatedAt
           owner
@@ -129,11 +133,13 @@ export const onDeleteDentist = /* GraphQL */ `
         }
         nextToken
       }
-      practices {
+      locations {
         items {
           id
           dentistId
-          name
+          city
+          address
+          postCode
           createdAt
           updatedAt
           owner
@@ -181,36 +187,42 @@ export const onDeleteService = /* GraphQL */ `
     }
   }
 `;
-export const onCreatePractice = /* GraphQL */ `
-  subscription OnCreatePractice {
-    onCreatePractice {
+export const onCreateLocation = /* GraphQL */ `
+  subscription OnCreateLocation {
+    onCreateLocation {
       id
       dentistId
-      name
+      city
+      address
+      postCode
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const onUpdatePractice = /* GraphQL */ `
-  subscription OnUpdatePractice {
-    onUpdatePractice {
+export const onUpdateLocation = /* GraphQL */ `
+  subscription OnUpdateLocation {
+    onUpdateLocation {
       id
       dentistId
-      name
+      city
+      address
+      postCode
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const onDeletePractice = /* GraphQL */ `
-  subscription OnDeletePractice {
-    onDeletePractice {
+export const onDeleteLocation = /* GraphQL */ `
+  subscription OnDeleteLocation {
+    onDeleteLocation {
       id
       dentistId
-      name
+      city
+      address
+      postCode
       createdAt
       updatedAt
       owner

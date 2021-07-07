@@ -4,12 +4,11 @@ import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
 
 class StripeManager {
-  public static async createCustomer(dentist) {
+  public static async createCustomer(dentist: any) {
     try {
       // Retrieve email and username of the currently logged in user.
       // getUserFromDB() is *your* implemention of getting user info from the DB
       const {email, id}: any = dentist
-      console.log(email,id )
       if (!email || !id) {
         throw Error('Email or username not found.');
       }
@@ -34,7 +33,7 @@ class StripeManager {
     }
   }
 
-  public static async getStripeCustomerID(dentist) {
+  public static async getStripeCustomerID(dentist: any) {
     // Retrieve the current customerID from the currently logged in user
     // getUserFromDB() is *your* implemention of getting user info from the DB
     const {customerID}: any = dentist;

@@ -85,7 +85,7 @@ class Plan extends React.Component<Props> {
   }
 
 };
-const UpdateForm = (dentist, typeCard) => {
+const UpdateForm = (dentist: any, typeCard: any) => {
   // Include these hooks:
   const stripe = useStripe();
   const elements = useElements();

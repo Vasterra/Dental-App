@@ -24,7 +24,7 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentists, setCurr
     <CardWrapper>
       <FlexWrapper>
         <Grid container spacing={3}>
-          {dentists.map((data: any, key) => {
+          {dentists.map((data: any, key: any) => {
               return (
                 <Grid item xs={12} sm={6} lg={3} key={key}>
                   <CardBlock key={data.id} onClick={() => setCurrentDentist(data)}>

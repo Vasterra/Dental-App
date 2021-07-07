@@ -10,10 +10,10 @@ const ServiceWrapper = styled("div")`
 type Props = {
   setFindDentist: Function,
   getDentists: Function,
-  dentists?: Array<string | boolean | number>
-  searchDentistsLocations?: Array<string | boolean | number>
+  dentists?: any
+  searchDentistsLocations?: any
   searchCoords?: any
-  services?: Array<string | boolean | number>
+  services?: any
 }
 
 const ServicesComponent: React.FunctionComponent<Props> = ({
@@ -33,7 +33,7 @@ const ServicesComponent: React.FunctionComponent<Props> = ({
       <>Services not found</>
     )
   }
-  const handleChange = async (e) => {
+  const handleChange = async (e: any) => {
     let distanceDent: any[] = [];
     let searchDent: any[] = [];
 
@@ -43,13 +43,13 @@ const ServicesComponent: React.FunctionComponent<Props> = ({
       return getDentists(searchDentistsLocations)
     }
 
-    dentists.forEach(item => {
+    dentists.forEach((item: any) => {
       searchDent.push(getDentistsFind(item, e.target.value))
     })
 
     searchDent = await Promise.all(searchDent)
     searchDent.forEach(dent => {
-      dent.services.items.forEach(val => {
+      dent.services.items.forEach((val: { name: any; }) => {
         if (val.name == e.target.value) {
           const a = {'Longitude': searchCoords.lng, 'Latitude': searchCoords.lat};
           const b = {'Longitude': dent.lng, 'Latitude': dent.lat};
@@ -69,7 +69,7 @@ const ServicesComponent: React.FunctionComponent<Props> = ({
     setFindDentist(distanceDent);
   }
 
-  const getDentistsFind = async (dentist, currentService) => {
+  const getDentistsFind = async (dentist: { id: any; }, currentService: any) => {
     const search = []
     const {data}: any = await API.graphql({
       query: getDentist,

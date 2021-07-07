@@ -42,9 +42,9 @@ const CardDentistImage: React.FunctionComponent<Props> = ({data}) => {
     try {
       if (data === null) return
       const files = await Storage.list('images/' + data.id + '/')
-      let signedFiles = files.map(f => Storage.get(f.key))
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
-      let filesList = signedFiles.map(f => {
+      let filesList = signedFiles.map((f: any) => {
         return {
           thumbnail: f,
           src: f,

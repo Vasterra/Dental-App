@@ -48,7 +48,7 @@ class Search extends Component {
     this.setState({servicesForSearch: data.listServiceForDentals.items})
   }
   
-  async setFindDentist(findDentist) {
+  async setFindDentist(findDentist: any) {
     this.setState({dentists: findDentist})
   }
 
@@ -86,7 +86,7 @@ class Search extends Component {
     this.setState({searchDentist: dentists})
   }
 
-  setCurrentDentist = (currentDentist) => {
+  setCurrentDentist = (currentDentist: any) => {
     this.setState({currentDentist: currentDentist})
   }
 
@@ -153,9 +153,9 @@ class Search extends Component {
   render() {
     return (
       <Layout title="Search page">
-        <Header />
+        {/*<Header />*/}
         <Profile>
-          <Drawer/>
+          <Drawer />
           <Main>
             <SearchPanelWrapper>
               <Grid container alignItems="center" justify="space-between" spacing={2}>

@@ -157,7 +157,6 @@ const CheckoutFormStripe: React.FunctionComponent<Props> = ({dentist}) => {
   const buttonAction = retry ? handleRetryPayment : handleSubmitPayment;
   return (
     <>
-
       <div className="pay-card border">
         <p className="text-form">Update Payment Information</p>
         <div className="card-numbers">
@@ -174,7 +173,6 @@ const CheckoutFormStripe: React.FunctionComponent<Props> = ({dentist}) => {
                 <CardCvcElement/>
               </div>
             </div>
-
           </div>
         </div>
         {error && <div className="colorRed">{error}</div>}

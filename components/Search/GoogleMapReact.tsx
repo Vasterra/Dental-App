@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+// @ts-ignore
 import GoogleMapReact from 'google-map-react';
 import Marker from "./Marker";
 import MeMarket from "./MeMarker";

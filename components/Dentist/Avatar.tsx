@@ -104,7 +104,7 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({
 
   const Me = dentist.id === currentUser.username;
 
-  async function uploadAvatar(files) {
+  async function uploadAvatar(files: any[]) {
     const file = files[0];
     const filename = file.name.split('.')
     try {
@@ -113,7 +113,7 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({
         contentType: 'image/png',
       }).then(async (result: any) => {
         let signedFiles: any = Storage.get(result.key)
-        signedFiles = await signedFiles.then(item => {
+        signedFiles = await signedFiles.then((item: any) => {
           return item
         })
         setAvatarImage(signedFiles)

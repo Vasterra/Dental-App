@@ -24,12 +24,12 @@ const DownloadDropzone: React.FunctionComponent<Props> = ({downloadImages, denti
     setOpenSnackbar(false)
   }
 
-  async function uploadImage(files) {
+  async function uploadImage(files: any[]) {
     const file = files[0];
     try {
       await Storage.put('images/' + dentist.id + '/' + file.name, file, {
         contentType: 'image/png',
-        progressCallback(progress) {
+        progressCallback(progress: { loaded: number; total: number; }) {
           const percentUploaded: number = Math.round((progress.loaded / progress.total) * 100)
           setPercent(percentUploaded)
         },

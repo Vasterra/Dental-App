@@ -36,11 +36,13 @@ export const createDentist = /* GraphQL */ `
         }
         nextToken
       }
-      practices {
+      locations {
         items {
           id
           dentistId
-          name
+          city
+          address
+          postCode
           createdAt
           updatedAt
           owner
@@ -87,11 +89,13 @@ export const updateDentist = /* GraphQL */ `
         }
         nextToken
       }
-      practices {
+      locations {
         items {
           id
           dentistId
-          name
+          city
+          address
+          postCode
           createdAt
           updatedAt
           owner
@@ -138,11 +142,13 @@ export const deleteDentist = /* GraphQL */ `
         }
         nextToken
       }
-      practices {
+      locations {
         items {
           id
           dentistId
-          name
+          city
+          address
+          postCode
           createdAt
           updatedAt
           owner
@@ -199,45 +205,51 @@ export const deleteService = /* GraphQL */ `
     }
   }
 `;
-export const createPractice = /* GraphQL */ `
-  mutation CreatePractice(
-    $input: CreatePracticeInput!
-    $condition: ModelPracticeConditionInput
+export const createLocation = /* GraphQL */ `
+  mutation CreateLocation(
+    $input: CreateLocationInput!
+    $condition: ModelLocationConditionInput
   ) {
-    createPractice(input: $input, condition: $condition) {
+    createLocation(input: $input, condition: $condition) {
       id
       dentistId
-      name
+      city
+      address
+      postCode
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const updatePractice = /* GraphQL */ `
-  mutation UpdatePractice(
-    $input: UpdatePracticeInput!
-    $condition: ModelPracticeConditionInput
+export const updateLocation = /* GraphQL */ `
+  mutation UpdateLocation(
+    $input: UpdateLocationInput!
+    $condition: ModelLocationConditionInput
   ) {
-    updatePractice(input: $input, condition: $condition) {
+    updateLocation(input: $input, condition: $condition) {
       id
       dentistId
-      name
+      city
+      address
+      postCode
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const deletePractice = /* GraphQL */ `
-  mutation DeletePractice(
-    $input: DeletePracticeInput!
-    $condition: ModelPracticeConditionInput
+export const deleteLocation = /* GraphQL */ `
+  mutation DeleteLocation(
+    $input: DeleteLocationInput!
+    $condition: ModelLocationConditionInput
   ) {
-    deletePractice(input: $input, condition: $condition) {
+    deleteLocation(input: $input, condition: $condition) {
       id
       dentistId
-      name
+      city
+      address
+      postCode
       createdAt
       updatedAt
       owner

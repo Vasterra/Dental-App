@@ -33,11 +33,13 @@ export const getDentist = /* GraphQL */ `
         }
         nextToken
       }
-      practices {
+      locations {
         items {
           id
           dentistId
-          name
+          city
+          address
+          postCode
           createdAt
           updatedAt
           owner
@@ -78,7 +80,7 @@ export const listDentists = /* GraphQL */ `
         services {
           nextToken
         }
-        practices {
+        locations {
           nextToken
         }
         createdAt
@@ -119,29 +121,33 @@ export const listServices = /* GraphQL */ `
     }
   }
 `;
-export const getPractice = /* GraphQL */ `
-  query GetPractice($id: ID!) {
-    getPractice(id: $id) {
+export const getLocation = /* GraphQL */ `
+  query GetLocation($id: ID!) {
+    getLocation(id: $id) {
       id
       dentistId
-      name
+      city
+      address
+      postCode
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const listPractices = /* GraphQL */ `
-  query ListPractices(
-    $filter: ModelPracticeFilterInput
+export const listLocations = /* GraphQL */ `
+  query ListLocations(
+    $filter: ModelLocationFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPractices(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listLocations(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         dentistId
-        name
+        city
+        address
+        postCode
         createdAt
         updatedAt
         owner

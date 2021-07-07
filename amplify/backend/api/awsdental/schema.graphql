@@ -19,7 +19,7 @@ type Dentist
   subscriptionID: String
   hasPaidPlan: Boolean
   services: [Service] @connection(keyName: "byDentist", fields: ["id"])
-  practices: [Practice] @connection(keyName: "byDentist", fields: ["id"])
+  locations: [Location] @connection(keyName: "byDentist", fields: ["id"])
 }
 
 type Service
@@ -31,13 +31,15 @@ type Service
   name: String!
 }
 
-type Practice
+type Location
 @model
-@key(name: "byDentist", fields: ["dentistId", "name"])
+@key(name: "byDentist", fields: ["dentistId", "city", "address", "postCode"])
 @auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
   id: ID!
   dentistId: ID!
-  name: String!
+  city: String!
+  address: String!
+  postCode: String!
 }
 
 type ServiceForDental

@@ -39,11 +39,11 @@ class Gallery extends Component {
       .then(() => this.downloadImages())
   }
 
-  setDeleteImage(selectImages) {
+  setDeleteImage(selectImages: any) {
     this.setState({deleteImage: selectImages})
   }
 
-  async authListener(router) {
+  async authListener(router: string[]) {
     Hub.listen('auth', (data) => {
       switch (data.payload.event) {
         case 'signIn':
@@ -60,7 +60,7 @@ class Gallery extends Component {
     }
   }
 
-  async getDentist(router) {
+  async getDentist(router: { query: { slug: any[]; }; }) {
     return API.graphql({
       query: getDentist,
       variables: {
@@ -75,10 +75,10 @@ class Gallery extends Component {
     try {
       if (this.state.dentist === null) return
       const files = await Storage.list('images/' + this.state.dentist.id + '/')
-      let signedFiles = files.map(f => Storage.get(f.key))
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
       console.log('signedFiles: ', signedFiles)
-      let filesList = signedFiles.map((f, key) => {
+      let filesList = signedFiles.map((f: any, key: string | number) => {
         return {
           thumbnail: f,
           src: f,
@@ -99,7 +99,7 @@ class Gallery extends Component {
       <>
         {this.state.isMe && <Layout title="Profile Gallery">
           {this.state.dentist && <Box>
-              <Header/>
+              {/*<Header/>*/}
               <FlexWrapper>
                   <Drawer/>
                   <MainContainer>

@@ -81,10 +81,10 @@ const ServiceConfig: React.FunctionComponent<Props> = ({dentist, getDentist}) =>
   }, []);
 
   const getServices = () => {
-    setPersonName(dentist.services.items.map(item => item.name))
+    setPersonName(dentist.services.items.map((item: { name: any; }) => item.name))
   }
 
-  const handleChange = async (event) => {
+  const handleChange = async (event: { target: { value: React.SetStateAction<undefined>; }; }) => {
     setPersonName(event.target.value);
   };
 
@@ -106,9 +106,11 @@ const ServiceConfig: React.FunctionComponent<Props> = ({dentist, getDentist}) =>
         <Select
           variant="outlined"
           className={classes.root}
+          // @ts-ignore
           onChange={handleChange}
         >
           {service.map((item: any) => (
+            // @ts-ignore
             <MenuItem key={item.id} value={item.name} style={getStyles(item.name, personName, theme)}>
               {item.name}
             </MenuItem>
@@ -117,7 +119,7 @@ const ServiceConfig: React.FunctionComponent<Props> = ({dentist, getDentist}) =>
       </FormControl>
       <ListWrapper>
         {
-          dentist.services.items.map((el, key) => {
+          dentist.services.items.map((el: { id: any; name: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, key: React.Key | null | undefined) => {
             return (
               <Item key={key} onClick={async () => {
                 await API.graphql({
