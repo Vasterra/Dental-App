@@ -1,33 +1,15 @@
 import React, {Component} from "react";
-import Header from "../../../components/Header";
+import {Auth, Storage} from "aws-amplify";
+import {withRouter} from "next/router";
 import Drawer from "../../../components/Drawer";
 import Layout from "../../../components/Layout";
-import Breadcrumb from "../../../components/Breadcrumb";
-import {Grid} from "@material-ui/core";
 import AddSettings from "../../../components/Dentist/profile/settings/AddSettings";
 import Location from "../../../components/Dentist/profile/settings/Location";
 import Services from "../../../components/Dentist/profile/settings/Services";
-import AddWatermark from "../../../components/Dentist/profile/settings/AddWatermark";
-import styled from "styled-components";
-// import AddPractice from "../../../components/Dentist/profile/settings/AddPractice";
-import AddService from "../../../components/Dentist/profile/settings/AddService";
-import {FlexWrapper, Box, MainContainer, FormBlockWrapper} from "../../../styles/Main.module";
-import {API, Auth, Hub, Storage} from "aws-amplify";
-import {getDentist} from "../../../graphql/queries";
-import {withRouter} from "next/router";
 import DisplayPhotos from "../../../components/Dentist/profile/settings/DisplayPhotos";
 import ApiManager from "../../../services/ApiManager";
 
-const DentistSettingBlockWrapper = styled("div")`{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  border-radius: 10px;
-  padding: 20px;
-`;
-
-class CardDentist extends Component {
+class Profile extends Component {
 
   state: any = {
     currentDentist: null,
@@ -91,18 +73,6 @@ class CardDentist extends Component {
               getDentist={this.getDentist.bind(this)}
             />}
             {this.state.currentDentist && <DisplayPhotos currentDentist={this.state.currentDentist}/>}
-            {/*<AddWatermark/>*/}
-
-            {/*{this.state.dentist &&*/}
-            {/*<AddPractice*/}
-            {/*  dentist={this.state.dentist}*/}
-            {/*  getDentist={this.getDentist.bind(this)}*/}
-            {/*/>}*/}
-            {/*{this.state.dentist &&*/}
-            {/*<AddService*/}
-            {/*  dentist={this.state.dentist}*/}
-            {/*  getDentist={this.getDentist.bind(this)}*/}
-            {/*/>}*/}
           </div>}
           {!this.state.currentDentist && <>Dentist not found</>}
         </Layout>}
@@ -112,4 +82,4 @@ class CardDentist extends Component {
 };
 
 // @ts-ignore
-export default withRouter(CardDentist);
+export default withRouter(Profile);

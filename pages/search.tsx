@@ -134,7 +134,7 @@ class Search extends Component {
     }
 
     dentists.map((dent: { lng: any; lat: any; }) => {
-      const a = {'Longitude': coordinate.lng, 'Latitude': coordinate.lat};
+      const a = {'Longitude': coordinate?.lng, 'Latitude': coordinate?.lat};
       const b = {'Longitude': dent.lng, 'Latitude': dent.lat};
       const distanceCur = (111.111 *
         (180 / Math.PI) * (

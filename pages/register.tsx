@@ -44,7 +44,7 @@ const Register = ({}) => {
         password: values.password,
         attributes: {
           email: values.email,
-          gdc_number: values.gdc_number,
+          // gdc_number: values.gdc_number,
         }
       });
       // @ts-ignore
@@ -98,18 +98,18 @@ const Register = ({}) => {
                       placeholder="Email"
                       onChange={(e) => setValues({...values, email: e.target.value})}
                     />
-                    <Close className="form-login-input-close" onClick={() => setValues({...values, username: ''})}/>
+                    <Close className="form-login-input-close" onClick={() => setValues({...values, email: ''})}/>
                   </p>
                   <p className="form-login-input">
                     <input
                       type="text"
                       name="gdc_number"
-                      value={values.email}
+                      value={values.gdc_number}
                       id="gdc_number"
                       placeholder="GDC Number (this cannot be updated later)"
                       onChange={(e) => setValues({...values, gdc_number: e.target.value})}
                     />
-                    <Close className="form-login-input-close" onClick={() => setValues({...values, username: ''})}/>
+                    <Close className="form-login-input-close" onClick={() => setValues({...values, gdc_number: ''})}/>
                   </p>
                   <p className="form-login-input">
                     <input

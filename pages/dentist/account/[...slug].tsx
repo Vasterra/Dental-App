@@ -1,24 +1,13 @@
-import * as React from "react";
-import Layout from "../../../components/Layout";
-import Header from "../../../components/Header";
-import Drawer from "../../../components/Drawer";
-import Breadcrumb from "../../../components/Breadcrumb";
-import AvatarProfile from "../../../components/Dentist/Avatar";
-import DentistProfileInfo from "../../../components/Dentist/Info";
-import Services from "../../../components/Dentist/Services";
-// import Practises from "../../../components/Dentist/Practices";
-import {Component, useState} from "react";
-import {CircularProgress, Grid} from "@material-ui/core";
-import {FlexWrapper, Box, MainContainer, CircularProgressWrapper} from "../../../styles/Main.module";
-import {API, Auth, Hub, Storage} from "aws-amplify";
-import {getDentist, listDentists, listServices} from "../../../graphql/queries";
+import React, {Component} from "react";
 import {withRouter} from "next/router";
-import GalleryComponent from "../../../components/Gallery";
-import ApiManager from "../../../services/ApiManager";
-import AccountInformation from "../../../components/Dentist/AccountInformation";
-import ResetPassword from "../../../components/Dentist/ResetPassword";
+import {Auth, Storage} from "aws-amplify";
+import Layout from "components/Layout";
+import Drawer from "components/Drawer";
+import AccountInformation from "components/Dentist/AccountInformation";
+import ResetPassword from "components/Dentist/ResetPassword";
 import BillingInformation from "components/Dentist/BillingInformation";
 import UpgradeToPremium from "components/Dentist/UpgradeToPremium ";
+import ApiManager from "services/ApiManager";
 
 class Account extends Component {
 
@@ -89,8 +78,8 @@ class Account extends Component {
   render() {
     return (
       <>
-        {this.state.isMe && <Layout title="Profile">
-          <Drawer/>
+        <Layout title="Profile">
+          {this.state.isMe && <Drawer/>}
           {this.state.currentDentist &&
           <div className="main-profile bg-white ">
             <div className="profile-box-form">
@@ -117,58 +106,10 @@ class Account extends Component {
                 <BillingInformation currentDentist={this.state.currentDentist} getDentist={this.getDentist}/>
               </div>
             </div>
-            {/*<AddWatermark/>*/}
-
-            {/*{this.state.dentist &&*/}
-            {/*<AddPractice*/}
-            {/*  dentist={this.state.dentist}*/}
-            {/*  getDentist={this.getDentist.bind(this)}*/}
-            {/*/>}*/}
-            {/*{this.state.dentist &&*/}
-            {/*<AddService*/}
-            {/*  dentist={this.state.dentist}*/}
-            {/*  getDentist={this.getDentist.bind(this)}*/}
-            {/*/>}*/}
           </div>}
           {!this.state.currentDentist && <>Dentist not found</>}
-        </Layout>}
+        </Layout>
       </>
-      // <Layout title="Account">
-      //   {this.state.dentist && <Box>
-      //       <Header/>
-      //       <FlexWrapper>
-      //         {this.state.isMe && <Drawer/>}
-      //           <MainContainer>
-      //               <Breadcrumb point="Account"/>
-      //               <Grid container spacing={2}>
-      //                   <Grid item xs={12} sm={4} lg={2}>
-      //                     {this.state.dentist && <AvatarProfile
-      //                         dentist={this.state.dentist}
-      //                         currentAvatar={this.state.currentAvatar}
-      //                         downloadAvatar={this.downloadAvatar.bind(this)}
-      //                         signedInUser={this.state.signedInUser}
-      //                         currentUser={this.state.currentUser}
-      //                     />}
-      //                   </Grid>
-      //                   <Grid item xs={12} sm={8} lg={5}>
-      //                     {this.state.dentist && <DentistProfileInfo dentist={this.state.dentist}/>}
-      //                   </Grid>
-      //                   <Grid item xs={12} sm={6} lg={2}>
-      //                     {this.state.services && <Services services={this.state.services}/>}
-      //                   </Grid>
-      //                   <Grid item xs={12} sm={6} lg={2}>
-      //                     {this.state.practices && <Practises practices={this.state.practices}/>}
-      //                   </Grid>
-      //               </Grid>
-      //             {this.state.images && <GalleryComponent
-      //                 images={this.state.images}
-      //             />}
-      //             {!this.state.images && <CircularProgressWrapper><CircularProgress/></CircularProgressWrapper>}
-      //           </MainContainer>
-      //       </FlexWrapper>
-      //   </Box>}
-      //   {!this.state.dentist && <>Dentist not found</>}
-      // </Layout>
     )
   }
 };

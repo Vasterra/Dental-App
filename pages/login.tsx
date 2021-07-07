@@ -60,7 +60,6 @@ const Login = () => {
 
   async function createNewDentist(user: { attributes: { sub: any; email: any; phone_number: any; }; }) {
     await convertCityCoords().then(async (result) => {
-      console.log(result)
       await API.graphql({
         query: createDentist,
         variables: {

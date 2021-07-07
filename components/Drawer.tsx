@@ -61,7 +61,8 @@ class Drawer extends React.Component {
 
   async componentDidMount() {
     await this.authListener();
-    const currentDentist = await ApiManager.getDentist(this.state.currentUser?.attributes.sub);
+    console.log(this.state.currentUser.attributes.sub)
+    const currentDentist = await ApiManager.getDentist(this.state.currentUser.attributes.sub);
     this.setState({currentDentist: currentDentist.getDentist});
     await this.downloadAvatar();
   }

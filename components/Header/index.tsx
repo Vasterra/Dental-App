@@ -73,8 +73,10 @@ class Header extends React.Component {
               </PopupState>}
             </IconButton>
           </div>
-          <Link href={"../../../search"}>
-            <img src={logoImg} srcSet={logoImg + '2x' + ',' + logoImg + '3x'} className="logo-image" />
+          <Link href="/">
+            <img src="../../images/FYD4_beige-on-green@2x.png"
+                 srcSet="../../images/FYD4_beige-on-green@2x.png 2x,
+             ../../images/FYD4_beige-on-green@3x.png 3x" className="logo-image" />
           </Link>
           {!this.state.signedInUser && (
             <div style={{alignItems: 'center', display: 'flex'}}>
@@ -84,12 +86,12 @@ class Header extends React.Component {
                   <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                 </svg>
               </div>
-              <Link href={"../../../login"}>
-                <Button color="inherit">Login</Button>
-              </Link>
-              <Link href={"../../../register"}>
-                <Button color="inherit">Register</Button>
-              </Link>
+              {/*<Link href={"../../../login"}>*/}
+              {/*  <Button color="inherit">Login</Button>*/}
+              {/*</Link>*/}
+              {/*<Link href={"../../../register"}>*/}
+              {/*  <Button color="inherit">Register</Button>*/}
+              {/*</Link>*/}
             </div>
           )}
           {this.state.signedInUser && (
@@ -100,7 +102,7 @@ class Header extends React.Component {
                   <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                 </svg>
               </div>
-              <Button onClick={ApiManager.signOut} color="inherit">Logout</Button>
+              {/*<Button onClick={ApiManager.signOut} color="inherit">Logout</Button>*/}
             </div>
           )}
         </Toolbar>
