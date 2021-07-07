@@ -48,60 +48,19 @@ const Menu = styled("ul")`{
   }
 }`;
 
-const initState: any = {
-  currentAvatar: null,
-  currentUser: null,
-  currentDentist: null,
-  signedInUser: null
-};
 
-class Drawer extends React.Component {
-
-  state = initState
-
-  async componentDidMount() {
-    await this.authListener();
-    console.log(this.state.currentUser.attributes.sub)
-    const currentDentist = await ApiManager.getDentist(this.state.currentUser.attributes.sub);
-    this.setState({currentDentist: currentDentist.getDentist});
-    await this.downloadAvatar();
-  }
-
-  async authListener() {
-    Hub.listen('auth', (data) => {
-      switch (data.payload.event) {
-        case 'signIn':
-          return this.setState({signedInUser: true})
-        case 'signOut':
-          return this.setState({signedInUser: false})
-      }
-    })
-    try {
-      const currentUser = await Auth.currentAuthenticatedUser()
-      this.setState({currentUser})
-      this.setState({signedInUser: true})
-    } catch (err) {
-    }
-  }
-
-  async downloadAvatar() {
-    if (this.state.currentDentist === null) return
-    try {
-      const files =  await Storage.list('avatars/' + this.state.currentDentist.id + '/')
-      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
-      signedFiles = await Promise.all(signedFiles)
-      this.setState({currentAvatar: signedFiles[0]})
-    } catch (error) {
-      console.log('Error download Avatar file: ', error);
-    }
-  }
-
-  render() {
-    if (!this.state.signedInUser) return null
+type Props = {
+  currentDentist: any,
+  currentAvatar: any,
+  currentUser: any,
+  signedInUser: any,
+}
+const Drawer: React.FunctionComponent<Props> = ({currentDentist, currentAvatar, currentUser, signedInUser}) => {
+    if (!signedInUser) return null
     return (
-      this.state.signedInUser &&
+      signedInUser &&
       <>
-        {this.state.currentDentist && <div className="leftmenu">
+        {currentDentist && <div className="leftmenu">
           <div className="mobile-topmenu">
             <p className="menu" id="mobile_menu">
               <svg className="menu-logo" xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 28 20"
@@ -129,23 +88,23 @@ class Drawer extends React.Component {
               </a>
             </p>
             <div className="leftmenu-user-information">
-              {this.state.currentAvatar && <img className="user-image" src={this.state.currentAvatar} alt="user image" />}
-              <p className="user-description white"><span>{this.state.currentDentist.firstName}</span>
-                <span>{this.state.currentDentist.lastName}</span></p>
+              {currentAvatar && <img className="user-image" src={currentAvatar} alt="user image" />}
+              <p className="user-description white"><span>{currentDentist.firstName}</span>
+                <span>{currentDentist.lastName}</span></p>
             </div>
           </div>
           <Menu>
             <li className="leftmenu-list">
               <img className="leftmenu-link-image" src="../../images/user.svg" alt="link image"/>
-              <Link href={"../../dentist/profile/" + this.state.currentUser.username}>Profile</Link>
+              <Link href={"../../dentist/profile/" + currentUser.username}>Profile</Link>
             </li>
             <li className="leftmenu-list">
               <img className="leftmenu-link-image" src="../../images/gallery.svg" alt="link image"/>
-              <Link href={"../../dentist/gallery/" + this.state.currentUser.username}>Gallery</Link>
+              <Link href={"../../dentist/gallery/" + currentUser.username}>Gallery</Link>
             </li>
             <li className="leftmenu-list">
               <img className="leftmenu-link-image" src="../../images/more_vert.svg" alt="link image"/>
-              <Link href={"../../dentist/account/" + this.state.currentUser.username}>Account</Link>
+              <Link href={"../../dentist/account/" + currentUser.username}>Account</Link>
             </li>
             <li className="leftmenu-list logout">
               <img className="leftmenu-link-image" src="../../images/left-arrow.svg" alt="link image"/>
@@ -155,7 +114,6 @@ class Drawer extends React.Component {
         </div>}
       </>
     );
-  }
 };
 
 export default Drawer;

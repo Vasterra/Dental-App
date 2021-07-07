@@ -27,7 +27,7 @@ type Props = {
   getDentist: Function,
 }
 
-const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
+const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
 
   const [dataLocation, setDataLocation] = useState({
     city: '',
@@ -168,4 +168,4 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
   )
 }
 
-export default AddSettings
+export default Location

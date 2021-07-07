@@ -7,6 +7,7 @@ import {
   makeStyles,
   MenuItem,
   Select,
+  Snackbar,
   Theme,
   useTheme
 } from "@material-ui/core";
@@ -19,15 +20,19 @@ import {API} from "aws-amplify";
 import {createService, deleteService, updateDentist} from "../../../../graphql/mutations";
 import { listServiceForDentals } from "../../../../graphql/queries";
 import Close from "@material-ui/icons/Close";
+import { Alert } from "@material-ui/lab";
 
 type Props = {
   currentDentist: any,
   getDentist: Function,
 }
 
-const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
+const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
   const [personName, setPersonName] = useState([]);
   const [service, setService] = useState([]);
+  const [statusSnackbar, setStatusSnackbar] = useState('');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const disabled = service.length === 0;
 
@@ -40,7 +45,6 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
   }
 
   const handleOnChange = async (event: { target: { value: React.SetStateAction<never[]>; }; }) => {
-    console.log(event.target.value)
     setPersonName(event.target.value);
   };
 
@@ -69,8 +73,8 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                       // @ts-ignore
                       onChange={handleOnChange}>
                 <option value="" disabled selected>Select Service</option>
-                {service.map((item: any) => (
-                  <option value={item.name}>{item.name}</option>
+                {service.map((item: any, key: any) => (
+                  <option key={key} value={item.name}>{item.name}</option>
                 ))}
               </select>
             </p>
@@ -90,6 +94,9 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                 authMode: 'AWS_IAM'
               })
               getDentist();
+              setStatusSnackbar('success');
+              setSnackbarMessage(`Service ${personName} created`);
+              setOpenSnackbar(true);
             }}>Confirm</button>
           </p>
           <div className="mt-big">
@@ -113,6 +120,9 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                         authMode: 'AWS_IAM'
                       })
                       getDentist();
+                      setStatusSnackbar('success');
+                      setSnackbarMessage(`Service ${el.name} deleted`);
+                      setOpenSnackbar(true);
                     }}/>
                   </p>
                 )
@@ -125,7 +135,6 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
             <p className="form-profile-label">
               <label className="form-profile-label">Additional Services</label>
             </p>
-
             <p className="form-profile-empty-input">
               <input type="text" name="empty" value="" id="empty" placeholder="" />
             </p>
@@ -147,11 +156,28 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
           </div>
         </div>
       </div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={openSnackbar}
+        autoHideDuration={2000}
+      >
+        <Alert
+          variant="filled"
+          // @ts-ignore
+          severity={statusSnackbar}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
+
   )
 }
 
-export default AddSettings
+export default Services
 function setService(items: any) {
     throw new Error("Function not implemented.");
 }

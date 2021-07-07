@@ -3,12 +3,7 @@ import {Formik} from "formik";
 import {API} from "aws-amplify";
 import ApiManager from "services/ApiManager";
 
-type Props = {
-  currentDentist: any,
-  getDentist: Function,
-}
-
-const ResetPassword: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
+const ResetPassword = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 

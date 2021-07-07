@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Auth, Storage} from "aws-amplify";
+import {Auth, Hub, Storage} from "aws-amplify";
 import {withRouter} from "next/router";
 import Drawer from "../../../components/Drawer";
 import Layout from "../../../components/Layout";
@@ -15,6 +15,7 @@ class Profile extends Component {
     currentDentist: null,
     currentAvatar: null,
     signedInUser: null,
+    currentUser: null,
     isMe: false
   }
 
@@ -24,9 +25,18 @@ class Profile extends Component {
 
   async authListener() {
     const {router}: any = this.props
-    ApiManager.authListener()
+    Hub.listen('auth', (data) => {
+      switch (data.payload.event) {
+        case 'signIn':
+          return this.setState({signedInUser: true})
+        case 'signOut':
+          return this.setState({signedInUser: false})
+      }
+    })
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
+      this.setState({currentUser})
+      this.setState({signedInUser: true})
       this.setState({isMe: currentUser.username === this.state.currentDentist.id});
       if (!this.state.isMe) return router.push('/dentist/account/' + this.state.currentDentist.id)
     } catch (err) {
@@ -42,12 +52,43 @@ class Profile extends Component {
   }
 
   async downloadAvatar() {
+    if (this.state.currentDentist === null) return
     try {
-      if (this.state.currentDentist === null) return
-      await Storage.list('avatars/' + this.state.currentDentist.id + '/')
-        .then(result => {
-          this.setState({currentAvatar: result})
+      const files =  await Storage.list('avatars/' + this.state.currentDentist.id + '/')
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
+      signedFiles = await Promise.all(signedFiles)
+      console.log(signedFiles)
+      this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
+    } catch (error) {
+      console.log('Error download Avatar file: ', error);
+    }
+  }
+
+  async uploadAvatar(files: any) {
+    files.preventDefault();
+    const file = files.target.files[0];
+    const filename = file.name.split('.')
+    try {
+      await Storage.put('avatars/' + this.state.currentDentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
+        level: 'public',
+        contentType: 'image/png',
+      }).then(async (result: any) => {
+        let signedFiles: any = Storage.get(result.key)
+        signedFiles = await signedFiles.then((item: any) => {
+          return item
         })
+        this.setState({setCurrentAvatar: signedFiles})
+        this.downloadAvatar()
+        // setDownloadMessage('Success!')
+        // setStatusSnackbar('success')
+        // setOpenSnackbar(true)
+        // setOpen(false)
+      })
+        .catch((_error: any) => {
+          // setDownloadMessage('File upload error')
+          // setStatusSnackbar('error')
+          // setOpenSnackbar(true)
+        });
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
@@ -57,7 +98,12 @@ class Profile extends Component {
     return (
       <>
         {this.state.isMe && <Layout title="Profile">
-          <Drawer/>
+          <Drawer
+            currentAvatar={this.state.currentAvatar}
+            currentDentist={this.state.currentDentist}
+            currentUser={this.state.currentUser}
+            signedInUser={this.state.signedInUser}
+          />
           {this.state.currentDentist &&
           <div className="main-profile bg-white ">
             {this.state.currentDentist && <AddSettings
@@ -72,7 +118,11 @@ class Profile extends Component {
               currentDentist={this.state.currentDentist}
               getDentist={this.getDentist.bind(this)}
             />}
-            {this.state.currentDentist && <DisplayPhotos currentDentist={this.state.currentDentist}/>}
+            {this.state.currentDentist && <DisplayPhotos
+              currentDentist={this.state.currentDentist}
+              currentAvatar={this.state.currentAvatar}
+              uploadAvatar={this.uploadAvatar.bind(this)}
+            />}
           </div>}
           {!this.state.currentDentist && <>Dentist not found</>}
         </Layout>}
