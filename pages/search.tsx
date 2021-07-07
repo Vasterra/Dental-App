@@ -155,7 +155,12 @@ class Search extends Component {
       <Layout title="Search page">
         {/*<Header />*/}
         <Profile>
-          <Drawer />
+          <Drawer
+            currentAvatar={this.state.currentAvatar}
+            currentDentist={this.state.currentDentist}
+            currentUser={this.state.currentUser}
+            signedInUser={this.state.signedInUser}
+          />
           <Main>
             <SearchPanelWrapper>
               <Grid container alignItems="center" justify="space-between" spacing={2}>

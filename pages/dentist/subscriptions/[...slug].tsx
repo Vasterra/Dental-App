@@ -126,7 +126,12 @@ class Subscription extends Component {
         <Box>
           <Header/>
           <FlexWrapper>
-            <Drawer/>
+            <Drawer
+              currentAvatar={this.state.currentAvatar}
+              currentDentist={this.state.currentDentist}
+              currentUser={this.state.currentUser}
+              signedInUser={this.state.signedInUser}
+            />
             <MainContainer>
               <Breadcrumb point="Subscription"/>
               <FormBlockWrapper>

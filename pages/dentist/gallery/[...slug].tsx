@@ -1,25 +1,24 @@
-import React, {Component, useState} from "react";
+import React, {Component} from "react";
 import Drawer from "../../../components/Drawer";
-import Header from "../../../components/Header";
 import Layout from "../../../components/Layout";
 import {InputSearch} from "../../../styles/Search.module";
 import {CircularProgress, Grid, IconButton} from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import DownloadDropzone from "../../../components/Gallery/DownloadDropzone";
-import {getDentist} from "../../../graphql/queries";
 import Breadcrumb from "../../../components/Breadcrumb";
 import GalleryComponent from "../../../components/Gallery";
 import {
-  FlexWrapper,
   Box,
-  MainContainer,
+  CircularProgressWrapper,
+  FlexWrapper,
   FormBlockWrapper,
-  Search,
-  CircularProgressWrapper
+  MainContainer,
+  Search
 } from "../../../styles/Main.module";
-import {API, Auth, Hub, Storage} from "aws-amplify";
+import {Auth, Hub, Storage} from "aws-amplify";
 import {withRouter} from "next/router";
 import DeleteFile from "../../../components/Gallery/DeleteFile";
+import ApiManager from "services/ApiManager";
 
 class Gallery extends Component {
 
@@ -30,20 +29,15 @@ class Gallery extends Component {
   }
 
   async componentDidMount() {
-    const {router}: any = this.props
-    await this.getDentist(router)
-      .then(({data}: any) => {
-        this.setState({dentist: data.getDentist})
-      })
-      .then(() => this.authListener(router))
-      .then(() => this.downloadImages())
+    await this.getDentist()
   }
 
   setDeleteImage(selectImages: any) {
     this.setState({deleteImage: selectImages})
   }
 
-  async authListener(router: string[]) {
+  async authListener() {
+    const {router}: any = this.props
     Hub.listen('auth', (data) => {
       switch (data.payload.event) {
         case 'signIn':
@@ -53,22 +47,21 @@ class Gallery extends Component {
       }
     })
     try {
-      const currentUser = await Auth.currentAuthenticatedUser()
-      this.setState({isMe: currentUser.username === this.state.dentist.id})
-      if (!this.state.isMe) return router.push('/dentist/account/' + this.state.dentist.id)
+      const currentUser = await Auth.currentAuthenticatedUser();
+      this.setState({currentUser})
+      this.setState({signedInUser: true})
+      this.setState({isMe: currentUser.username === this.state.currentDentist.id});
+      if (!this.state.isMe) return router.push('/dentist/account/' + this.state.currentDentist.id)
     } catch (err) {
     }
   }
 
-  async getDentist(router: { query: { slug: any[]; }; }) {
-    return API.graphql({
-      query: getDentist,
-      variables: {
-        id: router.query.slug[0]
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
+  async getDentist() {
+    const {router}: any = this.props
+    const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
+    this.setState({currentDentist: currentDentist.getDentist});
+    await this.authListener()
+    await this.downloadImages()
   }
 
   async downloadImages() {
@@ -101,7 +94,12 @@ class Gallery extends Component {
           {this.state.dentist && <Box>
               {/*<Header/>*/}
               <FlexWrapper>
-                  <Drawer/>
+                  <Drawer
+                    currentAvatar={this.state.currentAvatar}
+                    currentDentist={this.state.currentDentist}
+                    currentUser={this.state.currentUser}
+                    signedInUser={this.state.signedInUser}
+                  />
                   <MainContainer>
                       <Breadcrumb point="Gallery"/>
                       <FormBlockWrapper>
