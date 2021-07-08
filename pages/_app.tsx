@@ -6,7 +6,9 @@ import {loadStripe} from '@stripe/stripe-js';
 import withApollo from "../lib/withApollo";
 import '../styles/globals.css'
 import '../configureAmplify'
-import {QueryClientProvider, QueryClient} from "react-query";
+import {QueryClient, QueryClientProvider} from "react-query";
+import Drawer from "components/Drawer";
+import Layout from "components/Layout";
 
 class DentalApp extends App<any> {
   render() {
@@ -17,7 +19,10 @@ class DentalApp extends App<any> {
       <ApolloProvider client={apolloClient}>
         <QueryClientProvider client={queryClient}>
           <Elements stripe={stripePromise}>
-            <Component {...pageProps} />
+            <Layout title="">
+              <Drawer/>
+              <Component {...pageProps} />
+            </Layout>
           </Elements>
         </QueryClientProvider>
       </ApolloProvider>

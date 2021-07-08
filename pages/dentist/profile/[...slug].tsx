@@ -54,7 +54,7 @@ class Profile extends Component {
   async downloadAvatar() {
     if (this.state.currentDentist === null) return
     try {
-      const files =  await Storage.list('avatars/' + this.state.currentDentist.id + '/')
+      const files = await Storage.list('avatars/' + this.state.currentDentist.id + '/')
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
       console.log(signedFiles)
@@ -95,38 +95,29 @@ class Profile extends Component {
   }
 
   render() {
+    if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
     return (
-      <>
-        {this.state.isMe && <Layout title="Profile">
-          <Drawer
-            currentAvatar={this.state.currentAvatar}
-            currentDentist={this.state.currentDentist}
-            currentUser={this.state.currentUser}
-            signedInUser={this.state.signedInUser}
-          />
-          {this.state.currentDentist &&
-          <div className="main-profile bg-white ">
-            {this.state.currentDentist && <AddSettings
+      <Layout title="Profile">
+        <div className="main-profile bg-white ">
+          {this.state.currentDentist && <AddSettings
               currentDentist={this.state.currentDentist}
               getDentist={this.getDentist.bind(this)}
-            />}
-            {this.state.currentDentist && <Location
+          />}
+          {this.state.currentDentist && <Location
               currentDentist={this.state.currentDentist}
               getDentist={this.getDentist.bind(this)}
-            />}
-            {this.state.currentDentist && <Services
+          />}
+          {this.state.currentDentist && <Services
               currentDentist={this.state.currentDentist}
               getDentist={this.getDentist.bind(this)}
-            />}
-            {this.state.currentDentist && <DisplayPhotos
+          />}
+          {this.state.currentDentist && <DisplayPhotos
               currentDentist={this.state.currentDentist}
               currentAvatar={this.state.currentAvatar}
               uploadAvatar={this.uploadAvatar.bind(this)}
-            />}
-          </div>}
-          {!this.state.currentDentist && <>Dentist not found</>}
-        </Layout>}
-      </>
+          />}
+        </div>
+      </Layout>
     )
   }
 };

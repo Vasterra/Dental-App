@@ -21,7 +21,6 @@ class Gallery extends Component {
 
   async componentDidMount() {
     await this.getDentist()
-
   }
 
   generateUUID() {
@@ -99,14 +98,9 @@ class Gallery extends Component {
   }
 
   render() {
+    if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
     return (
-      <Layout title="Profile Gallery">
-        {this.state.isMe && <Drawer
-            currentAvatar={this.state.currentAvatar}
-            currentDentist={this.state.currentDentist}
-            currentUser={this.state.currentUser}
-            signedInUser={this.state.signedInUser}
-        />}
+      <Layout title="Gallery">
         <div className="main-profile bg-white ">
           <div className="row-gallery">
             <div className="profile-box-form cut-block">
@@ -127,15 +121,13 @@ class Gallery extends Component {
                 <div>
                   <p className="form-profile-label">Title</p>
                   <p>
-                    <input className="form-profile-input" type="text" name="title" id="title" value=""
-                           placeholder="Image Title"/>
+                    <input className="form-profile-input" type="text" name="title" id="title" value="" placeholder="Image Title"/>
                   </p>
                 </div>
                 <div>
                   <p className="form-profile-label">Alt Tags</p>
                   <p>
-                    <input className="form-profile-input" type="text" name="tags" id="tags" value=""
-                           placeholder="Alt Tag"/>
+                    <input className="form-profile-input" type="text" name="tags" id="tags" value="" placeholder="Alt Tag"/>
                   </p>
                 </div>
               </div>
@@ -158,16 +150,13 @@ class Gallery extends Component {
                 <div>
                   <p className="form-profile-label">Title</p>
                   <p>
-                    <input className="form-profile-input" type="text" name="title" id="title" value=""
-                           placeholder="Image Title"/>
+                    <input className="form-profile-input" type="text" name="title" id="title" value="" placeholder="Image Title"/>
                   </p>
                 </div>
-
                 <div>
                   <p className="form-profile-label">Alt Tags</p>
                   <p>
-                    <input className="form-profile-input" type="text" name="tags" id="tags" value=""
-                           placeholder="Alt Tag"/>
+                    <input className="form-profile-input" type="text" name="tags" id="tags" value="" placeholder="Alt Tag"/>
                   </p>
                 </div>
               </div>
@@ -207,10 +196,8 @@ class Gallery extends Component {
               </p>
             </div>
           </div>
-
         </div>
       </Layout>
-
     );
   }
 

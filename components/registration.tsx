@@ -17,7 +17,7 @@ interface State {
     user: null;
 }
 
-const Register = ({}) => {
+const Registration = ({}) => {
     const [values, setValues] = React.useState<State>({
         username: '',
         password: '',
@@ -141,4 +141,4 @@ const Register = ({}) => {
     );
 };
 
-export default Register
+export default Registration

@@ -1,4 +1,4 @@
-import {API, Auth, Hub} from "aws-amplify";
+import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
 import { updateDentist } from "../graphql/mutations";
 import { getDentist } from "../graphql/queries";
@@ -32,6 +32,7 @@ class ApiManager {
   }
 
   public static async getDentist(id: any) {
+    if (id === null) return
     const {data}: any = await API.graphql({
       query: getDentist,
       variables: {
@@ -50,6 +51,40 @@ class ApiManager {
       })
       .then(data => console.log(data))
       .catch(err => console.log(err));
+  }
+
+  public static async downloadImages(currentDentist: any) {
+    try {
+      if (currentDentist === null) return
+      const files = await Storage.list('images/' + currentDentist.id + '/')
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
+      signedFiles = await Promise.all(signedFiles)
+      let filesList = signedFiles.map((f: any) => {
+        return {
+          thumbnail: f,
+          src: f,
+          name: f,
+          thumbnailWidth: 320,
+          thumbnailHeight: 212,
+          isSelected: false
+        }
+      })
+      return filesList
+    } catch (error) {
+      console.log('Error uploading file: ', error);
+    }
+  }
+
+  public static async downloadAvatar(currentDentist: any) {
+    if (currentDentist === null) return
+    try {
+      const files = await Storage.list('avatars/' + currentDentist.id + '/');
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key));
+      signedFiles = await Promise.all(signedFiles);
+      return signedFiles[signedFiles.length - 1];
+    } catch (error) {
+      console.log('Error download Avatar file: ', error);
+    }
   }
 
 }
