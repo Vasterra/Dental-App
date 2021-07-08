@@ -129,9 +129,7 @@ class Search extends Component {
   findCoordinatesDentists = (coordinate: any, distance: number, dentists: []): object | [] => {
     let distanceDent: any[] = [];
 
-    if (!dentists) {
-      return {};
-    }
+    if (!dentists) {return {}}
 
     dentists.map((dent: { lng: any; lat: any; }) => {
       const a = {'Longitude': coordinate?.lng, 'Latitude': coordinate?.lat};
@@ -153,14 +151,8 @@ class Search extends Component {
   render() {
     return (
       <Layout title="Search page">
-        {/*<Header />*/}
+        <Header />
         <Profile>
-          <Drawer
-            currentAvatar={this.state.currentAvatar}
-            currentDentist={this.state.currentDentist}
-            currentUser={this.state.currentUser}
-            signedInUser={this.state.signedInUser}
-          />
           <Main>
             <SearchPanelWrapper>
               <Grid container alignItems="center" justify="space-between" spacing={2}>

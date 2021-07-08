@@ -50,17 +50,15 @@ const Menu = styled("ul")`{
 
 
 type Props = {
-  currentDentist: any,
-  currentAvatar: any,
-  currentUser: any,
-  signedInUser: any,
+    currentDentist: any,
+    currentAvatar: any,
+    currentUser: any,
+    signedInUser: any,
 }
 const Drawer: React.FunctionComponent<Props> = ({currentDentist, currentAvatar, currentUser, signedInUser}) => {
-    if (!signedInUser) return null
+
     return (
-      signedInUser &&
-      <>
-        {currentDentist && <div className="leftmenu">
+     <div className="leftmenu">
           <div className="mobile-topmenu">
             <p className="menu" id="mobile_menu">
               <svg className="menu-logo" xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 28 20"
@@ -111,8 +109,7 @@ const Drawer: React.FunctionComponent<Props> = ({currentDentist, currentAvatar, 
               <a href="/" onClick={ApiManager.signOut}>Logout</a>
             </li>
           </Menu>
-        </div>}
-      </>
+     </div>
     );
 };
 

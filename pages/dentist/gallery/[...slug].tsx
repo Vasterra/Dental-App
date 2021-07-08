@@ -1,35 +1,32 @@
 import React, {Component} from "react";
-import Drawer from "../../../components/Drawer";
-import Layout from "../../../components/Layout";
-import {InputSearch} from "../../../styles/Search.module";
-import {CircularProgress, Grid, IconButton} from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import DownloadDropzone from "../../../components/Gallery/DownloadDropzone";
-import Breadcrumb from "../../../components/Breadcrumb";
-import GalleryComponent from "../../../components/Gallery";
-import {
-  Box,
-  CircularProgressWrapper,
-  FlexWrapper,
-  FormBlockWrapper,
-  MainContainer,
-  Search
-} from "../../../styles/Main.module";
-import {Auth, Hub, Storage} from "aws-amplify";
 import {withRouter} from "next/router";
-import DeleteFile from "../../../components/Gallery/DeleteFile";
+import { v4 as uuidv4 } from 'uuid';
+import Layout from "../../../components/Layout";
+import {Auth, Hub, Storage} from "aws-amplify";
 import ApiManager from "services/ApiManager";
+import Drawer from "components/Drawer";
 
 class Gallery extends Component {
 
   state: any = {
-    dentist: [],
     images: null,
-    deleteImage: null
+    deleteImage: null,
+    currentDentist: null,
+    currentAvatar: null,
+    signedInUser: null,
+    currentUser: null,
+    isMe: false,
+    uuid: null
   }
 
   async componentDidMount() {
     await this.getDentist()
+
+  }
+
+  generateUUID() {
+    this.setState({uuid: uuidv4()})
+    console.log(uuidv4())
   }
 
   setDeleteImage(selectImages: any) {
@@ -60,14 +57,28 @@ class Gallery extends Component {
     const {router}: any = this.props
     const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
     this.setState({currentDentist: currentDentist.getDentist});
-    await this.authListener()
-    await this.downloadImages()
+    await this.authListener();
+    await this.downloadImages();
+    await this.downloadAvatar();
+  }
+
+  async downloadAvatar() {
+    if (this.state.currentDentist === null) return
+    try {
+      const files = await Storage.list('avatars/' + this.state.currentDentist.id + '/')
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
+      signedFiles = await Promise.all(signedFiles)
+      console.log(signedFiles)
+      this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
+    } catch (error) {
+      console.log('Error download Avatar file: ', error);
+    }
   }
 
   async downloadImages() {
     try {
-      if (this.state.dentist === null) return
-      const files = await Storage.list('images/' + this.state.dentist.id + '/')
+      if (this.state.currentDentist === null) return
+      const files = await Storage.list('images/' + this.state.currentDentist.id + '/')
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
       console.log('signedFiles: ', signedFiles)
@@ -81,7 +92,7 @@ class Gallery extends Component {
           isSelected: false
         }
       })
-      this.setState({ images: filesList })
+      this.setState({images: filesList})
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
@@ -89,66 +100,117 @@ class Gallery extends Component {
 
   render() {
     return (
-      <>
-        {this.state.isMe && <Layout title="Profile Gallery">
-          {this.state.dentist && <Box>
-              {/*<Header/>*/}
-              <FlexWrapper>
-                  <Drawer
-                    currentAvatar={this.state.currentAvatar}
-                    currentDentist={this.state.currentDentist}
-                    currentUser={this.state.currentUser}
-                    signedInUser={this.state.signedInUser}
-                  />
-                  <MainContainer>
-                      <Breadcrumb point="Gallery"/>
-                      <FormBlockWrapper>
-                          <Grid container alignItems="center" justify="space-between" spacing={1}>
-                              <Grid item xs={12} sm={6} lg={6}>
-                                  <Grid container alignItems="center" justify="space-between">
-                                      <Grid item xs={12} sm={10} lg={6}>
-                                          <Search>
-                                              <IconButton type="submit" aria-label="search"
-                                                          style={{width: '45px', height: '45px', color: '#0d9da6'}}>
-                                                  <SearchIcon/>
-                                              </IconButton>
-                                              <InputSearch
-                                                  style={{width: '70%', background: 'transparent'}}
-                                                  placeholder="Search Images by title"
-                                              />
-                                          </Search>
-                                      </Grid>
-                                  </Grid>
-                              </Grid>
-                              <Grid item xs={12} sm={6} lg={6}>
-                                  <Grid container alignItems="center" justify="flex-end" spacing={1}>
-                                      <Grid item xs={12} sm={5} lg={4}>
-                                        <DeleteFile
-                                          // @ts-ignore
-                                          deleteImage={this.state.deleteImage} getImages={this.downloadImages.bind(this)}/>
-                                      </Grid>
-                                      <Grid item xs={12} sm={5} lg={4}>
-                                          <DownloadDropzone
-                                              dentist={this.state.dentist}
-                                              downloadImages={this.downloadImages.bind(this)}
-                                          />
-                                      </Grid>
-                                  </Grid>
-                              </Grid>
-                          </Grid>
-                      </FormBlockWrapper>
-                    {this.state.images &&
-                    <GalleryComponent
-                        images={this.state.images}
-                        setDeleteImage={this.setDeleteImage.bind(this)}
-                    />}
-                    {!this.state.images && <CircularProgressWrapper><CircularProgress/></CircularProgressWrapper>}
-                  </MainContainer>
-              </FlexWrapper>
-          </Box>}
-          {!this.state.dentist && <>Dentist not found</>}
-        </Layout>}
-      </>
+      <Layout title="Profile Gallery">
+        {this.state.isMe && <Drawer
+            currentAvatar={this.state.currentAvatar}
+            currentDentist={this.state.currentDentist}
+            currentUser={this.state.currentUser}
+            signedInUser={this.state.signedInUser}
+        />}
+        <div className="main-profile bg-white ">
+          <div className="row-gallery">
+            <div className="profile-box-form cut-block">
+              <div className="form-info-block one-block">
+                <div>
+                  <p className="form-login-title green px20">Upload Before Image</p>
+                  <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
+                </div>
+              </div>
+              <div className="profile-block-box">
+                <div className="gallery-block-image">
+                  <p className="form-login-buttons gallery-preview">
+                    <button className="button-green" onClick={this.generateUUID.bind(this)}>Crop</button>
+                  </p>
+                  <img className="delete-button" src="../../../public/images/delete_forever.svg"
+                       alt="delete"/>
+                </div>
+                <div>
+                  <p className="form-profile-label">Title</p>
+                  <p>
+                    <input className="form-profile-input" type="text" name="title" id="title" value=""
+                           placeholder="Image Title"/>
+                  </p>
+                </div>
+                <div>
+                  <p className="form-profile-label">Alt Tags</p>
+                  <p>
+                    <input className="form-profile-input" type="text" name="tags" id="tags" value=""
+                           placeholder="Alt Tag"/>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="profile-box-form cut-block">
+              <div className="form-info-block one-block">
+                <div>
+                  <p className="form-login-title green px20">Upload After Image</p>
+                  <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
+                </div>
+              </div>
+              <div className="profile-block-box">
+                <div className="gallery-block-image">
+                  <p className="gallery-upload">
+                    <label className="button-green-file">Upload</label>
+                    <input type="file" className="input-file" name="cover_image" id="cover_image"/>
+                    <span className="upload-subtitle">Max Size 2MB</span>
+                  </p>
+                </div>
+                <div>
+                  <p className="form-profile-label">Title</p>
+                  <p>
+                    <input className="form-profile-input" type="text" name="title" id="title" value=""
+                           placeholder="Image Title"/>
+                  </p>
+                </div>
+
+                <div>
+                  <p className="form-profile-label">Alt Tags</p>
+                  <p>
+                    <input className="form-profile-input" type="text" name="tags" id="tags" value=""
+                           placeholder="Alt Tag"/>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row-gallery">
+            <div className="profile-box-form cut-block-2">
+              <div className="profile-block-box">
+                <div>
+                  <p className="form-profile-label">
+                    <label className="form-profile-label">Service</label>
+                  </p>
+                  <div className="row-content space-between">
+                    <select className="gallery-select" name="services" id="services">
+                      <option value="" disabled selected>Select from your services</option>
+                      <option value="">Service 1</option>
+                      <option value="">Service 2</option>
+                      <option value="">Service 3</option>
+                      <option value="">Service 4</option>
+                    </select>
+                    <img className="gallery-select-arrow" src="../../../public/images/down-select.png"
+                         alt="select"/>
+                    <p className="checkbox">
+                      <input type="checkbox" name="delete" id="delete" value=""/>
+                      <span className="gallery-checkbox-text">I confirm I have full rights for the use and publication of these images.</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="gallery-button-block">
+              <p className="form-login-buttons">
+                <button className="button-green">Confirm</button>
+              </p>
+              <p className="form-login-buttons">
+                <button className="button-green-outline">Cancel</button>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </Layout>
+
     );
   }
 

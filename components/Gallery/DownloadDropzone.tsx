@@ -34,6 +34,7 @@ const DownloadDropzone: React.FunctionComponent<Props> = ({downloadImages, denti
           setPercent(percentUploaded)
         },
       }).then(result => {
+        console.log(result)
         setDownloadMessage('Success!')
         setStatusSnackbar('success')
         setOpenSnackbar(true)

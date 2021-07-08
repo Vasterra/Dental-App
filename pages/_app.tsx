@@ -8,7 +8,7 @@ import '../styles/globals.css'
 import '../configureAmplify'
 import {QueryClientProvider, QueryClient} from "react-query";
 
-class MyApp extends App<any> {
+class DentalApp extends App<any> {
   render() {
     const {Component, pageProps, apolloClient} = this.props;
     const queryClient = new QueryClient()
@@ -25,4 +25,4 @@ class MyApp extends App<any> {
   }
 }
 
-export default withApollo(MyApp);
+export default withApollo(DentalApp);
