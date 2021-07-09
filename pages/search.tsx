@@ -184,9 +184,11 @@ class Search extends Component {
             <div className="index-box-to-box-top">
               <div className="box-left">
                 <div className="index-search-gallery ">
-                  <input className="search-postcode" type="search" id="postcode" name="postcode" value=""
+                  <input className="search-postcode" type="search" id="postcode" name="postcode" value={this.state.searchValue}
+                         onChange={e => this.setState({searchValue: e.target.value})}
+                         onKeyDown={this.enterKeyDown}
                          placeholder=" Postcode"/>
-                  <img className="search-button" src="../images/search.svg" alt="search"/>
+                  <img className="search-button" src="../images/search.svg" alt="search" />
                 </div>
                 <p className="row-content-index">
                   <Services
