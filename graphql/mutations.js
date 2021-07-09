@@ -298,3 +298,60 @@ export const deleteServiceForDental = /* GraphQL */ `
     }
   }
 `;
+export const createImage = /* GraphQL */ `
+  mutation CreateImage(
+    $input: CreateImageInput!
+    $condition: ModelImageConditionInput
+  ) {
+    createImage(input: $input, condition: $condition) {
+      id
+      dentistId
+      titleBefore
+      tagsBefore
+      titleAfter
+      tagsAfter
+      service
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateImage = /* GraphQL */ `
+  mutation UpdateImage(
+    $input: UpdateImageInput!
+    $condition: ModelImageConditionInput
+  ) {
+    updateImage(input: $input, condition: $condition) {
+      id
+      dentistId
+      titleBefore
+      tagsBefore
+      titleAfter
+      tagsAfter
+      service
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteImage = /* GraphQL */ `
+  mutation DeleteImage(
+    $input: DeleteImageInput!
+    $condition: ModelImageConditionInput
+  ) {
+    deleteImage(input: $input, condition: $condition) {
+      id
+      dentistId
+      titleBefore
+      tagsBefore
+      titleAfter
+      tagsAfter
+      service
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

@@ -1,16 +1,13 @@
-import React, {Component, useEffect, useState} from "react";
+import React, {Component} from "react";
 import Layout from "../components/Layout";
-import {Grid, IconButton, Input, Slider, Typography} from "@material-ui/core";
-import SearchIcon from '@material-ui/icons/Search';
-import {DistanceWrapper, InputSearch, Main, Profile, SearchBlock, SearchPanelWrapper} from "../styles/Search.module";
 import Header from "../components/Header";
-import Services from "../components/Search/Services";
-import GoogleMapReactComponent from "../components/Search/GoogleMapReact";
-import Drawer from "../components/Drawer";
 import {convertCityCoords} from "../utils/search/converCityCoords";
-import CardDentist from "../components/Search/CardDentist";
 import {API} from "aws-amplify";
 import {listDentists, listServiceForDentals,} from "../graphql/queries";
+import Services from "components/Search/Services";
+import CardDentist from "components/Search/CardDentist";
+import GoogleMapReactComponent from "../components/Search/GoogleMapReact";
+import Footer from "components/Footer";
 
 class Search extends Component {
   state: any = {
@@ -21,12 +18,35 @@ class Search extends Component {
     ipCoords: null,
     searchDentistsLocations: null,
     searchDentists: null,
-    valueSlider: 100,
+    valueSlider: 50,
     searchCoords: null,
     searchValue: null
   }
 
   async componentDidMount() {
+    const switcher: any = document.querySelector(".switcher")
+    let flag = true
+    switcher.addEventListener("click", () => {
+      if (flag === true) {
+        switcher.style.cssText = `padding: 4px 4px 4px 4px;`
+        const changeClass = document.querySelectorAll(".switcher-text")
+        // @ts-ignore
+        document.querySelector(".left-size").style.cssText = `display: none`
+        for (let i = 0; i < changeClass.length; i++) {
+          changeClass[i].classList.toggle("strong")
+        }
+        flag = false
+      } else {
+        switcher.style.cssText = `padding: 4px 4px 4px 20px;`
+        const changeClass = document.querySelectorAll(".switcher-text")
+        // @ts-ignore
+        document.querySelector(".left-size").style.cssText = ``
+        for (let i = 0; i < changeClass.length; i++) {
+          changeClass[i].classList.toggle("strong")
+        }
+        flag = true
+      }
+    })
     if (!this.state.ipCoords) {
       convertCityCoords().then((result) => {
         this.setState({ipCoords: result})
@@ -47,7 +67,7 @@ class Search extends Component {
     });
     this.setState({servicesForSearch: data.listServiceForDentals.items})
   }
-  
+
   async setFindDentist(findDentist: any) {
     this.setState({dentists: findDentist})
   }
@@ -101,7 +121,7 @@ class Search extends Component {
       })
   }
 
-  getDistance = (_event: any, newValue: any, coordinate?: object | undefined, searchDent?: object) => {
+  getDistance = (_event: any, newValue: any, coordinate?: object | undefined, searchDent?: object) : any => {
     this.setState({valueSlider: newValue})
 
     let searchD: any = [];
@@ -129,7 +149,9 @@ class Search extends Component {
   findCoordinatesDentists = (coordinate: any, distance: number, dentists: []): object | [] => {
     let distanceDent: any[] = [];
 
-    if (!dentists) {return {}}
+    if (!dentists) {
+      return {}
+    }
 
     dentists.map((dent: { lng: any; lat: any; }) => {
       const a = {'Longitude': coordinate?.lng, 'Latitude': coordinate?.lat};
@@ -148,30 +170,25 @@ class Search extends Component {
     return distanceDent
   }
 
+  onChangeDistance(e: any) {
+    this.getDistance('event', e.target.value)
+  }
+
   render() {
+
     return (
       <Layout title="Search page">
-        <Header />
-        <Profile>
-          <Main>
-            <SearchPanelWrapper>
-              <Grid container alignItems="center" justify="space-between" spacing={2}>
-                <Grid item xs={12} sm={6} lg={3}>
-                  <SearchBlock>
-                    <IconButton
-                      onClick={this.changeSearch}
-                      aria-label="search"
-                      style={{width: '32px', height: '32px', zoom: 1.6, color: '#0d9da6'}}>
-                      <SearchIcon/>
-                    </IconButton>
-                    <InputSearch
-                      placeholder="Search Google Maps"
-                      onChange={e => this.setState({searchValue: e.target.value})}
-                      onKeyDown={this.enterKeyDown}
-                    />
-                  </SearchBlock>
-                </Grid>
-                <Grid item xs={12} sm={6} lg={3}>
+        <Header/>
+        <section className="container page">
+          <div className="index-box-to-box">
+            <div className="index-box-to-box-top">
+              <div className="box-left">
+                <div className="index-search-gallery ">
+                  <input className="search-postcode" type="search" id="postcode" name="postcode" value=""
+                         placeholder=" Postcode"/>
+                  <img className="search-button" src="../images/search.svg" alt="search"/>
+                </div>
+                <p className="row-content-index">
                   <Services
                     setFindDentist={this.setFindDentist.bind(this)}
                     dentists={this.state.searchDentists}
@@ -180,53 +197,63 @@ class Search extends Component {
                     searchDentistsLocations={this.state.searchDentistsLocations}
                     searchCoords={this.state.searchCoords}
                   />
-                </Grid>
-                <Grid item xs={12} lg={3}>
-                  <DistanceWrapper>
-                    <Typography id="discrete-slider" gutterBottom>
-                      Distance
-                    </Typography>
-                    <Grid container spacing={2} alignItems="center">
-                      <Grid item xs>
-                        <Slider
-                          value={typeof this.state.valueSlider === 'number' ? this.state.valueSlider : 0}
-                          aria-labelledby="discrete-slider"
-                          // @ts-ignore
-                          onChange={this.getDistance}
-                        />
-                      </Grid>
-                      <Grid item xs>
-                        <Input
-                          value={this.state.valueSlider}
-                          margin="dense"
-                          onChange={this.handleInputChange}
-                          onBlur={this.handleBlur}
-                          inputProps={{
-                            step: 1,
-                            min: 0,
-                            max: 100,
-                            type: 'number',
-                            'aria-labelledby': 'input-slider',
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </DistanceWrapper>
-                </Grid>
-                <Grid item lg={2}>
-                </Grid>
-              </Grid>
-            </SearchPanelWrapper>
-            <GoogleMapReactComponent
-              dentists={this.state.dentists}
-              me={this.state.dentists[0]}
-              currentDentist={this.state.currentDentist}
-              searchCoords={this.state.searchCoords}
-              ipCoords={this.state.ipCoords}
-            />
-            <CardDentist dentists={this.state.dentists} setCurrentDentist={this.setCurrentDentist}/>
-          </Main>
-        </Profile>
+                </p>
+                <p className="row-content-index">
+                  <select className="index-select arrows" name="services" id="services" onChange={this.onChangeDistance.bind(this)}>
+                    <option value="50"
+                      // @ts-ignore
+                            disabled="" selected=""
+                    >Within: 50 Miles</option>
+                    <option value="1">Within: 1 Mile</option>
+                    <option value="5">Within: 5 Miles</option>
+                    <option value="10">Within: 10 Miles</option>
+                    <option value="20">Within: 20 Miles</option>
+                    <option value="30">Within: 30 Miles</option>
+                    <option value="40">Within: 40 Miles</option>
+                  </select>
+                </p>
+              </div>
+              <h1 className="title-dentist">Find Your Dentist</h1>
+              <div className="box-right">
+                <p className="switcher-text">List Search</p>
+                <p className="switcher">
+                  <span className="switcher-dot"></span>
+                </p>
+                <p className="switcher-text strong">Map Search</p>
+              </div>
+            </div>
+          </div>
+          <div className="index-box-to-box">
+            <div className="main-index  index-main-box left-size">
+              <GoogleMapReactComponent
+                dentists={this.state.dentists}
+                me={this.state.dentists[0]}
+                currentDentist={this.state.currentDentist}
+                searchCoords={this.state.searchCoords}
+                ipCoords={this.state.ipCoords}
+              />
+              {/*<div className="map">*/}
+              {/*  <iframe*/}
+              {/*    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d158858.4733956696!2d-0.24168015785324748!3d51.528558242897844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2z0JvQvtC90LTQvtC9LCDQktC10LvQuNC60L7QsdGA0LjRgtCw0L3QuNGP!5e0!3m2!1sru!2sby!4v1625735420809!5m2!1sru!2sby"*/}
+              {/*    style={{width: '45vw', height: '85vh', border: 0}}*/}
+              {/*    loading="lazy"></iframe>*/}
+              {/*  <div className="map-dentist-block">*/}
+              {/*    <img className="map-dentist-block-image" src="../images/user-image.png" alt=""/>*/}
+              {/*    <p className="map-dentist-block-title">Dr Jane Doe</p>*/}
+              {/*    <p className="map-dentist-block-subtitle">Address</p>*/}
+              {/*  </div>*/}
+              {/*  <img className="map-heart-green" src="../images/heart-green.png" alt="heart green"/>*/}
+              {/*  <img className="map-heart-white" src="../images/heart-white.png" alt="heart white"/>*/}
+              {/*</div>*/}
+            </div>
+            <div className="main-index index-main-box right-size">
+              <div className="index-gallery-box">
+                <CardDentist dentists={this.state.dentists} setCurrentDentist={this.setCurrentDentist}/>
+              </div>
+            </div>
+          </div>
+          <Footer />
+        </section>
       </Layout>
     )
   }

@@ -1,7 +1,7 @@
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
-import { updateDentist } from "../graphql/mutations";
-import { getDentist } from "../graphql/queries";
+import {deleteDentist, updateDentist } from "../graphql/mutations";
+import { getDentist, listServiceForDentals } from "../graphql/queries";
 import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
 
@@ -85,6 +85,30 @@ class ApiManager {
     } catch (error) {
       console.log('Error download Avatar file: ', error);
     }
+  }
+
+  public static async deleteDentist(currentDentist: any) {
+    if (currentDentist === null) return
+    await API.graphql({
+      query: deleteDentist,
+      variables: {
+        input: {
+          id: currentDentist.id,
+        }
+      },
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    })
+  }
+
+
+  public static async getListServiceForDentals () {
+    const {data}: any = await API.graphql({
+      query: listServiceForDentals,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    })
+    return data.listServiceForDentals
   }
 
 }

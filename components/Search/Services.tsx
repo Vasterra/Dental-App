@@ -79,16 +79,11 @@ const ServicesComponent: React.FunctionComponent<Props> = ({
       // @ts-ignore
       authMode: 'AWS_IAM'
     })
-    // console.log('currentService', currentService)
-    // data.getDentist.services.items.forEach(val => {
-    //   val.name == currentService && search.push(data.getDentist)
-    // })
     return data.getDentist
   }
 
   return (
-    <ServiceWrapper>
-      <select className="input-checkbox space-between" value={service} onChange={handleChange}>
+      <select className="index-select arrows" name="services" id="services" value={service} onChange={handleChange}>
         <option value='choose service'>choose service</option>
         {services.map((data: any) => {
             return (
@@ -97,35 +92,6 @@ const ServicesComponent: React.FunctionComponent<Props> = ({
           }
         )}
       </select>
-      <style jsx>{`
-        .input-checkbox {
-          appearance: none;
-          width: 100%;
-          //max-width: 100%;
-          height: 47px;
-          background: #FFFFFF 0 0 no-repeat padding-box;
-          border-radius: 30px;
-          border: 1px solid #0d9da6;
-          text-align: left;
-          font: normal normal normal 16px/21px Segoe UI;
-          letter-spacing: 0;
-          color: #000000;
-          display: flex;
-          align-items: center;
-          padding: 0 15px;
-          //margin-right: 30px;
-        }
-
-        .input-checkbox:focus {
-          outline: none;
-        }
-
-        .input-checkbox::before {
-          width: 100%;
-        }
-
-      `}</style>
-    </ServiceWrapper>
   )
 }
 

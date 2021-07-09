@@ -55,17 +55,13 @@ class Header extends React.Component {
                     <MenuIcon {...bindTrigger(popupState)}/>
                     <Menu {...bindMenu(popupState)}>
                       <MenuItem onClick={popupState.close}>
-                        <Link href={"../../dentist/account/" + this.state.currentUser.username}>Account</Link>
+                        <a href={"../../dentist/account/" + this.state.currentUser.username}>Account</a>
                       </MenuItem>
                       <MenuItem onClick={popupState.close}>
-                        <Link href={"../../dentist/profile/" + this.state.currentUser.username}><a>Profile</a></Link>
+                        <a href={"../../dentist/profile/" + this.state.currentUser.username}><a>Profile</a></a>
                       </MenuItem>
                       <MenuItem onClick={popupState.close}>
-                        <Link href={"../../dentist/gallery/" + this.state.currentUser.username}><a>Gallery</a></Link>
-                      </MenuItem>
-                      <MenuItem onClick={popupState.close}>
-                        <Link
-                          href={"../../dentist/subscriptions/" + this.state.currentUser.username}><a>Settings</a></Link>
+                        <a href={"../../dentist/gallery/" + this.state.currentUser.username}><a>Gallery</a></a>
                       </MenuItem>
                     </Menu>
                   </>
@@ -78,25 +74,9 @@ class Header extends React.Component {
                  srcSet="../../images/FYD4_beige-on-green@2x.png 2x,
              ../../images/FYD4_beige-on-green@3x.png 3x" className="logo-image"/>
           </a>
-          {/*{!this.state.signedInUser && (*/}
-          {/*  <div style={{alignItems: 'center', display: 'flex'}}>*/}
-          {/*    <div className="user-logo-circle">*/}
-          {/*      <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 19 16" width="19px" fill="#707070">*/}
-          {/*        <path d="M0 0h24v24H0V0z" fill="none"/>*/}
-          {/*        <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>*/}
-          {/*      </svg>*/}
-          {/*    </div>*/}
-          {/*    /!*<Link href={"../../../login"}>*!/*/}
-          {/*    /!*  <Button color="inherit">Login</Button>*!/*/}
-          {/*    /!*</Link>*!/*/}
-          {/*    /!*<Link href={"../../../register"}>*!/*/}
-          {/*    /!*  <Button color="inherit">Register</Button>*!/*/}
-          {/*    /!*</Link>*!/*/}
-          {/*  </div>*/}
-          {/*)}*/}
-          <a href={"../../dentist/account/" + this.state.currentUser.username}>
+          {!this.state.signedInUser && (
             <div style={{alignItems: 'center', display: 'flex'}}>
-              {this.state.signedInUser && (
+              {this.state.signedInUser && <a href={"../../dentist/account/" + this.state.currentUser.username}>
                 <div className="user-logo-circle">
                   <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 19 16" width="19px" fill="#707070">
                     <path d="M0 0h24v24H0V0z" fill="none"/>
@@ -104,10 +84,29 @@ class Header extends React.Component {
                       d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                   </svg>
                 </div>
-              )}
-              {/*<Button onClick={ApiManager.signOut} color="inherit">Logout</Button>*/}
+              </a>}
+              <Link href={"../../../login"}>
+                <Button color="inherit">Login</Button>
+              </Link>
+              <Link href={"../../../registration"}>
+                <Button color="inherit">Register</Button>
+              </Link>
             </div>
-          </a>
+          )}
+          {this.state.signedInUser && (
+            <div style={{alignItems: 'center', display: 'flex'}}>
+              <a href={"../../dentist/account/" + this.state.currentUser.username}>
+                <div className="user-logo-circle">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 19 16" width="19px" fill="#707070">
+                    <path d="M0 0h24v24H0V0z" fill="none"/>
+                    <path
+                      d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                  </svg>
+                </div>
+              </a>
+              <Button onClick={ApiManager.signOut} color="inherit">Logout</Button>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
     )

@@ -5,6 +5,7 @@ import Layout from "../../../components/Layout";
 import {Auth, Hub, Storage} from "aws-amplify";
 import ApiManager from "services/ApiManager";
 import Drawer from "components/Drawer";
+import UploadImage from "components/Gallery/UploadImage";
 
 class Gallery extends Component {
 
@@ -77,10 +78,9 @@ class Gallery extends Component {
   async downloadImages() {
     try {
       if (this.state.currentDentist === null) return
-      const files = await Storage.list('images/' + this.state.currentDentist.id + '/')
+      const files = await Storage.list('images/' + this.state.currentDentist.id + '/' + this.state.uuid + '/')
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
-      console.log('signedFiles: ', signedFiles)
       let filesList = signedFiles.map((f: any, key: string | number) => {
         return {
           thumbnail: f,
@@ -113,7 +113,7 @@ class Gallery extends Component {
               <div className="profile-block-box">
                 <div className="gallery-block-image">
                   <p className="form-login-buttons gallery-preview">
-                    <button className="button-green" onClick={this.generateUUID.bind(this)}>Crop</button>
+                    <button className="button-green">Crop</button>
                   </p>
                   <img className="delete-button" src="../../../public/images/delete_forever.svg"
                        alt="delete"/>
@@ -140,13 +140,14 @@ class Gallery extends Component {
                 </div>
               </div>
               <div className="profile-block-box">
-                <div className="gallery-block-image">
-                  <p className="gallery-upload">
-                    <label className="button-green-file">Upload</label>
-                    <input type="file" className="input-file" name="cover_image" id="cover_image"/>
-                    <span className="upload-subtitle">Max Size 2MB</span>
-                  </p>
-                </div>
+                {/*<div className="gallery-block-image">*/}
+                {/*  <p className="gallery-upload">*/}
+                {/*    <label className="button-green-file">Upload</label>*/}
+                {/*    <input type="file" className="input-file" name="cover_image" id="cover_image"/>*/}
+                {/*    <span className="upload-subtitle">Max Size 2MB</span>*/}
+                {/*  </p>*/}
+                {/*</div>*/}
+                <UploadImage />
                 <div>
                   <p className="form-profile-label">Title</p>
                   <p>
@@ -189,7 +190,7 @@ class Gallery extends Component {
             </div>
             <div className="gallery-button-block">
               <p className="form-login-buttons">
-                <button className="button-green">Confirm</button>
+                <button className="button-green" onClick={this.generateUUID.bind(this)}>Confirm</button>
               </p>
               <p className="form-login-buttons">
                 <button className="button-green-outline">Cancel</button>

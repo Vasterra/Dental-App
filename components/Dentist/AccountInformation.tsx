@@ -1,6 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import {Formik} from "formik";
 import {API} from "aws-amplify";
+import {Auth, Hub, Storage} from "aws-amplify";
+import {CognitoUser} from "amazon-cognito-identity-js";
+import ApiManager from "services/ApiManager";
+import {Router} from "next/router";
 
 type Props = {
   currentDentist: any,
@@ -8,6 +12,34 @@ type Props = {
 }
 
 const AccountInformation: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
+  const [onCheck, setOnCheck] = useState()
+
+  const onRemoveAccount = () => {
+    if (onCheck) {
+      Auth
+        .currentAuthenticatedUser()
+        .then((user: CognitoUser) => new Promise<void>((resolve, reject) => {
+          ApiManager.signOut()
+          user.deleteUser(error => {
+            if (error) {
+              return reject(error);
+            }
+            document.location.href = "/";
+            resolve();
+          });
+          ApiManager.deleteDentist(currentDentist);
+        }))
+        .catch(e => {
+          console.log(e)
+        });
+    } else {
+      console.log('check not true')
+    }
+  }
+
+  const onCheckBox = ({ target }: any) => {
+    setOnCheck(target.checked);
+  };
 
   return (
     <div className="profile-block-box">
@@ -48,7 +80,8 @@ const AccountInformation: React.FunctionComponent<Props> = ({currentDentist, get
           <input type="checkbox"
                  name="delete"
                  id="delete"
-                 value=""
+                 value={onCheck}
+                 onChange={onCheckBox}
           />
           <span className="checkbox-text">
                           I acknowledge that by deleting my account,
@@ -57,7 +90,7 @@ const AccountInformation: React.FunctionComponent<Props> = ({currentDentist, get
         </p>
       </div>
       <p className="form-login-buttons">
-        <button className="button-green">Delete Account</button>
+        <button className="button-green" disabled={!onCheck} onClick={onRemoveAccount}>Delete Account</button>
       </p>
     </div>
   )

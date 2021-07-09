@@ -55,7 +55,6 @@ class Drawer extends Component {
     currentAvatar: null,
     signedInUser: null,
     currentUser: null,
-    isMe: false
   }
 
   async componentDidMount() {
@@ -76,7 +75,7 @@ class Drawer extends Component {
       const currentUser = await Auth.currentAuthenticatedUser();
       this.setState({currentUser})
       this.setState({signedInUser: true})
-      if (!this.state.isMe) return router.push('/dentist/account/' + this.state.currentDentist.id)
+      if (!this.state.currentUser.username === this.state.currentDentist.id) return router.push('/dentist/account/' + this.state.currentDentist.id)
     } catch (err) {
     }
   }
@@ -128,7 +127,7 @@ class Drawer extends Component {
   render() {
     if (!this.state.signedInUser) return null
     return (
-      this.state.signedInUser &&
+      this.state.currentUser &&
       <>
         {this.state.currentUser.username === this.state.currentDentist.id &&
         <div className="leftmenu">
@@ -167,15 +166,15 @@ class Drawer extends Component {
             <Menu>
                 <li className="leftmenu-list">
                     <img className="leftmenu-link-image" src="../../images/user.svg" alt="link image"/>
-                    <Link href={"../../dentist/profile/" + this.state.currentUser.username}>Profile</Link>
+                    <a href={"../../dentist/profile/" + this.state.currentUser.username}>Profile</a>
                 </li>
                 <li className="leftmenu-list">
                     <img className="leftmenu-link-image" src="../../images/gallery.svg" alt="link image"/>
-                    <Link href={"../../dentist/gallery/" + this.state.currentUser.username}>Gallery</Link>
+                    <a href={"../../dentist/gallery/" + this.state.currentUser.username}>Gallery</a>
                 </li>
                 <li className="leftmenu-list">
                     <img className="leftmenu-link-image" src="../../images/more_vert.svg" alt="link image"/>
-                    <Link href={"../../dentist/account/" + this.state.currentUser.username}>Account</Link>
+                    <a href={"../../dentist/account/" + this.state.currentUser.username}>Account</a>
                 </li>
                 <li className="leftmenu-list logout">
                     <img className="leftmenu-link-image" src="../../images/left-arrow.svg" alt="link image"/>

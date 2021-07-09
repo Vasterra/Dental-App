@@ -63,10 +63,8 @@ const Registration = ({}) => {
             <div className="form-login">
                 <p className="form-login-title green">Sign Up</p>
                 <p className="form-login-subtitle gray">Create An Account with FYD
-
                 </p>
-                {
-                    !values.user &&
+                {!values.user &&
                     <form onSubmit={signUp}>
                         <p className="form-login-input">
                             <input
@@ -120,8 +118,7 @@ const Registration = ({}) => {
                             <button type="submit" className="button-green">Sign Up</button>
                         </p>
                     </form>
-                }{
-                values.user &&
+                }{values.user &&
                 <form onSubmit={confirmSignUp} className="login-form-wrapper">
                     <TextField
                         id="filled-password-input"

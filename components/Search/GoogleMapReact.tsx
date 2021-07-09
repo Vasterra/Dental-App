@@ -11,9 +11,8 @@ const SearchPanelWrapper = styled("div")`
   align-items: center;
   flex-flow: wrap;
   background: #FFFFFF 0 0 no-repeat padding-box;
-  padding: 15px;
   border-radius: 10px;
-  margin: 10px 0;
+  width: 100%;
 `;
 
 type Props = {
@@ -52,34 +51,33 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
       }
     }
     return (
-      <SearchPanelWrapper>
-        <div style={{height: '300px', width: '100%'}}>
-          <GoogleMapReact
-            bootstrapURLKeys={{key: 'AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY'}}
-            center={centerMe}
-            zoom={10}
-          >
-            <MeMarket
-              // @ts-ignore
-              lat={centerMe.lat}
-              lng={centerMe.lng}
-              text={'Me'}
-            />
-            {this.props.dentists !== undefined ? this.props.dentists.map((dent: { lat: any; lng: any; email: any; }, key: React.Key | null | undefined): any => {
-              const {lat, lng, email} = dent;
-              return <Marker
-                // @ts-ignore
-                lat={lat}
-                lng={lng}
-                key={key}
-                text={email}
-                selected={dent === this.props.currentDentist}
-              />
-            }) : <></>
-            }
-          </GoogleMapReact>
-        </div>
-      </SearchPanelWrapper>
+
+      <GoogleMapReact
+        bootstrapURLKeys={{key: 'AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY'}}
+        center={centerMe}
+        zoom={10}
+      >
+        {/*<MeMarket*/}
+        {/*  // @ts-ignore*/}
+        {/*  lat={centerMe.lat}*/}
+        {/*  lng={centerMe.lng}*/}
+        {/*  text={'Me'}*/}
+        {/*/>*/}
+        {this.props.dentists !== undefined ? this.props.dentists.map((dent: { lat: any; lng: any; email: any; address: any }, key: React.Key | null | undefined): any => {
+          const {lat, lng, email, address} = dent;
+          return <Marker
+            // @ts-ignore
+            lat={lat}
+            lng={lng}
+            key={key}
+            dent={dent}
+            text={email}
+            address={address}
+            selected={dent === this.props.currentDentist}
+          />
+        }) : <></>
+        }
+      </GoogleMapReact>
     )
   }
 }

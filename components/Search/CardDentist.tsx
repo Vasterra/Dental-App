@@ -21,39 +21,24 @@ type Props = {
 
 const CardDentistComponent: React.FunctionComponent<Props> = ({dentists, setCurrentDentist}) => {
   return (
-    <CardWrapper>
-      <FlexWrapper>
-        <Grid container spacing={3}>
-          {dentists.map((data: any, key: any) => {
-              return (
-                <Grid item xs={12} sm={6} lg={3} key={key}>
-                  <CardBlock key={data.id} onClick={() => setCurrentDentist(data)}>
-                    <div className="water">
-                      {/*<img className="image" src="/zub.jpeg" alt="image"/>*/}
-                      <CardDentistImage data={data}/>
-                      {/*<button className="block-button"><span*/}
-                      {/*  className="block-button-text center"> View BeforeImage</span>*/}
-                      {/*</button>*/}
-                      {/*<span className="watermark">watermark</span>*/}
-                    </div>
-                    <ImageDescription>
-                      <Avatar data={data}/>
-                      <TitleDescription>
-                        {data.name}<br/>
-                        <SubtitleDescription>21 km away</SubtitleDescription>
-                      </TitleDescription>
-                      <ButtonBig>
-                        <a href={"../../dentist/account/" + data.id} target="_blank">View Profile</a>
-                      </ButtonBig>
-                    </ImageDescription>
-                  </CardBlock>
-                </Grid>
-              )
-            }
-          )}
-        </Grid>
-      </FlexWrapper>
-    </CardWrapper>
+    dentists.map((data: any, key: any) => {
+        return (
+
+            <div className="index-gallery-image-box" onClick={() => setCurrentDentist(data)}>
+              <CardDentistImage data={data}/>
+              <p className="index-gallery-image-watermark"></p>
+              <img className="index-gallery-image-watermark-img" src="../images/check_circle.svg" alt="check"/>
+              {/*<a href={"../../dentist/account/" + data.id} target="_blank" key={key}>*/}
+              <div className="index-gallery-image-description">
+                <p className="index-gallery-image-title">Image Title</p>
+                <p className="index-gallery-image-text">Image Alt Text</p>
+              </div>
+              {/*</a>*/}
+            </div>
+
+        )
+      }
+    )
   )
 }
 

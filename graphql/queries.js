@@ -189,3 +189,42 @@ export const listServiceForDentals = /* GraphQL */ `
     }
   }
 `;
+export const getImage = /* GraphQL */ `
+  query GetImage($id: ID!) {
+    getImage(id: $id) {
+      id
+      dentistId
+      titleBefore
+      tagsBefore
+      titleAfter
+      tagsAfter
+      service
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listImages = /* GraphQL */ `
+  query ListImages(
+    $filter: ModelImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        dentistId
+        titleBefore
+        tagsBefore
+        titleAfter
+        tagsAfter
+        service
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;

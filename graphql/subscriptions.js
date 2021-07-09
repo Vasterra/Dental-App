@@ -262,3 +262,51 @@ export const onDeleteServiceForDental = /* GraphQL */ `
     }
   }
 `;
+export const onCreateImage = /* GraphQL */ `
+  subscription OnCreateImage {
+    onCreateImage {
+      id
+      dentistId
+      titleBefore
+      tagsBefore
+      titleAfter
+      tagsAfter
+      service
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateImage = /* GraphQL */ `
+  subscription OnUpdateImage {
+    onUpdateImage {
+      id
+      dentistId
+      titleBefore
+      tagsBefore
+      titleAfter
+      tagsAfter
+      service
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteImage = /* GraphQL */ `
+  subscription OnDeleteImage {
+    onDeleteImage {
+      id
+      dentistId
+      titleBefore
+      tagsBefore
+      titleAfter
+      tagsAfter
+      service
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
