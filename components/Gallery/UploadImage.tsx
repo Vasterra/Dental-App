@@ -1,153 +1,127 @@
-import React, {useState, useCallback, useRef} from "react";
-import styled from "styled-components";
+import React, {useState, useCallback, useRef, useEffect} from 'react';
 // @ts-ignore
-import ReactCrop from "react-image-crop";
-import "react-image-crop/dist/ReactCrop.css";
-import Uploady, {
-  withRequestPreSendUpdate,
-  useItemFinalizeListener
-} from "@rpldy/uploady";
-import UploadButton from "@rpldy/upload-button";
-// @ts-ignore
-import UploadPreview, {PREVIEW_TYPES} from "@rpldy/upload-preview";
-import cropImage from "utils/cropImage";
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 
-const StyledReactCrop = styled(ReactCrop)`
-  width: 100%;
-  /* max-width: 900px; */
-  height: 314px;
-`;
+function generateDownload(canvas: any, crop: any, saveCrop: any, file: any, anchor: any) {
+  if (!crop || !canvas) {
+    return;
+  }
+  if (canvas.toBlob) {
+    canvas.toBlob(function (blob: any) {
+      let b: any = blob;
+      b.lastModifiedDate = new Date();
+      b.name = file[0].name;
+      saveCrop(blob, anchor)
+    }, 'image/jpeg', 1)
+  }
+}
 
-const PreviewImage = styled.img`
-  margin: 5px;
-  max-width: 500px;
-  height: auto;
-  max-height: 500px;
-`;
+type Props = {
+  saveCrop: Function
+  desabledButtonFiles: Function
+  anchor: any
+}
 
-const ButtonsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 10px;
-`;
+const UploadImage: React.FunctionComponent<Props> = ({saveCrop, anchor, desabledButtonFiles}) => {
+  const [upImg, setUpImg] = useState(null);
+  const [file, setFile] = useState(null);
+  const imgRef = useRef(null);
+  const previewCanvasRef = useRef(null);
+  const [crop, setCrop] = useState({
+    unit: '%', width: 100,
+    height: 100, aspect: 16 / 9
+  });
+  const [completedCrop, setCompletedCrop]: any = useState(null);
 
-const PreviewButtons = (props: { finished: any; crop: any; updateRequest: any; onUploadCancel: any; onUploadCrop: any; }) => {
-  const {finished, crop, updateRequest, onUploadCancel, onUploadCrop} = props;
-  console.log(finished)
+  const onSelectFile = (e: any) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files)
+      const reader: any = new FileReader();
+      reader.addEventListener('load', () => setUpImg(reader.result));
+      reader.readAsDataURL(e.target.files[0]);
+      // filesDownload()
+    }
+  };
+
+  const cancel = () => {
+    setUpImg(null)
+    setCompletedCrop(null)
+    desabledButtonFiles(anchor)
+  }
+
+  const onLoad = useCallback((img) => {
+    imgRef.current = img;
+  }, []);
+
+  useEffect(() => {
+    if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {
+      return;
+    }
+
+    const image: any = imgRef.current;
+    const canvas: any = previewCanvasRef.current;
+    const crop: any = completedCrop;
+
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    const ctx = canvas.getContext('2d');
+    const pixelRatio = window.devicePixelRatio;
+
+    canvas.width = crop.width * pixelRatio;
+    canvas.height = crop.height * pixelRatio;
+
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    ctx.imageSmoothingQuality = 'high';
+
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
+  }, [completedCrop]);
+
   return (
-    <ButtonsWrapper>
-      <button
-        style={{
-          display: !finished && updateRequest && crop ? "block" : "none"
-        }}
-        onClick={onUploadCrop}
-      >
-        Upload Cropped
-      </button>
-      <button
-        style={{display: !finished && updateRequest ? "block" : "none"}}
-        onClick={updateRequest}
-      >
-        Upload without Crop
-      </button>
-      <button
-        style={{
-          display: !finished && updateRequest && crop ? "block" : "none"
-        }}
-        onClick={onUploadCancel}
-      >
-        Cancel
-      </button>
-    </ButtonsWrapper>
-  );
-};
-
-const ItemPreviewWithCrop = withRequestPreSendUpdate((props) => {
-  const {
-    id,
-    url,
-    isFallback,
-    type,
-    updateRequest,
-    requestData,
-    previewMethods
-  }: any = props;
-  const [finished, setFinished] = useState(false);
-  const [crop, setCrop] = useState({aspect: 4 / 3});
-
-  useItemFinalizeListener(() => {
-    setFinished(true);
-  }, id);
-
-  const onUploadCrop = useCallback(async () => {
-    // @ts-ignore
-    if (updateRequest && (crop?.height || crop?.width)) {
-      requestData.items[0].file = await cropImage(
-        url,
-        requestData.items[0].file,
-        crop
-      );
-      updateRequest({items: requestData.items});
-    }
-  }, [url, requestData, updateRequest, crop]);
-
-  const onUploadCancel = useCallback(() => {
-    updateRequest(false);
-    if (previewMethods.current?.clear) {
-      previewMethods.current.clear();
-    }
-  }, [updateRequest, previewMethods]);
-
-  return isFallback || type !== PREVIEW_TYPES.IMAGE ? (
-    <PreviewImage src={url} alt="fallback img"/>
-  ) : (
-    <>
-      {requestData && !finished ? (
-        <StyledReactCrop
-          src={url}
-          crop={crop}
-          onChange={setCrop}
-          onComplete={setCrop}
-        />
-      ) : (
-        <PreviewImage src={url} alt="uploading img"/>
-      )}
-      <PreviewButtons
-        finished={finished}
+    <div className="gallery-block-image">
+      {!completedCrop?.width && <p className="gallery-upload">
+          <label className="button-green-file">Upload</label>
+          <input type="file" className="input-file2" name="cover_image" id="cover_image" accept="image/*"
+                 onChange={onSelectFile}/>
+          <span className="upload-subtitle">Max Size 2MB</span>
+      </p>}
+      {upImg && <ReactCrop
+        src={upImg}
+        onImageLoaded={onLoad}
         crop={crop}
-        updateRequest={updateRequest}
-        onUploadCancel={onUploadCancel}
-        onUploadCrop={onUploadCrop}
+        onChange={(c: any) => setCrop(c)}
+        onComplete={(c: any) => setCompletedCrop(c)}
+      /> }
+      <canvas
+        ref={previewCanvasRef}
+        style={{
+          width: Math.round(completedCrop?.width ?? 0),
+          height: Math.round(completedCrop?.height ?? 0),
+          position: 'absolute',
+          left: 0,
+          zIndex: -1,
+        }}
       />
-      <p>{finished ? "FINISHED" : ""}</p>
-    </>
-  );
-});
-
-export default function UploadImage() {
-  const previewMethodsRef = useRef();
-  return (
-    <>
-      <div className="gallery-block-image">
-        <p className="gallery-upload">
-          <Uploady destination={{url: "[upload-url]"}}>
-            <UploadButton className="button-green-file">Upload</UploadButton>
-            <input type="file" className="input-file" name="cover_image" id="cover_image"/>
-            <span className="upload-subtitle">Max Size 2MB</span>
-            <UploadPreview
-              // @ts-ignore
-              PreviewComponent={ItemPreviewWithCrop}
-              previewComponentProps={{previewMethods: previewMethodsRef}}
-              // @ts-ignore
-              previewMethodsRef={previewMethodsRef}
-              // fallbackUrl="https://icon-library.net/images/image-placeholder-icon/image-placeholder-icon-6.jpg"
-            />
-          </Uploady>
-
-        </p>
-      </div>
-    </>
-
+      {completedCrop?.width &&
+      < div className="uploadimage-settings">
+          <img className="delete-button" src="../../images/delete_forever.svg" alt="delete" onClick={cancel}/>
+          <button className="button-green" onClick={() =>
+            generateDownload(previewCanvasRef.current, completedCrop, saveCrop, file, anchor)
+          }>Crop
+          </button>
+      </div>}
+    </div>
   );
 }
+
+export default UploadImage;

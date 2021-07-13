@@ -11,7 +11,6 @@ import ApiManager from "services/ApiManager";
 
 class Account extends Component {
 
-
   state: any = {
     currentDentist: null,
     currentAvatar: null,

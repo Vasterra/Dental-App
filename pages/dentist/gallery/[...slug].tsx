@@ -1,11 +1,15 @@
 import React, {Component} from "react";
 import {withRouter} from "next/router";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import Layout from "../../../components/Layout";
-import {Auth, Hub, Storage} from "aws-amplify";
+import {API, Auth, Hub, Storage} from "aws-amplify";
 import ApiManager from "services/ApiManager";
 import Drawer from "components/Drawer";
 import UploadImage from "components/Gallery/UploadImage";
+import Services from "components/Gallery/Services";
+import {listServiceForDentals} from "graphql/queries";
+import {createImage} from "graphql/mutations";
+import Snackbar from "components/Snackbar";
 
 class Gallery extends Component {
 
@@ -17,16 +21,25 @@ class Gallery extends Component {
     signedInUser: null,
     currentUser: null,
     isMe: false,
-    uuid: null
+    uuid: null,
+    files: [],
+    titleBefore: null,
+    tagsBefore: null,
+    titleAfter: null,
+    tagsAfter: null,
+    service: null,
+    services: null,
+    check: null,
+    checkFilesLeft: false,
+    checkFilesRight: false,
+    messageSnackBar: null,
+    statusSnackBar: null,
+    openSnackBar: false,
   }
 
   async componentDidMount() {
     await this.getDentist()
-  }
-
-  generateUUID() {
     this.setState({uuid: uuidv4()})
-    console.log(uuidv4())
   }
 
   setDeleteImage(selectImages: any) {
@@ -58,8 +71,7 @@ class Gallery extends Component {
     const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
     this.setState({currentDentist: currentDentist.getDentist});
     await this.authListener();
-    await this.downloadImages();
-    await this.downloadAvatar();
+    await this.getListServiceForDentals()
   }
 
   async downloadAvatar() {
@@ -68,33 +80,115 @@ class Gallery extends Component {
       const files = await Storage.list('avatars/' + this.state.currentDentist.id + '/')
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
-      console.log(signedFiles)
       this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
     } catch (error) {
       console.log('Error download Avatar file: ', error);
     }
   }
 
-  async downloadImages() {
-    try {
-      if (this.state.currentDentist === null) return
-      const files = await Storage.list('images/' + this.state.currentDentist.id + '/' + this.state.uuid + '/')
-      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
-      signedFiles = await Promise.all(signedFiles)
-      let filesList = signedFiles.map((f: any, key: string | number) => {
-        return {
-          thumbnail: f,
-          src: f,
-          name: files[key].key,
-          thumbnailWidth: 320,
-          thumbnailHeight: 212,
-          isSelected: false
-        }
-      })
-      this.setState({images: filesList})
-    } catch (error) {
-      console.log('Error uploading file: ', error);
+  handleCloseSnackbar = () => {
+    this.setState({openSnackBar: false})
+  }
+
+  async getListServiceForDentals() {
+    const {data}: any = await API.graphql({
+      query: listServiceForDentals,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    this.setState({services: data.listServiceForDentals.items})
+  }
+
+  saveCrop(value: any, anchor: any) {
+    if (anchor === 'left') {
+      this.state.files[0] = value;
+      this.setState({checkFilesLeft: true})
+    } else {
+      this.setState({checkFilesRight: true})
+      this.state.files[1] = value;
     }
+    console.log(this.state.checkFilesLeft)
+    console.log(this.state.checkFilesRight)
+  }
+
+  saveService(value: any) {
+    this.setState({service: value})
+  }
+
+  desabledButtonFiles(anchor: any) {
+    if (anchor === 'left') {
+      this.setState({checkFilesLeft: false})
+    } else {
+      this.setState({checkFilesRight: false})
+    }
+  }
+
+  checkHandler({target}: any) {
+    this.setState({check: target.checked})
+  }
+
+  onChangeBeforeTitle(e: any) {
+    this.setState({titleBefore: e.target.value})
+  }
+
+  async saveData() {
+    if (!this.state.check) return console.log('I confirm I have full rights for the use and publication of these images.')
+    this.uploadImage()
+    try {
+      await API.graphql({
+        query: createImage,
+        variables: {
+          input: {
+            id: this.state.uuid,
+            dentistId: this.state.currentDentist.id,
+            titleBefore: this.state.titleBefore,
+            tagsBefore: this.state.tagsBefore,
+            titleAfter: this.state.titleAfter,
+            tagsAfter: this.state.tagsAfter,
+            service: this.state.service,
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      })
+      this.setState({uuid: uuidv4()})
+      this.setState({messageSnackBar: 'Success!'})
+      this.setState({statusSnackBar: 'success'})
+      this.setState({openSnackBar: true})
+    } catch (error) {
+      this.setState({messageSnackBar: error})
+      this.setState({statusSnackBar: 'error'})
+      this.setState({openSnackBar: true})
+    }
+  }
+
+  uploadImage() {
+    this.state.files.forEach(async (file: any) => {
+      try {
+        await Storage.put('images/' + this.state.currentDentist.id + '/' + this.state.uuid + '/' + file.name, file, {
+          contentType: 'image/png',
+          progressCallback(progress: { loaded: number; total: number; }) {
+            const percentUploaded: number = Math.round((progress.loaded / progress.total) * 100)
+            // setPercent(percentUploaded)
+          },
+        }).then(result => {
+          console.log(result)
+          this.setState({messageSnackBar: 'Success Upload!'})
+          this.setState({statusSnackBar: 'success'})
+          this.setState({openSnackBar: true})
+        })
+          .catch((error: any) => {
+            this.setState({messageSnackBar: error})
+            this.setState({statusSnackBar: 'error'})
+            this.setState({openSnackBar: true})
+          });
+      } catch (error) {
+        this.setState({messageSnackBar: error})
+        this.setState({statusSnackBar: 'error'})
+        this.setState({openSnackBar: true})
+      }
+    })
+
   }
 
   render() {
@@ -111,23 +205,35 @@ class Gallery extends Component {
                 </div>
               </div>
               <div className="profile-block-box">
-                <div className="gallery-block-image">
-                  <p className="form-login-buttons gallery-preview">
-                    <button className="button-green">Crop</button>
-                  </p>
-                  <img className="delete-button" src="../../../public/images/delete_forever.svg"
-                       alt="delete"/>
-                </div>
+                <UploadImage
+                  saveCrop={this.saveCrop.bind(this)}
+                  desabledButtonFiles={this.desabledButtonFiles.bind(this)}
+                  anchor="left"
+                />
                 <div>
                   <p className="form-profile-label">Title</p>
                   <p>
-                    <input className="form-profile-input" type="text" name="title" id="title" value="" placeholder="Image Title"/>
+                    <input className="form-profile-input"
+                           type="text"
+                           name="title"
+                           id="title"
+                           value={this.state.titleBefore}
+                           placeholder="Image Title"
+                           onChange={(e) => this.setState({titleBefore: e.target.value})}
+                    />
                   </p>
                 </div>
                 <div>
                   <p className="form-profile-label">Alt Tags</p>
                   <p>
-                    <input className="form-profile-input" type="text" name="tags" id="tags" value="" placeholder="Alt Tag"/>
+                    <input className="form-profile-input"
+                           type="text"
+                           name="tags"
+                           id="tags"
+                           value={this.state.tagsBefore}
+                           placeholder="Alt Tag"
+                           onChange={(e) => this.setState({tagsBefore: e.target.value})}
+                    />
                   </p>
                 </div>
               </div>
@@ -140,24 +246,35 @@ class Gallery extends Component {
                 </div>
               </div>
               <div className="profile-block-box">
-                {/*<div className="gallery-block-image">*/}
-                {/*  <p className="gallery-upload">*/}
-                {/*    <label className="button-green-file">Upload</label>*/}
-                {/*    <input type="file" className="input-file" name="cover_image" id="cover_image"/>*/}
-                {/*    <span className="upload-subtitle">Max Size 2MB</span>*/}
-                {/*  </p>*/}
-                {/*</div>*/}
-                <UploadImage />
+                <UploadImage
+                  saveCrop={this.saveCrop.bind(this)}
+                  desabledButtonFiles={this.desabledButtonFiles.bind(this)}
+                  anchor="rigth"
+                />
                 <div>
                   <p className="form-profile-label">Title</p>
                   <p>
-                    <input className="form-profile-input" type="text" name="title" id="title" value="" placeholder="Image Title"/>
+                    <input className="form-profile-input"
+                           type="text"
+                           name="title"
+                           id="title"
+                           value={this.state.titleAfter}
+                           placeholder="Image Title"
+                           onChange={(e) => this.setState({titleAfter: e.target.value})}
+                    />
                   </p>
                 </div>
                 <div>
                   <p className="form-profile-label">Alt Tags</p>
                   <p>
-                    <input className="form-profile-input" type="text" name="tags" id="tags" value="" placeholder="Alt Tag"/>
+                    <input className="form-profile-input"
+                           type="text"
+                           name="tags"
+                           id="tags"
+                           value={this.state.tagsAfter}
+                           placeholder="Alt Tag"
+                           onChange={(e) => this.setState({tagsAfter: e.target.value})}
+                    />
                   </p>
                 </div>
               </div>
@@ -171,17 +288,12 @@ class Gallery extends Component {
                     <label className="form-profile-label">Service</label>
                   </p>
                   <div className="row-content space-between">
-                    <select className="gallery-select" name="services" id="services">
-                      <option value="" disabled selected>Select from your services</option>
-                      <option value="">Service 1</option>
-                      <option value="">Service 2</option>
-                      <option value="">Service 3</option>
-                      <option value="">Service 4</option>
-                    </select>
+                    {this.state.services &&
+                    <Services saveService={this.saveService.bind(this)} services={this.state.services}/>}
                     <img className="gallery-select-arrow" src="../../../public/images/down-select.png"
                          alt="select"/>
                     <p className="checkbox">
-                      <input type="checkbox" name="delete" id="delete" value=""/>
+                      <input type="checkbox" name="delete" id="delete" onChange={this.checkHandler.bind(this)}/>
                       <span className="gallery-checkbox-text">I confirm I have full rights for the use and publication of these images.</span>
                     </p>
                   </div>
@@ -190,7 +302,11 @@ class Gallery extends Component {
             </div>
             <div className="gallery-button-block">
               <p className="form-login-buttons">
-                <button className="button-green" onClick={this.generateUUID.bind(this)}>Confirm</button>
+                <button className="button-green" onClick={this.saveData.bind(this)}
+                        disabled={!this.state.checkFilesLeft || !this.state.checkFilesRight || !this.state.titleBefore || !this.state.tagsBefore || !this.state.titleAfter ||
+                        !this.state.tagsAfter || !this.state.service || !this.state.check}
+                >Confirm
+                </button>
               </p>
               <p className="form-login-buttons">
                 <button className="button-green-outline">Cancel</button>
@@ -198,10 +314,15 @@ class Gallery extends Component {
             </div>
           </div>
         </div>
+        <Snackbar
+          messageSnackBar={this.state.messageSnackBar}
+          statusSnackBar={this.state.statusSnackBar}
+          openSnackBar={this.state.openSnackBar}
+          handleCloseSnackbar={this.handleCloseSnackbar.bind(this)}
+        />
       </Layout>
     );
   }
-
 }
 
 //@ts-ignore

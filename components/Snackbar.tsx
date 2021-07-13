@@ -6,79 +6,34 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { Alert } from '@material-ui/lab';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    close: {
-      padding: theme.spacing(0.5),
-    },
-  }),
-);
-
-export interface SnackbarMessage {
-  message: string;
-  key: number;
+type Props = {
+  openSnackBar: any,
+  handleCloseSnackbar: any,
+  statusSnackBar: any,
+  messageSnackBar: any,
 }
 
-export interface State {
-  open: boolean;
-  snackPack: SnackbarMessage[];
-  messageInfo?: SnackbarMessage;
-}
+const Snackbars: React.FunctionComponent<Props> = ({openSnackBar, handleCloseSnackbar, statusSnackBar, messageSnackBar}) => {
 
-export default function ConsecutiveSnackbars() {
-  const [snackPack, setSnackPack] = React.useState<SnackbarMessage[]>([]);
-  const [open, setOpen] = React.useState(false);
-  const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>(undefined);
-
-  React.useEffect(() => {
-    if (snackPack.length && !messageInfo) {
-      // Set a new snack when we don't have an active one
-      setMessageInfo({...snackPack[0]});
-      setSnackPack((prev) => prev.slice(1));
-      setOpen(true);
-    } else if (snackPack.length && messageInfo && open) {
-      // Close an active snack when a new one is added
-      setOpen(false);
-    }
-  }, [snackPack, messageInfo, open]);
-
-  const handleClick = (message: string) => () => {
-    setSnackPack((prev) => [...prev, {message, key: new Date().getTime()}]);
-  };
-
-  const handleClose = (event: React.SyntheticEvent | MouseEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
-
-  const handleExited = () => {
-    setMessageInfo(undefined);
-  };
-
-  const classes = useStyles();
   return (
     <Snackbar
-      key={messageInfo ? messageInfo.key : undefined}
       anchorOrigin={{
         vertical: 'bottom',
-        horizontal: 'left',
+        horizontal: 'center',
       }}
-      open={open}
+      open={openSnackBar}
       autoHideDuration={6000}
-      onClose={handleClose}
-      onExited={handleExited}
-      message={messageInfo ? messageInfo.message : undefined}
-      action={
-        <Alert
-          variant="filled"
-          // @ts-ignore
-          severity={statusSnackbar}
-        >
-          {messageInfo}
-        </Alert>
-      }
-    />
+      onClose={handleCloseSnackbar}
+    >
+      <Alert
+        variant="filled"
+        // @ts-ignore
+        severity={statusSnackBar}
+      >
+        {messageSnackBar}
+      </Alert>
+    </Snackbar>
   );
 }
+
+export default Snackbars;

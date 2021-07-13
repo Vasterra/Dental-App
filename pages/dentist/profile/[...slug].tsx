@@ -67,6 +67,7 @@ class Profile extends Component {
   async uploadAvatar(files: any) {
     files.preventDefault();
     const file = files.target.files[0];
+    console.log(file)
     const filename = file.name.split('.')
     try {
       await Storage.put('avatars/' + this.state.currentDentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
