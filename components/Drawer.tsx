@@ -95,7 +95,6 @@ class Drawer extends Component {
       const files = await Storage.list('avatars/' + this.state.currentDentist.id + '/')
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
-      console.log(signedFiles)
       this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
     } catch (error) {
       console.log('Error download Avatar file: ', error);

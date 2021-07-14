@@ -20,7 +20,6 @@ class DentalApp extends App<any> {
         <QueryClientProvider client={queryClient}>
           <Elements stripe={stripePromise}>
             <Layout title="">
-              <Drawer/>
               <Component {...pageProps} />
             </Layout>
           </Elements>

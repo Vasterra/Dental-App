@@ -28,12 +28,12 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentists, setCurr
               <CardDentistImage data={data}/>
               <p className="index-gallery-image-watermark"></p>
               <img className="index-gallery-image-watermark-img" src="../images/check_circle.svg" alt="check"/>
-              {/*<a href={"../../dentist/account/" + data.id} target="_blank" key={key}>*/}
+              <a href={"../../dentist/person/" + data.id} target="_blank" key={key}>
               <div className="index-gallery-image-description">
                 <p className="index-gallery-image-title">Image Title</p>
                 <p className="index-gallery-image-text">Image Alt Text</p>
               </div>
-              {/*</a>*/}
+              </a>
             </div>
 
         )

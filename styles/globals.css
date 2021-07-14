@@ -168,7 +168,7 @@ img {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   align-self: stretch;
   padding: 20px;
 }
@@ -708,7 +708,12 @@ input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
   line-height: normal;
   letter-spacing: 1.33px;
   text-align: left;
-  margin-bottom: 20px;
+}
+
+
+
+.form-login-subtitle:nth-child(1) {
+  margin: 0;
 }
 
 .form-login-input-label {
@@ -1442,9 +1447,15 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
+  margin-right: 22px;
+  margin-bottom: 10px;
   text-align: left;
   color: #707070;
   background-color: #ffffff;
+}
+
+.bg-gray{
+  background: #f6f6f6;
 }
 
 .gallery-select-arrow {
@@ -2119,6 +2130,85 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   letter-spacing: 1.25px;
   text-align: left;
   color: #095c5c;
+}
+.index-green-button{
+  min-width: 82px;
+  cursor: pointer;
+  background-color: var(--color-green);
+  color: var(--color-white);
+  margin: 10px 10px 0 0;
+  max-width: 180px;
+  padding: 13px 13px;
+  box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  border: solid 2px var(--color-green);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  transition: background .3s linear;
+  text-transform: none;
+  font-family: PT Sans;
+  font-size: 9px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.75px;
+  text-align: center;
+}
+.index-green-button:hover{
+  color: var(--color-green);
+  background: var(--color-white);
+}
+.button-list{
+  margin: 34px 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+
+}
+.button-list >p span{
+  margin: 5px 0;
+}
+.index-dentist-gallery-image {
+  width: 247px;
+  height: 247px;
+}
+.relative{
+  position: relative;
+}
+.index-leftmenu-profile-information{
+  position: relative;
+  padding: 20px 10px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 45px;
+}
+.index-leftmenu-profile-photo{
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+}
+.leftmenu-index-cover-image {
+  width: 100%;
+}
+.index-leftmenu-text{
+  font-family: PT Sans;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: 0.69px;
+  text-align: left;
+  color: #101010;
+}
+.index-leftmenu-text p{
+  margin-top:18px;
 }
 .box-right-column{
   display: flex;

@@ -62,6 +62,7 @@ class Account extends Component {
     if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
     return (
       this.state.currentDentist && <Layout title="Account">
+        <Drawer />
         <div className="main-profile bg-white ">
           <div className="profile-box-form">
             <div className="form-info-block">

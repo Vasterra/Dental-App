@@ -99,6 +99,7 @@ class Profile extends Component {
     if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
     return (
       <Layout title="Profile">
+        <Drawer />
         <div className="main-profile bg-white ">
           {this.state.currentDentist && <AddSettings
               currentDentist={this.state.currentDentist}

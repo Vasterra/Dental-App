@@ -247,6 +247,7 @@ class GalleryPage extends Component {
     if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
     return (
       <Layout title="Gallery">
+        <Drawer />
         <div className="main-profile bg-white ">
           {    // @ts-ignore
             !this.state.showUloadGallery && this.state.images && <Gallery images={this.state.images} handlerShowUloadGallery={this.handlerShowUloadGallery.bind(this)} />
