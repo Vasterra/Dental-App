@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Formik} from "formik";
 import {API} from "aws-amplify";
 import {Auth, Hub, Storage} from "aws-amplify";
@@ -15,13 +15,17 @@ type Props = {
 }
 
 const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, images, currentAvatar, services}) => {
-  const [listImages, setListImages] = useState(images);
+  const [listImages, setListImages] = useState();
   const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
   const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
 
+  useEffect(() => {
+    setListImages(images)
+  })
+
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     if (e.target.value === 'All Service') return setListImages(images)
-    const newListImages: never[] = [];
+    let newListImages: any[] = [];
     const filterImages = images.map((img: any[]) => img.filter((item: { service: string; }) => item.service === e.target.value));
     filterImages.forEach((arr: any) => {
       if (arr.length !== 0) {
@@ -29,6 +33,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, ima
         newListImages.push(arr)
       }
     });
+    // @ts-ignore
     setListImages(newListImages)
   }
   const fullName = firstName + ' ' + lastName

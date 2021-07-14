@@ -4,7 +4,7 @@ import {withRouter} from "next/router";
 import ApiManager from "../../../services/ApiManager";
 import ProfileAccountFree from "components/Dentist/freeAccount/profileAccountFree";
 import Header from "components/Header";
-import {getImage, listImages, listServiceForDentals} from "graphql/queries";
+import {listImages, listServiceForDentals} from "graphql/queries";
 
 class Person extends Component {
 
@@ -58,7 +58,6 @@ class Person extends Component {
       const files = await Storage.list('avatars/' + this.state.currentDentist.id + '/')
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
-      console.log(signedFiles)
       this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
     } catch (error) {
       console.log('Error download Avatar file: ', error);
@@ -67,14 +66,12 @@ class Person extends Component {
 
   async getListImages() {
     const {data}: any = await API.graphql({
-      query: getImage,
-      variables: {
-        id: this.state.currentDentist.id
-      },
+      query: listImages,
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-    data.getImage && this.setState({listImages: data.getImage.items})
+    console.log(data.listImages)
+    this.setState({listImages: data.listImages.items})
   }
 
   async getListServiceForDentals() {
@@ -91,8 +88,11 @@ class Person extends Component {
     try {
       if (this.state.currentDentist === null) return
       if (this.state.listImages === undefined) return
+
+      const listImagesFilter = this.state.listImages.filter((el: { dentistId: any; }) => el.dentistId === this.state.currentDentist.id);
+      console.log(listImagesFilter)
       let eachImages: any[] = []
-      this.state.listImages.forEach(async (e: any) => {
+      listImagesFilter && listImagesFilter.forEach(async (e: any) => {
         const files = await Storage.list('images/' + this.state.currentDentist.id + '/' + e.id)
         let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
         signedFiles = await Promise.all(signedFiles)
@@ -120,7 +120,6 @@ class Person extends Component {
   }
 
   render() {
-    console.log(this.state.images)
     return (
       <>
         <Header/>
