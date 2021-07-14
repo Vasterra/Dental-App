@@ -6,15 +6,17 @@ import {API, Auth, Hub, Storage} from "aws-amplify";
 import ApiManager from "services/ApiManager";
 import Drawer from "components/Drawer";
 import UploadImage from "components/Gallery/UploadImage";
+import Gallery from "components/Gallery/Gallery";
 import Services from "components/Gallery/Services";
-import {listServiceForDentals} from "graphql/queries";
+import {listImages, listServiceForDentals} from "graphql/queries";
 import {createImage} from "graphql/mutations";
 import Snackbar from "components/Snackbar";
 
-class Gallery extends Component {
+class GalleryPage extends Component {
 
   state: any = {
     images: null,
+    listImages: null,
     deleteImage: null,
     currentDentist: null,
     currentAvatar: null,
@@ -34,6 +36,7 @@ class Gallery extends Component {
     checkFilesRight: false,
     messageSnackBar: null,
     statusSnackBar: null,
+    showUloadGallery: false,
     openSnackBar: false,
   }
 
@@ -71,7 +74,9 @@ class Gallery extends Component {
     const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
     this.setState({currentDentist: currentDentist.getDentist});
     await this.authListener();
+    await this.getListImages();
     await this.getListServiceForDentals()
+    await this.downloadImages();
   }
 
   async downloadAvatar() {
@@ -97,6 +102,15 @@ class Gallery extends Component {
       authMode: 'AWS_IAM'
     });
     this.setState({services: data.listServiceForDentals.items})
+  }
+
+  async getListImages() {
+    const {data}: any = await API.graphql({
+      query: listImages,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    this.setState({listImages: data.listImages.items})
   }
 
   saveCrop(value: any, anchor: any) {
@@ -169,10 +183,8 @@ class Gallery extends Component {
           contentType: 'image/png',
           progressCallback(progress: { loaded: number; total: number; }) {
             const percentUploaded: number = Math.round((progress.loaded / progress.total) * 100)
-            // setPercent(percentUploaded)
           },
         }).then(result => {
-          console.log(result)
           this.setState({messageSnackBar: 'Success Upload!'})
           this.setState({statusSnackBar: 'success'})
           this.setState({openSnackBar: true})
@@ -188,7 +200,47 @@ class Gallery extends Component {
         this.setState({openSnackBar: true})
       }
     })
+    this.handlerShowGallery();
+    this.downloadImages();
+  }
 
+  async downloadImages() {
+    try {
+      if (this.state.currentDentist === null) return
+      let eachImages: any[] = []
+      this.state.listImages.forEach(async (e:any) => {
+        const files = await Storage.list('images/' + this.state.currentDentist.id + '/' + e.id)
+        let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
+        signedFiles = await Promise.all(signedFiles)
+        let filesList = signedFiles.map((f: any, key: string | number) => {
+          return {
+            thumbnail: f,
+            url: f,
+            name: files[key].key,
+            thumbnailWidth: 320,
+            thumbnailHeight: 212,
+            isSelected: false,
+            titleBefore: e.titleBefore,
+            tagsBefore: e.titleBefore,
+            titleAfter: e.titleAfter,
+            tagsAfter: e.tagsAfter,
+            service: e.service
+          }
+        })
+        eachImages.push(filesList)
+        this.setState({ images: eachImages })
+      })
+    } catch (error) {
+      console.log('Error uploading file: ', error);
+    }
+  }
+
+  handlerShowUloadGallery() {
+    this.setState({showUloadGallery: true})
+  }
+
+  handlerShowGallery() {
+    this.setState({showUloadGallery: false})
   }
 
   render() {
@@ -196,123 +248,130 @@ class Gallery extends Component {
     return (
       <Layout title="Gallery">
         <div className="main-profile bg-white ">
-          <div className="row-gallery">
-            <div className="profile-box-form cut-block">
-              <div className="form-info-block one-block">
-                <div>
-                  <p className="form-login-title green px20">Upload Before Image</p>
-                  <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
+          {    // @ts-ignore
+            !this.state.showUloadGallery && this.state.images && <Gallery images={this.state.images} handlerShowUloadGallery={this.handlerShowUloadGallery.bind(this)} />
+          }
+          {
+            this.state.showUloadGallery && <>
+                <div className="row-gallery">
+                    <div className="profile-box-form cut-block">
+                        <div className="form-info-block one-block">
+                            <div>
+                                <p className="form-login-title green px20">Upload Before Image</p>
+                                <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
+                            </div>
+                        </div>
+                        <div className="profile-block-box">
+                            <UploadImage
+                                saveCrop={this.saveCrop.bind(this)}
+                                desabledButtonFiles={this.desabledButtonFiles.bind(this)}
+                                anchor="left"
+                            />
+                            <div>
+                                <p className="form-profile-label">Title</p>
+                                <p>
+                                    <input className="form-profile-input"
+                                           type="text"
+                                           name="title"
+                                           id="title"
+                                           value={this.state.titleBefore}
+                                           placeholder="Image Title"
+                                           onChange={(e) => this.setState({titleBefore: e.target.value})}
+                                    />
+                                </p>
+                            </div>
+                            <div>
+                                <p className="form-profile-label">Alt Tags</p>
+                                <p>
+                                    <input className="form-profile-input"
+                                           type="text"
+                                           name="tags"
+                                           id="tags"
+                                           value={this.state.tagsBefore}
+                                           placeholder="Alt Tag"
+                                           onChange={(e) => this.setState({tagsBefore: e.target.value})}
+                                    />
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="profile-box-form cut-block">
+                        <div className="form-info-block one-block">
+                            <div>
+                                <p className="form-login-title green px20">Upload After Image</p>
+                                <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
+                            </div>
+                        </div>
+                        <div className="profile-block-box">
+                            <UploadImage
+                                saveCrop={this.saveCrop.bind(this)}
+                                desabledButtonFiles={this.desabledButtonFiles.bind(this)}
+                                anchor="rigth"
+                            />
+                            <div>
+                                <p className="form-profile-label">Title</p>
+                                <p>
+                                    <input className="form-profile-input"
+                                           type="text"
+                                           name="title"
+                                           id="title"
+                                           value={this.state.titleAfter}
+                                           placeholder="Image Title"
+                                           onChange={(e) => this.setState({titleAfter: e.target.value})}
+                                    />
+                                </p>
+                            </div>
+                            <div>
+                                <p className="form-profile-label">Alt Tags</p>
+                                <p>
+                                    <input className="form-profile-input"
+                                           type="text"
+                                           name="tags"
+                                           id="tags"
+                                           value={this.state.tagsAfter}
+                                           placeholder="Alt Tag"
+                                           onChange={(e) => this.setState({tagsAfter: e.target.value})}
+                                    />
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div className="profile-block-box">
-                <UploadImage
-                  saveCrop={this.saveCrop.bind(this)}
-                  desabledButtonFiles={this.desabledButtonFiles.bind(this)}
-                  anchor="left"
-                />
-                <div>
-                  <p className="form-profile-label">Title</p>
-                  <p>
-                    <input className="form-profile-input"
-                           type="text"
-                           name="title"
-                           id="title"
-                           value={this.state.titleBefore}
-                           placeholder="Image Title"
-                           onChange={(e) => this.setState({titleBefore: e.target.value})}
-                    />
-                  </p>
+                <div className="row-gallery">
+                    <div className="profile-box-form cut-block-2">
+                        <div className="profile-block-box">
+                            <div>
+                                <p className="form-profile-label">
+                                    <label className="form-profile-label">Service</label>
+                                </p>
+                                <div className="row-content space-between">
+                                  {this.state.services &&
+                                  <Services saveService={this.saveService.bind(this)} services={this.state.services}/>}
+                                    <img className="gallery-select-arrow" src="../../../public/images/down-select.png"
+                                         alt="select"/>
+                                    <p className="checkbox">
+                                        <input type="checkbox" name="delete" id="delete" onChange={this.checkHandler.bind(this)}/>
+                                        <span className="gallery-checkbox-text">I confirm I have full rights for the use and publication of these images.</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="gallery-button-block">
+                        <p className="form-login-buttons">
+                            <button className="button-green" onClick={this.saveData.bind(this)}
+                                    disabled={!this.state.checkFilesLeft || !this.state.checkFilesRight || !this.state.titleBefore || !this.state.tagsBefore || !this.state.titleAfter ||
+                                    !this.state.tagsAfter || !this.state.service || !this.state.check}
+                            >Confirm
+                            </button>
+                        </p>
+                        <p className="form-login-buttons">
+                            <button className="button-green-outline" onClick={this.handlerShowGallery.bind(this)}>Cancel</button>
+                        </p>
+                    </div>
                 </div>
-                <div>
-                  <p className="form-profile-label">Alt Tags</p>
-                  <p>
-                    <input className="form-profile-input"
-                           type="text"
-                           name="tags"
-                           id="tags"
-                           value={this.state.tagsBefore}
-                           placeholder="Alt Tag"
-                           onChange={(e) => this.setState({tagsBefore: e.target.value})}
-                    />
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="profile-box-form cut-block">
-              <div className="form-info-block one-block">
-                <div>
-                  <p className="form-login-title green px20">Upload After Image</p>
-                  <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
-                </div>
-              </div>
-              <div className="profile-block-box">
-                <UploadImage
-                  saveCrop={this.saveCrop.bind(this)}
-                  desabledButtonFiles={this.desabledButtonFiles.bind(this)}
-                  anchor="rigth"
-                />
-                <div>
-                  <p className="form-profile-label">Title</p>
-                  <p>
-                    <input className="form-profile-input"
-                           type="text"
-                           name="title"
-                           id="title"
-                           value={this.state.titleAfter}
-                           placeholder="Image Title"
-                           onChange={(e) => this.setState({titleAfter: e.target.value})}
-                    />
-                  </p>
-                </div>
-                <div>
-                  <p className="form-profile-label">Alt Tags</p>
-                  <p>
-                    <input className="form-profile-input"
-                           type="text"
-                           name="tags"
-                           id="tags"
-                           value={this.state.tagsAfter}
-                           placeholder="Alt Tag"
-                           onChange={(e) => this.setState({tagsAfter: e.target.value})}
-                    />
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row-gallery">
-            <div className="profile-box-form cut-block-2">
-              <div className="profile-block-box">
-                <div>
-                  <p className="form-profile-label">
-                    <label className="form-profile-label">Service</label>
-                  </p>
-                  <div className="row-content space-between">
-                    {this.state.services &&
-                    <Services saveService={this.saveService.bind(this)} services={this.state.services}/>}
-                    <img className="gallery-select-arrow" src="../../../public/images/down-select.png"
-                         alt="select"/>
-                    <p className="checkbox">
-                      <input type="checkbox" name="delete" id="delete" onChange={this.checkHandler.bind(this)}/>
-                      <span className="gallery-checkbox-text">I confirm I have full rights for the use and publication of these images.</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="gallery-button-block">
-              <p className="form-login-buttons">
-                <button className="button-green" onClick={this.saveData.bind(this)}
-                        disabled={!this.state.checkFilesLeft || !this.state.checkFilesRight || !this.state.titleBefore || !this.state.tagsBefore || !this.state.titleAfter ||
-                        !this.state.tagsAfter || !this.state.service || !this.state.check}
-                >Confirm
-                </button>
-              </p>
-              <p className="form-login-buttons">
-                <button className="button-green-outline">Cancel</button>
-              </p>
-            </div>
-          </div>
+            </>
+          }
         </div>
         <Snackbar
           messageSnackBar={this.state.messageSnackBar}
@@ -326,4 +385,4 @@ class Gallery extends Component {
 }
 
 //@ts-ignore
-export default withRouter(Gallery)
+export default withRouter(GalleryPage)

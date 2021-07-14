@@ -15,7 +15,7 @@ const Services: React.FunctionComponent<Props> = ({saveService, services}) => {
     setService(e.target.value)
     saveService(e.target.value)
   }
-  console.log(services)
+
   return (
     <select className="gallery-select" name="services" id="services" value={service} onChange={handleChange}>
       <option value="" disabled selected>Select from your services</option>
