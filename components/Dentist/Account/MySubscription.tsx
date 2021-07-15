@@ -2,10 +2,9 @@ import React from "react";
 
 type Props = {
   currentDentist: any,
-  getDentist: Function,
 }
 
-const MySubscription: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
+const MySubscription: React.FunctionComponent<Props> = ({currentDentist}) => {
 
   return (
     <div className="profile-block-box">

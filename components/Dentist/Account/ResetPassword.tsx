@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Formik} from "formik";
 import {API} from "aws-amplify";
-import ApiManager from "services/ApiManager";
+import ApiManager from "../../../services/ApiManager";
 
 const ResetPassword = () => {
   const [oldPassword, setOldPassword] = useState('');

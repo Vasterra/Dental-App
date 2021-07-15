@@ -10,17 +10,18 @@ import {
   Theme,
   useTheme
 } from "@material-ui/core";
-import DentistProfileInput from "../componentForm/Input";
-import DentistProfileArea from "../componentForm/TextArea";
-import {BlockWrapperGreen} from "../../../../styles/Main.module";
-import {ButtonBigGreen} from "../../../../styles/Button.module";
-import {ButtonSubmitWrapper, Label} from "../../../../styles/Form.module";
-import {API} from "aws-amplify";
-// @ts-ignore
-import {listLocations} from "../../../../graphql/queries";
-// @ts-ignore
-import {createLocation, deleteLocation} from "../../../../graphql/mutations";
 import Close from "@material-ui/icons/Close";
+import {API} from "aws-amplify";
+
+import DentistProfileInput from "components/Dentist/Profile/componentForm/Input";
+import DentistProfileArea from "components/Dentist/Profile/componentForm/TextArea";
+
+import {BlockWrapperGreen} from "styles/Main.module";
+import {ButtonBigGreen} from "styles/Button.module";
+import {ButtonSubmitWrapper, Label} from "styles/Form.module";
+
+import {listLocations} from "graphql/queries";
+import {createLocation, deleteLocation} from "graphql/mutations";
 
 type Props = {
   currentDentist: any,
@@ -57,8 +58,14 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
 
   return (
     <div className="profile-box-form">
-      <p className="form-login-title green px20">Locations</p>
-      <p className="form-login-subtitle gray px12 ">Information For Patients</p>
+      <div className="form-info-block" >
+        <div><p className="form-login-title green px20">Locations</p>
+          <p className="form-login-subtitle gray px12 mb-6px">Information For Patients</p>
+        </div>
+        { true && <p className="form-login-buttons">
+          <button className="button-green-outline">Upgrade</button>
+        </p> }
+      </div>
       <div className="box-2-box">
         <div className="profile-block-box">
           <div>
@@ -134,7 +141,7 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
             }
           </div>
         </div>
-        <div className="profile-block-box">
+        { false && <div className="profile-block-box">
           <div>
             <p className="form-profile-label">
               <label className="form-profile-label">Additional Locations</label>
@@ -162,7 +169,31 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
               })
             }
           </div>
-        </div>
+        </div> }
+        { true && <div className="profile-block-box disabled">
+          <div>
+            <p className="form-profile-label">
+              <label className="form-profile-label">Locations</label>
+            </p>
+            <p className="form-login-input">
+              <input type="text" name="adress1" value="" id="adress1"
+                     placeholder="Cambridge: 1 Dental Row, CB1 2AB" disabled />
+                <img className="form-login-input-close" src="../images/close.svg" />
+            </p>
+            <p className="form-profile-empty-input">
+              <input type="text" name="empty" value="" id="empty" placeholder="" disabled />
+            </p>
+            <p className="form-profile-empty-input">
+              <input type="text" name="empty" value="" id="empty" placeholder="" disabled />
+            </p>
+            <p className="form-profile-empty-input">
+              <input type="text" name="empty" value="" id="empty" placeholder="" disabled />
+            </p>
+            <p className="form-profile-empty-input">
+              <input type="text" name="empty" value="" id="empty" placeholder="" disabled />
+            </p>
+          </div>
+        </div> }
       </div>
     </div>
   )

@@ -1,6 +1,10 @@
 import React from "react";
 
-const UpgradeToPremium = () => {
+type Props = {
+  currentDentist: any,
+}
+
+const UpgradeToPremium: React.FunctionComponent<Props> = ({currentDentist}) => {
 
   return (
     <div className="profile-block-box">

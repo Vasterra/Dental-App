@@ -28,7 +28,7 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
             <input type="file" className="input-file" name="profile_picture" id="profile_picture" onChange={uploadAvatar}/>
           </p>
         </div>
-        <div className="profile-block-box">
+        { false && <div className="profile-block-box">
           <div>
             <p className="form-profile-label">
               <label className="form-profile-label">Cover</label>
@@ -53,7 +53,37 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
               <input type="file" className="input-file" name="watermark" id="watermark" />
             </p>
           </div>
-        </div>
+        </div> }
+        { true && <div className="profile-block-box  disabled">
+          <div>
+            <p className="form-profile-label">
+              <label className="form-profile-label ">Cover</label>
+            </p>
+            <p className="profile-photo-box">
+              <img className="image" src="../../../../images/empty-image.jpg" alt="cover image" />
+            </p>
+            <p className="row-content">
+              <label className="button-green-file">Upload</label>
+              <input type="file" className="input-file" name="cover_image" id="cover_image" />
+            </p>
+
+          </div>
+          <div className="mt-30">
+            <p className="form-profile-label">
+              <label className="form-profile-label ">Watermark</label>
+            </p>
+            <p className="profile-photo-box">
+              <img className="image" src="../../../../images/empty-image.jpg" alt="watermark" />
+
+            </p>
+            <p className="row-content">
+              <label className="button-green-file">Upload</label>
+              <input type="file" className="input-file" name="watermark" id="watermark" />
+            </p>
+
+          </div>
+
+        </div> }
       </div>
     </div>
   )

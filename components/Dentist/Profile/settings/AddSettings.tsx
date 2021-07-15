@@ -1,9 +1,10 @@
 import React from "react";
 import {Formik} from "formik";
-import DentistProfileInput from "../componentForm/Input";
-import DentistProfileArea from "../componentForm/TextArea";
 import {API} from "aws-amplify";
-import {updateDentist} from "../../../../graphql/mutations";
+
+import DentistProfileInput from "components/Dentist/Profile/componentForm/Input";
+import DentistProfileArea from "components/Dentist/Profile/componentForm/TextArea";
+import {updateDentist} from "graphql/mutations";
 
 type Props = {
   currentDentist: any,
@@ -28,8 +29,14 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
   return (
     <>
       <div className="profile-box-form">
-        <p className="form-login-title green px20">Bio and Contact Information</p>
-        <p className="form-login-subtitle gray px12 mb-6px">Information For Patients</p>
+        <div className="form-info-block">
+          <div><p className="form-login-title green px20">Bio and Contact Information</p>
+            <p className="form-login-subtitle gray px12 mb-6px">Information For Patients</p>
+          </div>
+          <p className="form-login-buttons">
+            <button className="button-green-outline">Upgrade</button>
+          </p>
+        </div>
         {
           <Formik
             validateOnBlur={true}
@@ -101,26 +108,61 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                         props={props}
                       />
                     </div>
-                  </div>
-                  <div className="profile-block-box">
-                    <DentistProfileInput
-                      title="Website Address"
-                      name="website"
-                      placeholder="dental.co.uk"
-                      setValue={props.values.website}
-                      props={props}
-                    />
-                    <DentistProfileInput
-                      title="Phone"
-                      name="phone"
-                      placeholder="0203 123 4567"
-                      setValue={props.values.phone}
-                      props={props}
-                    />
                     <p className="form-login-buttons">
                       <button className="button-green" type="submit">Confirm</button>
                     </p>
                   </div>
+                  {true && <div className="profile-block-box disabled">
+                      <div>
+                          <p className="form-profile-label">
+                              <label className="form-profile-label" htmlFor="website">Website Address - Premium</label>
+                          </p>
+                          <p>
+                              <input className="form-profile-input"
+                                     type="text"
+                                     name="website"
+                                     id="website"
+                                     value=""
+                                     placeholder="dental.co.uk"
+                                     disabled
+                              />
+                          </p>
+                      </div>
+                      <div>
+                          <p className="form-profile-label">
+                              <label className="form-profile-label" htmlFor="phone">Phone - Premium</label>
+                          </p>
+                          <p>
+                              <input className="form-profile-input"
+                                     type="text"
+                                     name="phone"
+                                     id="phone"
+                                     value=""
+                                     placeholder="0203 123 4567"
+                                     disabled
+                              />
+                          </p>
+                      </div>
+                  </div>}
+                  {false && <div className="profile-block-box">
+                      <DentistProfileInput
+                          title="Website Address"
+                          name="website"
+                          placeholder="dental.co.uk"
+                          setValue={props.values.website}
+                          props={props}
+                      />
+                      <DentistProfileInput
+                          title="Phone"
+                          name="phone"
+                          placeholder="0203 123 4567"
+                          setValue={props.values.phone}
+                          props={props}
+                      />
+                      <p className="form-login-buttons">
+                          <button className="button-green" type="submit">Confirm</button>
+                      </p>
+                  </div>}
                 </div>
               </form>
             )}

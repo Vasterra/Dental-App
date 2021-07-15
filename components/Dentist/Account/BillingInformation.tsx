@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import {Formik} from "formik";
 import {API} from "aws-amplify";
 import {CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import StripeManager from "services/StripeManager";
-import { updateDentist } from "graphql/mutations";
+import StripeManager from "../../../services/StripeManager";
+import { updateDentist } from "../../../graphql/mutations";
 
 type Props = {
   currentDentist: any,

@@ -1,13 +1,14 @@
 import React, {Component} from "react";
 import {Auth, Hub, Storage} from "aws-amplify";
 import {withRouter} from "next/router";
-import Drawer from "../../../components/Drawer";
-import Layout from "../../../components/Layout";
-import AddSettings from "../../../components/Dentist/profile/settings/AddSettings";
-import Location from "../../../components/Dentist/profile/settings/Location";
-import Services from "../../../components/Dentist/profile/settings/Services";
-import DisplayPhotos from "../../../components/Dentist/profile/settings/DisplayPhotos";
-import ApiManager from "../../../services/ApiManager";
+
+import Drawer from "components/Drawer";
+import Layout from "components/Layout";
+import AddSettings from "components/Dentist/Profile/settings/AddSettings";
+import Location from "components/Dentist/Profile/settings/Location";
+import Services from "components/Dentist/Profile/settings/Services";
+import DisplayPhotos from "components/Dentist/Profile/settings/DisplayPhotos";
+import ApiManager from "services/ApiManager";
 
 class Profile extends Component {
 
@@ -16,53 +17,47 @@ class Profile extends Component {
     currentAvatar: null,
     signedInUser: null,
     currentUser: null,
-    isMe: false
+    isMe: false,
+    // @ts-ignore
+    router: this.props.router
   }
 
   async componentDidMount() {
-    await this.getDentist()
+    await this.getDentist();
+    await this.authListener();
+    await this.downloadAvatar();
   }
 
   async authListener() {
-    const {router}: any = this.props
-    Hub.listen('auth', (data) => {
-      switch (data.payload.event) {
-        case 'signIn':
-          return this.setState({signedInUser: true})
-        case 'signOut':
-          return this.setState({signedInUser: false})
-      }
-    })
+    const signedInUser = ApiManager.authListener()
+    this.setState({signedInUser})
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
       this.setState({currentUser})
       this.setState({signedInUser: true})
       this.setState({isMe: currentUser.username === this.state.currentDentist.id});
-      if (!this.state.isMe) return router.push('/dentist/account/' + this.state.currentDentist.id)
+      if (!this.state.isMe) return this.state.router.push('/dentist/account/' + this.state.currentDentist.id)
     } catch (err) {
+      console.error(err)
     }
   }
 
   async getDentist() {
-    const {router}: any = this.props
-    const currentDentist = await ApiManager.getDentist(router.query.slug[0]).then(currentDentist => {
+    const currentDentist = await ApiManager.getDentist(this.state.router.query.slug[0]).then(currentDentist => {
       this.setState({currentDentist: currentDentist});
     })
-    await this.authListener()
-    await this.downloadAvatar()
   }
 
   async downloadAvatar() {
-    if (this.state.currentDentist === null) return
-    try {
-      const files = await Storage.list('avatars/' + this.state.currentDentist.id + '/')
-      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
-      signedFiles = await Promise.all(signedFiles)
-      console.log(signedFiles)
-      this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
-    } catch (error) {
-      console.log('Error download Avatar file: ', error);
-    }
+    ApiManager.downloadAvatar(this.state.currentDentist).then(signedFiles => {
+      this.setState({currentAvatar: signedFiles})
+    })
+  }
+
+  async downloadImages() {
+    ApiManager.downloadImages(this.state.currentDentist).then(filesList => {
+      this.setState({images: filesList})
+    })
   }
 
   async uploadAvatar(files: any) {
@@ -100,7 +95,7 @@ class Profile extends Component {
     if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
     return (
       <Layout title="Profile">
-        <Drawer />
+        <Drawer/>
         <div className="main-profile bg-white ">
           {this.state.currentDentist && <AddSettings
               currentDentist={this.state.currentDentist}

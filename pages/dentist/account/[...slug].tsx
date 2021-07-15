@@ -1,12 +1,15 @@
 import React, {Component} from "react";
 import {withRouter} from "next/router";
 import {Auth, Hub, Storage} from "aws-amplify";
+
 import Layout from "components/Layout";
 import Drawer from "components/Drawer";
-import AccountInformation from "components/Dentist/AccountInformation";
-import ResetPassword from "components/Dentist/ResetPassword";
-import BillingInformation from "components/Dentist/BillingInformation";
-import UpgradeToPremium from "components/Dentist/UpgradeToPremium ";
+import AccountInformation from "components/Dentist/Account/AccountInformation";
+import ResetPassword from "components/Dentist/Account/ResetPassword";
+import Mysubscription from "components/Dentist/Account/MySubscription";
+import BillingInformation from "components/Dentist/Account/BillingInformation";
+import UpgradeToPremium from "components/Dentist/Account/UpgradeToPremium ";
+
 import ApiManager from "services/ApiManager";
 
 class Account extends Component {
@@ -22,9 +25,9 @@ class Account extends Component {
   }
 
   async componentDidMount() {
-    await this.getDentist()
-    await this.authListener()
-    await this.downloadAvatar()
+    await this.getDentist();
+    await this.authListener();
+    await this.downloadAvatar();
   }
 
   async authListener() {
@@ -37,6 +40,7 @@ class Account extends Component {
       this.setState({isMe: currentUser.username === this.state.currentDentist.id});
       if (!this.state.isMe) return this.state.router.push('/dentist/account/' + this.state.currentDentist.id)
     } catch (err) {
+      console.error(err)
     }
   }
 
@@ -73,7 +77,7 @@ class Account extends Component {
             </div>
             <div className="box-2-box">
               { this.state.currentDentist && <AccountInformation currentDentist={this.state.currentDentist} getDentist={this.getDentist}/> }
-              <ResetPassword/>
+              { this.state.currentDentist && <ResetPassword/> }
             </div>
           </div>
           <div className="profile-box-form">
@@ -84,7 +88,8 @@ class Account extends Component {
               </div>
             </div>
             <div className="box-2-box">
-              <UpgradeToPremium/>
+              { this.state.currentDentist && <UpgradeToPremium currentDentist={this.state.currentDentist}/> }
+              {/*{ this.state.currentDentist && <Mysubscription currentDentist={this.state.currentDentist}/> }*/}
               { this.state.currentDentist && <BillingInformation currentDentist={this.state.currentDentist} getDentist={this.getDentist}/> }
             </div>
           </div>

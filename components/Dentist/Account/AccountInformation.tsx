@@ -3,7 +3,7 @@ import {Formik} from "formik";
 import {API} from "aws-amplify";
 import {Auth, Hub, Storage} from "aws-amplify";
 import {CognitoUser} from "amazon-cognito-identity-js";
-import ApiManager from "services/ApiManager";
+import ApiManager from "../../../services/ApiManager";
 import {Router} from "next/router";
 
 type Props = {
