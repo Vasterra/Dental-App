@@ -93,7 +93,6 @@ class Search extends Component {
   }
 
   setSearchService = (service: any) => {
-    console.log(service)
     this.setState({serviceSearch: service})
   }
 
@@ -103,7 +102,7 @@ class Search extends Component {
       .then(result => {
         this.getListDentists(null)
         this.setState({searchCoords: result.results[0].geometry.location})
-        this.getDistance({}, this.state.valueSlider, result.results[0].geometry.location, this.state.dentists)
+        this.findCoordinatesDentists(result.results[0].geometry.location, this.state.valueSlider, this.state.dentists)
       })
       .catch((_error: any) => {
       })
@@ -113,21 +112,19 @@ class Search extends Component {
     this.setState({valueSlider: e.target.value})
     let distanceDent: any[] = [];
     let searchDent: any[] = [];
-    console.log(this.state.service === 'choose service')
-    if (this.state.service === 'choose service') {
+
+    if (!this.state.dentists) return {}
+
+    if (this.state.serviceSearch === 'choose service') {
       const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, e.target.value, this.state.dentists)
       this.setState({searchDentists: findCoordinatesDent})
-      this.setState({service: null})
     } else {
-      console.log(this.state.dentists)
       this.state.dentists.forEach((item: any) => {
         searchDent.push(this.getDentistsFind(item))
       })
       searchDent = await Promise.all(searchDent)
       searchDent.forEach((dent: { services: { items: { name: any; }[]; }; lng: any; lat: any; }) => {
         dent.services.items.forEach((val: { name: any; }) => {
-          console.log(this.state.serviceSearch)
-          console.log(val.name)
           if (val.name === this.state.serviceSearch) {
             const a = {'Longitude': this.state.searchCoords.lng, 'Latitude': this.state.searchCoords.lat};
             const b = {'Longitude': dent.lng, 'Latitude': dent.lat};
@@ -158,29 +155,6 @@ class Search extends Component {
       authMode: 'AWS_IAM'
     })
     return data.getDentist
-  }
-
-  getDistance = (_event: any, newValue: any, coordinate?: object | undefined, searchDent?: object): any => {
-    console.log(searchDent)
-
-    let searchD: any = [];
-    let coordinates: any = {};
-
-    if (searchDent) {
-      searchD = searchDent
-    } else {
-      searchD = this.state.searchDentists
-    }
-
-    if (coordinate) {
-      coordinates = coordinate
-    } else {
-      coordinates = this.state.searchCoords
-    }
-    if (!searchD) return
-    const findCoordinatesDent: any = this.findCoordinatesDentists(coordinates, newValue, searchD)
-    console.log(findCoordinatesDent)
-    this.setState({searchDentists: findCoordinatesDent})
   }
 
   findCoordinatesDentists = (coordinate: any, distance: number, dentists: []): object | [] => {

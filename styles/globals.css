@@ -769,6 +769,7 @@ input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
+  margin-top: 15px;
 }
 
 .add-plus {
