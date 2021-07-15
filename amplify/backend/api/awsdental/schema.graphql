@@ -20,6 +20,7 @@ type Dentist
   hasPaidPlan: Boolean
   services: [Service] @connection(keyName: "byDentist", fields: ["id"])
   locations: [Location] @connection(keyName: "byDentist", fields: ["id"])
+  images: [Image] @connection(keyName: "byDentist", fields: ["id"])
 }
 
 type Service

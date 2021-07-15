@@ -42,7 +42,7 @@ class Account extends Component {
 
   async getDentist() {
     const currentDentist = await ApiManager.getDentist(this.state.router.query.slug[0]).then(currentDentist => {
-      this.setState({currentDentist: currentDentist.getDentist});
+      this.setState({currentDentist: currentDentist});
     })
   }
 

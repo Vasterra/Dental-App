@@ -84,7 +84,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, ima
                   <option key={key} value={item.name}>{item.name}</option>
                 ))}
               </select>
-              {  // @ts-ignore
+              {// @ts-ignore
                 images && <GalleryPerson images={listImages}/>
               }
             </div>

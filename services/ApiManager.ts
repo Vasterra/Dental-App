@@ -1,7 +1,7 @@
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
 import {deleteDentist, updateDentist } from "../graphql/mutations";
-import { getDentist, listServiceForDentals } from "../graphql/queries";
+import { getDentist, listDentists, listServiceForDentals } from "../graphql/queries";
 import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
 
@@ -31,7 +31,7 @@ class ApiManager {
     }
   }
 
-  public static async getDentist(id: any) {
+  public static getDentist = async (id: any) => {
     if (id === null) return
     const {data}: any = await API.graphql({
       query: getDentist,
@@ -41,7 +41,16 @@ class ApiManager {
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-    return data
+    return data.getDentist
+  }
+
+  public static getListDentists = async () => {
+    const {data}: any = await API.graphql({
+      query: listDentists,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    return data.listDentists.items
   }
 
   public static async changePassword(oldPassword: any, newPassword: any) {
@@ -102,13 +111,13 @@ class ApiManager {
   }
 
 
-  public static async getListServiceForDentals () {
+  public static getListServiceForDentals = async () => {
     const {data}: any = await API.graphql({
       query: listServiceForDentals,
       // @ts-ignore
       authMode: 'AWS_IAM'
     })
-    return data.listServiceForDentals
+    return data.listServiceForDentals.items
   }
 
 }

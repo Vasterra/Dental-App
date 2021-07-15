@@ -2,18 +2,10 @@ import React from "react";
 import styled from "styled-components";
 // @ts-ignore
 import GoogleMapReact from 'google-map-react';
-import Marker from "./Marker";
-import MeMarket from "./MeMarker";
 import {geolocated, GeolocatedProps} from "react-geolocated";
 
-const SearchPanelWrapper = styled("div")`
-  display: flex;
-  align-items: center;
-  flex-flow: wrap;
-  background: #FFFFFF 0 0 no-repeat padding-box;
-  border-radius: 10px;
-  width: 100%;
-`;
+import Marker from "./Marker";
+import MeMarket from "./MeMarker";
 
 type Props = {
   me: {},
@@ -24,7 +16,6 @@ type Props = {
 }
 
 class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
-
   render() {
     let centerMe: any = {};
 
@@ -43,26 +34,25 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
       }
     }
 
-    if (this.props.currentDentist) {
-      const {lat, lng} = this.props.currentDentist
-      centerMe = {
-        lat: Number(lat),
-        lng: Number(lng)
-      }
-    }
+    // if (this.props.currentDentist) {
+    //   const {lat, lng} = this.props.currentDentist
+    //   centerMe = {
+    //     lat: Number(lat),
+    //     lng: Number(lng)
+    //   }
+    // }
     return (
-
       <GoogleMapReact
         bootstrapURLKeys={{key: 'AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY'}}
         center={centerMe}
         zoom={10}
       >
-        {/*<MeMarket*/}
-        {/*  // @ts-ignore*/}
-        {/*  lat={centerMe.lat}*/}
-        {/*  lng={centerMe.lng}*/}
-        {/*  text={'Me'}*/}
-        {/*/>*/}
+        <MeMarket
+          // @ts-ignore
+          lat={centerMe.lat}
+          lng={centerMe.lng}
+          text={'Me'}
+        />
         {this.props.dentists !== undefined ? this.props.dentists.map((dent: { lat: any; lng: any; email: any; address: any }, key: React.Key | null | undefined): any => {
           const {lat, lng, email, address} = dent;
           return <Marker
@@ -83,3 +73,12 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
 }
 
 export default geolocated()(GoogleMapReactComponent);
+
+const SearchPanelWrapper = styled("div")`
+  display: flex;
+  align-items: center;
+  flex-flow: wrap;
+  background: #FFFFFF 0 0 no-repeat padding-box;
+  border-radius: 10px;
+  width: 100%;
+`;

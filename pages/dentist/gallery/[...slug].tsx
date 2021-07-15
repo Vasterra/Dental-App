@@ -72,7 +72,8 @@ class GalleryPage extends Component {
   async getDentist() {
     const {router}: any = this.props
     const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
-    this.setState({currentDentist: currentDentist.getDentist});
+    console.log(currentDentist)
+    this.setState({currentDentist: currentDentist});
     await this.authListener();
     await this.getListImages();
     await this.getListServiceForDentals()

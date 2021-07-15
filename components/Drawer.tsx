@@ -84,7 +84,7 @@ class Drawer extends Component {
     const {router}: any = this.props
     if (router.query.slug === undefined) return;
     const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
-    this.setState({currentDentist: currentDentist.getDentist});
+    this.setState({currentDentist: currentDentist});
     await this.authListener()
     await this.downloadAvatar()
   }

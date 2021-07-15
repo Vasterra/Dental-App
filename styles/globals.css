@@ -388,6 +388,7 @@ img {
   background-color: var(--color-green);
   color: var(--color-white);
   /*margin: 20px 20px 0 0;*/
+  margin-right: 10px;
   max-width: 180px;
   padding: 13px 30px;
   box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
@@ -469,7 +470,6 @@ img {
   cursor: pointer;
   background-color: var(--color-white);
   color: var(--color-green);
-  margin: 20px 20px 0 0;
   max-width: 150px;
   padding: 13px 30px;
   box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);

@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import {Storage} from "aws-amplify";
+import ApiManager from "services/ApiManager";
 
 const ImageWrapper = styled("div")`
   display: flex;
@@ -32,41 +33,20 @@ type Props = {
 }
 
 const CardDentistImage: React.FunctionComponent<Props> = ({data}) => {
-  const [images, setImages] = useState([]);
+  const [avatarImg, setAvatarImg] = useState([]);
 
   React.useEffect(() => {
-    downloadImages()
+    ApiManager.downloadAvatar(data).then(signedFiles => {
+      setAvatarImg(signedFiles)
+    })
   }, []);
-
-  const downloadImages = async () => {
-    try {
-      if (data === null) return
-      const files = await Storage.list('images/' + data.id + '/')
-      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
-      signedFiles = await Promise.all(signedFiles)
-      let filesList = signedFiles.map((f: any) => {
-        return {
-          thumbnail: f,
-          src: f,
-          name: f,
-          thumbnailWidth: 320,
-          thumbnailHeight: 212,
-          isSelected: false
-        }
-      })
-      console.log(filesList)
-      setImages(filesList[0])
-    } catch (error) {
-      console.log('Error uploading file: ', error);
-    }
-  }
 
   return (
     <ImageWrapper>
-      {images && <DentistImage
+      {avatarImg && <DentistImage
         // @ts-ignore
-          src={images.src} alt="image"/>}
-      {!images && <DentistImageBlockEmpty/>}
+          src={avatarImg} alt="image"/>}
+      {!avatarImg && <DentistImageBlockEmpty/>}
     </ImageWrapper>
   )
 }

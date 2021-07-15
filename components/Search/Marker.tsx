@@ -1,5 +1,5 @@
 import React from "react"
-import AvatarForMap from "./AvatarForMap";
+import AvatarForMapComponent from "./AvatarForMap";
 
 class Marker extends React.Component {
   render() {
@@ -17,7 +17,7 @@ class Marker extends React.Component {
       <>
         <div style={{display: block}}>
           <div className="map-dentist-block">
-            <AvatarForMap data={dent}/>
+            <AvatarForMapComponent dentist={dent}/>
             <p className="map-dentist-block-title">{text}</p>
             <p className="map-dentist-block-subtitle">{address}</p>
           </div>
