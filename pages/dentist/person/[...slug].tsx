@@ -16,6 +16,7 @@ class Person extends Component {
     currentUser: null,
     services: null,
     images: null,
+    oldIMages: null,
     isMe: false
   }
 
@@ -119,6 +120,7 @@ class Person extends Component {
         })
         eachImages.push(filesList)
         this.setState({images: eachImages})
+        this.setState({oldIMages: eachImages})
       })
     } catch (error) {
       console.log('Error uploading file: ', error);
@@ -133,6 +135,7 @@ class Person extends Component {
         { this.state.currentDentist && !this.state.currentDentist.hasPaidPlan && <ProfileAccountFree
             currentDentist={this.state.currentDentist}
             images={this.state.images}
+            oldIMages={this.state.oldIMages}
             services={this.state.services}
             currentAvatar={this.state.currentAvatar}
             setImages={this.setImages.bind(this)}
@@ -142,6 +145,7 @@ class Person extends Component {
         { this.state.currentDentist && this.state.currentDentist.hasPaidPlan && <ProfileAccountSubscription
             currentDentist={this.state.currentDentist}
             images={this.state.images}
+            oldIMages={this.state.oldIMages}
             services={this.state.services}
             currentAvatar={this.state.currentAvatar}
             setImages={this.setImages.bind(this)}

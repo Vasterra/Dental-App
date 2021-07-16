@@ -31,7 +31,7 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
                    onChange={uploadAvatar}/>
           </p>
         </div>
-        { !currentDentist.hasPaidPlan && <div className="profile-block-box">
+        { currentDentist.hasPaidPlan && <div className="profile-block-box">
           <div>
             <p className="form-profile-label">
               <label className="form-profile-label">Cover</label>
@@ -57,7 +57,7 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
             </p>
           </div>
         </div> }
-        { currentDentist.hasPaidPlan && <div className="profile-block-box  disabled">
+        { !currentDentist.hasPaidPlan && <div className="profile-block-box  disabled">
           <div>
             <p className="form-profile-label">
               <label className="form-profile-label ">Cover</label>

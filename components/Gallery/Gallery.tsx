@@ -1,11 +1,17 @@
 import React, {useCallback, useState} from 'react';
 // @ts-ignore
 import ReactCrop from 'react-image-crop';
+import {API, Storage} from "aws-amplify";
 import 'react-image-crop/dist/ReactCrop.css';
 import SimpleImageSlider from "react-simple-image-slider";
+import {deleteImage} from 'graphql/mutations';
 
 type Props = {
   images: any,
+  oldIMages: any,
+  services: any,
+  setImages: Function
+  downloadImages: Function
   handlerShowUloadGallery: Function
 }
 
@@ -20,7 +26,14 @@ type SliderOptions = {
   bgColor: string;
 };
 
-const Gallery: React.FunctionComponent = ({images, handlerShowUloadGallery}: any) => {
+const Gallery: React.FunctionComponent = ({
+    images,
+    oldIMages,
+    services,
+    handlerShowUloadGallery,
+    downloadImages,
+    setImages
+  }: any) => {
 
   const [sliderOptions, setSliderOptions] = useState<SliderOptions>({
     useGPURender: true,
@@ -41,6 +54,46 @@ const Gallery: React.FunctionComponent = ({images, handlerShowUloadGallery}: any
     setIndexData(idx)
   };
 
+  const filterImagesByService = (e: { target: { value: string; }; }) => {
+    if (e.target.value === 'All Service') return downloadImages()
+    let newListImages: any[] = [];
+    const filterImages = oldIMages.map((img: any[]) => img.filter((item: { service: string; }) => item.service === e.target.value));
+
+    filterImages.forEach((arr: any) => {
+      if (arr.length !== 0) {
+        // @ts-ignore
+        newListImages.push(arr)
+      }
+    });
+    // @ts-ignore
+    setImages(newListImages)
+  }
+
+  const removeImage = async (e: any, key: any) => {
+    await Storage.remove(e[0].name)
+      .then(async () => await Storage.remove(e[1].name))
+      .then(async () => await Storage.remove('images/' + e[0].dentistId + '/' + e[0].id))
+      .then(async () => {
+          await API.graphql({
+            query: deleteImage,
+            variables: {
+              input: {
+                id: e[0].id
+              }
+            },
+            // @ts-ignore
+            authMode: 'AWS_IAM'
+          });
+        }
+      )
+    console.log(key)
+    const newListImages = oldIMages.splice(key, 1);
+    console.log(newListImages)
+    setTimeout(() => {
+      setImages(newListImages)
+    },3000)
+  }
+
   const onClick = useCallback((idx: number, event: React.SyntheticEvent) => {
     console.log(`[App onClick] ${idx} ${event.currentTarget}`);
   }, []);
@@ -60,44 +113,53 @@ const Gallery: React.FunctionComponent = ({images, handlerShowUloadGallery}: any
           <button className="button-green centered" onClick={handlerShowUloadGallery}>Upload to gallery</button>
         </div>
       </div>
-      <div className="flex-end"><p className="form-profile-label">
-        Service
-      </p>
-        <img className="flex-end-arrow" src="../../images/little-arrow-bottom.svg" alt="arrow"/>
-      </div>
-      <div className="gallery-box">
-        {
-          images.map((val: any[]) => {
-            console.log(val)
-            return (
-              <div className="gallery-image-box">
-                <SimpleImageSlider
-                  width={333}
-                  height={333}
-                  images={val}
-                  showBullets={sliderOptions.showBullets}
-                  showNavs={sliderOptions.showNavs}
-                  startIndex={0}
-                  useGPURender={sliderOptions.useGPURender}
-                  navStyle={sliderOptions.navStyle}
-                  navSize={sliderOptions.navSize}
-                  navMargin={sliderOptions.navMargin}
-                  slideDuration={sliderOptions.duration}
-                  onClickBullets={onClickBullets}
-                  onClick={onClick}
-                />
-                <p className="gallery-image-watermark">Watermark</p>
-                <div className="gallery-image-description">
-                  <p className="gallery-image-title">{val[indexData].titleBefore}</p>
-                  <p className="gallery-image-text">Image Alt Text</p>
-                  <img className="gallery-image-edit" src="../../images/edit.svg" alt="edit"/>
-                  <img className="gallery-image-delete" src="../../images/delete_forever.svg" alt="delete"/>
-                </div>
-              </div>
-            )
-          })
-        }
-      </div>
+      {images && <>
+          <div className="flex-end">
+              <select className="gallery-select arrows bg-gray" name="services" id="services"
+                      onChange={filterImagesByService}>
+                  <option value="All Service" selected>All Service</option>
+                {services && services.map((item: any, key: any) => (
+                  <option key={key} value={item.name}>{item.name}</option>
+                ))}
+              </select>
+          </div>
+          <div className="gallery-box">
+            {
+              images.map((val: any[], key: any) => {
+                return (
+                  <div className="gallery-image-box" key={key}>
+                    <SimpleImageSlider
+                      width={333}
+                      height={333}
+                      images={val}
+                      showBullets={sliderOptions.showBullets}
+                      showNavs={sliderOptions.showNavs}
+                      startIndex={0}
+                      useGPURender={sliderOptions.useGPURender}
+                      navStyle={sliderOptions.navStyle}
+                      navSize={sliderOptions.navSize}
+                      navMargin={sliderOptions.navMargin}
+                      slideDuration={sliderOptions.duration}
+                      onClickBullets={onClickBullets}
+                      onClick={onClick}
+                    />
+                    <p className="gallery-image-watermark">Watermark</p>
+                    <div className="gallery-image-description">
+                      <p className="gallery-image-title">{val[indexData].titleBefore}</p>
+                      <p className="gallery-image-text">Image Alt Text</p>
+                      <img className="gallery-image-edit" src="../../images/edit.svg" alt="edit"/>
+                      <img className="gallery-image-delete" src="../../images/delete_forever.svg" alt="delete"
+                           onClick={() => {
+                             removeImage(val, key)
+                           }}/>
+                    </div>
+                  </div>
+                )
+              })
+            }
+          </div>
+      </>
+      }
     </>
   );
 }

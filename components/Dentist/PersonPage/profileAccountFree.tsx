@@ -6,18 +6,19 @@ type Props = {
   currentAvatar: any,
   services: any,
   images: any,
+  oldIMages: any,
   setImages: Function,
   downloadImages: Function,
 }
 
-const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, images, currentAvatar, services, setImages, downloadImages}) => {
+const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, oldIMages, images, currentAvatar, services, setImages, downloadImages}) => {
   const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
   const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
 
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     if (e.target.value === 'All Service') return downloadImages()
     let newListImages: any[] = [];
-    const filterImages = images.map((img: any[]) => img.filter((item: { service: string; }) => item.service === e.target.value));
+    const filterImages = oldIMages.map((img: any[]) => img.filter((item: { service: string; }) => item.service === e.target.value));
 
     filterImages.forEach((arr: any) => {
       if (arr.length !== 0) {

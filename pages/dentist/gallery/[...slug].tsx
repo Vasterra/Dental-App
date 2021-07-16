@@ -16,6 +16,7 @@ class GalleryPage extends Component {
 
   state: any = {
     images: null,
+    oldIMages: null,
     listImages: null,
     deleteImage: null,
     currentDentist: null,
@@ -189,6 +190,7 @@ class GalleryPage extends Component {
           this.setState({messageSnackBar: 'Success Upload!'})
           this.setState({statusSnackBar: 'success'})
           this.setState({openSnackBar: true})
+          this.downloadImages()
         })
           .catch((error: any) => {
             this.setState({messageSnackBar: error})
@@ -206,15 +208,22 @@ class GalleryPage extends Component {
   }
 
   async downloadImages() {
+    this.setState({ images: null })
+    this.setState({ oldIMages: null })
     try {
       if (this.state.currentDentist === null) return
       let eachImages: any[] = []
       this.state.listImages.forEach(async (e:any) => {
+        console.log('signedFiles', e)
         const files = await Storage.list('images/' + this.state.currentDentist.id + '/' + e.id)
+        console.log('files', files)
         let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
         signedFiles = await Promise.all(signedFiles)
+
         let filesList = signedFiles.map((f: any, key: string | number) => {
           return {
+            id: e.id,
+            dentistId: e.dentistId,
             thumbnail: f,
             url: f,
             name: files[key].key,
@@ -229,11 +238,17 @@ class GalleryPage extends Component {
           }
         })
         eachImages.push(filesList)
+        console.log(filesList)
         this.setState({ images: eachImages })
+        this.setState({ oldIMages: eachImages })
       })
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
+  }
+
+  setImages(images: any) {
+    this.setState({images: images})
   }
 
   handlerShowUloadGallery() {
@@ -254,7 +269,16 @@ class GalleryPage extends Component {
         />
         <div className="main-profile bg-white ">
           {    // @ts-ignore
-            !this.state.showUloadGallery && this.state.images && <Gallery images={this.state.images} handlerShowUloadGallery={this.handlerShowUloadGallery.bind(this)} />
+            !this.state.showUloadGallery &&
+            <Gallery
+                // @ts-ignore
+                images={this.state.images}
+                oldIMages={this.state.oldIMages}
+                services={this.state.services}
+                setImages={this.setImages.bind(this)}
+                downloadImages={this.downloadImages.bind(this)}
+                handlerShowUloadGallery={this.handlerShowUloadGallery.bind(this)}
+            />
           }
           {
             this.state.showUloadGallery && <>
