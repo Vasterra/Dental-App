@@ -1,10 +1,4 @@
-import React, {useEffect, useState} from "react";
-import {Formik} from "formik";
-import {API} from "aws-amplify";
-import {Auth, Hub, Storage} from "aws-amplify";
-import {CognitoUser} from "amazon-cognito-identity-js";
-import ApiManager from "services/ApiManager";
-import {Router} from "next/router";
+import React from "react";
 import GalleryPerson from "components/Gallery/GalleryPerson";
 
 type Props = {
@@ -12,21 +6,19 @@ type Props = {
   currentAvatar: any,
   services: any,
   images: any,
+  setImages: Function,
+  downloadImages: Function,
 }
 
-const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, images, currentAvatar, services}) => {
-  const [listImages, setListImages] = useState();
+const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDentist, images, currentAvatar, services, setImages, downloadImages}) => {
   const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
   const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
-
-  useEffect(() => {
-    setListImages(images)
-  })
-
+  console.log(images)
   const filterImagesByService = (e: { target: { value: string; }; }) => {
-    if (e.target.value === 'All Service') return setListImages(images)
+    if (e.target.value === 'All Service') return downloadImages()
     let newListImages: any[] = [];
     const filterImages = images.map((img: any[]) => img.filter((item: { service: string; }) => item.service === e.target.value));
+
     filterImages.forEach((arr: any) => {
       if (arr.length !== 0) {
         // @ts-ignore
@@ -34,7 +26,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, ima
       }
     });
     // @ts-ignore
-    setListImages(newListImages)
+    setImages(newListImages)
   }
   const fullName = firstName + ' ' + lastName
   const adress = currentDentist.postIndex + ' ' + currentDentist.city + ' ' + currentDentist.street
@@ -44,10 +36,14 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, ima
       <section className="container page">
         <div className="flex-menu">
           <div className="index-leftmenu">
+            <img className="leftmenu-index-cover-image" src="../../../../images/cover-image.jpg" alt="cover image" />
             <div className="index-leftmenu-profile-information">
               <img className="index-leftmenu-profile-photo" src={currentAvatar} alt=""/>
               <div>
-                <p className="form-login-title green px20 mt-30">{fullName}</p>
+                <p className="form-login-title green px20 mt-30 row-content">
+                  {fullName}
+                  <img className="index-gallery-image-watermark-img relative-img" src="../../../../images/check_circle.svg" alt="check" />
+                </p>
                 <p className="form-login-subtitle gray px12 m-none">{currentDentist.qualifications}</p>
                 <p className="form-login-subtitle gray px12 m-none">GDC No: </p>
               </div>
@@ -66,7 +62,9 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, ima
                 </p>
                 <p>Contact </p>
                 <p>
-                  <span><strong>Email: </strong>{currentDentist.email}</span>
+                  <span><strong>Phone:</strong>{currentDentist.phone}</span><br />
+                  <span><strong>Email: </strong>{currentDentist.email}</span><br />
+                  <span> <strong>Website:</strong>{currentDentist.website}</span>
                 </p>
                 <p>Locations</p>
                 <p>
@@ -85,7 +83,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, ima
                 ))}
               </select>
               {// @ts-ignore
-                images && <GalleryPerson images={listImages}/>
+                images && <GalleryPerson images={images}/>
               }
             </div>
           </div>
@@ -95,4 +93,4 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, ima
   )
 };
 
-export default ProfileAccountFree
+export default ProfileAccountSubscription

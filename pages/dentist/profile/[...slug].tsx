@@ -93,9 +93,13 @@ class Profile extends Component {
 
   render() {
     if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
+
     return (
       <Layout title="Profile">
-        <Drawer/>
+        <Drawer
+          // @ts-ignore
+          currentAvatar={this.state.currentAvatar}
+        />
         <div className="main-profile bg-white ">
           {this.state.currentDentist && <AddSettings
               currentDentist={this.state.currentDentist}

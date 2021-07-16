@@ -42,7 +42,7 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
         {!images && <DentistImageBlockEmpty/>}
       </ImageWrapper>
       <p className="index-gallery-image-watermark"></p>
-      <img className="index-gallery-image-watermark-img" src="../images/check_circle.svg" alt="check"/>
+      <img className="index-gallery-image-watermark-img-1" src="../images/check_circle.svg" alt="check"/>
       <a href={"../../dentist/person/" + dentist.id} target="_blank">
         <div className="index-gallery-image-description">
           <p className="index-gallery-image-title">Image Title</p>

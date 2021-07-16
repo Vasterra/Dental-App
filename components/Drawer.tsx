@@ -48,11 +48,10 @@ const Menu = styled("ul")`{
   }
 }`;
 
-class Drawer extends Component {
+class Drawer extends Component<{ currentAvatar: string }> {
 
   state: any = {
     currentDentist: null,
-    currentAvatar: null,
     signedInUser: null,
     currentUser: null,
   }
@@ -86,20 +85,8 @@ class Drawer extends Component {
     const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
     this.setState({currentDentist: currentDentist});
     await this.authListener()
-    await this.downloadAvatar()
   }
 
-  async downloadAvatar() {
-    if (this.state.currentDentist === null) return
-    try {
-      const files = await Storage.list('avatars/' + this.state.currentDentist.id + '/')
-      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
-      signedFiles = await Promise.all(signedFiles)
-      this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
-    } catch (error) {
-      console.log('Error download Avatar file: ', error);
-    }
-  }
 
   async downloadImages() {
     try {
@@ -124,7 +111,7 @@ class Drawer extends Component {
   }
 
   render() {
-    if (!this.state.signedInUser) return null
+    if (!this.state.signedInUser) return null;
     return (
       this.state.currentUser &&
       <>
@@ -157,7 +144,7 @@ class Drawer extends Component {
                     </a>
                 </p>
                 <div className="leftmenu-user-information">
-                  {this.state.currentAvatar && <img className="user-image" src={this.state.currentAvatar} alt="user image"/>}
+                  {this.props.currentAvatar && <img className="user-image" src={this.props.currentAvatar} alt="user image"/>}
                     <p className="user-description white"><span>{this.state.currentDentist.firstName}</span>
                         <span>{this.state.currentDentist.lastName}</span></p>
                 </div>

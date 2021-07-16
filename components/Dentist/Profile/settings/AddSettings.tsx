@@ -112,7 +112,7 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                       <button className="button-green" type="submit">Confirm</button>
                     </p>
                   </div>
-                  {true && <div className="profile-block-box disabled">
+                  {!currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
                       <div>
                           <p className="form-profile-label">
                               <label className="form-profile-label" htmlFor="website">Website Address - Premium</label>
@@ -144,7 +144,7 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                           </p>
                       </div>
                   </div>}
-                  {false && <div className="profile-block-box">
+                  {currentDentist.hasPaidPlan && <div className="profile-block-box">
                       <DentistProfileInput
                           title="Website Address"
                           name="website"

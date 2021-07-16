@@ -50,6 +50,7 @@ class Search extends Component {
     console.log('service', service)
     this.setState({service: service})
     ApiManager.getListDentists().then(listDentitst => {
+      console.log(listDentitst)
       const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, this.state.valueSlider, listDentitst)
       this.setState({dentists: listDentitst})
       this.setState({searchDentists: findCoordinatesDent})

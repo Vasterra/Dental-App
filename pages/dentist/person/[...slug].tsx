@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import {withRouter} from "next/router";
 import ApiManager from "../../../services/ApiManager";
-import ProfileAccountFree from "components/Dentist/freeAccount/profileAccountFree";
+import ProfileAccountFree from "components/Dentist/PersonPage/profileAccountFree";
+import ProfileAccountSubscription from "components/Dentist/PersonPage/profileAccountSubscription";
 import Header from "components/Header";
 import {listImages, listServiceForDentals} from "graphql/queries";
 
@@ -64,6 +65,10 @@ class Person extends Component {
     }
   }
 
+  setImages(images: any) {
+    this.setState({images: images})
+  }
+
   async getListImages() {
     const {data}: any = await API.graphql({
       query: listImages,
@@ -85,6 +90,7 @@ class Person extends Component {
 
 
   async downloadImages() {
+    console.log('this.state.currentDentist', this.state.currentDentist)
     try {
       if (this.state.currentDentist === null) return
       if (this.state.listImages === undefined) return
@@ -120,15 +126,27 @@ class Person extends Component {
   }
 
   render() {
+    console.log('fdsgg', this.state.images)
     return (
       <>
         <Header/>
-        { this.state.currentDentist && <ProfileAccountFree
-              currentDentist={this.state.currentDentist}
-              images={this.state.images}
-              services={this.state.services}
-              currentAvatar={this.state.currentAvatar}
+        { this.state.currentDentist && !this.state.currentDentist.hasPaidPlan && <ProfileAccountFree
+            currentDentist={this.state.currentDentist}
+            images={this.state.images}
+            services={this.state.services}
+            currentAvatar={this.state.currentAvatar}
+            setImages={this.setImages.bind(this)}
+            downloadImages={this.downloadImages.bind(this)}
           />
+        }
+        { this.state.currentDentist && this.state.currentDentist.hasPaidPlan && <ProfileAccountSubscription
+            currentDentist={this.state.currentDentist}
+            images={this.state.images}
+            services={this.state.services}
+            currentAvatar={this.state.currentAvatar}
+            setImages={this.setImages.bind(this)}
+            downloadImages={this.downloadImages.bind(this)}
+        />
         }
       </>
     )

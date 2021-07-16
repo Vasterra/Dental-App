@@ -19,8 +19,9 @@ const BillingInformation: React.FunctionComponent<Props> = ({currentDentist, get
   const [error, setError] = useState('');
 
 
-  const [retry, setRetry] = useState(typeof window !== "undefined" ? !!localStorage.getItem('invoice_retry') : '');
+  const [retry, setRetry] = useState(typeof window !== "undefined" ? !!localStorage.getItem('invoice_retry') : null);
 
+  console.log(currentDentist)
   const initialValues = {
     id: currentDentist.id,
     firstName: currentDentist.firstName,
@@ -60,7 +61,13 @@ const BillingInformation: React.FunctionComponent<Props> = ({currentDentist, get
 
       const paymentID = paymentMethod.id;
       const {subscription, hasPaidPlan, paymentMethodID} = await StripeManager.createSubscription(customer, paymentID);
-
+      console.log({
+        ...initialValues,
+        customerID: customer,
+        paymentMethodID,
+        hasPaidPlan: true,
+        subscriptionID: subscription.id,
+      })
       try {
         await API.graphql({
           query: updateDentist,

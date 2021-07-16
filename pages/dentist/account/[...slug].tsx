@@ -66,7 +66,10 @@ class Account extends Component {
     if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
     return (
       this.state.currentDentist && <Layout title="Account">
-        <Drawer />
+          <Drawer
+            // @ts-ignore
+              currentAvatar={this.state.currentAvatar}
+          />
         <div className="main-profile bg-white ">
           <div className="profile-box-form">
             <div className="form-info-block">
@@ -88,8 +91,8 @@ class Account extends Component {
               </div>
             </div>
             <div className="box-2-box">
-              { this.state.currentDentist && <UpgradeToPremium currentDentist={this.state.currentDentist}/> }
-              {/*{ this.state.currentDentist && <Mysubscription currentDentist={this.state.currentDentist}/> }*/}
+              { !this.state.currentDentist.hasPaidPlan && <UpgradeToPremium currentDentist={this.state.currentDentist}/> }
+              { this.state.currentDentist.hasPaidPlan && <Mysubscription currentDentist={this.state.currentDentist}/> }
               { this.state.currentDentist && <BillingInformation currentDentist={this.state.currentDentist} getDentist={this.getDentist}/> }
             </div>
           </div>

@@ -4,10 +4,11 @@ import {Auth, Storage} from "aws-amplify";
 type Props = {
   currentDentist: any,
   currentAvatar: any,
-  uploadAvatar: any,
+  uploadAvatar: Function,
 }
 
 const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentAvatar, uploadAvatar}) => {
+
 
   return (
     <div className="profile-box-form">
@@ -25,10 +26,12 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
           </div>
           <p className="row-content">
             <label className="button-green-file">Upload</label>
-            <input type="file" className="input-file" name="profile_picture" id="profile_picture" onChange={uploadAvatar}/>
+            <input type="file" className="input-file" name="profile_picture" id="profile_picture"
+              // @ts-ignore
+                   onChange={uploadAvatar}/>
           </p>
         </div>
-        { false && <div className="profile-block-box">
+        { !currentDentist.hasPaidPlan && <div className="profile-block-box">
           <div>
             <p className="form-profile-label">
               <label className="form-profile-label">Cover</label>
@@ -54,7 +57,7 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
             </p>
           </div>
         </div> }
-        { true && <div className="profile-block-box  disabled">
+        { currentDentist.hasPaidPlan && <div className="profile-block-box  disabled">
           <div>
             <p className="form-profile-label">
               <label className="form-profile-label ">Cover</label>

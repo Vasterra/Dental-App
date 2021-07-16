@@ -139,7 +139,7 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
             }
           </div>
         </div>
-        {false && <div className="profile-block-box">
+        { !currentDentist.hasPaidPlan && <div className="profile-block-box">
           <div>
             <p className="form-profile-label">
               <label className="form-profile-label">Additional Services</label>
@@ -164,7 +164,7 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
             </p>
           </div>
         </div> }
-        { true && <div className="profile-block-box disabled">
+        { currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
           <div>
             <p className="form-profile-label">
               <label className="form-profile-label">Additional Services - Premium</label>
