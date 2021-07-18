@@ -5,11 +5,12 @@ import {getDentist, listServiceForDentals} from "../../graphql/queries";
 
 type Props = {
   services: any,
+  updateService: any,
   saveService: Function,
 }
 
-const Services: React.FunctionComponent<Props> = ({saveService, services}) => {
-  const [service, setService]: any = useState();
+const Services: React.FunctionComponent<Props> = ({saveService, services, updateService}) => {
+  const [service, setService]: any = useState(updateService);
 
   const handleChange = async (e: any) => {
     setService(e.target.value)

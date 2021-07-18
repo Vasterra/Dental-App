@@ -46,6 +46,23 @@ export const getDentist = /* GraphQL */ `
         }
         nextToken
       }
+      images {
+        items {
+          id
+          dentistId
+          titleBefore
+          tagsBefore
+          titleAfter
+          tagsAfter
+          service
+          nameBefore
+          nameAfter
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -81,6 +98,9 @@ export const listDentists = /* GraphQL */ `
           nextToken
         }
         locations {
+          nextToken
+        }
+        images {
           nextToken
         }
         createdAt
@@ -199,6 +219,8 @@ export const getImage = /* GraphQL */ `
       titleAfter
       tagsAfter
       service
+      nameBefore
+      nameAfter
       createdAt
       updatedAt
       owner
@@ -220,6 +242,8 @@ export const listImages = /* GraphQL */ `
         titleAfter
         tagsAfter
         service
+        nameBefore
+        nameAfter
         createdAt
         updatedAt
         owner

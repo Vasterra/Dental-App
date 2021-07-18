@@ -46,6 +46,23 @@ export const onCreateDentist = /* GraphQL */ `
         }
         nextToken
       }
+      images {
+        items {
+          id
+          dentistId
+          titleBefore
+          tagsBefore
+          titleAfter
+          tagsAfter
+          service
+          nameBefore
+          nameAfter
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -96,6 +113,23 @@ export const onUpdateDentist = /* GraphQL */ `
         }
         nextToken
       }
+      images {
+        items {
+          id
+          dentistId
+          titleBefore
+          tagsBefore
+          titleAfter
+          tagsAfter
+          service
+          nameBefore
+          nameAfter
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -140,6 +174,23 @@ export const onDeleteDentist = /* GraphQL */ `
           city
           address
           postCode
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      images {
+        items {
+          id
+          dentistId
+          titleBefore
+          tagsBefore
+          titleAfter
+          tagsAfter
+          service
+          nameBefore
+          nameAfter
           createdAt
           updatedAt
           owner
@@ -272,6 +323,8 @@ export const onCreateImage = /* GraphQL */ `
       titleAfter
       tagsAfter
       service
+      nameBefore
+      nameAfter
       createdAt
       updatedAt
       owner
@@ -288,6 +341,8 @@ export const onUpdateImage = /* GraphQL */ `
       titleAfter
       tagsAfter
       service
+      nameBefore
+      nameAfter
       createdAt
       updatedAt
       owner
@@ -304,6 +359,8 @@ export const onDeleteImage = /* GraphQL */ `
       titleAfter
       tagsAfter
       service
+      nameBefore
+      nameAfter
       createdAt
       updatedAt
       owner

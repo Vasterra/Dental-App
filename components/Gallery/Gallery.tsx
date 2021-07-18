@@ -5,12 +5,14 @@ import {API, Storage} from "aws-amplify";
 import 'react-image-crop/dist/ReactCrop.css';
 import SimpleImageSlider from "react-simple-image-slider";
 import {deleteImage} from 'graphql/mutations';
-
+// @ts-ignore
+import Loader from "react-loader-spinner";
 type Props = {
   images: any,
   oldIMages: any,
   services: any,
   setImages: Function
+  editGallery: Function
   downloadImages: Function
   handlerShowUloadGallery: Function
 }
@@ -19,6 +21,7 @@ type SliderOptions = {
   useGPURender: boolean;
   showNavs: boolean;
   showBullets: boolean;
+  loading: boolean;
   navStyle: 1 | 2;
   navSize: number;
   navMargin: number;
@@ -32,9 +35,12 @@ const Gallery: React.FunctionComponent = ({
     services,
     handlerShowUloadGallery,
     downloadImages,
+    editGallery,
+    loading,
     setImages
   }: any) => {
 
+  // @ts-ignore
   const [sliderOptions, setSliderOptions] = useState<SliderOptions>({
     useGPURender: true,
     showNavs: false,
@@ -50,7 +56,6 @@ const Gallery: React.FunctionComponent = ({
   const [indexData, setIndexData] = useState<number>(0);
 
   const onClickBullets = (idx: number) => {
-    console.log(`[App onClickBullets] ${idx}`);
     setIndexData(idx)
   };
 
@@ -86,18 +91,13 @@ const Gallery: React.FunctionComponent = ({
           });
         }
       )
-    console.log(key)
-    const newListImages = oldIMages.splice(key, 1);
-    console.log(newListImages)
-    setTimeout(() => {
-      setImages(newListImages)
-    },3000)
+    downloadImages()
   }
 
   const onClick = useCallback((idx: number, event: React.SyntheticEvent) => {
     console.log(`[App onClick] ${idx} ${event.currentTarget}`);
   }, []);
-
+  console.log('loading', loading)
   return (
     <>
       <div className="profile-box-form">
@@ -116,48 +116,59 @@ const Gallery: React.FunctionComponent = ({
       {images && <>
           <div className="flex-end">
               <select className="gallery-select arrows bg-gray" name="services" id="services"
-                      onChange={filterImagesByService}>
+                      onChange={() => filterImagesByService}>
                   <option value="All Service" selected>All Service</option>
                 {services && services.map((item: any, key: any) => (
                   <option key={key} value={item.name}>{item.name}</option>
                 ))}
               </select>
           </div>
-          <div className="gallery-box">
-            {
-              images.map((val: any[], key: any) => {
-                return (
-                  <div className="gallery-image-box" key={key}>
-                    <SimpleImageSlider
-                      width={333}
-                      height={333}
-                      images={val}
-                      showBullets={sliderOptions.showBullets}
-                      showNavs={sliderOptions.showNavs}
-                      startIndex={0}
-                      useGPURender={sliderOptions.useGPURender}
-                      navStyle={sliderOptions.navStyle}
-                      navSize={sliderOptions.navSize}
-                      navMargin={sliderOptions.navMargin}
-                      slideDuration={sliderOptions.duration}
-                      onClickBullets={onClickBullets}
-                      onClick={onClick}
-                    />
-                    <p className="gallery-image-watermark">Watermark</p>
-                    <div className="gallery-image-description">
-                      <p className="gallery-image-title">{val[indexData].titleBefore}</p>
-                      <p className="gallery-image-text">Image Alt Text</p>
-                      <img className="gallery-image-edit" src="../../images/edit.svg" alt="edit"/>
-                      <img className="gallery-image-delete" src="../../images/delete_forever.svg" alt="delete"
-                           onClick={() => {
-                             removeImage(val, key)
-                           }}/>
-                    </div>
+        {
+          loading && <Loader
+              type="TailSpin"
+              color="#095c5c"
+              height={100}
+              width={100}
+          />
+        }
+        { !loading && <div className="gallery-box">
+          {
+            images.map((val: any[], key: any) => {
+              return (
+                <div className="gallery-image-box" key={key}>
+                  <SimpleImageSlider
+                    width={333}
+                    height={333}
+                    images={val}
+                    showBullets={sliderOptions.showBullets}
+                    showNavs={sliderOptions.showNavs}
+                    startIndex={0}
+                    useGPURender={sliderOptions.useGPURender}
+                    navStyle={sliderOptions.navStyle}
+                    navSize={sliderOptions.navSize}
+                    navMargin={sliderOptions.navMargin}
+                    slideDuration={sliderOptions.duration}
+                    onClickBullets={onClickBullets}
+                    onClick={onClick}
+                  />
+                  <p className="gallery-image-watermark">Watermark</p>
+                  <div className="gallery-image-description">
+                    <p className="gallery-image-title">{val[indexData].titleBefore}</p>
+                    <p className="gallery-image-text">Image Alt Text</p>
+                    <img className="gallery-image-edit" src="../../images/edit.svg" alt="edit" onClick={() => {
+                      editGallery(val, key)
+                    }}/>
+                    <img className="gallery-image-delete" src="../../images/delete_forever.svg" alt="delete"
+                         onClick={() => {
+                           removeImage(val, key)
+                         }}/>
                   </div>
-                )
-              })
-            }
-          </div>
+                </div>
+              )
+            })
+          }
+        </div>
+        }
       </>
       }
     </>

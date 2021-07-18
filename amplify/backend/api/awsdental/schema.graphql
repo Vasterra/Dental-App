@@ -52,7 +52,7 @@ type ServiceForDental
 
 type Image
 @model
-@key(name: "byDentist", fields: ["dentistId", "titleBefore", "tagsBefore", "titleAfter", "tagsAfter", "service"])
+@key(name: "byDentist", fields: ["dentistId", "titleBefore", "tagsBefore", "titleAfter", "tagsAfter", "service", "nameBefore", "nameAfter"])
 @auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
   id: ID!
   dentistId: ID!
@@ -61,4 +61,6 @@ type Image
   titleAfter: String!
   tagsAfter: String!
   service: String!
+  nameBefore: String!
+  nameAfter: String!
 }
