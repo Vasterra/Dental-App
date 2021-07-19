@@ -69,6 +69,7 @@ class Account extends Component {
           <Drawer
             // @ts-ignore
               currentAvatar={this.state.currentAvatar}
+              active={'activeAccount'}
           />
         <div className="main-profile bg-white ">
           <div className="profile-box-form">

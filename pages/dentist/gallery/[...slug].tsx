@@ -353,6 +353,7 @@ class GalleryPage extends Component {
         <Drawer
           // @ts-ignore
           currentAvatar={this.state.currentAvatar}
+          active={'activeGallery'}
         />
         <div className="main-profile bg-white ">
           {    // @ts-ignore

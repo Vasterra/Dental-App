@@ -48,7 +48,7 @@ const Menu = styled("ul")`{
   }
 }`;
 
-class Drawer extends Component<{ currentAvatar: string }> {
+class Drawer extends Component<{ currentAvatar: string, active: string }> {
 
   state: any = {
     currentDentist: null,
@@ -150,21 +150,21 @@ class Drawer extends Component<{ currentAvatar: string }> {
                 </div>
             </div>
             <Menu>
-                <li className="leftmenu-list">
+                <li className={`leftmenu-list + ${this.props.active === 'activeProfile' ? 'active' : ''}`}>
                     <img className="leftmenu-link-image" src="../../images/user.svg" alt="link image"/>
-                    <a href={"../../dentist/profile/" + this.state.currentUser.username}>Profile</a>
+                    <a className="leftmenu-link" href={"../../dentist/profile/" + this.state.currentUser.username}>Profile</a>
                 </li>
-                <li className="leftmenu-list">
+                <li className={`leftmenu-list + ${this.props.active === 'activeGallery' ? 'active' : ''}`}>
                     <img className="leftmenu-link-image" src="../../images/gallery.svg" alt="link image"/>
-                    <a href={"../../dentist/gallery/" + this.state.currentUser.username}>Gallery</a>
+                    <a className="leftmenu-link" href={"../../dentist/gallery/" + this.state.currentUser.username}>Gallery</a>
                 </li>
-                <li className="leftmenu-list">
+                <li className={`leftmenu-list + ${this.props.active === 'activeAccount' ? 'active' : ''}`}>
                     <img className="leftmenu-link-image" src="../../images/more_vert.svg" alt="link image"/>
-                    <a href={"../../dentist/account/" + this.state.currentUser.username}>Account</a>
+                    <a className="leftmenu-link" href={"../../dentist/account/" + this.state.currentUser.username}>Account</a>
                 </li>
                 <li className="leftmenu-list logout">
                     <img className="leftmenu-link-image" src="../../images/left-arrow.svg" alt="link image"/>
-                    <a href="/login" onClick={ApiManager.signOut}>Logout</a>
+                    <a className="leftmenu-link" href="/login" onClick={ApiManager.signOut}>Logout</a>
                 </li>
             </Menu>
         </div>}

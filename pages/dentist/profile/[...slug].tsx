@@ -99,6 +99,7 @@ class Profile extends Component {
         <Drawer
           // @ts-ignore
           currentAvatar={this.state.currentAvatar}
+          active={'activeProfile'}
         />
         <div className="main-profile bg-white ">
           {this.state.currentDentist && <AddSettings
