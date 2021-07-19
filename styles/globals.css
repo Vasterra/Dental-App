@@ -1,50 +1,5 @@
-@import './Drawer.module.css';
-@import './Login.module.css';
-@import './Search.module.css';
-
-@import '../public/fonts/SFPro/stylesheet.css';
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind screens;
-
-
-.ReactCrop__image {
-  max-height: 316px;
-}
-
-.uploadimage-settings {
-  position: absolute;
-  cursor: pointer;
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  top: 10px;
-}
-
-button:disabled {
-  background: #dddddd;
-  border: 2px solid #dddddd;
-  color: #fff;
-  cursor: auto;
-}
-
-button:disabled:hover {
-  background: #dddddd;
-  border: 2px solid #dddddd;
-  color: #fff;
-  cursor: auto;
-}
-
-.not-found {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+@import '../public/fonts/SFPro/stylesheet.css';
 
 :root {
   --color-green: #095c5c;
@@ -150,12 +105,13 @@ img {
 
 .main {
   width: 100%;
-  height: 100vh;
+  /*height: 100vh;*/
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-self: stretch;
+
 }
 
 .index-main-box {
@@ -165,10 +121,11 @@ img {
 
 .main-index {
   width: 100%;
-  height: 100vh;
+  /*height: 100vh;*/
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
   align-self: stretch;
   padding: 20px;
 }
@@ -198,7 +155,7 @@ img {
   align-self: stretch;
   min-width: 333px;
   max-width: 100%;
-  height: 100vh;
+  padding: 30px 25px 30px 46px;
   background-color: #095c5c;
 
 }
@@ -262,16 +219,18 @@ img {
 .leftmenu-link-image {
   z-index: 2;
   width: 24px;
+  position: absolute;
+  margin-top: -32px;
   filter: invert(100%) brightness(160%);
   transition: all .3s linear;
 }
 
 .leftmenu-content {
+  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 30px 25px 0 46px;
 }
 
 .leftmenu-user-information {
@@ -387,9 +346,7 @@ img {
   cursor: pointer;
   background-color: var(--color-green);
   color: var(--color-white);
-  /*margin: 20px 20px 0 0;*/
-  margin-right: 10px;
-  margin-left: 10px;
+  margin: 20px 20px 0 0;
   max-width: 180px;
   padding: 13px 30px;
   box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
@@ -471,6 +428,7 @@ img {
   cursor: pointer;
   background-color: var(--color-white);
   color: var(--color-green);
+  margin: 20px 20px 0 0;
   max-width: 150px;
   padding: 13px 30px;
   box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
@@ -709,12 +667,7 @@ input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
   line-height: normal;
   letter-spacing: 1.33px;
   text-align: left;
-}
-
-
-
-.form-login-subtitle:nth-child(1) {
-  margin: 0;
+  margin-bottom: 20px;
 }
 
 .form-login-input-label {
@@ -770,7 +723,6 @@ input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 15px;
 }
 
 .add-plus {
@@ -1449,15 +1401,9 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
-  margin-right: 22px;
-  margin-bottom: 10px;
   text-align: left;
   color: #707070;
   background-color: #ffffff;
-}
-
-.bg-gray{
-  background: #f6f6f6;
 }
 
 .gallery-select-arrow {
@@ -1492,8 +1438,9 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .gallery-block-image {
   position: relative;
-  max-width: 100%;
-  min-height: 316px;
+  width: 100%;
+  max-width: 378px;
+  height: 316px;
   border: solid 1px #095c5c;
   background-color: #ffffff;
 }
@@ -1529,7 +1476,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   position: absolute;
   cursor: pointer;
   right: 0;
-  /*top: 10px;*/
+  top: 10px;
 }
 
 .search-gallery {
@@ -1869,18 +1816,13 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   background: #fff;
 }
 
-.index-gallery-image-watermark-img-1 {
+.index-gallery-image-watermark-img {
   position: absolute;
   right: 15px;
   top: 14px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
-}
-
-.index-gallery-image-watermark-img {
-  width: 24px;
-  height: 24px;
 }
 
 .index-gallery-image-box:hover .index-gallery-image-description {
@@ -2019,9 +1961,8 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .map-dentist-block {
   position: absolute;
-  top: -140px;
-  left: 17px;
-  z-index: 1;
+  top: 144px;
+  left: 250px;
   /*width: 139px;*/
   /*height: 139px;*/
   padding: 15px;
@@ -2043,10 +1984,16 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 .map-heart-green {
+  position: absolute;
+  top: 320px;
+  left: 250px;
   width: 24px;
 }
 
 .map-heart-white {
+  position: absolute;
+  top: 120px;
+  left: 200px;
   width: 24px;
 }
 
@@ -2084,59 +2031,55 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 .index-leftmenu {
+  position: relative;
   min-width: 333px;
+  max-width: 333px;
   background: #f6f6f6;
   align-self: stretch;
-  padding: 0 20px 20px;
+  /*padding: 0 20px 20px;*/
 }
-
-.index-dentist-gallery-image {
-  width: 247px;
-  height: 247px;
-}
-
-.index-dentist-gallery-box {
-  width: 100%;
-  margin-top: 7px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(247px, 1fr));
-  grid-gap: 20px;
-}
-
-.index-dentist-gallery-image-box {
-  justify-self: center;
+.index-leftmenu-profile-information{
   position: relative;
-  width: 247px;
-  height: 247px;
+  margin-top: -84px;
+  padding: 20px 10px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
-
-.index-dentist-gallery-image-watermark {
+.index-leftmenu-profile-photo{
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+}
+.leftmenu-index-cover-image {
+  width: 100%;
+}
+.bg-gray{
   position: absolute;
-  right: 10px;
-  top: 10px;
+  top: 20px;
+  right: 30px;
+  background: #f6f6f6;
+}
+.m-none{
+  margin:0;
+}
+.mt-30{
+  margin-top:30px;
+}
+.index-leftmenu-text{
   font-family: PT Sans;
-  font-size: 9px;
-  text-shadow: 0 0 1px #000;
+  font-size: 13px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: center;
-  color: #ffffff;
-}
-.title-dentist{
-  display: none;
-  padding: 20px;
-  font-family: PT Serif;
-  font-size: 20px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 1.25px;
+  line-height: 1.33;
+  letter-spacing: 0.69px;
   text-align: left;
-  color: #095c5c;
+  color: #101010;
+}
+.index-leftmenu-text p{
+  margin-top:18px;
 }
 .index-green-button{
   min-width: 82px;
@@ -2186,43 +2129,60 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 .relative{
   position: relative;
 }
-.index-leftmenu-profile-information{
-  position: relative;
-  padding: 20px 10px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  top: -88px;
-}
-.index-leftmenu-profile-photo{
-  width: 128px;
-  height: 128px;
-  border-radius: 50%;
-}
-.leftmenu-index-cover-image {
-  display: block;
+.index-dentist-gallery-box {
   width: 100%;
-  height: 191px;
+  margin-top: 55px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(247px, 1fr));
+  grid-gap: 20px;
 }
-.index-leftmenu-text{
+
+.index-dentist-gallery-image-box {
+  justify-self: center;
+  position: relative;
+  width: 247px;
+  height: 247px;
+}
+
+.index-dentist-gallery-image-watermark {
+  position: absolute;
+  right: 10px;
+  top: 10px;
   font-family: PT Sans;
-  font-size: 13px;
+  font-size: 9px;
+  text-shadow: 0 0 1px #000;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.33;
-  letter-spacing: 0.69px;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.title-dentist {
+  display: none;
+  padding: 20px;
+  font-family: PT Serif;
+  font-size: 20px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.25px;
   text-align: left;
-  color: #101010;
+  color: #095c5c;
 }
-.index-leftmenu-text p{
-  margin-top:18px;
-}
-.box-right-column{
+
+.box-right-column {
   display: flex;
   flex-direction: column;
 
+}
+.relative-img{
+  position: relative;
+  top: 3px;
+  left: 20px;
 }
 /*.left-size{*/
 /*    max-width: 0px;*/
@@ -2367,6 +2327,9 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 @media (max-width: 768px) {
+  .empty{
+    height: 90px;
+  }
   .footer-bottom {
     width: 100%;
     height: auto;
@@ -2610,6 +2573,10 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   .mobile-topmenu {
     margin-left: -10vw;
   }
+  .bg-gray{
+    right: 2vw;
+    width: 95vw;
+  }
 }
 
 @media (max-width: 390px) {
@@ -2689,5 +2656,4 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .page {
   padding-top: 72px;
-  width: 100%;
 }

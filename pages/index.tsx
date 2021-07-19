@@ -1,10 +1,9 @@
 import * as React from "react";
-import Search from "./search";
-
+import Login from "components/Login";
 
 const IndexPage: React.FunctionComponent = () => {
   return (
-    <Search />
+    <Login />
   );
 };
 

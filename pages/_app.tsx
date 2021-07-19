@@ -7,8 +7,6 @@ import withApollo from "../lib/withApollo";
 import '../styles/globals.css'
 import '../configureAmplify'
 import {QueryClient, QueryClientProvider} from "react-query";
-import Drawer from "components/Drawer";
-import Layout from "components/Layout";
 
 class DentalApp extends App<any> {
   render() {
@@ -19,9 +17,7 @@ class DentalApp extends App<any> {
       <ApolloProvider client={apolloClient}>
         <QueryClientProvider client={queryClient}>
           <Elements stripe={stripePromise}>
-            <Layout title="">
-              <Component {...pageProps} />
-            </Layout>
+            <Component {...pageProps} />
           </Elements>
         </QueryClientProvider>
       </ApolloProvider>

@@ -1,10 +1,6 @@
 import React from "react";
-import Layout from "components/Layout";
-import {Grid} from "@material-ui/core";
-import Header from "components/Header";
-import Login from "components/login";
 
-const DashboardSummary = () => {
+const AdminDashboard = () => {
 
   return (
     <section className="container-profile">
@@ -19,43 +15,46 @@ const DashboardSummary = () => {
           </p>
           <p>
             <a href="/">
-              <img src="../../public/images/FYD4_beige-on-green@2x.png"
-                   srcSet="../../public/images/FYD4_beige-on-green@2x.png 2x, ../images/FYD4_beige-on-green@3x.png 3x"
+              <img src="../../../images/FYD4_beige-on-green@2x.png"
+                   srcSet="../../../images/FYD4_beige-on-green@2x.png 2x, ../../../images/FYD4_beige-on-green@3x.png 3x"
                    className="logo-image"
               />
             </a>
           </p>
           <p>
-            <img className="user-image-mobile" src="../../public/images/user-image.png" alt="user image"/>
+            <img className="user-image-mobile" src="../../../images/user-image.png" alt="user image" />
           </p>
         </div>
         <div className="leftmenu-content">
           <p>
             <a href="/">
-              <img src="../../public/images/FYD4_beige-on-green@2x.png"
-                   srcSet="../../public/images/FYD4_beige-on-green@2x.png 2x, ../images/FYD4_beige-on-green@3x.png 3x"
+              <img src="../../../images/FYD4_beige-on-green@2x.png"
+                   srcSet="../../../images/FYD4_beige-on-green@2x.png 2x, ../../../images/FYD4_beige-on-green@3x.png 3x"
                    className="logo-image desctop-visible"
                    alt="logo image"
               />
             </a>
           </p>
           <div className="leftmenu-user-information">
-            <img className="user-image" src="../../public/images/user-image.png" alt="user image"/>
+            <img className="user-image" src="../../../images/user-image.png" alt="user image"/>
             <p className="user-description white"><span>Name</span> <span>Surname</span></p>
           </div>
           <ul className="leftmenu-nav-menu">
+            <li className="leftmenu-list active">
+              <a className="leftmenu-link" href="../../admin/dashboard/">Dashboard</a>
+              <img className="leftmenu-link-image" src="../../../images/dashboard.svg" alt="link image"/>
+            </li>
             <li className="leftmenu-list">
-              <a className="leftmenu-link   active" href="#">Dashboard </a>
-              <img className="leftmenu-link-image" src="..../public/images/dashboard.svg" alt="link image"/>
+              <a className="leftmenu-link" href="../../admin/users/">Users</a>
+              <img className="leftmenu-link-image" src="../../../images/user.svg" alt="link image"/>
             </li>
-            <li className="leftmenu-list"><a className="leftmenu-link" href="#">Users </a>
-              <img className="leftmenu-link-image" src="../../public/images/user.svg" alt="link image"/>
+            <li className="leftmenu-list">
+              <a className="leftmenu-link" href="../../admin/settings/">Settings</a>
+              <img className="leftmenu-link-image" src="../../../images/more_vert.svg" alt="link image"/>
             </li>
-            <li className="leftmenu-list"><a className="leftmenu-link" href="#">Settings </a>
-              <img className="leftmenu-link-image" src="../../public/images/more_vert.svg" alt="link image"/>
-            </li>
-            <li className="leftmenu-list logout"><a className="leftmenu-link bold" href="#">Logout </a>
-              <img className="leftmenu-link-image" src="../../public/images/left-arrow.svg" alt="link image"/>
+            <li className="leftmenu-list logout">
+              <a className="leftmenu-link bold" href="#">Logout</a>
+              <img className="leftmenu-link-image" src="../../../images/left-arrow.svg" alt="link image"/>
             </li>
             <li className="fill-mobile"></li>
           </ul>
@@ -189,8 +188,8 @@ const DashboardSummary = () => {
                 <div className="years-block">
                   <p className="year">2021</p>
                   <p className="year-arrows">
-                    <img src="../../public/images/arrow_left_big.svg" alt="arrow leftt"/>
-                    <img src="../../public/images/arrow_right_big.svg" alt="arrow left"/>
+                    <img src="../../../images/arrow_left_big.svg" alt="arrow left"/>
+                    <img src="../../../images/arrow_right_big.svg" alt="arrow right"/>
                   </p>
                   <p className="circle-gray"></p>
                   <p className="year-text">
@@ -224,4 +223,4 @@ const DashboardSummary = () => {
   );
 };
 
-export default DashboardSummary;
+export default AdminDashboard;
