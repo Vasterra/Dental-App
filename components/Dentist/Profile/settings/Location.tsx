@@ -62,7 +62,7 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
         <div><p className="form-login-title green px20">Locations</p>
           <p className="form-login-subtitle gray px12 mb-6px">Information For Patients</p>
         </div>
-        { currentDentist.hasPaidPlan && <p className="form-login-buttons">
+        { !currentDentist.hasPaidPlan && <p className="form-login-buttons">
           <button className="button-green-outline">Upgrade</button>
         </p> }
       </div>

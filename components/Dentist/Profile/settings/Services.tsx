@@ -91,6 +91,20 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
           <p className="row-content">
             <span className="input-span"></span>
             <button className="button-green" disabled={disabled} onClick={async () => {
+
+              if (personName.length === 0) return false;
+              const filterService: boolean[] = [];
+              currentDentist.services.items.map(async (item: any) => {
+                if (item.name === personName) { filterService.push(item) }
+              });
+
+              if (filterService.length !== 0) {
+                setStatusSnackbar('warning');
+                setSnackbarMessage(`The service ${personName} is already`);
+                setOpenSnackbar(true);
+                return false;
+              }
+
               await API.graphql({
                 query: createService,
                 variables: {
@@ -113,55 +127,66 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
               <label className="form-profile-label">Selected Services</label>
             </p>
             {
-              currentDentist.services.items.map((el: { name: string | number | readonly string[] | undefined; id: any; }, key: React.Key | null | undefined) => {
-                return (
-                  <p className="form-login-input" key={key}>
-                    <input value={el.name} />
-                    <Close className="form-login-input-close" onClick={async () => {
-                      await API.graphql({
-                        query: deleteService,
-                        variables: {
-                          input: {
-                            id: el.id
-                          }
-                        },
-                        // @ts-ignore
-                        authMode: 'AWS_IAM'
-                      })
-                      getDentist();
-                      setStatusSnackbar('success');
-                      setSnackbarMessage(`Service ${el.name} deleted`);
-                      setOpenSnackbar(true);
-                    }}/>
-                  </p>
-                )
+              currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
+                if (key < 2) {
+                  return (
+                    <p className="form-login-input" key={key}>
+                      <input value={el.name} />
+                      <Close className="form-login-input-close" onClick={async () => {
+                        await API.graphql({
+                          query: deleteService,
+                          variables: {
+                            input: {
+                              id: el.id
+                            }
+                          },
+                          // @ts-ignore
+                          authMode: 'AWS_IAM'
+                        })
+                        getDentist();
+                        setStatusSnackbar('success');
+                        setSnackbarMessage(`Service ${el.name} deleted`);
+                        setOpenSnackbar(true);
+                      }}/>
+                    </p>
+                  )
+                }
               })
             }
           </div>
         </div>
         { currentDentist.hasPaidPlan && <div className="profile-block-box">
           <div>
+
             <p className="form-profile-label">
               <label className="form-profile-label">Additional Services</label>
             </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" />
-            </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" />
-            </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" />
-            </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" />
-            </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" />
-            </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" />
-            </p>
+            { currentDentist.hasPaidPlan &&  currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
+                if (key >= 2) {
+                  return (
+                    <p className="form-profile-empty-input" key={key}>
+                      <input type="text" name="empty" value={el.name} id="empty" placeholder="" />
+                      <Close className="form-login-input-close" onClick={async () => {
+                        await API.graphql({
+                          query: deleteService,
+                          variables: {
+                            input: {
+                              id: el.id
+                            }
+                          },
+                          // @ts-ignore
+                          authMode: 'AWS_IAM'
+                        })
+                        getDentist();
+                        setStatusSnackbar('success');
+                        setSnackbarMessage(`Service ${el.name} deleted`);
+                        setOpenSnackbar(true);
+                      }}/>
+                    </p>
+                  )
+                }
+              })
+            }
           </div>
         </div> }
         { !currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
