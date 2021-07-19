@@ -1,7 +1,7 @@
 import * as React from "react";
-import Login from "components/Login";
+import Login from "../components/Login";
 
-const IndexPage: React.FunctionComponent = () => {
+const IndexPage = () => {
   return (
     <Login />
   );
