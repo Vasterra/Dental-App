@@ -11,7 +11,7 @@ const Menu = styled("ul")`{
     align-items: center;
     justify-content: center;
     padding-left: 36px;
-
+    cursor: pointer;
     a {
       position: relative;
       display: block;
@@ -125,7 +125,7 @@ class Drawer extends Component<{ currentAvatar: string, active: string }> {
                         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
                     </svg>
                 </p>
-                <p>
+                <p className="link-actve">
                     <Link href="/">
                         <img src="../../images/FYD4_beige-on-green@2x.png"
                              srcSet="../../images/FYD4_beige-on-green@2x.png 2x,
@@ -137,11 +137,11 @@ class Drawer extends Component<{ currentAvatar: string, active: string }> {
                 </p>
             </div>
             <div className="leftmenu-content">
-                <p>
-                    <a href="/"><img src="../../images/FYD4_beige-on-green@2x.png"
+                <p className="link-actve">
+                    <Link href="/"><img src="../../images/FYD4_beige-on-green@2x.png"
                                      srcSet="../../images/FYD4_beige-on-green@2x.png 2x, ../../images/FYD4_beige-on-green@3x.png 3x"
                                      className="logo-image desctop-visible" alt="logo image"/>
-                    </a>
+                    </Link>
                 </p>
                 <div className="leftmenu-user-information">
                   {this.props.currentAvatar && <img className="user-image" src={this.props.currentAvatar} alt="user image"/>}
@@ -150,18 +150,24 @@ class Drawer extends Component<{ currentAvatar: string, active: string }> {
                 </div>
             </div>
             <Menu>
-                <li className={`leftmenu-list + ${this.props.active === 'activeProfile' ? 'active' : ''}`}>
-                    <img className="leftmenu-link-image" src="../../images/user.svg" alt="link image"/>
-                    <a className="leftmenu-link" href={"../../dentist/profile/" + this.state.currentUser.username}>Profile</a>
-                </li>
-                <li className={`leftmenu-list + ${this.props.active === 'activeGallery' ? 'active' : ''}`}>
-                    <img className="leftmenu-link-image" src="../../images/gallery.svg" alt="link image"/>
-                    <a className="leftmenu-link" href={"../../dentist/gallery/" + this.state.currentUser.username}>Gallery</a>
-                </li>
-                <li className={`leftmenu-list + ${this.props.active === 'activeAccount' ? 'active' : ''}`}>
-                    <img className="leftmenu-link-image" src="../../images/more_vert.svg" alt="link image"/>
-                    <a className="leftmenu-link" href={"../../dentist/account/" + this.state.currentUser.username}>Account</a>
-                </li>
+                <Link href={"../../dentist/profile/" + this.state.currentUser.username}>
+                    <li className={`leftmenu-list + ${this.props.active === 'activeProfile' ? 'active' : ''}`}>
+                        <img className="leftmenu-link-image" src="../../images/user.svg" alt="link image"/>
+                        <a className="leftmenu-link">Profile</a>
+                    </li>
+                </Link>
+                <Link href={"../../dentist/gallery/" + this.state.currentUser.username}>
+                    <li className={`leftmenu-list + ${this.props.active === 'activeGallery' ? 'active' : ''}`}>
+                        <img className="leftmenu-link-image" src="../../images/gallery.svg" alt="link image"/>
+                        <a className="leftmenu-link" >Gallery</a>
+                    </li>
+                </Link>
+                <Link href={"../../dentist/account/" + this.state.currentUser.username}>
+                    <li className={`leftmenu-list + ${this.props.active === 'activeAccount' ? 'active' : ''}`}>
+                        <img className="leftmenu-link-image" src="../../images/more_vert.svg" alt="link image"/>
+                        <a className="leftmenu-link" >Account</a>
+                    </li>
+                </Link>
                 <li className="leftmenu-list logout">
                     <img className="leftmenu-link-image" src="../../images/left-arrow.svg" alt="link image"/>
                     <a className="leftmenu-link" href="/login" onClick={ApiManager.signOut}>Logout</a>

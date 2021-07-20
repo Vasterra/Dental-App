@@ -1,14 +1,17 @@
 import React, {Component} from "react";
-import {Auth, Hub, Storage} from "aws-amplify";
+import {Auth, Storage} from "aws-amplify";
 import {withRouter} from "next/router";
 
-import Drawer from "components/Drawer";
 import Layout from "components/Layout";
 import AddSettings from "components/Dentist/Profile/settings/AddSettings";
 import Location from "components/Dentist/Profile/settings/Location";
 import Services from "components/Dentist/Profile/settings/Services";
 import DisplayPhotos from "components/Dentist/Profile/settings/DisplayPhotos";
 import ApiManager from "services/ApiManager";
+import {CircularProgress} from "@material-ui/core";
+
+// @ts-ignore
+import {WrapperFlex} from "../../../styles/Main.module"
 
 class Profile extends Component {
 
@@ -63,7 +66,6 @@ class Profile extends Component {
   async uploadAvatar(files: any) {
     files.preventDefault();
     const file = files.target.files[0];
-    console.log(file)
     const filename = file.name.split('.')
     try {
       await Storage.put('avatars/' + this.state.currentDentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
@@ -92,15 +94,9 @@ class Profile extends Component {
   }
 
   render() {
-    if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
-
+    if (!this.state.currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
     return (
-      <Layout title="Profile">
-        <Drawer
-          // @ts-ignore
-          currentAvatar={this.state.currentAvatar}
-          active={'activeProfile'}
-        />
+      <Layout title="Profile" active={'activeProfile'} currentAvatar={this.state.currentAvatar}>
         <div className="main-profile bg-white ">
           {this.state.currentDentist && <AddSettings
               currentDentist={this.state.currentDentist}

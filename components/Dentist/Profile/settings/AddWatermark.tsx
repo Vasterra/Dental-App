@@ -1,10 +1,12 @@
 import React from "react";
 import {Grid, Typography} from "@material-ui/core";
-import EmptyAvatar from '../../../Form/Avatar';
-import {ButtonBigGreen, ButtonMediumGreen} from "../../../../styles/Button.module";
-import {BlockWrapperGreen} from "../../../../styles/Main.module";
-import {AddWatermarkBlock, BigSquare, BlockEmptyImage} from "../../../../styles/AddWatermark.module";
-import {Stripe} from "../../../../styles/Main.module";
+import EmptyAvatar from 'components/Form/Avatar';
+import {ButtonBigGreen, ButtonMediumGreen} from "styles/Button.module";
+// @ts-ignore
+import {BlockWrapperGreen} from "styles/Main.module";
+import {AddWatermarkBlock, BigSquare, BlockEmptyImage} from "styles/AddWatermark.module";
+// @ts-ignore
+import {Stripe} from "styles/Main.module";
 
 const AddWatermark = () => {
   return (

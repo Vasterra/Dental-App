@@ -55,13 +55,13 @@ class Header extends React.Component {
                     <MenuIcon {...bindTrigger(popupState)}/>
                     <Menu {...bindMenu(popupState)}>
                       <MenuItem onClick={popupState.close}>
-                        <a href={"../../dentist/account/" + this.state.currentUser.username}>Account</a>
+                        <Link href={"../../dentist/account/" + this.state.currentUser.username}>Account</Link>
                       </MenuItem>
                       <MenuItem onClick={popupState.close}>
-                        <a href={"../../dentist/profile/" + this.state.currentUser.username}><a>Profile</a></a>
+                        <Link href={"../../dentist/profile/" + this.state.currentUser.username}><a>Profile</a></Link>
                       </MenuItem>
                       <MenuItem onClick={popupState.close}>
-                        <a href={"../../dentist/gallery/" + this.state.currentUser.username}><a>Gallery</a></a>
+                        <Link href={"../../dentist/gallery/" + this.state.currentUser.username}><a>Gallery</a></Link>
                       </MenuItem>
                     </Menu>
                   </>
@@ -69,11 +69,13 @@ class Header extends React.Component {
               </PopupState>}
             </IconButton>
           </div>
-          <a href="/">
+          <Link href="/">
+            <p className="link-actve">
             <img src="../../images/FYD4_beige-on-green@2x.png"
                  srcSet="../../images/FYD4_beige-on-green@2x.png 2x,
              ../../images/FYD4_beige-on-green@3x.png 3x" className="logo-image"/>
-          </a>
+            </p>
+          </Link>
           {!this.state.signedInUser && (
             <div style={{alignItems: 'center', display: 'flex'}}>
               {this.state.signedInUser && <a href={"../../dentist/account/" + this.state.currentUser.username}>

@@ -198,9 +198,13 @@ img {
   align-self: stretch;
   min-width: 333px;
   max-width: 100%;
-  height: 100vh;
+  /*height: 100vh;*/
   background-color: #095c5c;
 
+}
+
+.link-actve {
+  cursor: pointer;
 }
 
 .leftmenu-nav-menu li {
@@ -289,7 +293,7 @@ img {
   margin-right: 22px;
   width: 100px;
   max-width: 100%;
-  height: auto;
+  height: 100px;
   border-radius: 50%;
 }
 

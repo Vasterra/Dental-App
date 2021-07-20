@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Grid} from "@material-ui/core";
+import {Grid, Link} from "@material-ui/core";
 import styled from "styled-components";
 import {
   FlexWrapper,
@@ -43,12 +43,12 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
       </ImageWrapper>
       <p className="index-gallery-image-watermark"></p>
       <img className="index-gallery-image-watermark-img-1" src="../images/check_circle.svg" alt="check"/>
-      <a href={"../../dentist/person/" + dentist.id} target="_blank">
+      <Link href={"../../dentist/person/" + dentist.id} target="_blank">
         <div className="index-gallery-image-description">
           <p className="index-gallery-image-title">Image Title</p>
           <p className="index-gallery-image-text">Image Alt Text</p>
         </div>
-      </a>
+      </Link>
     </div>
   )
 }

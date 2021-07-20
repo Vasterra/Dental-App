@@ -8,8 +8,6 @@ type Props = {
 }
 
 const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentAvatar, uploadAvatar}) => {
-
-
   return (
     <div className="profile-box-form">
       <p className="form-login-title green px20">Display Photos</p>

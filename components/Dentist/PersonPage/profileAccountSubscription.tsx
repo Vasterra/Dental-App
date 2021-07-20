@@ -14,7 +14,6 @@ type Props = {
 const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDentist, oldIMages, images, currentAvatar, services, setImages, downloadImages}) => {
   const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
   const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
-  console.log(images)
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     if (e.target.value === 'All Service') return downloadImages()
     let newListImages: any[] = [];

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 // @ts-ignore
 import GoogleMapReact from 'google-map-react';
+// @ts-ignore
 import {geolocated, GeolocatedProps} from "react-geolocated";
 
 import Marker from "./Marker";

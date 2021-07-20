@@ -68,7 +68,6 @@ const names = [
 ];
 
 const ServiceConfig: React.FunctionComponent<Props> = ({dentist, getDentist}) => {
-  console.log(dentist.services.items)
   const classes = useStyles();
   const theme = useTheme();
   const [service, setService] = useState([]);
@@ -77,7 +76,6 @@ const ServiceConfig: React.FunctionComponent<Props> = ({dentist, getDentist}) =>
 
   React.useEffect(() => {
     getListServiceForDentals()
-    console.log(getServices())
   }, []);
 
   const getServices = () => {

@@ -77,7 +77,6 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
                 validateOnBlur={true}
                 validateOnChange={true}
                 onSubmit={async (data: any, {setErrors}) => {
-                  console.log('data', data)
                   try {
                     await API.graphql({
                       query: createLocation,

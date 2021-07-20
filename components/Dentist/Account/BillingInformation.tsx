@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {Formik} from "formik";
 import {API} from "aws-amplify";
-import {CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import {CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import StripeManager from "../../../services/StripeManager";
-import { updateDentist } from "../../../graphql/mutations";
+import {updateDentist} from "../../../graphql/mutations";
 
 type Props = {
   currentDentist: any,
@@ -20,7 +20,6 @@ const BillingInformation: React.FunctionComponent<Props> = ({currentDentist, get
 
   const [retry, setRetry] = useState(typeof window !== "undefined" ? !!localStorage.getItem('invoice_retry') : null);
 
-  console.log(currentDentist)
   const initialValues = {
     id: currentDentist.id,
     firstName: currentDentist.firstName,
@@ -59,14 +58,7 @@ const BillingInformation: React.FunctionComponent<Props> = ({currentDentist, get
       }
 
       const paymentID = paymentMethod.id;
-        const {subscription, hasPaidPlan, paymentMethodID} = await StripeManager.createSubscription(customer, paymentID);
-      console.log({
-        ...initialValues,
-        customerID: customer,
-        paymentMethodID,
-        hasPaidPlan: true,
-        subscriptionID: subscription.id,
-      })
+      const {subscription, hasPaidPlan, paymentMethodID} = await StripeManager.createSubscription(customer, paymentID);
       try {
         await API.graphql({
           query: updateDentist,

@@ -6,6 +6,11 @@ import ProfileAccountFree from "components/Dentist/PersonPage/profileAccountFree
 import ProfileAccountSubscription from "components/Dentist/PersonPage/profileAccountSubscription";
 import Header from "components/Header";
 import {listImages, listServiceForDentals} from "graphql/queries";
+import {CircularProgress} from "@material-ui/core";
+
+// @ts-ignore
+import {WrapperFlex} from "../../../styles/Main.module"
+import Layout from "components/Layout";
 
 class Person extends Component {
 
@@ -76,7 +81,6 @@ class Person extends Component {
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-    console.log(data.listImages)
     this.setState({listImages: data.listImages.items})
   }
 
@@ -91,13 +95,12 @@ class Person extends Component {
 
 
   async downloadImages() {
-    console.log('this.state.currentDentist', this.state.currentDentist)
     try {
       if (this.state.currentDentist === null) return
       if (this.state.listImages === undefined) return
 
       const listImagesFilter = this.state.listImages.filter((el: { dentistId: any; }) => el.dentistId === this.state.currentDentist.id);
-      console.log(listImagesFilter)
+
       let eachImages: any[] = []
       listImagesFilter && listImagesFilter.forEach(async (e: any) => {
         const files = await Storage.list('images/' + this.state.currentDentist.id + '/' + e.id)
@@ -128,10 +131,10 @@ class Person extends Component {
   }
 
   render() {
-    console.log('fdsgg', this.state.images)
     return (
-      <>
+      <Layout title="Person" active={'activePerson'} currentAvatar={this.state.currentAvatar}>
         <Header/>
+        if (!this.state.currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
         { this.state.currentDentist && !this.state.currentDentist.hasPaidPlan && <ProfileAccountFree
             currentDentist={this.state.currentDentist}
             images={this.state.images}
@@ -152,7 +155,7 @@ class Person extends Component {
             downloadImages={this.downloadImages.bind(this)}
         />
         }
-      </>
+      </Layout>
     )
   }
 }

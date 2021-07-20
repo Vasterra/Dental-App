@@ -97,7 +97,7 @@ const Gallery: React.FunctionComponent = ({
   const onClick = useCallback((idx: number, event: React.SyntheticEvent) => {
     console.log(`[App onClick] ${idx} ${event.currentTarget}`);
   }, []);
-  console.log('loading', loading)
+
   return (
     <>
       <div className="profile-box-form">
@@ -153,7 +153,7 @@ const Gallery: React.FunctionComponent = ({
                   />
                   <p className="gallery-image-watermark">Watermark</p>
                   <div className="gallery-image-description">
-                    <p className="gallery-image-title">{val[indexData].titleBefore}</p>
+                    <p className="gallery-image-title">{val[indexData].titleBefore ? val[indexData].titleBefore : ''}</p>
                     <p className="gallery-image-text">Image Alt Text</p>
                     <img className="gallery-image-edit" src="../../images/edit.svg" alt="edit" onClick={() => {
                       editGallery(val, key)

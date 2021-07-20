@@ -4,13 +4,16 @@ import {v4 as uuidv4} from 'uuid';
 import Layout from "../../../components/Layout";
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import ApiManager from "services/ApiManager";
-import Drawer from "components/Drawer";
 import UploadImage from "components/Gallery/UploadImage";
 import Gallery from "components/Gallery/Gallery";
 import Services from "components/Gallery/Services";
 import {listImages, listServiceForDentals} from "graphql/queries";
 import {createImage, updateImage} from "graphql/mutations";
 import Snackbar from "components/Snackbar";
+import {CircularProgress} from "@material-ui/core";
+
+// @ts-ignore
+import {WrapperFlex} from "../../../styles/Main.module"
 
 class GalleryPage extends Component {
 
@@ -228,7 +231,6 @@ class GalleryPage extends Component {
             const percentUploaded: number = Math.round((progress.loaded / progress.total) * 100)
           },
         }).then(result => {
-          console.log(result)
           this.setState({messageSnackBar: 'Success Upload!'})
           this.setState({statusSnackBar: 'success'})
           this.setState({openSnackBar: true})
@@ -279,14 +281,13 @@ class GalleryPage extends Component {
   }
 
   downloadImages() {
-    this.setState({ images: null })
-    this.setState({ oldIMages: null })
-    this.setState({ loading: true })
-    console.log(this.state.loading)
+    this.setState({images: null})
+    this.setState({oldIMages: null})
+    this.setState({loading: true})
     try {
       if (this.state.currentDentist === null) return
       let eachImages: any[] = []
-      this.state.listImages.forEach(async (e:any) => {
+      this.state.listImages.forEach(async (e: any) => {
         const files = await Storage.list('images/' + this.state.currentDentist.id + '/' + e.id)
         let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
         signedFiles = await Promise.all(signedFiles)
@@ -311,12 +312,13 @@ class GalleryPage extends Component {
             nameAfter: e.nameAfter
           }
         })
-        eachImages.push(filesList)
-        this.setState({ images: eachImages })
-        this.setState({ oldIMages: eachImages })
+        if (filesList.length !== 0) {
+          eachImages.push(filesList)
+        }
+        this.setState({images: eachImages})
+        this.setState({oldIMages: eachImages})
       })
-      this.setState({ loading: false })
-      console.log(this.state.loading)
+      this.setState({loading: false})
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
@@ -347,19 +349,14 @@ class GalleryPage extends Component {
   }
 
   render() {
-    if (!this.state.currentDentist) return <div className="not-found">Dentist not found</div>
+    if (!this.state.currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
     return (
-      <Layout title="Gallery">
-        <Drawer
-          // @ts-ignore
-          currentAvatar={this.state.currentAvatar}
-          active={'activeGallery'}
-        />
+      <Layout title="Gallery" active={'activeGallery'} currentAvatar={this.state.currentAvatar}>
         <div className="main-profile bg-white ">
           {    // @ts-ignore
             !this.state.showUloadGallery &&
             <Gallery
-                // @ts-ignore
+              // @ts-ignore
                 images={this.state.images}
                 loading={this.state.loading}
                 oldIMages={this.state.oldIMages}
@@ -471,11 +468,13 @@ class GalleryPage extends Component {
                                 </p>
                                 <div className="row-content space-between">
                                   {this.state.services &&
-                                  <Services saveService={this.saveService.bind(this)} services={this.state.services} updateService={this.state.updateService}/>}
+                                  <Services saveService={this.saveService.bind(this)} services={this.state.services}
+                                            updateService={this.state.updateService}/>}
                                     <img className="gallery-select-arrow" src="../../../public/images/down-select.png"
                                          alt="select"/>
                                     <p className="checkbox">
-                                        <input type="checkbox" name="delete" id="delete" onChange={this.checkHandler.bind(this)}/>
+                                        <input type="checkbox" name="delete" id="delete"
+                                               onChange={this.checkHandler.bind(this)}/>
                                         <span className="gallery-checkbox-text">I confirm I have full rights for the use and publication of these images.</span>
                                     </p>
                                 </div>
@@ -486,12 +485,14 @@ class GalleryPage extends Component {
                         <p className="form-login-buttons">
                             <button className="button-green" onClick={this.saveData.bind(this)}
                                     disabled={!this.state.checkFilesLeft || !this.state.checkFilesRight || !this.state.titleBefore || !this.state.tagsBefore || !this.state.titleAfter ||
-                                      !this.state.tagsAfter || !this.state.service || !this.state.check}
+                                    !this.state.tagsAfter || !this.state.service || !this.state.check}
                             >Confirm
                             </button>
                         </p>
                         <p className="form-login-buttons">
-                            <button className="button-green-outline" onClick={this.handlerShowGallery.bind(this)}>Cancel</button>
+                            <button className="button-green-outline"
+                                    onClick={this.handlerShowGallery.bind(this)}>Cancel
+                            </button>
                         </p>
                     </div>
                 </div>

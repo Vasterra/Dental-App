@@ -14,7 +14,7 @@ import ApiManager from "services/ApiManager";
 import {switcher} from "../utils/switcher";
 import {getDentist, listDentists, listServiceForDentals,} from "../graphql/queries";
 import {convertCityCoords} from "../utils/search/converCityCoords";
-
+import { arch } from "os";
 
 class Search extends Component {
   state: any = {
@@ -47,10 +47,8 @@ class Search extends Component {
 
   async getListDentists(service: any) {
     this.setState({dentists: null})
-    console.log('service', service)
     this.setState({service: service})
     ApiManager.getListDentists().then(listDentitst => {
-      console.log(listDentitst)
       const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, this.state.valueSlider, listDentitst)
       this.setState({dentists: listDentitst})
       this.setState({searchDentists: findCoordinatesDent})
