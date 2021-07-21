@@ -39,7 +39,7 @@ class ApiManager {
         id: id
       },
       // @ts-ignore
-      authMode: 'AWS_IAM'
+      authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     return data.getDentist
   }
@@ -48,7 +48,7 @@ class ApiManager {
     const {data}: any = await API.graphql({
       query: listDentists,
       // @ts-ignore
-      authMode: 'AWS_IAM'
+      authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     return data.listDentists.items
   }
@@ -106,7 +106,7 @@ class ApiManager {
         }
       },
       // @ts-ignore
-      authMode: 'AWS_IAM'
+      authMode: "AMAZON_COGNITO_USER_POOLS",
     })
   }
 
@@ -115,7 +115,7 @@ class ApiManager {
     const {data}: any = await API.graphql({
       query: listServiceForDentals,
       // @ts-ignore
-      authMode: 'AWS_IAM'
+      authMode: "AMAZON_COGNITO_USER_POOLS",
     })
     return data.listServiceForDentals.items
   }
