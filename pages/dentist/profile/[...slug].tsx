@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Auth, Storage} from "aws-amplify";
 import {withRouter} from "next/router";
+import Error from "next/error";
 
 import Layout from "components/Layout";
 import AddSettings from "components/Dentist/Profile/settings/AddSettings";
@@ -41,26 +42,38 @@ class Profile extends Component {
       this.setState({isMe: currentUser.username === this.state.currentDentist.id});
       if (!this.state.isMe) return this.state.router.push('/dentist/account/' + this.state.currentDentist.id)
     } catch (err) {
-      console.error(err)
+      console.log(err)
     }
   }
 
   async getDentist() {
-    const currentDentist = await ApiManager.getDentist(this.state.router.query.slug[0]).then(currentDentist => {
-      this.setState({currentDentist: currentDentist});
-    })
+    try {
+      const currentDentist = await ApiManager.getDentist(this.state.router.query.slug[0]).then(currentDentist => {
+        this.setState({currentDentist: currentDentist});
+      })
+    } catch (e) {
+      return <Error statusCode={404}/>
+    }
   }
 
   async downloadAvatar() {
-    ApiManager.downloadAvatar(this.state.currentDentist).then(signedFiles => {
-      this.setState({currentAvatar: signedFiles})
-    })
+    try {
+      ApiManager.downloadAvatar(this.state.currentDentist).then(signedFiles => {
+        this.setState({currentAvatar: signedFiles})
+      })
+    } catch (e) {
+      return <Error statusCode={404}/>
+    }
   }
 
   async downloadImages() {
-    ApiManager.downloadImages(this.state.currentDentist).then(filesList => {
-      this.setState({images: filesList})
-    })
+    try {
+      ApiManager.downloadImages(this.state.currentDentist).then(filesList => {
+        this.setState({images: filesList})
+      })
+    } catch (e) {
+      return <Error statusCode={404}/>
+    }
   }
 
   async uploadAvatar(files: any) {
@@ -94,32 +107,26 @@ class Profile extends Component {
   }
 
   render() {
-    if (!this.state.currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+    !this.state.currentDentist && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+
     return (
-      <Layout title="Profile" active={'activeProfile'} currentAvatar={this.state.currentAvatar}>
-        <div className="main-profile bg-white ">
-          {this.state.currentDentist && <AddSettings
-              currentDentist={this.state.currentDentist}
-              getDentist={this.getDentist.bind(this)}
-          />}
-          {this.state.currentDentist && <Location
-              currentDentist={this.state.currentDentist}
-              getDentist={this.getDentist.bind(this)}
-          />}
-          {this.state.currentDentist && <Services
-              currentDentist={this.state.currentDentist}
-              getDentist={this.getDentist.bind(this)}
-          />}
-          {this.state.currentDentist && <DisplayPhotos
-              currentDentist={this.state.currentDentist}
-              currentAvatar={this.state.currentAvatar}
-              uploadAvatar={this.uploadAvatar.bind(this)}
-          />}
-        </div>
-      </Layout>
+      <>
+        {this.state.currentDentist &&
+        <Layout title="Profile" active={'activeProfile'} currentAvatar={this.state.currentAvatar}>
+            <div className="main-profile bg-white ">
+                <AddSettings currentDentist={this.state.currentDentist} getDentist={this.getDentist.bind(this)}/>
+                <Location currentDentist={this.state.currentDentist} getDentist={this.getDentist.bind(this)}/>
+                <Services currentDentist={this.state.currentDentist} getDentist={this.getDentist.bind(this)}/>
+                <DisplayPhotos currentDentist={this.state.currentDentist} currentAvatar={this.state.currentAvatar}
+                               uploadAvatar={this.uploadAvatar.bind(this)}/>
+            </div>
+        </Layout>
+        }
+      </>
     )
   }
-};
+}
+;
 
 // @ts-ignore
 export default withRouter(Profile);

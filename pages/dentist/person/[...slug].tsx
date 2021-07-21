@@ -7,7 +7,7 @@ import ProfileAccountSubscription from "components/Dentist/PersonPage/profileAcc
 import Header from "components/Header";
 import {listImages, listServiceForDentals} from "graphql/queries";
 import {CircularProgress} from "@material-ui/core";
-
+import Error from "next/error";
 // @ts-ignore
 import {WrapperFlex} from "../../../styles/Main.module"
 import Layout from "components/Layout";
@@ -44,7 +44,8 @@ class Person extends Component {
       this.setState({currentUser})
       this.setState({signedInUser: true})
       this.setState({isMe: currentUser.username === this.state.currentDentist.id});
-    } catch (err) {
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -66,8 +67,8 @@ class Person extends Component {
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
       this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
-    } catch (error) {
-      console.log('Error download Avatar file: ', error);
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -76,21 +77,29 @@ class Person extends Component {
   }
 
   async getListImages() {
-    const {data}: any = await API.graphql({
-      query: listImages,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    this.setState({listImages: data.listImages.items})
+    try {
+      const {data}: any = await API.graphql({
+        query: listImages,
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      this.setState({listImages: data.listImages.items})
+    } catch (e) {
+      return <Error statusCode={404}/>
+    }
   }
 
   async getListServiceForDentals() {
-    const {data}: any = await API.graphql({
-      query: listServiceForDentals,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    this.setState({services: data.listServiceForDentals.items})
+    try {
+      const {data}: any = await API.graphql({
+        query: listServiceForDentals,
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      this.setState({services: data.listServiceForDentals.items})
+    } catch (e) {
+      return <Error statusCode={404}/>
+    }
   }
 
 
@@ -125,17 +134,17 @@ class Person extends Component {
         this.setState({images: eachImages})
         this.setState({oldIMages: eachImages})
       })
-    } catch (error) {
-      console.log('Error uploading file: ', error);
+    } catch (e) {
+      return <Error statusCode={404}/>
     }
   }
 
   render() {
+    if (!this.state.currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
     return (
       <Layout title="Person" active={'activePerson'} currentAvatar={this.state.currentAvatar}>
         <Header/>
-        if (!this.state.currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
-        { this.state.currentDentist && !this.state.currentDentist.hasPaidPlan && <ProfileAccountFree
+        {this.state.currentDentist && !this.state.currentDentist.hasPaidPlan && <ProfileAccountFree
             currentDentist={this.state.currentDentist}
             images={this.state.images}
             oldIMages={this.state.oldIMages}
@@ -143,9 +152,8 @@ class Person extends Component {
             currentAvatar={this.state.currentAvatar}
             setImages={this.setImages.bind(this)}
             downloadImages={this.downloadImages.bind(this)}
-          />
-        }
-        { this.state.currentDentist && this.state.currentDentist.hasPaidPlan && <ProfileAccountSubscription
+        /> }
+        {this.state.currentDentist && this.state.currentDentist.hasPaidPlan && <ProfileAccountSubscription
             currentDentist={this.state.currentDentist}
             images={this.state.images}
             oldIMages={this.state.oldIMages}
@@ -153,8 +161,7 @@ class Person extends Component {
             currentAvatar={this.state.currentAvatar}
             setImages={this.setImages.bind(this)}
             downloadImages={this.downloadImages.bind(this)}
-        />
-        }
+        /> }
       </Layout>
     )
   }

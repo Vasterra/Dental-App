@@ -11,7 +11,7 @@ import {listImages, listServiceForDentals} from "graphql/queries";
 import {createImage, updateImage} from "graphql/mutations";
 import Snackbar from "components/Snackbar";
 import {CircularProgress} from "@material-ui/core";
-
+import Error from "next/error";
 // @ts-ignore
 import {WrapperFlex} from "../../../styles/Main.module"
 
@@ -49,7 +49,11 @@ class GalleryPage extends Component {
   }
 
   async componentDidMount() {
-    await this.getDentist()
+    await this.getDentist();
+    await this.authListener();
+    await this.getListImages();
+    await this.getListServiceForDentals()
+    await this.downloadImages();
     this.setState({uuid: uuidv4()})
   }
 
@@ -73,18 +77,19 @@ class GalleryPage extends Component {
       this.setState({signedInUser: true})
       this.setState({isMe: currentUser.username === this.state.currentDentist.id});
       if (!this.state.isMe) return router.push('/dentist/account/' + this.state.currentDentist.id)
-    } catch (err) {
+    } catch (e) {
+      console.log(e)
     }
   }
 
   async getDentist() {
-    const {router}: any = this.props
-    const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
-    this.setState({currentDentist: currentDentist});
-    await this.authListener();
-    await this.getListImages();
-    await this.getListServiceForDentals()
-    await this.downloadImages();
+    try {
+      const {router}: any = this.props
+      const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
+      this.setState({currentDentist: currentDentist});
+    } catch (e) {
+      return <Error statusCode={404}/>
+    }
   }
 
   async downloadAvatar() {
@@ -94,8 +99,8 @@ class GalleryPage extends Component {
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
       signedFiles = await Promise.all(signedFiles)
       this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
-    } catch (error) {
-      console.log('Error download Avatar file: ', error);
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -104,21 +109,29 @@ class GalleryPage extends Component {
   }
 
   async getListServiceForDentals() {
-    const {data}: any = await API.graphql({
-      query: listServiceForDentals,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    this.setState({services: data.listServiceForDentals.items})
+    try {
+      const {data}: any = await API.graphql({
+        query: listServiceForDentals,
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      this.setState({services: data.listServiceForDentals.items})
+    } catch (e) {
+      return <Error statusCode={404}/>
+    }
   }
 
   async getListImages() {
-    const {data}: any = await API.graphql({
-      query: listImages,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    this.setState({listImages: data.listImages.items})
+    try {
+      const {data}: any = await API.graphql({
+        query: listImages,
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      this.setState({listImages: data.listImages.items})
+    } catch (e) {
+      return <Error statusCode={404}/>
+    }
   }
 
   saveCrop(value: any, anchor: any) {
@@ -319,8 +332,8 @@ class GalleryPage extends Component {
         this.setState({oldIMages: eachImages})
       })
       this.setState({loading: false})
-    } catch (error) {
-      console.log('Error uploading file: ', error);
+    } catch (e) {
+      return <Error statusCode={404}/>
     }
   }
 

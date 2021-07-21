@@ -4,7 +4,7 @@ import {Auth} from "aws-amplify";
 
 // @ts-ignore
 import {WrapperFlex} from "../../../styles/Main.module"
-
+import Error from "next/error";
 import Layout from "components/Layout";
 import AccountInformation from "components/Dentist/Account/AccountInformation";
 import ResetPassword from "components/Dentist/Account/ResetPassword";
@@ -42,27 +42,39 @@ class Account extends Component {
       this.setState({signedInUser: true})
       this.setState({isMe: currentUser.username === this.state.currentDentist.id});
       if (!this.state.isMe) return this.state.router.push('/dentist/account/' + this.state.currentDentist.id)
-    } catch (err) {
-      console.error(err)
+    } catch (e) {
+      console.log(e)
     }
   }
 
   async getDentist() {
-    const currentDentist = await ApiManager.getDentist(this.state.router.query.slug[0]).then(currentDentist => {
-      this.setState({currentDentist: currentDentist});
-    })
+    try {
+      const currentDentist = await ApiManager.getDentist(this.state.router.query.slug[0]).then(currentDentist => {
+        this.setState({currentDentist: currentDentist});
+      })
+    } catch (e) {
+      return <Error statusCode={404}/>
+    }
   }
 
   async downloadAvatar() {
-    ApiManager.downloadAvatar(this.state.currentDentist).then(signedFiles => {
-      this.setState({currentAvatar: signedFiles})
-    })
+    try {
+      ApiManager.downloadAvatar(this.state.currentDentist).then(signedFiles => {
+        this.setState({currentAvatar: signedFiles})
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   async downloadImages() {
-    ApiManager.downloadImages(this.state.currentDentist).then(filesList => {
-      this.setState({images: filesList})
-    })
+    try {
+      ApiManager.downloadImages(this.state.currentDentist).then(filesList => {
+        this.setState({images: filesList})
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   render() {

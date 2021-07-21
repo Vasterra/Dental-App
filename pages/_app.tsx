@@ -1,13 +1,12 @@
 import App from "next/app";
 import Head from "next/head";
 import React from "react";
-import {Elements} from "@stripe/react-stripe-js";
 import {loadStripe} from '@stripe/stripe-js';
-import {withRouter} from "next/router";
+import {Elements} from "@stripe/react-stripe-js";
+import {QueryClient, QueryClientProvider} from "react-query";
+
 import '../styles/globals.css'
 import '../configureAmplify'
-import {QueryClient, QueryClientProvider} from "react-query";
-import Layout from "components/Layout";
 
 class DentalApp extends App<any> {
   render() {
