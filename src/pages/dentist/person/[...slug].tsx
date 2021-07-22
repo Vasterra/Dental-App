@@ -1,6 +1,6 @@
-import React, {Component} from "react";
+import React, {Component, useEffect, useState} from "react";
 import {API, Auth, Hub, Storage} from "aws-amplify";
-import {withRouter} from "next/router";
+import {useRouter, withRouter} from "next/router";
 import ApiManager from "src/services/ApiManager";
 import ProfileAccountFree from "src/components/Dentist/PersonPage/profileAccountFree";
 import ProfileAccountSubscription from "src/components/Dentist/PersonPage/profileAccountSubscription";
@@ -8,111 +8,108 @@ import Header from "src/components/Header";
 import {listImages, listServiceForDentals} from "src/graphql/queries";
 import {CircularProgress} from "@material-ui/core";
 import Error from "next/error";
-// @ts-ignore
+
 import {WrapperFlex} from "src/styles/Main.module"
 import Layout from "src/components/Layout";
 
-class Person extends Component {
+const Person = () => {
+  const router = useRouter()
 
-  state: any = {
-    currentDentist: null,
-    currentAvatar: null,
-    signedInUser: null,
-    currentUser: null,
-    services: null,
-    images: null,
-    oldIMages: null,
-    isMe: false
-  }
+  const [currentDentist, setCurrentDentist]: any = useState()
+  const [currentAvatar, setCurrentAvatar]: any = useState()
+  const [signedInUser, setSignedInUser]: any = useState()
+  const [currentUser, setCurrentUser]: any = useState()
+  const [listImagesData, setListImagesData]: any = useState()
+  const [services, setServices]: any = useState()
+  const [images, setImages]: any = useState()
+  const [oldIMages, setOldIMages]: any = useState()
+  const [route, setRoute]: any = useState()
 
-  async componentDidMount() {
-    await this.getDentist()
-  }
+  useEffect(() => {
+    if (router.query.slug !== undefined) {
+      const {slug} = router.query
+      setRoute(slug[0])
+      getDentist(slug[0]);
+      authListener()
+    }
+  }, [router])
 
-  async authListener() {
-    const {router}: any = this.props
-    Hub.listen('auth', (data) => {
-      switch (data.payload.event) {
-        case 'signIn':
-          return this.setState({signedInUser: true})
-        case 'signOut':
-          return this.setState({signedInUser: false})
-      }
-    })
+  useEffect(() => {
+    if (currentDentist !== undefined) {
+      downloadAvatar();
+    }
+  }, [currentDentist])
+
+  useEffect(() => {
+    if (listImagesData !== undefined) {
+      downloadImages();
+    }
+  }, [listImagesData])
+
+  const authListener = async () => {
+    const signedInUser = ApiManager.authListener()
+    setSignedInUser(signedInUser)
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      this.setState({currentUser})
-      this.setState({signedInUser: true})
-      this.setState({isMe: currentUser.username === this.state.currentDentist.id});
+      setCurrentUser(currentUser)
+      setSignedInUser(true)
     } catch (e) {
       console.log(e)
     }
   }
-
-  async getDentist() {
-    const {router}: any = this.props
-    const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
-    this.setState({currentDentist: currentDentist});
-    await this.authListener()
-    await this.getListImages()
-    await this.downloadAvatar();
-    await this.downloadImages();
-    await this.getListServiceForDentals();
+  const getDentist = async (id: string) => {
+    await ApiManager.getDentist(route ? route : id)
+    .then(currentDentist => {
+      setCurrentDentist(currentDentist);
+      getListImages()
+      getListServiceForDentals();
+    })
   }
 
-  async downloadAvatar() {
-    if (this.state.currentDentist === null) return
-    try {
-      const files = await Storage.list('avatars/' + this.state.currentDentist.id + '/')
-      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
-      signedFiles = await Promise.all(signedFiles)
-      this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
-    } catch (e) {
-      console.log(e)
-    }
+  const downloadAvatar = async () => {
+    await ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
+      setCurrentAvatar(signedFiles)
+    })
   }
 
-  setImages(images: any) {
-    this.setState({images: images})
+  const setFuncImages = (images: any) => {
+    setImages(images)
   }
 
-  async getListImages() {
+  const getListImages = async () => {
     try {
       const {data}: any = await API.graphql({
         query: listImages,
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
-      this.setState({listImages: data.listImages.items})
+      setListImagesData(data.listImages.items)
     } catch (e) {
-      return <Error statusCode={404}/>
+      console.log(e)
     }
   }
 
-  async getListServiceForDentals() {
-    try {
-      const {data}: any = await API.graphql({
-        query: listServiceForDentals,
-        // @ts-ignore
-        authMode: 'AWS_IAM'
-      });
-      this.setState({services: data.listServiceForDentals.items})
-    } catch (e) {
-      return <Error statusCode={404}/>
-    }
+  const getListServiceForDentals = async () => {
+    const {data}: any = await API.graphql({
+      query: listServiceForDentals,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    setServices(data.listServiceForDentals.items)
   }
 
 
-  async downloadImages() {
+  const downloadImages = async () => {
     try {
-      if (this.state.currentDentist === null) return
-      if (this.state.listImages === undefined) return
+      if (currentDentist === null) return
+      if (listImagesData === undefined) return
 
-      const listImagesFilter = this.state.listImages.filter((el: { dentistId: any; }) => el.dentistId === this.state.currentDentist.id);
+      const listImagesFilter = listImagesData.filter((el: { dentistId: any; }) => el.dentistId === currentDentist.id);
 
       let eachImages: any[] = []
       listImagesFilter && listImagesFilter.forEach(async (e: any) => {
-        const files = await Storage.list('images/' + this.state.currentDentist.id + '/' + e.id)
+        const files = await Storage.list('images/' + currentDentist.id + '/' + e.id)
+
         let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
         signedFiles = await Promise.all(signedFiles)
         let filesList = signedFiles.map((f: any, key: string | number) => {
@@ -131,40 +128,37 @@ class Person extends Component {
           }
         })
         eachImages.push(filesList)
-        this.setState({images: eachImages})
-        this.setState({oldIMages: eachImages})
+        setImages(eachImages)
+        setOldIMages(eachImages)
       })
     } catch (e) {
       return <Error statusCode={404}/>
     }
   }
-
-  render() {
-    if (!this.state.currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
-    return (
-      <Layout title="Person" active={'activePerson'} currentAvatar={this.state.currentAvatar}>
-        <Header/>
-        {this.state.currentDentist && !this.state.currentDentist.hasPaidPlan && <ProfileAccountFree
-            currentDentist={this.state.currentDentist}
-            images={this.state.images}
-            oldIMages={this.state.oldIMages}
-            services={this.state.services}
-            currentAvatar={this.state.currentAvatar}
-            setImages={this.setImages.bind(this)}
-            downloadImages={this.downloadImages.bind(this)}
-        /> }
-        {this.state.currentDentist && this.state.currentDentist.hasPaidPlan && <ProfileAccountSubscription
-            currentDentist={this.state.currentDentist}
-            images={this.state.images}
-            oldIMages={this.state.oldIMages}
-            services={this.state.services}
-            currentAvatar={this.state.currentAvatar}
-            setImages={this.setImages.bind(this)}
-            downloadImages={this.downloadImages.bind(this)}
-        /> }
-      </Layout>
-    )
-  }
+  if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+  return (
+    <>
+      <Header/>
+      {currentDentist && !currentDentist.hasPaidPlan && <ProfileAccountFree
+          currentDentist={currentDentist}
+          images={images}
+          oldIMages={oldIMages}
+          services={services}
+          currentAvatar={currentAvatar}
+          setImages={setFuncImages}
+          downloadImages={downloadImages}
+      />}
+      {currentDentist && currentDentist.hasPaidPlan && <ProfileAccountSubscription
+          currentDentist={currentDentist}
+          images={images}
+          oldIMages={oldIMages}
+          services={services}
+          currentAvatar={currentAvatar}
+          setImages={setFuncImages}
+          downloadImages={downloadImages}
+      />}
+    </>
+  )
 }
 
 // @ts-ignore

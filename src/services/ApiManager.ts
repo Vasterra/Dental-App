@@ -1,7 +1,7 @@
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
-import {deleteDentist, updateDentist } from "../graphql/mutations";
-import { getDentist, listDentists, listServiceForDentals } from "../graphql/queries";
+import {deleteDentist, updateDentist} from "../graphql/mutations";
+import {getDentist, listDentists, listImages, listServiceForDentals} from "../graphql/queries";
 import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
 
@@ -12,7 +12,7 @@ class ApiManager {
   }
 
   public static async authListener() {
-    Hub.listen('auth', (data) => {
+    Hub.listen('auth', (data: { payload: { event: any; }; }) => {
       switch (data.payload.event) {
         case 'signIn':
           return true
@@ -32,34 +32,38 @@ class ApiManager {
   }
 
   public static getDentist = async (id: any) => {
-    if (id === null) return
-    const {data}: any = await API.graphql({
-      query: getDentist,
-      variables: {
-        id: id
-      },
-      // @ts-ignore
-      authMode: "AMAZON_COGNITO_USER_POOLS",
-    });
-    return data.getDentist
+    try {
+      if (id === null) return
+      const {data}: any = await API.graphql({
+        query: getDentist,
+        variables: {
+          id: id
+        },
+        // @ts-ignore
+        authMode: "AWS_IAM",
+      });
+      return data.getDentist
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   public static getListDentists = async () => {
     const {data}: any = await API.graphql({
       query: listDentists,
       // @ts-ignore
-      authMode: "AMAZON_COGNITO_USER_POOLS",
+      authMode: "AWS_IAM",
     });
     return data.listDentists.items
   }
 
   public static async changePassword(oldPassword: any, newPassword: any) {
     await Auth.currentAuthenticatedUser()
-      .then(user => {
-        return Auth.changePassword(user, oldPassword, newPassword);
-      })
-      .then(data => console.log(data))
-      .catch(err => console.log(err));
+    .then((user: any) => {
+      return Auth.changePassword(user, oldPassword, newPassword);
+    })
+    .then((data: any) => console.log(data))
+    .catch((err: any) => console.log(err));
   }
 
   public static async downloadImages(currentDentist: any) {
@@ -97,29 +101,49 @@ class ApiManager {
   }
 
   public static async deleteDentist(currentDentist: any) {
-    if (currentDentist === null) return
-    await API.graphql({
-      query: deleteDentist,
-      variables: {
-        input: {
-          id: currentDentist.id,
-        }
-      },
-      // @ts-ignore
-      authMode: "AMAZON_COGNITO_USER_POOLS",
-    })
+    try {
+      if (currentDentist === null) return
+      await API.graphql({
+        query: deleteDentist,
+        variables: {
+          input: {
+            id: currentDentist.id,
+          }
+        },
+        // @ts-ignore
+        authMode: "AWS_IAM",
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
 
   public static getListServiceForDentals = async () => {
-    const {data}: any = await API.graphql({
-      query: listServiceForDentals,
-      // @ts-ignore
-      authMode: "AMAZON_COGNITO_USER_POOLS",
-    })
-    return data.listServiceForDentals.items
+    try {
+      const {data}: any = await API.graphql({
+        query: listServiceForDentals,
+        // @ts-ignore
+        authMode: "AWS_IAM",
+      })
+      return data.listServiceForDentals.items
+    } catch (e) {
+      console.log(e)
+    }
   }
 
+  public static getListImages = async () => {
+    try {
+      const {data}: any = await API.graphql({
+        query: listImages,
+        // @ts-ignore
+        authMode: "AWS_IAM",
+      })
+      return data.listImages.items
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 export default ApiManager;

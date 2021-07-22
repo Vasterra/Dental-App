@@ -9,7 +9,6 @@
     "deploy": "cdk deploy --profile pessoal"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.19",
     "@aws-amplify/cache": "^3.1.36",
     "@aws-amplify/ui-react": "^1.0.5",
     "@babel/core": "^7.14.0",
@@ -22,10 +21,6 @@
     "@stripe/react-stripe-js": "^1.4.1",
     "@stripe/stripe-js": "^1.15.1",
     "@tailwindcss/typography": "^0.4.0",
-    "apollo-boost": "^0.4.9",
-    "apollo-link-context": "^1.0.12",
-    "apollo-link-error": "^1.1.7",
-    "apollo-link-http": "^1.5.9",
     "autoprefixer": "^10.2.5",
     "aws-amplify": "^3.3.24",
     "aws-amplify-react": "^5.0.2",
@@ -37,7 +32,6 @@
     "next": "10.0.8",
     "postcss": "^8.2.10",
     "react": "17.0.1",
-    "react-apollo": "^2.4.0",
     "react-cropper": "^2.1.8",
     "react-dom": "17.0.1",
     "react-geolocated": "^3.2.0",

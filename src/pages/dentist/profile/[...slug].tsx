@@ -1,6 +1,6 @@
-import React, {Component} from "react";
+import React, {Component, useEffect, useState} from "react";
 import {Auth, Storage} from "aws-amplify";
-import {withRouter} from "next/router";
+import {useRouter} from "next/router";
 import Error from "next/error";
 
 import Layout from "src/components/Layout";
@@ -11,77 +11,73 @@ import DisplayPhotos from "src/components/Dentist/Profile/settings/DisplayPhotos
 import ApiManager from "src/services/ApiManager";
 import {CircularProgress} from "@material-ui/core";
 
-// @ts-ignore
 import {WrapperFlex} from "src/styles/Main.module"
 
-class Profile extends Component {
+const Profile = () => {
+  const router = useRouter()
 
-  state: any = {
-    currentDentist: null,
-    currentAvatar: null,
-    signedInUser: null,
-    currentUser: null,
-    isMe: false,
-    // @ts-ignore
-    router: this.props.router
-  }
+  const [currentDentist, setCurrentDentist]: any = useState()
+  const [currentAvatar, setCurrentAvatar]: any = useState()
+  const [signedInUser, setSignedInUser]: any = useState()
+  const [currentUser, setCurrentUser]: any = useState()
+  const [images, setImages]: any = useState()
+  const [route, setRoute]: any = useState()
 
-  async componentDidMount() {
-    await this.getDentist();
-    await this.authListener();
-    await this.downloadAvatar();
-  }
+  useEffect(() => {
+    if (router.query.slug !== undefined) {
+      const {slug} = router.query
+      setRoute(slug[0])
+      getDentist(slug[0]);
+    }
+  }, [router])
 
-  async authListener() {
+  const authListener = async () => {
     const signedInUser = ApiManager.authListener()
-    this.setState({signedInUser})
+    setSignedInUser(signedInUser)
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      this.setState({currentUser})
-      this.setState({signedInUser: true})
-      this.setState({isMe: currentUser.username === this.state.currentDentist.id});
-      if (!this.state.isMe) return this.state.router.push('/dentist/account/' + this.state.currentDentist.id)
-    } catch (err) {
-      console.log(err)
+      setCurrentUser(currentUser)
+      setSignedInUser(true)
+    } catch (e) {
+      console.log(e)
     }
   }
 
-  async getDentist() {
+  const getDentist = async (id: string) => {
     try {
-      const currentDentist = await ApiManager.getDentist(this.state.router.query.slug[0]).then(currentDentist => {
-        this.setState({currentDentist: currentDentist});
+      await ApiManager.getDentist(route ? route : id)
+      .then(currentDentist => {
+        setCurrentDentist(currentDentist);
+        authListener();
+        downloadAvatar(currentDentist);
       })
     } catch (e) {
-      return <Error statusCode={404}/>
+      console.log(e)
     }
   }
 
-  async downloadAvatar() {
+  const downloadAvatar = async (currentDentist: any) => {
+    ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
+      setCurrentAvatar(signedFiles)
+    })
+  }
+
+  const downloadImages = async () => {
     try {
-      ApiManager.downloadAvatar(this.state.currentDentist).then(signedFiles => {
-        this.setState({currentAvatar: signedFiles})
+      ApiManager.downloadImages(currentDentist).then(filesList => {
+        setImages(filesList)
       })
     } catch (e) {
-      return <Error statusCode={404}/>
+      console.log(e)
     }
   }
 
-  async downloadImages() {
-    try {
-      ApiManager.downloadImages(this.state.currentDentist).then(filesList => {
-        this.setState({images: filesList})
-      })
-    } catch (e) {
-      return <Error statusCode={404}/>
-    }
-  }
-
-  async uploadAvatar(files: any) {
+  const uploadAvatar = async (files: any) => {
     files.preventDefault();
     const file = files.target.files[0];
     const filename = file.name.split('.')
     try {
-      await Storage.put('avatars/' + this.state.currentDentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
+      await Storage.put('avatars/' + currentDentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
         level: 'public',
         contentType: 'image/png',
       }).then(async (result: any) => {
@@ -89,44 +85,38 @@ class Profile extends Component {
         signedFiles = await signedFiles.then((item: any) => {
           return item
         })
-        this.setState({setCurrentAvatar: signedFiles})
-        this.downloadAvatar()
+        setCurrentAvatar(signedFiles)
+        downloadAvatar(currentDentist)
         // setDownloadMessage('Success!')
         // setStatusSnackbar('success')
         // setOpenSnackbar(true)
         // setOpen(false)
       })
-        .catch((_error: any) => {
-          // setDownloadMessage('File upload error')
-          // setStatusSnackbar('error')
-          // setOpenSnackbar(true)
-        });
+      .catch((_error: any) => {
+        // setDownloadMessage('File upload error')
+        // setStatusSnackbar('error')
+        // setOpenSnackbar(true)
+      });
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
   }
 
-  render() {
-    !this.state.currentDentist && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+  !currentDentist && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+  return (
+    <>
+      {currentDentist &&
+      <Layout title="Profile" active={'activeProfile'} currentAvatar={currentAvatar}>
+        <div className="main-profile bg-white ">
+          <AddSettings currentDentist={currentDentist} getDentist={getDentist}/>
+          <Location currentDentist={currentDentist} getDentist={getDentist}/>
+          <Services currentDentist={currentDentist} getDentist={getDentist}/>
+          <DisplayPhotos currentDentist={currentDentist} currentAvatar={currentAvatar}
+                           uploadAvatar={uploadAvatar}/>
+        </div>
+      </Layout>}
+    </>
+  )
+};
 
-    return (
-      <>
-        {this.state.currentDentist &&
-        <Layout title="Profile" active={'activeProfile'} currentAvatar={this.state.currentAvatar}>
-            <div className="main-profile bg-white ">
-                <AddSettings currentDentist={this.state.currentDentist} getDentist={this.getDentist.bind(this)}/>
-                <Location currentDentist={this.state.currentDentist} getDentist={this.getDentist.bind(this)}/>
-                <Services currentDentist={this.state.currentDentist} getDentist={this.getDentist.bind(this)}/>
-                <DisplayPhotos currentDentist={this.state.currentDentist} currentAvatar={this.state.currentAvatar}
-                               uploadAvatar={this.uploadAvatar.bind(this)}/>
-            </div>
-        </Layout>
-        }
-      </>
-    )
-  }
-}
-;
-
-// @ts-ignore
-export default withRouter(Profile);
+export default Profile;
