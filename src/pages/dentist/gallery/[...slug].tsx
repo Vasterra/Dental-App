@@ -46,6 +46,8 @@ const GalleryPage = () => {
   const [showUloadGallery, setShowUloadGallery]: any = useState()
   const [openSnackBar, setOpenSnackBar]: any = useState()
   const [updateImgEvent, setUpdateImgEvent]: any = useState()
+  const [searchValue, setSearchValue]: any = useState()
+  const [imagesUpdate, setImagesUpdate]: any = useState()
 
   useEffect(() => {
     if (router.query.slug !== undefined) {
@@ -156,7 +158,9 @@ const GalleryPage = () => {
 
   const saveDataUpdate = async () => {
     if (!check) return console.log('I confirm I have full rights for the use and publication of these images.')
-    uploadUpdateImage()
+    if (!imagesUpdate) {
+      uploadUpdateImage()
+    }
     try {
       await API.graphql({
         query: updateImage,
@@ -169,8 +173,8 @@ const GalleryPage = () => {
             titleAfter: titleAfter,
             tagsAfter: tagsAfter,
             service: service,
-            nameBefore: fileLeft.name,
-            nameAfter: fileRight.name,
+            nameBefore: fileLeft ? fileLeft.name : updateImg[0].nameBefore,
+            nameAfter: fileRight ? fileRight.name : updateImg[0].nameAfter,
           }
         },
         // @ts-ignore
@@ -180,6 +184,13 @@ const GalleryPage = () => {
       setMessageSnackBar('Success!')
       setStatusSnackBar('success')
       setOpenSnackBar(true)
+      if (updateImgEvent) {
+        setTimeout(() => {
+          handlerShowGallery();
+          getListImages()
+          setCheck(null)
+        }, 1000)
+      }
     } catch (error) {
       setMessageSnackBar(error)
       setStatusSnackBar('error')
@@ -192,7 +203,6 @@ const GalleryPage = () => {
       saveDataUpdate()
       return;
     }
-    console.log(fileLeft)
     if (!check) return console.log('I confirm I have full rights for the use and publication of these images.')
     uploadImage()
     try {
@@ -237,7 +247,8 @@ const GalleryPage = () => {
           setOpenSnackBar(true)
           console.log('success')
           setTimeout(() => {
-            downloadImages()
+            handlerShowGallery();
+            getListImages()
           }, 1000)
         })
         .catch((error: any) => {
@@ -251,8 +262,6 @@ const GalleryPage = () => {
         setOpenSnackBar(true)
       }
     })
-    handlerShowGallery();
-    downloadImages();
   }
 
   const uploadImage = () => {
@@ -265,6 +274,10 @@ const GalleryPage = () => {
           setMessageSnackBar('Success Upload!')
           setStatusSnackBar('success')
           setOpenSnackBar(true)
+          setTimeout(() => {
+            handlerShowGallery();
+            getListImages()
+          }, 1000)
         })
         .catch((error: any) => {
           setMessageSnackBar(error)
@@ -277,11 +290,6 @@ const GalleryPage = () => {
         setOpenSnackBar(true)
       }
     })
-    setTimeout(() => {
-      handlerShowGallery();
-      downloadImages()
-    }, 1000)
-
   }
 
   const downloadImages = async () => {
@@ -346,6 +354,10 @@ const GalleryPage = () => {
   }
 
   const editGallery = (val: any) => {
+    console.log(val)
+    setImagesUpdate(true)
+    setCheckFilesLeft(true)
+    setCheckFilesRight(true)
     setShowUloadGallery(true)
     setUpdateImgEvent(true)
     setUpdateImg(val)
@@ -359,7 +371,9 @@ const GalleryPage = () => {
 
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null)
-    if (e.target.value === 'All Service') return downloadImages()
+    if (e.target.value === 'All Service') {
+      getListImages()
+    }
     let newListImages: any[] = [];
     const filterImages = oldIMages.map((img: any[]) => img.filter((item: { service: string; }) => item.service === e.target.value));
 
@@ -373,8 +387,33 @@ const GalleryPage = () => {
     }, 1000)
   }
 
-  if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+  const searchImagesByTitle = async (e: any) => {
+    setImages(null)
+    setSearchValue(e)
+    let allImages: any[] = []
+    let result = oldIMages.map(async (item: any) => {
+      if (item[0].tagsBefore.toLowerCase().indexOf(e) === 0) {
+        return item
+      }
 
+    })
+    result = await Promise.all(result)
+    result.forEach((item: string | any[]) => {
+      if (item !== undefined) {
+        allImages.push(item)
+      }
+    })
+    setTimeout(() => {
+      setImages(allImages)
+    }, 2000)
+  }
+
+  const enterKeyDown = (e: { keyCode: number; }) => {
+    if (e.keyCode === 13) searchImagesByTitle(e)
+  }
+
+  if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+  console.log(checkFilesLeft)
   return (
     <Layout title="Gallery" active={'activeGallery'} currentAvatar={currentAvatar}>
       <div className="main-profile bg-white ">
@@ -386,7 +425,13 @@ const GalleryPage = () => {
             </div>
           </div>
           <div className="search-gallery">
-            <input className="search-users" type="search" id="search" name="search" value=""
+            <input className="search-users"
+                   type="search"
+                   id="search"
+                   name="search"
+                   value={searchValue}
+                   onKeyDown={enterKeyDown}
+                   onChange={e => searchImagesByTitle(e.target.value)}
                    placeholder="Search Images"/>
             <img className="search-button" src="../../images/search.svg" alt="search"/>
             <button className="button-green centered" onClick={handlerShowUloadGallery}>Upload to gallery</button>
