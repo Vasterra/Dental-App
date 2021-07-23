@@ -2,7 +2,7 @@ projects:
   awsdental:
     schemaPath: graphql/schema.json
     includes:
-      - graphql/**/*.js
+      - src/graphql/**/*.js
     excludes:
       - ./amplify/**
     extensions:

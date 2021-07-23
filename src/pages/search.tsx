@@ -201,9 +201,8 @@ const Search = () => {
     })
     return distanceDent
   }
-
+  console.log(searchDentists)
   if (!dentists) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
-
   return (
     <Layout title="Search page">
       <Header/>

@@ -11,6 +11,7 @@ export const getDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -83,6 +84,7 @@ export const listDentists = /* GraphQL */ `
         qualifications
         bio
         website
+        address
         city
         street
         postIndex

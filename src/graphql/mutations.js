@@ -14,6 +14,7 @@ export const createDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -84,6 +85,7 @@ export const updateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -154,6 +156,7 @@ export const deleteDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex

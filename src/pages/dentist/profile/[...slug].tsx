@@ -44,9 +44,11 @@ const Profile = () => {
   }
 
   const getDentist = async (id: string) => {
+    setCurrentDentist(null)
     try {
       await ApiManager.getDentist(route ? route : id)
       .then(currentDentist => {
+        console.log(currentDentist)
         setCurrentDentist(currentDentist);
         authListener();
         downloadAvatar(currentDentist);

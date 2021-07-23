@@ -12,6 +12,7 @@ type Props = {
 }
 
 const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
+  console.log(currentDentist)
   const initialValues = {
     id: currentDentist.id,
     firstName: currentDentist.firstName,
@@ -21,6 +22,7 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
     website: currentDentist.website,
     city: currentDentist.city,
     street: currentDentist.street,
+    address: currentDentist.address,
     postIndex: currentDentist.postIndex,
     phone: currentDentist.phone,
     qualifications: currentDentist.qualifications,
@@ -42,21 +44,32 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
             validateOnBlur={true}
             validateOnChange={true}
             onSubmit={async (data: any, {setErrors}) => {
-              try {
-                await API.graphql({
-                  query: updateDentist,
-                  variables: {
-                    input: data
-                  },
-                  // @ts-ignore
-                  authMode: 'AWS_IAM'
-                })
+              console.log(data)
+              fetch('https://maps.google.com/maps/api/geocode/json?sensor=false&address=' + data.address + '&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY')
+              .then(response => response.json())
+              .then(async(result) => {
+                console.log(result)
+                data.lng = result.results[0].geometry.location.lng
+                data.lat = result.results[0].geometry.location.lat
+                console.log(data)
+                try {
+                  await API.graphql({
+                    query: updateDentist,
+                    variables: {
+                      input: data
+                    },
+                    // @ts-ignore
+                    authMode: 'AWS_IAM'
+                  })
 
-              } catch (err) {
-                setErrors(err);
-              }
+                } catch (err) {
+                  setErrors(err);
+                }
+                getDentist();
+              })
+              .catch((_error: any) => {
+              })
 
-              getDentist();
             }}
             initialValues={initialValues}
           >
@@ -107,9 +120,9 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                         props={props}
                       />
                     </div>
-                    <p className="form-login-buttons">
-                      <button className="button-green" type="submit">Confirm</button>
-                    </p>
+                    {/*<p className="form-login-buttons">*/}
+                    {/*  <button className="button-green" type="submit">Confirm</button>*/}
+                    {/*</p>*/}
                   </div>
                   {!currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
                       <div>
@@ -156,6 +169,13 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                           name="phone"
                           placeholder="0203 123 4567"
                           setValue={props.values.phone}
+                          props={props}
+                      />
+                      <DentistProfileInput
+                          title="Address"
+                          name="address"
+                          placeholder="London"
+                          setValue={props.values.address}
                           props={props}
                       />
                       <p className="form-login-buttons">
