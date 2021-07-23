@@ -392,40 +392,35 @@ const GalleryPage = () => {
             <button className="button-green centered" onClick={handlerShowUloadGallery}>Upload to gallery</button>
           </div>
         </div>
+
+        { !showUloadGallery && <div className="flex-end">
+          <select className="gallery-select arrows bg-gray" name="services" id="services"
+                  onChange={filterImagesByService}>
+            <option value="All Service" selected>All Service</option>
+            {services && services.map((item: any, key: any) => (
+              <option key={key} value={item.name}>{item.name}</option>
+            ))}
+          </select>
+        </div> }
         {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
-        {!showUloadGallery && images &&
-          <>
-              <div className="flex-end">
-                  <select className="gallery-select arrows bg-gray" name="services" id="services"
-                          onChange={filterImagesByService}>
-                      <option value="All Service" selected>All Service</option>
-                    {services && services.map((item: any, key: any) => (
-                      <option key={key} value={item.name}>{item.name}</option>
-                    ))}
-                  </select>
+        <div className="gallery-box">
+          {!showUloadGallery && images && images.map((val: any[], key: any) => {
+            return (
+              <div key={key}>
+                <Gallery
+                  // @ts-ignore
+                  images={val}
+                  oldIMages={oldIMages}
+                  services={services}
+                  setImages={setFuncImages}
+                  editGallery={editGallery}
+                  downloadImages={downloadImages}
+                  handlerShowUloadGallery={handlerShowUloadGallery}
+                />
               </div>
-              <div className="gallery-box">
-                {
-                  images.map((val: any[], key: any) => {
-                    return (
-                      <div key={key}>
-                        <Gallery
-                          // @ts-ignore
-                          images={val}
-                          oldIMages={oldIMages}
-                          services={services}
-                          setImages={setFuncImages}
-                          editGallery={editGallery}
-                          downloadImages={downloadImages}
-                          handlerShowUloadGallery={handlerShowUloadGallery}
-                        />
-                      </div>
-                    )
-                  })
-                }
-              </div>
-          </>
-        }
+            )
+          })}
+        </div>
         {showUloadGallery && <>
             <div className="row-gallery">
                 <div className="profile-box-form cut-block">
