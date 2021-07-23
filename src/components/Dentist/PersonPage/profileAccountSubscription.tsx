@@ -1,5 +1,7 @@
+import { CircularProgress } from "@material-ui/core";
 import React from "react";
 import GalleryPerson from "src/components/Gallery/GalleryPerson";
+import { WrapperFlex } from "src/styles/Main.module";
 
 type Props = {
   currentDentist: any,
@@ -14,19 +16,21 @@ type Props = {
 const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDentist, oldIMages, images, currentAvatar, services, setImages, downloadImages}) => {
   const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
   const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
+
   const filterImagesByService = (e: { target: { value: string; }; }) => {
+    setImages(null)
     if (e.target.value === 'All Service') return downloadImages()
     let newListImages: any[] = [];
     const filterImages = oldIMages.map((img: any[]) => img.filter((item: { service: string; }) => item.service === e.target.value));
 
     filterImages.forEach((arr: any) => {
       if (arr.length !== 0) {
-        // @ts-ignore
         newListImages.push(arr)
       }
     });
-    // @ts-ignore
-    setImages(newListImages)
+    setTimeout(() => {
+      setImages(newListImages)
+    }, 1000)
   }
   const fullName = firstName + ' ' + lastName
   const adress = currentDentist.postIndex + ' ' + currentDentist.city + ' ' + currentDentist.street
@@ -82,6 +86,7 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDent
                   <option key={key} value={item.name}>{item.name}</option>
                 ))}
               </select>
+              {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
               {// @ts-ignore
                 images && <GalleryPerson images={images}/>
               }

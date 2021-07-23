@@ -14,7 +14,6 @@ import ApiManager from "src/services/ApiManager";
 import {switcher} from "src/utils/switcher";
 import {getDentist, listDentists, listServiceForDentals,} from "src/graphql/queries";
 import {convertCityCoords} from "src/utils/search/converCityCoords";
-import { arch } from "os";
 
 class Search extends Component {
   state: any = {

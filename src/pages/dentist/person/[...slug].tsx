@@ -101,22 +101,24 @@ const Person = () => {
 
 
   const downloadImages = async () => {
+    setImages(null)
+    setOldIMages(null)
     try {
       if (currentDentist === null) return
-      if (listImagesData === undefined) return
-
-      const listImagesFilter = listImagesData.filter((el: { dentistId: any; }) => el.dentistId === currentDentist.id);
-
-      let eachImages: any[] = []
-      listImagesFilter && listImagesFilter.forEach(async (e: any) => {
+      let eachImages: any[] = [];
+      let allImages: any[] = []
+      let filesList = listImagesData.map(async (e: any) => {
         const files = await Storage.list('images/' + currentDentist.id + '/' + e.id)
-
         let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
         signedFiles = await Promise.all(signedFiles)
-        let filesList = signedFiles.map((f: any, key: string | number) => {
+        return signedFiles.map((f: any, key: string | number) => {
+          const amazon = f.split('amazonaws.com')
           return {
+            id: e.id,
+            dentistId: e.dentistId,
             thumbnail: f,
             url: f,
+            imgUrl: amazon[0] + 'amazonaws.com/public/' + files[key].key,
             name: files[key].key,
             thumbnailWidth: 320,
             thumbnailHeight: 212,
@@ -125,18 +127,30 @@ const Person = () => {
             tagsBefore: e.titleBefore,
             titleAfter: e.titleAfter,
             tagsAfter: e.tagsAfter,
-            service: e.service
+            service: e.service,
+            nameBefore: e.nameBefore,
+            nameAfter: e.nameAfter
           }
         })
-        eachImages.push(filesList)
-        setImages(eachImages)
-        setOldIMages(eachImages)
       })
+      filesList = await Promise.all(filesList)
+      filesList.forEach((item: string | any[]) => {
+        if (item.length !== 0) {
+          allImages.push(item)
+        }
+      })
+      setTimeout(() => {
+        setImages(allImages)
+        setOldIMages(allImages)
+      }, 1000)
+
     } catch (e) {
       return <Error statusCode={404}/>
     }
   }
+
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+
   return (
     <>
       <Header/>

@@ -1,5 +1,7 @@
+import { CircularProgress } from "@material-ui/core";
 import React from "react";
 import GalleryPerson from "src/components/Gallery/GalleryPerson";
+import { WrapperFlex } from "src/styles/Main.module";
 
 type Props = {
   currentDentist: any,
@@ -16,18 +18,19 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
   const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
 
   const filterImagesByService = (e: { target: { value: string; }; }) => {
+    setImages(null)
     if (e.target.value === 'All Service') return downloadImages()
     let newListImages: any[] = [];
     const filterImages = oldIMages.map((img: any[]) => img.filter((item: { service: string; }) => item.service === e.target.value));
 
     filterImages.forEach((arr: any) => {
       if (arr.length !== 0) {
-        // @ts-ignore
         newListImages.push(arr)
       }
     });
-    // @ts-ignore
-    setImages(newListImages)
+    setTimeout(() => {
+      setImages(newListImages)
+    }, 1000)
   }
   const fullName = firstName + ' ' + lastName
   const adress = currentDentist.postIndex + ' ' + currentDentist.city + ' ' + currentDentist.street
@@ -78,6 +81,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
                   <option key={key} value={item.name}>{item.name}</option>
                 ))}
               </select>
+              {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
               {// @ts-ignore
                 images && <GalleryPerson images={images}/>
               }
