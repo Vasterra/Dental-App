@@ -40,7 +40,6 @@ const ServicesComponent: React.FunctionComponent<Props> = ({
     if (e.target.value === 'choose service') {
       return getListDentists(e.target.value);
     }
-    console.log(dentists)
     dentists.forEach((item: any) => {
       searchDent.push(getDentistsFind(item))
     })

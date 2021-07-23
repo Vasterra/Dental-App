@@ -1825,6 +1825,7 @@ input:disabled:-ms-input-placeholder {
   padding: 10px;
   position: relative;
   margin-top: -5px;
+  overflow-wrap: break-word;
 }
 
 .index-gallery-image-title {

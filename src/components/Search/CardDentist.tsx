@@ -45,8 +45,8 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
       <img className="index-gallery-image-watermark-img-1" src="../images/check_circle.svg" alt="check"/>
       <Link href={"../../dentist/person/" + dentist.id} target="_blank">
         <div className="index-gallery-image-description">
-          <p className="index-gallery-image-title">Image Title</p>
-          <p className="index-gallery-image-text">Image Alt Text</p>
+          <p className="index-gallery-image-title">{dentist.email}</p>
+          <p className="index-gallery-image-text">{dentist.firstName}</p>
         </div>
       </Link>
     </div>

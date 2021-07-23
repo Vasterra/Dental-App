@@ -1,5 +1,5 @@
 import {API} from "aws-amplify";
-import React, {Component} from "react";
+import React, {Component, useEffect, useState} from "react";
 import styled from "styled-components";
 import {CircularProgress} from "@material-ui/core";
 
@@ -14,117 +14,140 @@ import ApiManager from "src/services/ApiManager";
 import {switcher} from "src/utils/switcher";
 import {getDentist, listDentists, listServiceForDentals,} from "src/graphql/queries";
 import {convertCityCoords} from "src/utils/search/converCityCoords";
+import { WrapperFlex } from "src/styles/Main.module";
 
-class Search extends Component {
-  state: any = {
-    services: null,
-    service: null,
-    servicesForSearch: null,
-    dentists: null,
-    currentDentist: null,
-    ipCoords: null,
-    searchDentists: null,
-    valueSlider: 50,
-    searchCoords: null,
-    searchValue: null,
-    serviceSearch: null,
-  }
+const Search = () => {
 
-  async componentDidMount() {
-    switcher();
-    if (!this.state.ipCoords) {
+  const [currentDentist, setCurrentDentist]: any = useState()
+  const [dentists, setDentists]: any = useState()
+  const [oldDentists, setOldDentists]: any = useState()
+  const [services, setServices]: any = useState()
+  const [service, setService]: any = useState()
+  const [servicesForSearch, setServicesForSearch]: any = useState()
+  const [ipCoords, setIpCoords]: any = useState()
+  const [searchDentists, setSearchDentists]: any = useState()
+  const [valueSlider, setValueSlider]: any = useState(50)
+  const [searchValue, setSearchValue]: any = useState()
+  const [searchCoords, setSearchCoords]: any = useState()
+  const [switcherClick, setSwitcherClick]: any = useState()
+  const [serviceSearch, setServiceSearch]: any = useState('choose service')
+
+  useEffect(() => {
+    if (!ipCoords) {
       convertCityCoords().then((result) => {
-        this.setState({ipCoords: result})
-        if (!this.state.searchCoords) {
-          this.setState({searchCoords: result})
+        setIpCoords(result)
+        if (!searchCoords) {
+          setSearchCoords(result)
+          getListDentists(null, result);
+          getListServiceForDentals();
         }
       })
     }
-    await this.getListDentists(null);
-    await this.getListServiceForDentals();
-  }
+  }, [])
 
-  async getListDentists(service: any) {
-    this.setState({dentists: null})
-    this.setState({service: service})
-    ApiManager.getListDentists().then(listDentitst => {
-      const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, this.state.valueSlider, listDentitst)
-      this.setState({dentists: listDentitst})
-      this.setState({searchDentists: findCoordinatesDent})
+  useEffect(() => {
+    if(searchDentists) {
+      switcher();
+    }
+  }, [searchDentists])
+
+  const getListDentists = async (service: any, result: any) => {
+    setSearchDentists(null)
+    setService(service)
+    ApiManager.getListDentists().then(listDentist => {
+      const findCoordinatesDent = findCoordinatesDentists(searchCoords ? searchCoords : result, valueSlider, listDentist)
+      setTimeout(() => {
+        setSearchDentists(findCoordinatesDent)
+      }, 1000)
+      setDentists(listDentist)
+      setOldDentists(listDentist)
     });
   }
 
-  async getListServiceForDentals() {
-    ApiManager.getListServiceForDentals().then(listServiceForDentals => {
-      this.setState({servicesForSearch: listServiceForDentals})
-    })
+  const getListServiceForDentals = async () => {
+    const {data}: any = await API.graphql({
+      query: listServiceForDentals,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    setServicesForSearch(data.listServiceForDentals.items)
   }
 
-  async setFindDentist(findDentist: any) {
-    this.setState({searchDentists: null})
-    const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, this.state.valueSlider, findDentist)
-    this.setState({searchDentists: findCoordinatesDent})
+  const setFindDentist = (findDentist: any) => {
+    setSearchDentists(null)
+    const findCoordinatesDent = findCoordinatesDentists(searchCoords, valueSlider, findDentist)
+    setTimeout(() => {
+      setSearchDentists(findCoordinatesDent)
+    }, 1000)
   }
 
-  enterKeyDown = (e: { keyCode: number; }) => {
-    if (e.keyCode === 13) this.changeSearch()
+  const enterKeyDown = (e: { keyCode: number; }) => {
+    if (e.keyCode === 13) changeSearch()
   }
 
-  handleBlur = () => {
-    if (this.state.valueSlider < 0) {
-      this.setState({valueSlider: 0})
-    } else if (this.state.valueSlider < 100) {
-      this.setState({valueSlider: 100})
+  const handleBlur = () => {
+    if (valueSlider < 0) {
+      setValueSlider(0)
+    } else if (valueSlider < 100) {
+      setValueSlider(100)
     }
   };
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({valueSlider: event.target.value === '' ? '' : Number(event.target.value)})
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValueSlider(event.target.value === '' ? '' : Number(event.target.value))
   };
 
-  getDentistForService = (dentists: any) => {
-    this.setState({searchDentist: dentists})
+  const getDentistForService = (dentists: any) => {
+    setSearchDentists(dentists)
   }
 
-  setCurrentDentist = (currentDentist: any) => {
-    this.setState({currentDentist: currentDentist})
+  const setFunctCurrentDentist = (currentDentist: any) => {
+    setCurrentDentist(currentDentist)
   }
 
-  setSearchService = (service: any) => {
-    this.setState({serviceSearch: service})
+  const handlerClickSwitch = () => {
+    setSwitcherClick(true)
   }
 
-  changeSearch = () => {
-    fetch('https://maps.google.com/maps/api/geocode/json?sensor=false&address=' + this.state.searchValue + '&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY')
-      .then(response => response.json())
-      .then(result => {
-        this.getListDentists(null)
-        this.setState({searchCoords: result.results[0].geometry.location})
-        this.findCoordinatesDentists(result.results[0].geometry.location, this.state.valueSlider, this.state.dentists)
-      })
-      .catch((_error: any) => {
-      })
+  const setSearchService = (service: any) => {
+    setServiceSearch(service)
   }
 
-  async onChangeDistance(e: any) {
-    this.setState({valueSlider: e.target.value})
+  const changeSearch = () => {
+    setSearchDentists(null)
+    fetch('https://maps.google.com/maps/api/geocode/json?sensor=false&address=' + searchValue + '&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY')
+    .then(response => response.json())
+    .then(result => {
+      setSearchCoords(result.results[0].geometry.location)
+      const findCoordinatesDent = findCoordinatesDentists(result.results[0].geometry.location, valueSlider, dentists)
+      setTimeout(() => {
+        setSearchDentists(findCoordinatesDent)
+      }, 1000)
+    })
+    .catch((_error: any) => {
+    })
+  }
+
+  const onChangeDistance = async (e: any) => {
+    setSearchDentists(null)
     let distanceDent: any[] = [];
     let searchDent: any[] = [];
 
-    if (!this.state.dentists) return {}
-
-    if (this.state.serviceSearch === 'choose service') {
-      const findCoordinatesDent = this.findCoordinatesDentists(this.state.searchCoords, e.target.value, this.state.dentists)
-      this.setState({searchDentists: findCoordinatesDent})
+    if (serviceSearch === 'choose service') {
+      setSearchDentists(null)
+      const findCoordinatesDent = findCoordinatesDentists(searchCoords, e.target.value, dentists)
+      setTimeout(() => {
+        setSearchDentists(findCoordinatesDent)
+      }, 1000)
     } else {
-      this.state.dentists.forEach((item: any) => {
-        searchDent.push(this.getDentistsFind(item))
+      oldDentists.forEach((item: any) => {
+        searchDent.push(getDentistsFind(item))
       })
       searchDent = await Promise.all(searchDent)
-      searchDent.forEach((dent: { services: { items: { name: any; }[]; }; lng: any; lat: any; }) => {
+      searchDent.forEach((dent: any) => {
         dent.services.items.forEach((val: { name: any; }) => {
-          if (val.name === this.state.serviceSearch) {
-            const a = {'Longitude': this.state.searchCoords.lng, 'Latitude': this.state.searchCoords.lat};
+          if (val.name === serviceSearch) {
+            const a = {'Longitude': searchCoords.lng, 'Latitude': searchCoords.lat};
             const b = {'Longitude': dent.lng, 'Latitude': dent.lat};
             const distanceCur = (111.111 *
               (180 / Math.PI) * (
@@ -138,12 +161,15 @@ class Search extends Component {
             }
           }
         })
-        this.setState({searchDentists: distanceDent})
+        setTimeout(() => {
+          setSearchDentists(distanceDent)
+        }, 1000)
+
       })
     }
   }
 
-  getDentistsFind = async (dentist: { id: any; }) => {
+  const getDentistsFind = async (dentist: { id: any; }) => {
     const {data}: any = await API.graphql({
       query: getDentist,
       variables: {
@@ -155,9 +181,8 @@ class Search extends Component {
     return data.getDentist
   }
 
-  findCoordinatesDentists = (coordinate: any, distance: number, dentists: []): object | [] => {
+  const findCoordinatesDentists = (coordinate: any, distance: number, dentists: []): object | [] => {
     let distanceDent: any[] = [];
-
     if (!dentists) return {}
 
     dentists.map((dent: { lng: any; lat: any; }) => {
@@ -177,96 +202,95 @@ class Search extends Component {
     return distanceDent
   }
 
-  render() {
-    return (
-      <Layout title="Search page">
-        <Header/>
-        <section className="container page">
-          <div className="index-box-to-box">
-            <div className="index-box-to-box-top">
-              <div className="box-left">
-                <div className="index-search-gallery ">
-                  <input className="search-postcode"
-                         type="search"
-                         id="postcode"
-                         name="postcode"
-                         value={this.state.searchValue}
-                         onChange={e => this.setState({searchValue: e.target.value})}
-                         onKeyDown={this.enterKeyDown}
-                         placeholder=" Postcode"
+  if (!dentists) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+
+  return (
+    <Layout title="Search page">
+      <Header/>
+      <section className="container page">
+        <div className="index-box-to-box">
+          <div className="index-box-to-box-top">
+            <div className="box-left">
+              <div className="index-search-gallery ">
+                <input className="search-postcode"
+                       type="search"
+                       id="postcode"
+                       name="postcode"
+                       value={searchValue}
+                       onChange={e => setSearchValue(e.target.value)}
+                       onKeyDown={enterKeyDown}
+                       placeholder=" Postcode"
+                />
+                <img className="search-button" src="../images/search.svg" alt="search"/>
+              </div>
+              <p className="row-content-index">
+                {servicesForSearch &&
+                <Services
+                    setFindDentist={setFindDentist}
+                    getListDentists={getListDentists}
+                    setSearchService={setSearchService}
+                    services={servicesForSearch}
+                    searchCoords={searchCoords}
+                    dentists={dentists}
+                />}
+              </p>
+              <p className="row-content-index">
+                <select className="index-select arrows" name="services" id="services"
+                        onChange={onChangeDistance}>
+                  <option value="50">Within: 50 Miles
+                  </option>
+                  <option value="1">Within: 1 Mile</option>
+                  <option value="5">Within: 5 Miles</option>
+                  <option value="10">Within: 10 Miles</option>
+                  <option value="20">Within: 20 Miles</option>
+                  <option value="30">Within: 30 Miles</option>
+                  <option value="40">Within: 40 Miles</option>
+                </select>
+              </p>
+            </div>
+            <h1 className="title-dentist">Find Your Dentist</h1>
+            <div className="box-right">
+              <p className="switcher-text">List Search</p>
+              <p className="switcher">
+                <span className="switcher-dot"></span>
+              </p>
+              <p className="switcher-text strong">Map Search</p>
+            </div>
+          </div>
+        </div>
+        <div className="index-box-to-box">
+          <div className="main-index  index-main-box left-size">
+            { !searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+            {searchDentists &&
+            <GoogleMapReactComponent
+                dentists={searchDentists}
+                me={searchDentists[0]}
+                currentDentist={currentDentist}
+                searchCoords={searchCoords}
+                ipCoords={ipCoords}
+            />}
+          </div>
+          <div className="main-index index-main-box right-size">
+            { !searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+            <div className="index-gallery-box">
+              { searchDentists &&
+              searchDentists.map((dentist: any, key: any) => {
+                return (
+                  <CardDentistComponent
+                    key={key}
+                    dentist={dentist}
+                    setCurrentDentist={setFunctCurrentDentist}
                   />
-                  <img className="search-button" src="../images/search.svg" alt="search"/>
-                </div>
-                <p className="row-content-index">
-                  {this.state.servicesForSearch &&
-                  <Services
-                      setFindDentist={this.setFindDentist.bind(this)}
-                      getListDentists={this.getListDentists.bind(this)}
-                      setSearchService={this.setSearchService.bind(this)}
-                      services={this.state.servicesForSearch}
-                      searchCoords={this.state.searchCoords}
-                      dentists={this.state.dentists}
-                  />}
-                </p>
-                <p className="row-content-index">
-                  <select className="index-select arrows" name="services" id="services"
-                          onChange={this.onChangeDistance.bind(this)}>
-                    <option value="50"
-                      // @ts-ignore
-                            disabled="" selected=""
-                    >Within: 50 Miles
-                    </option>
-                    <option value="1">Within: 1 Mile</option>
-                    <option value="5">Within: 5 Miles</option>
-                    <option value="10">Within: 10 Miles</option>
-                    <option value="20">Within: 20 Miles</option>
-                    <option value="30">Within: 30 Miles</option>
-                    <option value="40">Within: 40 Miles</option>
-                  </select>
-                </p>
-              </div>
-              <h1 className="title-dentist">Find Your Dentist</h1>
-              <div className="box-right">
-                <p className="switcher-text">List Search</p>
-                <p className="switcher">
-                  <span className="switcher-dot"></span>
-                </p>
-                <p className="switcher-text strong">Map Search</p>
-              </div>
+                )
+              })
+              }
             </div>
           </div>
-          <div className="index-box-to-box">
-            <div className="main-index  index-main-box left-size">
-              {this.state.searchDentists &&
-              <GoogleMapReactComponent
-                  dentists={this.state.searchDentists}
-                  me={this.state.searchDentists[0]}
-                  currentDentist={this.state.currentDentist}
-                  searchCoords={this.state.searchCoords}
-                  ipCoords={this.state.ipCoords}
-              />}
-            </div>
-            <div className="main-index index-main-box right-size">
-              <div className="index-gallery-box">
-                {this.state.searchDentists &&
-                this.state.searchDentists.map((dentist: any, key: any) => {
-                  return (
-                    <CardDentistComponent
-                      key={key}
-                      dentist={dentist}
-                      setCurrentDentist={this.setCurrentDentist}
-                    />
-                  )
-                })
-                }
-              </div>
-            </div>
-          </div>
-          <Footer/>
-        </section>
-      </Layout>
-    )
-  }
+        </div>
+        <Footer/>
+      </section>
+    </Layout>
+  )
 }
 
 export default Search;
