@@ -57,6 +57,7 @@ const Person = () => {
       console.log(e)
     }
   }
+
   const getDentist = async (id: string) => {
     await ApiManager.getDentist(route ? route : id)
     .then(currentDentist => {

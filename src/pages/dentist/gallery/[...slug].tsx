@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {withRouter} from "next/router";
+import React, {Component, useEffect, useState} from "react";
+import {useRouter, withRouter} from "next/router";
 import {v4 as uuidv4} from 'uuid';
 import Layout from "src/components/Layout";
 import {API, Auth, Hub, Storage} from "aws-amplify";
@@ -12,299 +12,290 @@ import {createImage, updateImage} from "src/graphql/mutations";
 import Snackbar from "src/components/Snackbar";
 import {CircularProgress} from "@material-ui/core";
 import Error from "next/error";
-// @ts-ignore
-import {WrapperFlex} from "../../../styles/Main.module"
+import {WrapperFlex} from "src/styles/Main.module"
 
-class GalleryPage extends Component {
+const GalleryPage = () => {
+  const router = useRouter()
 
-  state: any = {
-    images: null,
-    loading: true,
-    oldIMages: null,
-    updateImg: null,
-    listImages: null,
-    deleteImage: null,
-    currentDentist: null,
-    currentAvatar: null,
-    signedInUser: null,
-    currentUser: null,
-    updateService: null,
-    isMe: false,
-    uuid: null,
-    files: [],
-    titleBefore: null,
-    tagsBefore: null,
-    titleAfter: null,
-    tagsAfter: null,
-    service: null,
-    services: null,
-    check: null,
-    checkFilesLeft: false,
-    checkFilesRight: false,
-    messageSnackBar: null,
-    statusSnackBar: null,
-    showUloadGallery: false,
-    openSnackBar: false,
-    updateImgEvent: false,
-  }
+  const [currentDentist, setCurrentDentist]: any = useState()
+  const [currentAvatar, setCurrentAvatar]: any = useState()
+  const [signedInUser, setSignedInUser]: any = useState()
+  const [currentUser, setCurrentUser]: any = useState()
+  const [images, setImages]: any = useState()
+  const [oldIMages, setOldIMages]: any = useState()
+  const [route, setRoute]: any = useState()
+  const [loading, setLoading]: any = useState()
+  const [updateImg, setUpdateImg]: any = useState()
+  const [listImagesData, setListImagesData]: any = useState()
+  const [deleteImage, setDeleteImage]: any = useState()
+  const [updateService, setUpdateService]: any = useState()
+  const [uuid, setUuid]: any = useState()
+  const [fileLeft, setFileLeft]: any = useState()
+  const [fileRight, setFileRight]: any = useState()
+  const [titleBefore, setTitleBefore]: any = useState()
+  const [tagsBefore, setTagsBefore]: any = useState()
+  const [titleAfter, setTitleAfter]: any = useState()
+  const [tagsAfter, setTagsAfter]: any = useState()
+  const [service, setService]: any = useState()
+  const [services, setServices]: any = useState()
+  const [check, setCheck]: any = useState()
+  const [checkFilesLeft, setCheckFilesLeft]: any = useState()
+  const [checkFilesRight, setCheckFilesRight]: any = useState()
+  const [messageSnackBar, setMessageSnackBar]: any = useState()
+  const [statusSnackBar, setStatusSnackBar]: any = useState()
+  const [showUloadGallery, setShowUloadGallery]: any = useState()
+  const [openSnackBar, setOpenSnackBar]: any = useState()
+  const [updateImgEvent, setUpdateImgEvent]: any = useState()
 
-  async componentDidMount() {
-    await this.getDentist();
-    await this.authListener();
-    await this.getListImages();
-    await this.getListServiceForDentals()
-    await this.downloadImages();
-    this.setState({uuid: uuidv4()})
-  }
+  useEffect(() => {
+    if (router.query.slug !== undefined) {
+      const {slug} = router.query
+      setUuid(uuidv4())
+      setRoute(slug[0])
+      getDentist(slug[0]);
+      authListener()
 
-  setDeleteImage(selectImages: any) {
-    this.setState({deleteImage: selectImages})
-  }
+    }
+  }, [router])
 
-  async authListener() {
-    const {router}: any = this.props
-    Hub.listen('auth', (data) => {
-      switch (data.payload.event) {
-        case 'signIn':
-          return this.setState({signedInUser: true})
-        case 'signOut':
-          return this.setState({signedInUser: false})
-      }
-    })
+  useEffect(() => {
+    if (currentDentist !== undefined) {
+      downloadAvatar();
+    }
+  }, [currentDentist])
+
+  useEffect(() => {
+    if (listImagesData !== undefined) {
+      downloadImages();
+    }
+  }, [listImagesData])
+
+  const authListener = async () => {
+    const signedInUser = ApiManager.authListener()
+    setSignedInUser(signedInUser)
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      this.setState({currentUser})
-      this.setState({signedInUser: true})
-      this.setState({isMe: currentUser.username === this.state.currentDentist.id});
-      if (!this.state.isMe) return router.push('/dentist/account/' + this.state.currentDentist.id)
+      setCurrentUser(currentUser)
+      setSignedInUser(true)
     } catch (e) {
       console.log(e)
     }
   }
 
-  async getDentist() {
-    try {
-      const {router}: any = this.props
-      const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
-      this.setState({currentDentist: currentDentist});
-    } catch (e) {
-      return <Error statusCode={404}/>
-    }
+  const getDentist = async (id: string) => {
+    await ApiManager.getDentist(route ? route : id)
+    .then(currentDentist => {
+      setCurrentDentist(currentDentist);
+      getListImages()
+      getListServiceForDentals();
+    })
   }
 
-  async downloadAvatar() {
-    if (this.state.currentDentist === null) return
-    try {
-      const files = await Storage.list('avatars/' + this.state.currentDentist.id + '/')
-      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
-      signedFiles = await Promise.all(signedFiles)
-      this.setState({currentAvatar: signedFiles[signedFiles.length - 1]})
-    } catch (e) {
-      console.log(e)
-    }
+  const downloadAvatar = async () => {
+    await ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
+      setCurrentAvatar(signedFiles)
+    })
   }
 
-  handleCloseSnackbar = () => {
-    this.setState({openSnackBar: false})
+  const handleCloseSnackbar = () => {
+    setOpenSnackBar(false)
   }
 
-  async getListServiceForDentals() {
-    try {
-      const {data}: any = await API.graphql({
-        query: listServiceForDentals,
-        // @ts-ignore
-        authMode: 'AWS_IAM'
-      });
-      this.setState({services: data.listServiceForDentals.items})
-    } catch (e) {
-      return <Error statusCode={404}/>
-    }
-  }
-
-  async getListImages() {
+  const getListImages = async () => {
     try {
       const {data}: any = await API.graphql({
         query: listImages,
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
-      this.setState({listImages: data.listImages.items})
+      setListImagesData(data.listImages.items)
     } catch (e) {
-      return <Error statusCode={404}/>
+      console.log(e)
     }
   }
 
-  saveCrop(value: any, anchor: any) {
-    if (anchor === 'left') {
-      this.state.files[0] = value;
-      this.setState({checkFilesLeft: true})
-    } else {
-      this.state.files[1] = value;
-      this.setState({checkFilesRight: true})
-    }
-  }
-
-  saveService(value: any) {
-    this.setState({service: value})
-  }
-
-  desabledButtonFiles(anchor: any) {
-    if (anchor === 'left') {
-      this.setState({checkFilesLeft: false})
-    } else {
-      this.setState({checkFilesRight: false})
-    }
-  }
-
-  checkHandler({target}: any) {
-    this.setState({check: target.checked})
-  }
-
-  onChangeBeforeTitle(e: any) {
-    this.setState({titleBefore: e.target.value})
-  }
-
-  async saveDataUpdate() {
-    if (!this.state.check) return console.log('I confirm I have full rights for the use and publication of these images.')
-    this.uploadUpdateImage()
-    try {
+  const getListServiceForDentals = async () => {
+    const {data}: any = await API.graphql({
+      query: listServiceForDentals,
       // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    setServices(data.listServiceForDentals.items)
+  }
+
+
+  const saveCrop = (value: any, anchor: any) => {
+    if (anchor === 'left') {
+      setFileLeft(value);
+      setCheckFilesLeft(true)
+    } else {
+      setFileRight(value);
+      setCheckFilesRight(true)
+    }
+  }
+
+  const saveService = (value: any) => {
+    setService(value)
+  }
+
+  const desabledButtonFiles = (anchor: any) => {
+    if (anchor === 'left') {
+      setCheckFilesLeft(false)
+    } else {
+      setCheckFilesRight(false)
+    }
+  }
+
+  const checkHandler = ({target}: any) => {
+    setCheck(target.checked)
+  }
+
+  const onChangeBeforeTitle = (e: any) => {
+    setTitleBefore(e.target.value)
+  }
+
+  const saveDataUpdate = async () => {
+    if (!check) return console.log('I confirm I have full rights for the use and publication of these images.')
+    uploadUpdateImage()
+    try {
       await API.graphql({
         query: updateImage,
         variables: {
           input: {
-            id: this.state.updateImg[1].id,
-            dentistId: this.state.currentDentist.id,
-            titleBefore: this.state.titleBefore,
-            tagsBefore: this.state.tagsBefore,
-            titleAfter: this.state.titleAfter,
-            tagsAfter: this.state.tagsAfter,
-            service: this.state.service,
-            nameBefore: this.state.files[0].name,
-            nameAfter: this.state.files[1].name,
+            id: updateImg[1].id,
+            dentistId: currentDentist.id,
+            titleBefore: titleBefore,
+            tagsBefore: tagsBefore,
+            titleAfter: titleAfter,
+            tagsAfter: tagsAfter,
+            service: service,
+            nameBefore: fileLeft.name,
+            nameAfter: fileRight.name,
           }
         },
         // @ts-ignore
         authMode: 'AWS_IAM'
       })
-      this.setState({uuid: uuidv4()})
-      this.setState({messageSnackBar: 'Success!'})
-      this.setState({statusSnackBar: 'success'})
-      this.setState({openSnackBar: true})
+      setUuid(uuidv4())
+      setMessageSnackBar('Success!')
+      setStatusSnackBar('success')
+      setOpenSnackBar(true)
     } catch (error) {
-      this.setState({messageSnackBar: error})
-      this.setState({statusSnackBar: 'error'})
-      this.setState({openSnackBar: true})
+      setMessageSnackBar(error)
+      setStatusSnackBar('error')
+      setOpenSnackBar(true)
     }
   }
 
-  async saveData() {
-    if (this.state.updateImgEvent) {
-      this.saveDataUpdate()
+  const saveData = async () => {
+    if (updateImgEvent) {
+      saveDataUpdate()
       return;
     }
-    if (!this.state.check) return console.log('I confirm I have full rights for the use and publication of these images.')
-    this.uploadImage()
+    console.log(fileLeft)
+    if (!check) return console.log('I confirm I have full rights for the use and publication of these images.')
+    uploadImage()
     try {
       await API.graphql({
         query: createImage,
         variables: {
           input: {
-            id: this.state.uuid,
-            dentistId: this.state.currentDentist.id,
-            titleBefore: this.state.titleBefore,
-            tagsBefore: this.state.tagsBefore,
-            titleAfter: this.state.titleAfter,
-            tagsAfter: this.state.tagsAfter,
-            service: this.state.service,
-            nameBefore: this.state.files[0].name,
-            nameAfter: this.state.files[1].name,
+            id: uuid,
+            dentistId: currentDentist.id,
+            titleBefore: titleBefore,
+            tagsBefore: tagsBefore,
+            titleAfter: titleAfter,
+            tagsAfter: tagsAfter,
+            service: service,
+            nameBefore: fileLeft.name,
+            nameAfter: fileRight.name,
           }
         },
         // @ts-ignore
         authMode: 'AWS_IAM'
       })
-      this.setState({uuid: uuidv4()})
-      this.setState({messageSnackBar: 'Success!'})
-      this.setState({statusSnackBar: 'success'})
-      this.setState({openSnackBar: true})
+      setUuid(uuidv4())
+      setMessageSnackBar('Success!')
+      setStatusSnackBar('success')
+      setOpenSnackBar(true)
     } catch (error) {
-      this.setState({messageSnackBar: error})
-      this.setState({statusSnackBar: 'error'})
-      this.setState({openSnackBar: true})
+      setMessageSnackBar(error)
+      setStatusSnackBar('error')
+      setOpenSnackBar(true)
     }
   }
 
-  uploadUpdateImage() {
-    this.state.files.forEach(async (file: any, key: any) => {
+  const uploadUpdateImage = () => {
+    const files = [fileRight, fileLeft]
+    files.forEach(async (file: any, key: any) => {
       try {
-        await Storage.put('images/' + this.state.currentDentist.id + '/' + this.state.updateImg[key].id + '/' + file.name, file, {
+        await Storage.put('images/' + currentDentist.id + '/' + updateImg[key].id + '/' + file.name, file, {
           contentType: 'image/png',
-          progressCallback(progress: { loaded: number; total: number; }) {
-            const percentUploaded: number = Math.round((progress.loaded / progress.total) * 100)
-          },
         }).then(result => {
-          this.setState({messageSnackBar: 'Success Upload!'})
-          this.setState({statusSnackBar: 'success'})
-          this.setState({openSnackBar: true})
-          this.downloadImages()
+          setMessageSnackBar('Success Upload!')
+          setStatusSnackBar('success')
+          setOpenSnackBar(true)
+          console.log('success')
+          setTimeout(() => {
+            downloadImages()
+          }, 1000)
         })
-          .catch((error: any) => {
-            this.setState({messageSnackBar: error})
-            this.setState({statusSnackBar: 'error'})
-            this.setState({openSnackBar: true})
-          });
+        .catch((error: any) => {
+          setMessageSnackBar(error)
+          setStatusSnackBar('error')
+          setOpenSnackBar(true)
+        });
       } catch (error) {
-        this.setState({messageSnackBar: error})
-        this.setState({statusSnackBar: 'error'})
-        this.setState({openSnackBar: true})
+        setMessageSnackBar(error)
+        setStatusSnackBar('error')
+        setOpenSnackBar(true)
       }
     })
-    this.handlerShowGallery();
-    this.downloadImages();
+    handlerShowGallery();
+    downloadImages();
   }
 
-  uploadImage() {
-    this.state.files.forEach(async (file: any) => {
+  const uploadImage = () => {
+    const files = [fileLeft, fileRight]
+    files.forEach(async (file: any) => {
       try {
-        await Storage.put('images/' + this.state.currentDentist.id + '/' + this.state.uuid + '/' + file.name, file, {
+        await Storage.put('images/' + currentDentist.id + '/' + uuid + '/' + file.name, file, {
           contentType: 'image/png',
-          progressCallback(progress: { loaded: number; total: number; }) {
-            const percentUploaded: number = Math.round((progress.loaded / progress.total) * 100)
-          },
         }).then(result => {
-          this.setState({messageSnackBar: 'Success Upload!'})
-          this.setState({statusSnackBar: 'success'})
-          this.setState({openSnackBar: true})
-          this.downloadImages()
+          setMessageSnackBar('Success Upload!')
+          setStatusSnackBar('success')
+          setOpenSnackBar(true)
         })
-          .catch((error: any) => {
-            this.setState({messageSnackBar: error})
-            this.setState({statusSnackBar: 'error'})
-            this.setState({openSnackBar: true})
-          });
+        .catch((error: any) => {
+          setMessageSnackBar(error)
+          setStatusSnackBar('error')
+          setOpenSnackBar(true)
+        });
       } catch (error) {
-        this.setState({messageSnackBar: error})
-        this.setState({statusSnackBar: 'error'})
-        this.setState({openSnackBar: true})
+        setMessageSnackBar(error)
+        setStatusSnackBar('error')
+        setOpenSnackBar(true)
       }
     })
-    this.handlerShowGallery();
-    this.downloadImages();
+    setTimeout(() => {
+      handlerShowGallery();
+      downloadImages()
+    }, 1000)
+
   }
 
-  downloadImages() {
-    this.setState({images: null})
-    this.setState({oldIMages: null})
-    this.setState({loading: true})
+  const downloadImages = async () => {
+    setImages(null)
+    setOldIMages(null)
     try {
-      if (this.state.currentDentist === null) return
-      let eachImages: any[] = []
-      this.state.listImages.forEach(async (e: any) => {
-        const files = await Storage.list('images/' + this.state.currentDentist.id + '/' + e.id)
+      if (currentDentist === null) return
+      let eachImages: any[] = [];
+      let allImages: any[] = []
+      let filesList = listImagesData.map(async (e: any) => {
+        const files = await Storage.list('images/' + currentDentist.id + '/' + e.id)
         let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
         signedFiles = await Promise.all(signedFiles)
-        let filesList = signedFiles.map((f: any, key: string | number) => {
+        return signedFiles.map((f: any, key: string | number) => {
           const amazon = f.split('amazonaws.com')
           return {
             id: e.id,
@@ -325,203 +316,255 @@ class GalleryPage extends Component {
             nameAfter: e.nameAfter
           }
         })
-        if (filesList.length !== 0) {
-          eachImages.push(filesList)
-        }
-        this.setState({images: eachImages})
-        this.setState({oldIMages: eachImages})
       })
-      this.setState({loading: false})
+      filesList = await Promise.all(filesList)
+      filesList.forEach((item: string | any[]) => {
+        if (item.length !== 0) {
+          allImages.push(item)
+        }
+      })
+      setTimeout(() => {
+        setImages(allImages)
+        setOldIMages(allImages)
+      }, 1000)
+
     } catch (e) {
       return <Error statusCode={404}/>
     }
   }
 
-  setImages(images: any) {
-    this.setState({images: images})
+  const setFuncImages = (images: any) => {
+    setImages(images)
   }
 
-  handlerShowUloadGallery() {
-    this.setState({showUloadGallery: true})
+  const handlerShowUloadGallery = () => {
+    setShowUloadGallery(true)
   }
 
-  handlerShowGallery() {
-    this.setState({showUloadGallery: false})
+  const handlerShowGallery = () => {
+    setShowUloadGallery(false)
   }
 
-  editGallery(val: any) {
-    this.setState({showUloadGallery: true})
-    this.setState({updateImgEvent: true})
-    this.setState({updateImg: val})
-    this.setState({titleBefore: val[1].titleBefore})
-    this.setState({tagsBefore: val[1].tagsBefore})
-    this.setState({titleAfter: val[1].titleAfter})
-    this.setState({tagsAfter: val[1].tagsAfter})
-    this.setState({service: val[1].service})
-    this.setState({updateService: val[1].service})
+  const editGallery = (val: any) => {
+    setShowUloadGallery(true)
+    setUpdateImgEvent(true)
+    setUpdateImg(val)
+    setTitleBefore(val[1].titleBefore)
+    setTagsBefore(val[1].tagsBefore)
+    setTitleAfter(val[1].titleAfter)
+    setTagsAfter(val[1].tagsAfter)
+    setService(val[1].service)
+    setUpdateService(val[1].service)
   }
 
-  render() {
-    if (!this.state.currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
-    return (
-      <Layout title="Gallery" active={'activeGallery'} currentAvatar={this.state.currentAvatar}>
-        <div className="main-profile bg-white ">
-          {    // @ts-ignore
-            !this.state.showUloadGallery &&
-            <Gallery
-              // @ts-ignore
-                images={this.state.images}
-                loading={this.state.loading}
-                oldIMages={this.state.oldIMages}
-                services={this.state.services}
-                setImages={this.setImages.bind(this)}
-                editGallery={this.editGallery.bind(this)}
-                downloadImages={this.downloadImages.bind(this)}
-                handlerShowUloadGallery={this.handlerShowUloadGallery.bind(this)}
-            />
-          }
-          {
-            this.state.showUloadGallery && <>
-                <div className="row-gallery">
-                    <div className="profile-box-form cut-block">
-                        <div className="form-info-block one-block">
-                            <div>
-                                <p className="form-login-title green px20">Upload Before Image</p>
-                                <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
-                            </div>
-                        </div>
-                        <div className="profile-block-box">
-                            <UploadImage
-                                saveCrop={this.saveCrop.bind(this)}
-                                desabledButtonFiles={this.desabledButtonFiles.bind(this)}
-                                anchor="left"
-                                updateImg={this.state.updateImg && this.state.updateImg[0].imgUrl}
-                                updateImgData={this.state.updateImg && this.state.updateImg[0]}
-                                nameUpdateImg={this.state.updateImg && this.state.updateImg[0].nameBefore}
-                            />
-                            <div>
-                                <p className="form-profile-label">Title</p>
-                                <p>
-                                    <input className="form-profile-input"
-                                           type="text"
-                                           name="title"
-                                           id="title"
-                                           value={this.state.titleBefore}
-                                           placeholder="Image Title"
-                                           onChange={(e) => this.setState({titleBefore: e.target.value})}
-                                    />
-                                </p>
-                            </div>
-                            <div>
-                                <p className="form-profile-label">Alt Tags</p>
-                                <p>
-                                    <input className="form-profile-input"
-                                           type="text"
-                                           name="tags"
-                                           id="tags"
-                                           value={this.state.tagsBefore}
-                                           placeholder="Alt Tag"
-                                           onChange={(e) => this.setState({tagsBefore: e.target.value})}
-                                    />
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="profile-box-form cut-block">
-                        <div className="form-info-block one-block">
-                            <div>
-                                <p className="form-login-title green px20">Upload After Image</p>
-                                <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
-                            </div>
-                        </div>
-                        <div className="profile-block-box">
-                            <UploadImage
-                                saveCrop={this.saveCrop.bind(this)}
-                                desabledButtonFiles={this.desabledButtonFiles.bind(this)}
-                                anchor="rigth"
-                                updateImg={this.state.updateImg && this.state.updateImg[1].imgUrl}
-                                updateImgData={this.state.updateImg && this.state.updateImg[1]}
-                                nameUpdateImg={this.state.updateImg && this.state.updateImg[1].nameAfter}
-                            />
-                            <div>
-                                <p className="form-profile-label">Title</p>
-                                <p>
-                                    <input className="form-profile-input"
-                                           type="text"
-                                           name="title"
-                                           id="title"
-                                           value={this.state.titleAfter}
-                                           placeholder="Image Title"
-                                           onChange={(e) => this.setState({titleAfter: e.target.value})}
-                                    />
-                                </p>
-                            </div>
-                            <div>
-                                <p className="form-profile-label">Alt Tags</p>
-                                <p>
-                                    <input className="form-profile-input"
-                                           type="text"
-                                           name="tags"
-                                           id="tags"
-                                           value={this.state.tagsAfter}
-                                           placeholder="Alt Tag"
-                                           onChange={(e) => this.setState({tagsAfter: e.target.value})}
-                                    />
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row-gallery">
-                    <div className="profile-box-form cut-block-2">
-                        <div className="profile-block-box">
-                            <div>
-                                <p className="form-profile-label">
-                                    <label className="form-profile-label">Service</label>
-                                </p>
-                                <div className="row-content space-between">
-                                  {this.state.services &&
-                                  <Services saveService={this.saveService.bind(this)} services={this.state.services}
-                                            updateService={this.state.updateService}/>}
-                                    <img className="gallery-select-arrow" src="../../../public/images/down-select.png"
-                                         alt="select"/>
-                                    <p className="checkbox">
-                                        <input type="checkbox" name="delete" id="delete"
-                                               onChange={this.checkHandler.bind(this)}/>
-                                        <span className="gallery-checkbox-text">I confirm I have full rights for the use and publication of these images.</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="gallery-button-block">
-                        <p className="form-login-buttons">
-                            <button className="button-green" onClick={this.saveData.bind(this)}
-                                    disabled={!this.state.checkFilesLeft || !this.state.checkFilesRight || !this.state.titleBefore || !this.state.tagsBefore || !this.state.titleAfter ||
-                                    !this.state.tagsAfter || !this.state.service || !this.state.check}
-                            >Confirm
-                            </button>
-                        </p>
-                        <p className="form-login-buttons">
-                            <button className="button-green-outline"
-                                    onClick={this.handlerShowGallery.bind(this)}>Cancel
-                            </button>
-                        </p>
-                    </div>
-                </div>
-            </>
-          }
+  const filterImagesByService = (e: { target: { value: string; }; }) => {
+    setImages(null)
+    if (e.target.value === 'All Service') return downloadImages()
+    let newListImages: any[] = [];
+    const filterImages = oldIMages.map((img: any[]) => img.filter((item: { service: string; }) => item.service === e.target.value));
+
+    filterImages.forEach((arr: any) => {
+      if (arr.length !== 0) {
+        newListImages.push(arr)
+      }
+    });
+    setTimeout(() => {
+      setImages(newListImages)
+    }, 1000)
+  }
+
+  if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+
+  return (
+    <Layout title="Gallery" active={'activeGallery'} currentAvatar={currentAvatar}>
+      <div className="main-profile bg-white ">
+        <div className="profile-box-form">
+          <div className="form-info-block">
+            <div>
+              <p className="form-login-title green px20">Gallery</p>
+              <p className="form-login-subtitle gray px12 mb-6px">Add and edit your portfolio</p>
+            </div>
+          </div>
+          <div className="search-gallery">
+            <input className="search-users" type="search" id="search" name="search" value=""
+                   placeholder="Search Images"/>
+            <img className="search-button" src="../../images/search.svg" alt="search"/>
+            <button className="button-green centered" onClick={handlerShowUloadGallery}>Upload to gallery</button>
+          </div>
         </div>
-        <Snackbar
-          messageSnackBar={this.state.messageSnackBar}
-          statusSnackBar={this.state.statusSnackBar}
-          openSnackBar={this.state.openSnackBar}
-          handleCloseSnackbar={this.handleCloseSnackbar.bind(this)}
-        />
-      </Layout>
-    );
-  }
+        {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+        {!showUloadGallery && images &&
+          <>
+              <div className="flex-end">
+                  <select className="gallery-select arrows bg-gray" name="services" id="services"
+                          onChange={filterImagesByService}>
+                      <option value="All Service" selected>All Service</option>
+                    {services && services.map((item: any, key: any) => (
+                      <option key={key} value={item.name}>{item.name}</option>
+                    ))}
+                  </select>
+              </div>
+              <div className="gallery-box">
+                {
+                  images.map((val: any[], key: any) => {
+                    return (
+                      <div key={key}>
+                        <Gallery
+                          // @ts-ignore
+                          images={val}
+                          oldIMages={oldIMages}
+                          services={services}
+                          setImages={setFuncImages}
+                          editGallery={editGallery}
+                          downloadImages={downloadImages}
+                          handlerShowUloadGallery={handlerShowUloadGallery}
+                        />
+                      </div>
+                    )
+                  })
+                }
+              </div>
+          </>
+        }
+        {showUloadGallery && <>
+            <div className="row-gallery">
+                <div className="profile-box-form cut-block">
+                    <div className="form-info-block one-block">
+                        <div>
+                            <p className="form-login-title green px20">Upload Before Image</p>
+                            <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
+                        </div>
+                    </div>
+                    <div className="profile-block-box">
+                        <UploadImage
+                            saveCrop={saveCrop}
+                            desabledButtonFiles={desabledButtonFiles}
+                            anchor="left"
+                            updateImg={updateImg && updateImg[0].imgUrl}
+                            updateImgData={updateImg && updateImg[0]}
+                            nameUpdateImg={updateImg && updateImg[0].nameBefore}
+                        />
+                        <div>
+                            <p className="form-profile-label">Title</p>
+                            <p>
+                                <input className="form-profile-input"
+                                       type="text"
+                                       name="title"
+                                       id="title"
+                                       value={titleBefore}
+                                       placeholder="Image Title"
+                                       onChange={(e) => setTitleBefore(e.target.value)}
+                                />
+                            </p>
+                        </div>
+                        <div>
+                            <p className="form-profile-label">Alt Tags</p>
+                            <p>
+                                <input className="form-profile-input"
+                                       type="text"
+                                       name="tags"
+                                       id="tags"
+                                       value={tagsBefore}
+                                       placeholder="Alt Tag"
+                                       onChange={(e) => setTagsBefore(e.target.value)}
+                                />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div className="profile-box-form cut-block">
+                    <div className="form-info-block one-block">
+                        <div>
+                            <p className="form-login-title green px20">Upload After Image</p>
+                            <p className="form-login-subtitle gray px12 mb-6px">Add and edit your images</p>
+                        </div>
+                    </div>
+                    <div className="profile-block-box">
+                        <UploadImage
+                            saveCrop={saveCrop}
+                            desabledButtonFiles={desabledButtonFiles}
+                            anchor="rigth"
+                            updateImg={updateImg && updateImg[1].imgUrl}
+                            updateImgData={updateImg && updateImg[1]}
+                            nameUpdateImg={updateImg && updateImg[1].nameAfter}
+                        />
+                        <div>
+                            <p className="form-profile-label">Title</p>
+                            <p>
+                                <input className="form-profile-input"
+                                       type="text"
+                                       name="title"
+                                       id="title"
+                                       value={titleAfter}
+                                       placeholder="Image Title"
+                                       onChange={(e) => setTitleAfter(e.target.value)}
+                                />
+                            </p>
+                        </div>
+                        <div>
+                            <p className="form-profile-label">Alt Tags</p>
+                            <p>
+                                <input className="form-profile-input"
+                                       type="text"
+                                       name="tags"
+                                       id="tags"
+                                       value={tagsAfter}
+                                       placeholder="Alt Tag"
+                                       onChange={(e) => setTagsAfter(e.target.value)}
+                                />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="row-gallery">
+                <div className="profile-box-form cut-block-2">
+                    <div className="profile-block-box">
+                        <div>
+                            <p className="form-profile-label">
+                                <label className="form-profile-label">Service</label>
+                            </p>
+                            <div className="row-content space-between">
+                              {services &&
+                              <Services saveService={saveService} services={services}
+                                        updateService={updateService}/>}
+                                <img className="gallery-select-arrow" src="../../../public/images/down-select.png"
+                                     alt="select"/>
+                                <p className="checkbox">
+                                    <input type="checkbox" name="delete" id="delete"
+                                           onChange={checkHandler}/>
+                                    <span className="gallery-checkbox-text">I confirm I have full rights for the use and publication of these images.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="gallery-button-block">
+                    <p className="form-login-buttons">
+                        <button className="button-green" onClick={saveData}
+                                disabled={!checkFilesLeft || !checkFilesRight || !titleBefore || !tagsBefore || !titleAfter ||
+                                !tagsAfter || !service || !check}
+                        >Confirm
+                        </button>
+                    </p>
+                    <p className="form-login-buttons">
+                        <button className="button-green-outline"
+                                onClick={handlerShowGallery}>Cancel
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </>
+        }
+      </div>
+      <Snackbar
+        messageSnackBar={messageSnackBar}
+        statusSnackBar={statusSnackBar}
+        openSnackBar={openSnackBar}
+        handleCloseSnackbar={handleCloseSnackbar}
+      />
+    </Layout>
+  );
 }
 
-//@ts-ignore
-export default withRouter(GalleryPage)
+export default GalleryPage
