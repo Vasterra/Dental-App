@@ -8,6 +8,8 @@ import Header from "src/components/Header";
 import {getDentist, listImages, listServiceForDentals} from "src/graphql/queries";
 import {CircularProgress} from "@material-ui/core";
 import Error from "next/error";
+import {v4 as uuidv4} from 'uuid';
+import {generateRandomPoints} from "src/utils/generateUsers"
 
 import {WrapperFlex} from "src/styles/Main.module"
 import {GetServerSideProps} from "next";
@@ -151,7 +153,7 @@ const Person = ({dentist}: any) => {
   }
 
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
-
+  console.log('currentDentist', currentDentist)
   return (
     <>
       <Header/>
@@ -177,25 +179,29 @@ const Person = ({dentist}: any) => {
   )
 }
 
+
 // @ts-ignore
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const {API} = withSSRContext(context)
   let dentistData
   try {
     if (context.params.slug[0] === null) return
-    dentistData = await API.graphql({
-      query: getDentist,
-      variables: {
-        id: context.params.slug[0]
-      },
-      authMode: "AWS_IAM",
-    });
+    var randomGeoPoints: any = generateRandomPoints({'lat':55.85, 'lng':37.71}, 2000, 40);
+    dentistData = randomGeoPoints.filter((item: { id: any; }) => item.id == context.params.slug[0])
+    // dentistData = await API.graphql({
+    //   query: getDentist,
+    //   variables: {
+    //     id: context.params.slug[0]
+    //   },
+    //   authMode: "AWS_IAM",
+    // });
   } catch (e) {
     console.log(e)
   }
   return {
     props: {
-      dentist: dentistData ? dentistData.data.getDentist : null
+      dentist: dentistData ? dentistData[0] : null
+      // dentist: dentistData ? dentistData.data.getDentist : null
     }
   }
 }

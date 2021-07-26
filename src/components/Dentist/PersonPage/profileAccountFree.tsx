@@ -16,7 +16,7 @@ type Props = {
 const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, oldIMages, images, currentAvatar, services, setImages, downloadImages}) => {
   const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
   const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
-
+  console.log('currentDentist',currentDentist)
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null)
     if (e.target.value === 'All Service') return downloadImages()
@@ -53,13 +53,13 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
                 <p>Nulla eu tempor tortor. Sed iaculis sit amet purus eu pharetra. Maecenas eu risus sem. Fusce
                   sollicitudin sollicitudin sapien.</p>
                 <p className="button-list">
-                  {
-                    currentDentist.services.items.map((el: any, key: any) => {
-                      return (
-                        <button className="index-green-button" key={key}>{el.name}</button>
-                      )
-                    })
-                  }
+                  {/*{*/}
+                  {/*  currentDentist.services.items.map((el: any, key: any) => {*/}
+                  {/*    return (*/}
+                  {/*      <button className="index-green-button" key={key}>{el.name}</button>*/}
+                  {/*    )*/}
+                  {/*  })*/}
+                  {/*}*/}
                 </p>
                 <p>Contact </p>
                 <p>

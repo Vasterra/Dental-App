@@ -45,7 +45,7 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDent
               <img className="index-leftmenu-profile-photo" src={currentAvatar} alt=""/>
               <div>
                 <p className="form-login-title green px20 mt-30 row-content">
-                  {fullName}
+                  <p className="form-login-title green px20 mt-30">{fullName}</p>
                   <img className="index-gallery-image-watermark-img relative-img" src="../../../../images/check_circle.svg" alt="check" />
                 </p>
                 <p className="form-login-subtitle gray px12 m-none">{currentDentist.qualifications}</p>
