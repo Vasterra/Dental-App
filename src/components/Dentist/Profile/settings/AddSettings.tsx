@@ -12,7 +12,7 @@ type Props = {
 }
 
 const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
-  console.log(currentDentist)
+
   const initialValues = {
     id: currentDentist.id,
     firstName: currentDentist.firstName,

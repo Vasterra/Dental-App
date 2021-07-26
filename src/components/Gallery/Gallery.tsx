@@ -117,8 +117,6 @@ const Gallery: React.FunctionComponent = ({
              }}/>
       </div>
     </div>
-
-
   );
 }
 

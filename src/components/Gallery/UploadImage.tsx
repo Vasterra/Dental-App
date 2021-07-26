@@ -73,7 +73,7 @@ const UploadImage: React.FunctionComponent<Props> = ({saveCrop, anchor, desabled
       {!completedCrop && <p className="gallery-upload">
         <label className="button-green-file">Upload</label>
         <input type="file" className="input-file2" name="cover_image" id="cover_image" accept="image/*"
-               onChange={onChange}/>
+               onChange={onChange} />
         <span className="upload-subtitle">Max Size 2MB</span>
       </p>}
       <Cropper

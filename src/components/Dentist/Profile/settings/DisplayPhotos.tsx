@@ -1,5 +1,6 @@
 import React from "react";
 import {Auth, Storage} from "aws-amplify";
+import AddWatermark from "./AddWatermark";
 
 type Props = {
   currentDentist: any,
@@ -30,60 +31,10 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
           </p>
         </div>
         { currentDentist.hasPaidPlan && <div className="profile-block-box">
-          <div>
-            <p className="form-profile-label">
-              <label className="form-profile-label">Cover</label>
-            </p>
-            <p className="profile-photo-box">
-              <img className="image" src="../../../../images/cover-image.jpg" alt="cover image" />
-            </p>
-            <p className="row-content">
-              <label className="button-green-file">Upload</label>
-              <input type="file" className="input-file" name="cover_image" id="cover_image" />
-            </p>
-          </div>
-          <div className="mt-30">
-            <p className="form-profile-label">
-              <label className="form-profile-label">Watermark</label>
-            </p>
-            <p className="profile-photo-box">
-              <img className="image" src="../../../../images/empty-image.jpg" alt="watermark" />
-            </p>
-            <p className="row-content">
-              <label className="button-green-file" >Upload</label>
-              <input type="file" className="input-file" name="watermark" id="watermark" />
-            </p>
-          </div>
+            <AddWatermark />
         </div> }
-        { !currentDentist.hasPaidPlan && <div className="profile-block-box  disabled">
-          <div>
-            <p className="form-profile-label">
-              <label className="form-profile-label ">Cover</label>
-            </p>
-            <p className="profile-photo-box">
-              <img className="image" src="../../../../images/empty-image.jpg" alt="cover image" />
-            </p>
-            <p className="row-content">
-              <label className="button-green-file">Upload</label>
-              <input type="file" className="input-file" name="cover_image" id="cover_image" />
-            </p>
-
-          </div>
-          <div className="mt-30">
-            <p className="form-profile-label">
-              <label className="form-profile-label ">Watermark</label>
-            </p>
-            <p className="profile-photo-box">
-              <img className="image" src="../../../../images/empty-image.jpg" alt="watermark" />
-
-            </p>
-            <p className="row-content">
-              <label className="button-green-file">Upload</label>
-              <input type="file" className="input-file" name="watermark" id="watermark" />
-            </p>
-
-          </div>
-
+        { !currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
+          <AddWatermark />
         </div> }
       </div>
     </div>

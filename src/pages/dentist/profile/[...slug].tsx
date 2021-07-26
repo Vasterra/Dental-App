@@ -1,7 +1,6 @@
-import React, {Component, useEffect, useState} from "react";
-import {Auth, Storage} from "aws-amplify";
+import React, {useEffect, useState} from "react";
+import {Auth, Storage, withSSRContext} from "aws-amplify";
 import {useRouter} from "next/router";
-import Error from "next/error";
 
 import Layout from "src/components/Layout";
 import AddSettings from "src/components/Dentist/Profile/settings/AddSettings";
@@ -12,11 +11,13 @@ import ApiManager from "src/services/ApiManager";
 import {CircularProgress} from "@material-ui/core";
 
 import {WrapperFlex} from "src/styles/Main.module"
+import {getDentist} from "src/graphql/queries";
+import {GetServerSideProps} from "next";
 
-const Profile = () => {
+const Profile = ({dentist}: any) => {
   const router = useRouter()
 
-  const [currentDentist, setCurrentDentist]: any = useState()
+  const [currentDentist, setCurrentDentist]: any = useState(dentist)
   const [currentAvatar, setCurrentAvatar]: any = useState()
   const [signedInUser, setSignedInUser]: any = useState()
   const [currentUser, setCurrentUser]: any = useState()
@@ -27,7 +28,8 @@ const Profile = () => {
     if (router.query.slug !== undefined) {
       const {slug} = router.query
       setRoute(slug[0])
-      getDentist(slug[0]);
+      authListener();
+      downloadAvatar(currentDentist);
     }
   }, [router])
 
@@ -48,7 +50,6 @@ const Profile = () => {
     try {
       await ApiManager.getDentist(route ? route : id)
       .then(currentDentist => {
-        console.log(currentDentist)
         setCurrentDentist(currentDentist);
         authListener();
         downloadAvatar(currentDentist);
@@ -120,5 +121,29 @@ const Profile = () => {
     </>
   )
 };
+
+
+// @ts-ignore
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const {API} = withSSRContext(context)
+  let dentistData
+  try {
+    if (context.params.slug[0] === null) return
+    dentistData = await API.graphql({
+      query: getDentist,
+      variables: {
+        id: context.params.slug[0]
+      },
+      authMode: "AWS_IAM",
+    });
+  } catch (e) {
+    console.log(e)
+  }
+  return {
+    props: {
+      dentist: dentistData ? dentistData.data.getDentist : null
+    }
+  }
+}
 
 export default Profile;

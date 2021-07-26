@@ -2,22 +2,22 @@ import React, {Component, useEffect, useState} from "react";
 import {useRouter, withRouter} from "next/router";
 import {v4 as uuidv4} from 'uuid';
 import Layout from "src/components/Layout";
-import {API, Auth, Hub, Storage} from "aws-amplify";
+import {API, Auth, Hub, Storage, withSSRContext} from "aws-amplify";
 import ApiManager from "src/services/ApiManager";
 import UploadImage from "src/components/Gallery/UploadImage";
 import Gallery from "src/components/Gallery/Gallery";
 import Services from "src/components/Gallery/Services";
-import {listImages, listServiceForDentals} from "src/graphql/queries";
+import {getDentist, listImages, listServiceForDentals} from "src/graphql/queries";
 import {createImage, updateImage} from "src/graphql/mutations";
 import Snackbar from "src/components/Snackbar";
 import {CircularProgress} from "@material-ui/core";
 import Error from "next/error";
 import {WrapperFlex} from "src/styles/Main.module"
 
-const GalleryPage = () => {
+const GalleryPage = ({dentist}: any) => {
   const router = useRouter()
 
-  const [currentDentist, setCurrentDentist]: any = useState()
+  const [currentDentist, setCurrentDentist]: any = useState(dentist)
   const [currentAvatar, setCurrentAvatar]: any = useState()
   const [signedInUser, setSignedInUser]: any = useState()
   const [currentUser, setCurrentUser]: any = useState()
@@ -54,8 +54,9 @@ const GalleryPage = () => {
       const {slug} = router.query
       setUuid(uuidv4())
       setRoute(slug[0])
-      getDentist(slug[0]);
       authListener()
+      getListImages()
+      getListServiceForDentals();
 
     }
   }, [router])
@@ -413,7 +414,7 @@ const GalleryPage = () => {
   }
 
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
-  console.log(checkFilesLeft)
+
   return (
     <Layout title="Gallery" active={'activeGallery'} currentAvatar={currentAvatar}>
       <div className="main-profile bg-white ">
@@ -605,6 +606,29 @@ const GalleryPage = () => {
       />
     </Layout>
   );
+}
+
+// @ts-ignore
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const {API} = withSSRContext(context)
+  let dentistData
+  try {
+    if (context.params.slug[0] === null) return
+    dentistData = await API.graphql({
+      query: getDentist,
+      variables: {
+        id: context.params.slug[0]
+      },
+      authMode: "AWS_IAM",
+    });
+  } catch (e) {
+    console.log(e)
+  }
+  return {
+    props: {
+      dentist: dentistData ? dentistData.data.getDentist : null
+    }
+  }
 }
 
 export default GalleryPage

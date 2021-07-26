@@ -1,9 +1,8 @@
-import React, {Component, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
-import {Auth} from "aws-amplify";
+import {Auth, withSSRContext} from "aws-amplify";
 
 import {WrapperFlex} from "../../../styles/Main.module"
-import Error from "next/error";
 import Layout from "src/components/Layout";
 import AccountInformation from "src/components/Dentist/Account/AccountInformation";
 import ResetPassword from "src/components/Dentist/Account/ResetPassword";
@@ -13,11 +12,13 @@ import UpgradeToPremium from "src/components/Dentist/Account/UpgradeToPremium ";
 
 import ApiManager from "src/services/ApiManager";
 import {CircularProgress} from "@material-ui/core";
+import {GetServerSideProps} from "next";
+import {getDentist} from "src/graphql/queries";
 
-const Account = () => {
+const Account = ({dentist}: any) => {
   const router = useRouter()
 
-  const [currentDentist, setCurrentDentist]: any = useState()
+  const [currentDentist, setCurrentDentist]: any = useState(dentist)
   const [currentAvatar, setCurrentAvatar]: any = useState()
   const [signedInUser, setSignedInUser]: any = useState()
   const [currentUser, setCurrentUser]: any = useState()
@@ -28,10 +29,10 @@ const Account = () => {
     if (router.query.slug !== undefined) {
       const {slug} = router.query
       setRoute(slug[0])
-      getDentist(slug[0]);
+      authListener();
+      downloadAvatar(currentDentist);
     }
   }, [router])
-
 
   const authListener = async () => {
     const signedInUser = ApiManager.authListener()
@@ -40,19 +41,6 @@ const Account = () => {
       const currentUser = await Auth.currentAuthenticatedUser();
       setCurrentUser(currentUser)
       setSignedInUser(true)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  const getDentist = async (id: string) => {
-    try {
-      await ApiManager.getDentist(route ? route : id)
-      .then(currentDentist => {
-        setCurrentDentist(currentDentist);
-        authListener();
-        downloadAvatar(currentDentist);
-      })
     } catch (e) {
       console.log(e)
     }
@@ -75,11 +63,12 @@ const Account = () => {
   }
 
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+
   return (
     <>
       {currentDentist &&
       <Layout title="Account" active={'activeAccount'} currentAvatar={currentAvatar}>
-        <div className="main-profile bg-white ">
+          <div className="main-profile bg-white ">
               <div className="profile-box-form">
                   <div className="form-info-block">
                       <div>
@@ -89,7 +78,7 @@ const Account = () => {
                   </div>
                   <div className="box-2-box">
                     {currentDentist &&
-                    <AccountInformation currentDentist={currentDentist} getDentist={getDentist}/>}
+                    <AccountInformation currentDentist={currentDentist} />}
                     {currentDentist && <ResetPassword/>}
                   </div>
               </div>
@@ -106,7 +95,7 @@ const Account = () => {
                     {currentDentist.hasPaidPlan &&
                     <Mysubscription currentDentist={currentDentist}/>}
                     {currentDentist &&
-                    <BillingInformation currentDentist={currentDentist} getDentist={getDentist}/>}
+                    <BillingInformation currentDentist={currentDentist} />}
                   </div>
               </div>
           </div>
@@ -115,4 +104,29 @@ const Account = () => {
   )
 }
 
+// @ts-ignore
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const {API} = withSSRContext(context)
+  let dentistData;
+  try {
+    if (context.params.slug[0] === null) return
+    dentistData = await API.graphql({
+      query: getDentist,
+      variables: {
+        id: context.params.slug[0]
+      },
+      authMode: "AWS_IAM",
+    });
+  } catch (e) {
+    console.log(e)
+  }
+  return {
+    props: {
+      dentist: dentistData ? dentistData.data.getDentist : null
+    }
+  }
+}
+
 export default Account;
+
+

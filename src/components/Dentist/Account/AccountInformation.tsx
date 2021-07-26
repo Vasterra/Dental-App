@@ -7,11 +7,10 @@ import ApiManager from "src/services/ApiManager";
 import {Router} from "next/router";
 
 type Props = {
-  currentDentist: any,
-  getDentist: Function,
+  currentDentist: any
 }
 
-const AccountInformation: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
+const AccountInformation: React.FunctionComponent<Props> = ({currentDentist}) => {
   const [onCheck, setOnCheck] = useState()
 
   const onRemoveAccount = () => {

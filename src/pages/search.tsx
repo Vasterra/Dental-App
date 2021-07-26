@@ -1,6 +1,5 @@
 import {API} from "aws-amplify";
-import React, {Component, useEffect, useState} from "react";
-import styled from "styled-components";
+import React, {useEffect, useState} from "react";
 import {CircularProgress} from "@material-ui/core";
 
 import Layout from "src/components/Layout";
@@ -12,18 +11,18 @@ import Footer from "src/components/Footer";
 
 import ApiManager from "src/services/ApiManager";
 import {switcher} from "src/utils/switcher";
-import {getDentist, listDentists, listServiceForDentals,} from "src/graphql/queries";
+import {getDentist,} from "src/graphql/queries";
 import {convertCityCoords} from "src/utils/search/converCityCoords";
-import { WrapperFlex } from "src/styles/Main.module";
+import {WrapperFlex} from "src/styles/Main.module";
 
-const Search = () => {
+const Search = ({dentistsData, listServiceForDentals}: any) => {
 
   const [currentDentist, setCurrentDentist]: any = useState()
-  const [dentists, setDentists]: any = useState()
+  const [dentists, setDentists]: any = useState(dentistsData)
   const [oldDentists, setOldDentists]: any = useState()
   const [services, setServices]: any = useState()
   const [service, setService]: any = useState()
-  const [servicesForSearch, setServicesForSearch]: any = useState()
+  const [servicesForSearch, setServicesForSearch]: any = useState(listServiceForDentals)
   const [ipCoords, setIpCoords]: any = useState()
   const [searchDentists, setSearchDentists]: any = useState()
   const [valueSlider, setValueSlider]: any = useState(50)
@@ -38,16 +37,26 @@ const Search = () => {
         setIpCoords(result)
         if (!searchCoords) {
           setSearchCoords(result)
-          getListDentists(null, result);
-          getListServiceForDentals();
+          const findCoordinatesDent: any = findCoordinatesDentists(searchCoords ? searchCoords : result, valueSlider, dentistsData)
+          if (findCoordinatesDent.length > 0) {
+            setTimeout(() => {
+              setSearchDentists(findCoordinatesDent)
+            }, 1000)
+          } else {
+            setSearchDentists(null)
+          }
+          setDentists(dentistsData)
+          setOldDentists(dentistsData)
         }
       })
     }
   }, [])
 
   useEffect(() => {
-    if(searchDentists) {
+    if (searchDentists) {
       switcher();
+    } else {
+      return
     }
   }, [searchDentists])
 
@@ -62,15 +71,6 @@ const Search = () => {
       setDentists(listDentist)
       setOldDentists(listDentist)
     });
-  }
-
-  const getListServiceForDentals = async () => {
-    const {data}: any = await API.graphql({
-      query: listServiceForDentals,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    setServicesForSearch(data.listServiceForDentals.items)
   }
 
   const setFindDentist = (findDentist: any) => {
@@ -201,8 +201,9 @@ const Search = () => {
     })
     return distanceDent
   }
-  console.log(searchDentists)
+
   if (!dentists) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+
   return (
     <Layout title="Search page">
       <Header/>
@@ -259,7 +260,7 @@ const Search = () => {
         </div>
         <div className="index-box-to-box">
           <div className="main-index  index-main-box left-size">
-            { !searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+            {!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
             {searchDentists &&
             <GoogleMapReactComponent
                 dentists={searchDentists}
@@ -270,9 +271,9 @@ const Search = () => {
             />}
           </div>
           <div className="main-index index-main-box right-size">
-            { !searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+            {!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
             <div className="index-gallery-box">
-              { searchDentists &&
+              {searchDentists &&
               searchDentists.map((dentist: any, key: any) => {
                 return (
                   <CardDentistComponent
@@ -281,8 +282,7 @@ const Search = () => {
                     setCurrentDentist={setFunctCurrentDentist}
                   />
                 )
-              })
-              }
+              })}
             </div>
           </div>
         </div>

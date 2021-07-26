@@ -6,11 +6,10 @@ import StripeManager from "src/services/StripeManager";
 import {updateDentist} from "src//graphql/mutations";
 
 type Props = {
-  currentDentist: any,
-  getDentist: Function,
+  currentDentist: any
 }
 
-const BillingInformation: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
+const BillingInformation: React.FunctionComponent<Props> = ({currentDentist}) => {
 
   // Include these hooks:
   const stripe = useStripe();

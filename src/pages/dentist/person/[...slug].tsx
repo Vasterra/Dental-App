@@ -1,21 +1,21 @@
-import React, {Component, useEffect, useState} from "react";
-import {API, Auth, Hub, Storage} from "aws-amplify";
-import {useRouter, withRouter} from "next/router";
+import React, {useEffect, useState} from "react";
+import {API, Auth, Storage, withSSRContext} from "aws-amplify";
+import {useRouter} from "next/router";
 import ApiManager from "src/services/ApiManager";
 import ProfileAccountFree from "src/components/Dentist/PersonPage/profileAccountFree";
 import ProfileAccountSubscription from "src/components/Dentist/PersonPage/profileAccountSubscription";
 import Header from "src/components/Header";
-import {listImages, listServiceForDentals} from "src/graphql/queries";
+import {getDentist, listImages, listServiceForDentals} from "src/graphql/queries";
 import {CircularProgress} from "@material-ui/core";
 import Error from "next/error";
 
 import {WrapperFlex} from "src/styles/Main.module"
-import Layout from "src/components/Layout";
+import {GetServerSideProps} from "next";
 
-const Person = () => {
+const Person = ({dentist}: any) => {
   const router = useRouter()
 
-  const [currentDentist, setCurrentDentist]: any = useState()
+  const [currentDentist, setCurrentDentist]: any = useState(dentist)
   const [currentAvatar, setCurrentAvatar]: any = useState()
   const [signedInUser, setSignedInUser]: any = useState()
   const [currentUser, setCurrentUser]: any = useState()
@@ -29,8 +29,9 @@ const Person = () => {
     if (router.query.slug !== undefined) {
       const {slug} = router.query
       setRoute(slug[0])
-      getDentist(slug[0]);
       authListener()
+      getListImages()
+      getListServiceForDentals();
     }
   }, [router])
 
@@ -177,4 +178,26 @@ const Person = () => {
 }
 
 // @ts-ignore
-export default withRouter(Person);
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const {API} = withSSRContext(context)
+  let dentistData
+  try {
+    if (context.params.slug[0] === null) return
+    dentistData = await API.graphql({
+      query: getDentist,
+      variables: {
+        id: context.params.slug[0]
+      },
+      authMode: "AWS_IAM",
+    });
+  } catch (e) {
+    console.log(e)
+  }
+  return {
+    props: {
+      dentist: dentistData ? dentistData.data.getDentist : null
+    }
+  }
+}
+
+export default Person;
