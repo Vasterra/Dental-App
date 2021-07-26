@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ReactImageProcess from 'react-image-process';
 
 const AddWatermark = () => {
 
@@ -40,7 +41,7 @@ const AddWatermark = () => {
   const uploadWatermark = () => {
 
   }
-
+  console.log(watermarkImg)
   return (
     <>
       <div>
@@ -48,7 +49,17 @@ const AddWatermark = () => {
           <label className="form-profile-label ">Cover</label>
         </p>
         <p className="profile-photo-box">
-          { image && <img className="image" src={image} alt=""/> }
+          <ReactImageProcess
+            mode="waterMark"
+            waterMarkType="image"
+            waterMark={watermarkImg}
+            width={60}
+            height={60}
+            opacity={0.7}
+            coordinate={[430, 200]}
+          >
+            { image && <img className="image" src={image} alt=""/> }
+          </ReactImageProcess>
         </p>
         <p className="row-content">
           <label className="button-green-file">Upload</label>

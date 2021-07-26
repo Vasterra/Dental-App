@@ -38,6 +38,7 @@
     "react-google-maps": "^9.4.5",
     "react-grid-gallery": "^0.5.5",
     "react-image-crop": "8.6.4",
+    "react-image-process": "^0.2.4",
     "react-loader-spinner": "^4.0.0",
     "react-markdown": "^5.0.3",
     "react-promise-tracker": "^2.1.0",

@@ -260,7 +260,7 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
         </div>
         <div className="index-box-to-box">
           <div className="main-index  index-main-box left-size">
-            {!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+            {/*{!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}*/}
             {searchDentists &&
             <GoogleMapReactComponent
                 dentists={searchDentists}
@@ -271,7 +271,7 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
             />}
           </div>
           <div className="main-index index-main-box right-size">
-            {!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+            {/*{!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}*/}
             <div className="index-gallery-box">
               {searchDentists &&
               searchDentists.map((dentist: any, key: any) => {
