@@ -14,10 +14,10 @@ import {generateRandomPoints} from "src/utils/generateUsers"
 import {WrapperFlex} from "src/styles/Main.module"
 import {GetServerSideProps} from "next";
 
-const Person = ({dentist}: any) => {
+const Person = ({dentistData}: any) => {
   const router = useRouter()
 
-  const [currentDentist, setCurrentDentist]: any = useState(dentist)
+  const [currentDentist, setCurrentDentist]: any = useState(dentistData)
   const [currentAvatar, setCurrentAvatar]: any = useState()
   const [signedInUser, setSignedInUser]: any = useState()
   const [currentUser, setCurrentUser]: any = useState()
@@ -201,7 +201,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       // dentist: dentistData ? dentistData[0] : null
-      dentist: dentistData ? dentistData.data.getDentist : null
+      dentistData: dentistData ? dentistData.data.getDentist : null
     }
   }
 }

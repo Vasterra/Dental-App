@@ -44,10 +44,10 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDent
             <div className="index-leftmenu-profile-information">
               <img className="index-leftmenu-profile-photo" src={currentAvatar} alt=""/>
               <div>
-                <p className="form-login-title green px20 mt-30 row-content">
-                  <p className="form-login-title green px20 mt-30">{fullName}</p>
+                <div className="form-login-title green px20 mt-30 row-content">
+                  <p className="form-login-title green px20">{fullName}</p>
                   <img className="index-gallery-image-watermark-img relative-img" src="../../../../images/check_circle.svg" alt="check" />
-                </p>
+                </div>
                 <p className="form-login-subtitle gray px12 m-none">{currentDentist.qualifications}</p>
                 <p className="form-login-subtitle gray px12 m-none">GDC No: </p>
               </div>
@@ -71,22 +71,29 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDent
                   <span> <strong>Website:</strong>{currentDentist.website}</span>
                 </p>
                 <p>Locations</p>
-                <p>
-                  <span><strong>{currentDentist.city}</strong>{currentDentist.adress}</span>
-                </p>
+                <div className="flex-wrapper">
+                  {
+                    currentDentist.locations.items.map((el: any, key: any) => {
+                      return (
+                        <p><strong>{el.city}</strong> {el.address} - {el.postCode}</p>
+                      )
+                    })
+                  }
+                </div>
               </div>
             </div>
           </div>
-
           <div className="index-box-to-box">
             <div className="main-index index-main-box relative">
               <select className="gallery-select arrows bg-gray" name="services" id="services" onChange={filterImagesByService}>
                 <option value="All Service" selected>All Service</option>
-                {services && services.map((item: any, key: any) => (
-                  <option key={key} value={item.name}>{item.name}</option>
-                ))}
+                { currentDentist.services.items.map((el: any, key: any) => {
+                  return (
+                    <option key={key} value={el.name}>{el.name}</option>
+                  )
+                })}
               </select>
-              {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+              { !images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex> }
               {// @ts-ignore
                 images && <GalleryPerson images={images}/>
               }

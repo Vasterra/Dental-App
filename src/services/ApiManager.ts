@@ -25,7 +25,7 @@ class ApiManager {
   public static async signOut() {
     try {
       await Auth.signOut();
-      await Router.replace('/')
+      await Router.push('/')
     } catch (error) {
       console.log('error signing out: ', error);
     }

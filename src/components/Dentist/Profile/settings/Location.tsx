@@ -36,6 +36,7 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
     postCode: '',
   });
   const [location, setLocation] = useState([]);
+  const [isDisabled, setIsDsabled] = useState(false);
 
   const disabled = location.length === 0;
 
@@ -77,6 +78,7 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
                 validateOnBlur={true}
                 validateOnChange={true}
                 onSubmit={async (data: any, {setErrors}) => {
+                  setIsDsabled(true)
                   try {
                     await API.graphql({
                       query: createLocation,
@@ -95,6 +97,7 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
                     setErrors(err);
                   }
                   getDentist();
+                  setIsDsabled(false)
                 }}
                 initialValues={dataLocation}
               >
@@ -132,7 +135,7 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
                     </p>
                     <p className="row-content">
                       <span className="input-span"></span>
-                      <button className="button-green" type="submit">Confirm</button>
+                      <button className="button-green" disabled={isDisabled} type="submit">Confirm</button>
                     </p>
                   </form>
                 )}
@@ -174,23 +177,15 @@ const Location: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
             <p className="form-profile-label">
               <label className="form-profile-label">Locations</label>
             </p>
-            <p className="form-login-input">
-              <input type="text" name="adress1" value="" id="adress1"
-                     placeholder="Cambridge: 1 Dental Row, CB1 2AB" disabled />
-                <img className="form-login-input-close" src="../images/close.svg" />
-            </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" disabled />
-            </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" disabled />
-            </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" disabled />
-            </p>
-            <p className="form-profile-empty-input">
-              <input type="text" name="empty" value="" id="empty" placeholder="" disabled />
-            </p>
+            {
+              currentDentist.locations.items.map((el: any, key: any) => {
+                return (
+                  <p className="form-login-input" key={key}>
+                    <input value={el.city + ' ' + el.address + ' ' + el.postCode}/>
+                  </p>
+                )
+              })
+            }
           </div>
         </div> }
       </div>

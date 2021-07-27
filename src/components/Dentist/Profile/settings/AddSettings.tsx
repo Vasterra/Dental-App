@@ -120,9 +120,9 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                         props={props}
                       />
                     </div>
-                    {/*<p className="form-login-buttons">*/}
-                    {/*  <button className="button-green" type="submit">Confirm</button>*/}
-                    {/*</p>*/}
+                    <p className="form-login-buttons">
+                      <button className="button-green" type="submit">Confirm</button>
+                    </p>
                   </div>
                   {!currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
                       <div>

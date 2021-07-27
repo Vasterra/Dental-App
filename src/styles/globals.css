@@ -10,6 +10,11 @@
 @tailwind utilities;
 @tailwind screens;
 
+.flex-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .ReactCrop__image {
   max-height: 316px;
 }
@@ -739,7 +744,7 @@ input[type=file]::-webkit-file-upload-button {
   max-width: 100%;
   border: none;
   outline: none;
-  padding: 9px 11.4px 10.7px 17px;
+  padding: 9px 30px 10.7px 17px;
   background-color: #ffffff;
 }
 
