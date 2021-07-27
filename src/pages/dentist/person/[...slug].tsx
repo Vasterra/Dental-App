@@ -186,22 +186,22 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   let dentistData
   try {
     if (context.params.slug[0] === null) return
-    var randomGeoPoints: any = generateRandomPoints({'lat':55.85, 'lng':37.71}, 2000, 40);
-    dentistData = randomGeoPoints.filter((item: { id: any; }) => item.id == context.params.slug[0])
-    // dentistData = await API.graphql({
-    //   query: getDentist,
-    //   variables: {
-    //     id: context.params.slug[0]
-    //   },
-    //   authMode: "AWS_IAM",
-    // });
+    // var randomGeoPoints: any = generateRandomPoints({'lat':55.85, 'lng':37.71}, 2000, 40);
+    // dentistData = randomGeoPoints.filter((item: { id: any; }) => item.id == context.params.slug[0])
+    dentistData = await API.graphql({
+      query: getDentist,
+      variables: {
+        id: context.params.slug[0]
+      },
+      authMode: "AWS_IAM",
+    });
   } catch (e) {
     console.log(e)
   }
   return {
     props: {
-      dentist: dentistData ? dentistData[0] : null
-      // dentist: dentistData ? dentistData.data.getDentist : null
+      // dentist: dentistData ? dentistData[0] : null
+      dentist: dentistData ? dentistData.data.getDentist : null
     }
   }
 }

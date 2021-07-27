@@ -6,7 +6,6 @@ import { listDentists, listServiceForDentals } from "src/graphql/queries";
 import Search from "./search";
 import {generateRandomPoints} from "src/utils/generateUsers"
 const IndexPage = ({dentistsData, listServiceForDentals}: any) => {
-  console.log('dentistsData', dentistsData)
   return (
     <Search dentistsData={dentistsData} listServiceForDentals={listServiceForDentals}/>
   );
@@ -18,15 +17,13 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   let listServiceForDentalsData;
 
   try {
-    // dentistsData = await API.graphql({
-    //   query: listDentists,
-    //   // @ts-ignore
-    //   authMode: "AWS_IAM",
-    // });
+    dentistsData = await API.graphql({
+      query: listDentists,
+      // @ts-ignore
+      authMode: "AWS_IAM",
+    });
 
-
-
-    var randomGeoPoints: any = generateRandomPoints({'lat':55.85, 'lng':37.71}, 2000, 40);
+    // var randomGeoPoints: any = generateRandomPoints({'lat':55.85, 'lng':37.71}, 2000, 40);
 
     listServiceForDentalsData = await API.graphql({
       query: listServiceForDentals,
@@ -39,7 +36,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   console.log(dentistsData)
   return {
     props: {
-      dentistsData: randomGeoPoints ? randomGeoPoints : null,
+      // dentistsData: randomGeoPoints ? randomGeoPoints : null,
+      dentistsData: dentistsData ? dentistsData.data.listDentists.items : null,
       listServiceForDentals: listServiceForDentalsData ? listServiceForDentalsData.data.listServiceForDentals.items : null
     }
   }

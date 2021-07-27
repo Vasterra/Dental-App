@@ -48,8 +48,8 @@ class Header extends React.Component {
       <AppBar position="fixed" style={{background: '#095c5c'}}>
         <Toolbar style={{justifyContent: 'space-between', display: 'flex'}}>
           <div style={{alignItems: 'center', display: 'flex'}}>
-            <IconButton edge="start" color="inherit" aria-label="menu">
-              {this.state.signedInUser && <PopupState variant="popover" popupId="demo-popup-menu">
+            {this.state.signedInUser &&<IconButton edge="start" color="inherit" aria-label="menu">
+               <PopupState variant="popover" popupId="demo-popup-menu">
                 {(popupState) => (
                   <>
                     <MenuIcon {...bindTrigger(popupState)}/>
@@ -66,8 +66,8 @@ class Header extends React.Component {
                     </Menu>
                   </>
                 )}
-              </PopupState>}
-            </IconButton>
+              </PopupState>
+            </IconButton>}
           </div>
           <Link href="/">
             <p className="link-actve">
