@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   } catch (e) {
     console.log(e)
   }
-  console.log(dentistsData)
+
   return {
     props: {
       // dentistsData: randomGeoPoints ? randomGeoPoints : null,

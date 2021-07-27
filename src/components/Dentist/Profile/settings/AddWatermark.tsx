@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import ReactImageProcess from 'react-image-process';
 
 const AddWatermark = () => {
@@ -38,46 +38,40 @@ const AddWatermark = () => {
     reader.readAsDataURL(files[0]);
   };
 
-  const uploadWatermark = () => {
-
-  }
   console.log(watermarkImg)
   return (
     <>
-      <div>
-        <p className="form-profile-label">
-          <label className="form-profile-label ">Cover</label>
-        </p>
-        <p className="profile-photo-box">
-          <ReactImageProcess
-            mode="waterMark"
-            waterMarkType="image"
-            waterMark={watermarkImg}
-            width={60}
-            height={60}
-            opacity={0.7}
-            coordinate={[430, 200]}
-          >
-            { image && <img className="image" src={image} alt=""/> }
-          </ReactImageProcess>
-        </p>
-        <p className="row-content">
-          <label className="button-green-file">Upload</label>
-          <input type="file" className="input-file" name="cover_image" id="cover_image" onChange={addImage} />
-        </p>
-      </div>
       <div className="mt-30">
         <p className="form-profile-label">
-          <label className="form-profile-label ">Watermark</label>
+          <label className="form-profile-label">Cover</label>
         </p>
         <p className="profile-photo-box">
-          { watermarkImg && <img className="image" src={watermarkImg} alt=""/> }
+          {image && <img className="image" src={image} alt=""/>}
         </p>
         <p className="row-content">
           <label className="button-green-file">Upload</label>
-          <input type="file" className="input-file" name="watermark" id="watermark" onChange={addWatermark} />
+          <input type="file" className="input-file" name="watermark" id="watermark" onChange={addImage}/>
         </p>
-        <button onClick={uploadWatermark}>dawferfre</button>
+      </div>
+      <div>
+        <p className="form-profile-label">
+          <label className="form-profile-label">Watermark</label>
+        </p>
+        <p className="profile-photo-box">
+          {watermarkImg && <ReactImageProcess
+              mode="waterMark"
+              waterMarkType="image"
+              waterMark={watermarkImg}
+              coordinate={[10, 10]}
+          >
+              <img className="image" src={image} alt=""/>
+          </ReactImageProcess>
+          }
+        </p>
+        <p className="row-content">
+          <label className="button-green-file">Upload</label>
+          <input type="file" className="input-file" name="cover_image" id="cover_image" onChange={addWatermark}/>
+        </p>
       </div>
     </>
   )
