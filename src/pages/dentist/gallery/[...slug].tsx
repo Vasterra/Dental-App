@@ -309,20 +309,22 @@ const GalleryPage = ({dentist}: any) => {
           return {
             id: e.id,
             dentistId: e.dentistId,
-            thumbnail: f,
             url: f,
-            imgUrl: amazon[0] + 'amazonaws.com/public/' + files[key].key,
+            original: amazon[0] + 'amazonaws.com/public/' + files[key].key,
+            thumbnail: amazon[0] + 'amazonaws.com/public/' + files[key].key,
             name: files[key].key,
             thumbnailWidth: 320,
             thumbnailHeight: 212,
             isSelected: false,
             titleBefore: e.titleBefore,
+            originalAlt: e.titleBefore,
             tagsBefore: e.titleBefore,
             titleAfter: e.titleAfter,
             tagsAfter: e.tagsAfter,
             service: e.service,
             nameBefore: e.nameBefore,
-            nameAfter: e.nameAfter
+            nameAfter: e.nameAfter,
+            bulletOnClick: (item: any, itemIndex: any, currentIndex: any) => {return {item, itemIndex, currentIndex}}
           }
         })
       })
@@ -443,9 +445,13 @@ const GalleryPage = ({dentist}: any) => {
           <select className="gallery-select arrows bg-gray" name="services" id="services"
                   onChange={filterImagesByService}>
             <option value="All Service" selected>All Service</option>
-            {services && services.map((item: any, key: any) => (
-              <option key={key} value={item.name}>{item.name}</option>
-            ))}
+            {
+              currentDentist.services.items.map((el: any, key: any) => {
+                return (
+                  <option key={key} value={el.name}>{el.name}</option>
+                )
+              })
+            }
           </select>
         </div> }
         {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}

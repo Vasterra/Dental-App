@@ -5,6 +5,8 @@ import {API, Storage} from "aws-amplify";
 import 'react-image-crop/dist/ReactCrop.css';
 import SimpleImageSlider from "react-simple-image-slider";
 import {deleteImage} from 'src/graphql/mutations';
+// @ts-ignore
+import ImageGallery from 'react-image-gallery';
 
 type Props = {
   images: any,
@@ -90,20 +92,28 @@ const Gallery: React.FunctionComponent = ({
 
   return (
     <div className="gallery-image-box" key={key}>
-      <SimpleImageSlider
-        width={333}
-        height={333}
-        images={images}
-        showBullets={sliderOptions.showBullets}
-        showNavs={sliderOptions.showNavs}
-        startIndex={0}
-        useGPURender={sliderOptions.useGPURender}
-        navStyle={sliderOptions.navStyle}
-        navSize={sliderOptions.navSize}
-        navMargin={sliderOptions.navMargin}
-        slideDuration={sliderOptions.duration}
-        onClickBullets={onClickBullets}
+      <ImageGallery
+        items={images}
+        showNav={false}
+        showThumbnails={false}
+        showPlayButton={false}
+        showBullets={true}
+        onSlide={onClickBullets}
       />
+      {/*<SimpleImageSlider*/}
+      {/*  width={333}*/}
+      {/*  height={333}*/}
+      {/*  images={images}*/}
+      {/*  showBullets={sliderOptions.showBullets}*/}
+      {/*  showNavs={sliderOptions.showNavs}*/}
+      {/*  startIndex={0}*/}
+      {/*  useGPURender={sliderOptions.useGPURender}*/}
+      {/*  navStyle={sliderOptions.navStyle}*/}
+      {/*  navSize={sliderOptions.navSize}*/}
+      {/*  navMargin={sliderOptions.navMargin}*/}
+      {/*  slideDuration={sliderOptions.duration}*/}
+      {/*  onClickBullets={onClickBullets}*/}
+      {/*/>*/}
       <p className="gallery-image-watermark">Watermark</p>
       <div className="gallery-image-description">
         <p className="gallery-image-title">{title}</p>

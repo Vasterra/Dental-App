@@ -3,6 +3,8 @@ import React, {useCallback, useState} from 'react';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import SimpleImageSlider from "react-simple-image-slider";
+// @ts-ignore
+import ImageGallery from 'react-image-gallery';
 
 type Props = {
   images: any,
@@ -52,21 +54,28 @@ const Gallery: React.FunctionComponent = ({images}: any) => {
             images.map((val: any[], key: any) => {
               return (
                 <div className="index-dentist-gallery-image-box" key={key}>
-                  <SimpleImageSlider
-                    width={247}
-                    height={247}
-                    images={val}
-                    showBullets={sliderOptions.showBullets}
-                    showNavs={sliderOptions.showNavs}
-                    startIndex={0}
-                    useGPURender={sliderOptions.useGPURender}
-                    navStyle={sliderOptions.navStyle}
-                    navSize={sliderOptions.navSize}
-                    navMargin={sliderOptions.navMargin}
-                    slideDuration={sliderOptions.duration}
-                    onClickBullets={onClickBullets}
-                    onClick={onClick}
+                  <ImageGallery
+                    items={val}
+                    showNav={false}
+                    showThumbnails={false}
+                    showPlayButton={false}
+                    showBullets={true}
                   />
+                  {/*<SimpleImageSlider*/}
+                  {/*  width={247}*/}
+                  {/*  height={247}*/}
+                  {/*  images={val}*/}
+                  {/*  showBullets={sliderOptions.showBullets}*/}
+                  {/*  showNavs={sliderOptions.showNavs}*/}
+                  {/*  startIndex={0}*/}
+                  {/*  useGPURender={sliderOptions.useGPURender}*/}
+                  {/*  navStyle={sliderOptions.navStyle}*/}
+                  {/*  navSize={sliderOptions.navSize}*/}
+                  {/*  navMargin={sliderOptions.navMargin}*/}
+                  {/*  slideDuration={sliderOptions.duration}*/}
+                  {/*  onClickBullets={onClickBullets}*/}
+                  {/*  onClick={onClick}*/}
+                  {/*/>*/}
                 </div>
               )
             })
