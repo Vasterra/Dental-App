@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 // @ts-ignore
 import GoogleMapReact from 'google-map-react';
+import {customDistanceToMouse} from './helpersMap/custom_distance.js';
 // @ts-ignore
 import {geolocated, GeolocatedProps} from "react-geolocated";
 
@@ -42,11 +43,16 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
     //     lng: Number(lng)
     //   }
     // }
+    const onChildClick = (e: any) => {
+      console.log(e)
+    }
     return (
       <GoogleMapReact
         bootstrapURLKeys={{key: 'AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY'}}
         center={centerMe}
         zoom={10}
+        distanceToMouse={customDistanceToMouse}
+        onChildClick={onChildClick}
       >
         <MeMarket
           // @ts-ignore
