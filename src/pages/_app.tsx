@@ -4,7 +4,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import {AppProps} from 'next/app';
 
 import '../styles/globals.css';
-import config from '../../aws-exports'
+import config from 'src/aws-exports'
 import Amplify from 'aws-amplify';
 
 Amplify.configure({...config, ssr: true});
