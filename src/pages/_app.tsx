@@ -1,24 +1,37 @@
-import App from "next/app";
-import {Elements} from "@stripe/react-stripe-js";
-import {loadStripe} from '@stripe/stripe-js';
-import 'src/styles/globals.css'
+import Head from 'next/head';
+import React from 'react';
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {AppProps} from 'next/app';
+import 'src/styles/globals.css';
 import "src/styles/graph.css"
-import 'src/configureAmplify'
-import {QueryClient, QueryClientProvider} from "react-query";
+import config from 'src/aws-exports'
+import Amplify from 'aws-amplify';
 
-class DentalApp extends App<any> {
-  render() {
-    const {Component, pageProps,} = this.props;
-    const queryClient = new QueryClient()
-    const stripePromise = loadStripe("pk_test_51J15W0B5Yj7B7VjGcyWF6fMvy3UkvUUS5l6YJ3LQqLGFGZgK7UwNyVHLMMVi2HgDweAsAUxkhuukQBjWlTshTPmu00NmYIp1nd");
-    return (
-        <QueryClientProvider client={queryClient}>
-          <Elements stripe={stripePromise}>
-            <Component {...pageProps} />
-          </Elements>
-        </QueryClientProvider>
-    );
-  }
+Amplify.configure({...config, ssr: true});
+
+function DentalApp({Component, pageProps}: AppProps) {
+  const queryClient = new QueryClient();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+
+      <Head>
+        <title>Dental App</title>
+        <link rel="stylesheet" href="/favicon.ico"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com"/>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap"
+        />
+        <meta charSet="utf-8"/>
+        <meta
+          name="viewport"
+          content="initial-scale=1.0, width=device-width"
+        />
+      </Head>
+      <Component {...pageProps} />
+    </QueryClientProvider>
+  );
 }
 
 export default DentalApp;
