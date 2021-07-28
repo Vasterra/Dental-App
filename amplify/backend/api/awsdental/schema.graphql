@@ -7,6 +7,7 @@ type Dentist
   qualifications: String
   bio: String
   website: String
+  address: String
   city: String
   street: String
   postIndex: String
@@ -14,6 +15,9 @@ type Dentist
   lat: String
   lng: String
   registered: Boolean
+#  customerID: String
+#  paymentMethodID: String
+#  subscriptionID: String
   hasPaidPlan: Boolean
   services: [Service] @connection(keyName: "byDentist", fields: ["id"])
   locations: [Location] @connection(keyName: "byDentist", fields: ["id"])
