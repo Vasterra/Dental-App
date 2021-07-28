@@ -11,9 +11,26 @@
 @tailwind utilities;
 @tailwind screens;
 
-.flex-wrapper {
+.flex-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.block-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.list-dentist {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1em;
+  padding: 20px;
 }
 
 .ReactCrop__image {
@@ -367,7 +384,7 @@ img {
   color: var(--color-green);
   /*margin: 20px 20px 0 0;*/
   max-width: 180px;
-  padding: 13px 30px;
+  padding: 13px 20px;
   box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
   font-family: PT Sans;
   font-size: 9px;
@@ -400,7 +417,7 @@ img {
   margin-right: 10px;
   /*margin-left: 10px;*/
   max-width: 180px;
-  padding: 13px 30px;
+  padding: 13px 20px;
   box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
   font-family: PT Sans;
   font-size: 9px;
@@ -693,8 +710,11 @@ input[type=file]::-webkit-file-upload-button {
 }
 
 .form-login {
-  width: 450px;
-  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
   padding: 20px;
 }
 
