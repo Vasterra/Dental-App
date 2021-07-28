@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap');
-@import '../public/fonts/SFPro/stylesheet.css';
+@import '../../public/fonts/SFPro/stylesheet.css';
 
 :root {
   --color-green: #095c5c;
@@ -852,7 +852,7 @@ select {
 }
 
 select.arrows {
-  background-image: url('../public/images/down-select.png');
+  background-image: url('../../public/images/down-select.png');
   background-position: calc(100% - .5rem), 100% 0;
   background-size: 1em 1em;
   background-repeat: no-repeat;
@@ -1203,7 +1203,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 .select-area::after {
-  content: url('../public/images/little-arrow-bottom.svg');
+  content: url('../../public/images/little-arrow-bottom.svg');
   position: absolute;
   margin-top: -3px;
 
@@ -1248,7 +1248,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 .view-profile::before {
-  content: url('../public/images/user.svg');
+  content: url('../../public/images/user.svg');
   position: absolute;
   margin-left: -25px;
   margin-top: -4px;
@@ -1259,21 +1259,8 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 .stripes {
-  position: relative;
   margin-top: 30px;
-  /*display: grid;*/
-  /*grid-template-columns: repeat(14,88px);*/
-  /*justify-items: center;*/
   display: flex;
-  justify-content: flex-start;
-}
-
-.stripes div {
-  margin: 0 44px;
-}
-
-.stripes div:nth-child(1) {
-  margin: 0;
 }
 
 .vertical-stripe {
@@ -1315,7 +1302,8 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 .years-block {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  width: 12%;
 }
 
 .year {
@@ -1359,7 +1347,6 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .years-block > .circle-gray {
   margin: 15px 0 7px 0;
-  align-self: flex-start;
 }
 
 .row-wrap {
@@ -1408,7 +1395,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .gallery-select-arrow {
   position: absolute;
-  content: url('../public/images/down-select.png');
+  content: url('../../public/images/down-select.png');
   margin-left: 240px;
   margin-top: 10px;
 
@@ -1911,7 +1898,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 .index-select.arrows {
-  background-image: url('../public/images/arrow_drop_down_black_36dp.svg');
+  background-image: url('../../public/images/arrow_drop_down_black_36dp.svg');
   background-position: 100%, 100% 0;
   background-size: 2.5em 2.5em;
   background-repeat: no-repeat;
@@ -2237,7 +2224,6 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   }
 
   .double-blocks-5 {
-    grid-gap: 20px;
     grid-template-columns: 1fr 1fr 1fr;
   }
 

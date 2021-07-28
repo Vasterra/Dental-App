@@ -1,8 +1,9 @@
 import App from "next/app";
 import {Elements} from "@stripe/react-stripe-js";
 import {loadStripe} from '@stripe/stripe-js';
-import '../styles/globals.css'
-import '../configureAmplify'
+import 'src/styles/globals.css'
+import "src/styles/graph.css"
+import 'src/configureAmplify'
 import {QueryClient, QueryClientProvider} from "react-query";
 
 class DentalApp extends App<any> {

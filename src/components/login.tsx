@@ -1,7 +1,7 @@
 import React from "react";
 
 import { AmplifyAuthenticator } from '@aws-amplify/ui-react';
-import Dashboard from '../pages/admin/dashboard';
+import Dashboard from 'src/pages/admin/dashboard';
 
 const Login = ({}) => {
     return (

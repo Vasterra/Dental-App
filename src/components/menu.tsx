@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {AmplifyAuthenticator} from '@aws-amplify/ui-react';
 
-import ApiManager from "services/ApiManager";
-import Dashboard from '../pages/admin/dashboard';
+import ApiManager from "src/services/ApiManager";
+import Dashboard from 'src/pages/admin/dashboard';
 
 class Login extends Component<{ active: string }> {
   render() {

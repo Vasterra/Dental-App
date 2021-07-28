@@ -1,11 +1,11 @@
 import React, {Component, useEffect, useState} from 'react';
-import Menu from "components/menu";
-import ApiManager from 'services/ApiManager';
+import Menu from "src/components/menu";
+import ApiManager from 'src/services/ApiManager';
 import Error from "next/error"
 import {motion} from "framer-motion"
 
 const AdminUsers = () => {
-  const [dentists, setDentists] = useState([]);
+  const [dentists, setDentists]: any = useState();
   const [userInfoShow, sestUserInfoShow] = useState(false);
 
   const variants = {
@@ -29,9 +29,18 @@ const AdminUsers = () => {
   };
 
   const clickRowOpen = (id: number) => {
+    console.log(id)
     const allRow = document.getElementsByClassName('user-info');
     // @ts-ignore
+    console.log(allRow)
+
+    // @ts-ignore
     if (allRow[id].style.display === 'none') {
+      // @ts-ignore
+      for (let i = 0; i < allRow.length; i++) {
+        // @ts-ignore
+        allRow[i].style.display = 'none'
+      }
       // @ts-ignore
       allRow[id].style.display = 'block';
       sestUserInfoShow(true);
@@ -82,55 +91,48 @@ const AdminUsers = () => {
             </div>
           </div>
 
-          {/*{*/}
-          {/*  this.state.dentists.map((item: any, key: any) => {*/}
-          {/*    return (*/}
-
-          <div className='user-block'>
-            <div className='user-list user-list-text bg-white user-data'>
-              {/*<p>"{item.firstName}"</p>*/}
-              {/*<p>'{item.createdAt}'</p>*/}
-              <p>fdsfsd</p>
-              <p>fdsfsd</p>
-              <p>Paid Subscription Ends: 03/09/2021</p>
-              <a className='row'>
-                <img src='../../../images/user.svg'/>
-                <span>View Profile</span>
-              </a>
-              <p>
-                <img className='open-user-profile open-info' src='../../../images/plus.svg'
-                     onClick={() => clickRowOpen(0)}
-                />
-              </p>
-            </div>
-            <motion.div animate={userInfoShow ? 'visible' : 'hidden'} variants={variants} initial='hidden'>
-              <div className='user-info-text bg-green user-info preview'>
-                <div className='flex-2-column'>
-                  <div>
-                    <p><strong>Account Email:</strong></p>
-                    <p><strong>GDC Number:</strong></p>
-                    <p><strong>Post Code:</strong></p>
-                    <p><strong>Last Logged In:</strong></p>
-                    <p><strong>Subscription #:</strong></p>
-                    <button className='button-green-outline border-white'>Suspend</button>
-                  </div>
-                  <div>
-                    {/*<p>{item.email ? item.email : 'none'}</p>*/}
-                    <p>12345678</p>
-                    <p>12345678</p>
-                    <p>12345678</p>
-                    {/*<p>{item.postIndex ? item.postIndex : 'none'}</p>*/}
-                    <p>13:05 04/04/2021</p>
-                    <p>#StripeID</p>
-                    <button className='button-green-outline border-white'>Delete</button>
-                  </div>
+          {dentists && dentists.map((item: any, key: any) => {
+            return (
+              <div className='user-block'>
+                <div className='user-list user-list-text bg-white user-data'>
+                  <p>"{item.firstName}"</p>
+                  <p>'{item.createdAt}'</p>
+                  <p>Paid Subscription Ends: 03/09/2021</p>
+                  <a className='row'>
+                    <img src='../../../images/user.svg'/>
+                    <span>View Profile</span>
+                  </a>
+                  <p>
+                    <img className='open-user-profile open-info' src='../../../images/plus.svg'
+                         onClick={() => clickRowOpen(key)}
+                    />
+                  </p>
                 </div>
+                <motion.div animate={userInfoShow ? 'visible' : 'hidden'} variants={variants} initial='hidden'>
+                  <div className='user-info-text bg-green user-info preview'>
+                    <div className='flex-2-column'>
+                      <div>
+                        <p><strong>Account Email:</strong></p>
+                        <p><strong>GDC Number:</strong></p>
+                        <p><strong>Post Code:</strong></p>
+                        <p><strong>Last Logged In:</strong></p>
+                        <p><strong>Subscription #:</strong></p>
+                        <button className='button-green-outline border-white'>Suspend</button>
+                      </div>
+                      <div>
+                        <p>{item.email ? item.email : 'none'}</p>
+                        <p>12345678</p>
+                        <p>{item.postIndex ? item.postIndex : 'none'}</p>
+                        <p>13:05 04/04/2021</p>
+                        <p>#StripeID</p>
+                        <button className='button-green-outline border-white'>Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-            </motion.div>
-          </div>
-          {/*)*/}
-          {/*  })*/}
-          {/*}*/}
+            )
+          })}
         </div>
       </div>
     </section>
