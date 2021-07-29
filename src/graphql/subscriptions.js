@@ -11,6 +11,7 @@ export const onCreateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -75,6 +76,7 @@ export const onUpdateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -139,6 +141,7 @@ export const onDeleteDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -352,6 +355,66 @@ export const onDeleteImage = /* GraphQL */ `
       service
       nameBefore
       nameAfter
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateAdminSettingsSubscriber = /* GraphQL */ `
+  subscription OnCreateAdminSettingsSubscriber {
+    onCreateAdminSettingsSubscriber {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateAdminSettingsSubscriber = /* GraphQL */ `
+  subscription OnUpdateAdminSettingsSubscriber {
+    onUpdateAdminSettingsSubscriber {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteAdminSettingsSubscriber = /* GraphQL */ `
+  subscription OnDeleteAdminSettingsSubscriber {
+    onDeleteAdminSettingsSubscriber {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
       createdAt
       updatedAt
       owner

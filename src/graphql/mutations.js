@@ -14,6 +14,7 @@ export const createDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -81,6 +82,7 @@ export const updateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -148,6 +150,7 @@ export const deleteDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -397,6 +400,75 @@ export const deleteImage = /* GraphQL */ `
       service
       nameBefore
       nameAfter
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const createAdminSettingsSubscriber = /* GraphQL */ `
+  mutation CreateAdminSettingsSubscriber(
+    $input: CreateAdminSettingsSubscriberInput!
+    $condition: ModelAdminSettingsSubscriberConditionInput
+  ) {
+    createAdminSettingsSubscriber(input: $input, condition: $condition) {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateAdminSettingsSubscriber = /* GraphQL */ `
+  mutation UpdateAdminSettingsSubscriber(
+    $input: UpdateAdminSettingsSubscriberInput!
+    $condition: ModelAdminSettingsSubscriberConditionInput
+  ) {
+    updateAdminSettingsSubscriber(input: $input, condition: $condition) {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteAdminSettingsSubscriber = /* GraphQL */ `
+  mutation DeleteAdminSettingsSubscriber(
+    $input: DeleteAdminSettingsSubscriberInput!
+    $condition: ModelAdminSettingsSubscriberConditionInput
+  ) {
+    deleteAdminSettingsSubscriber(input: $input, condition: $condition) {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
       createdAt
       updatedAt
       owner

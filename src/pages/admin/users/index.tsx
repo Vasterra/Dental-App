@@ -20,7 +20,6 @@ const AdminUsers = () => {
   }, [])
 
   const getListDentists = async () => {
-
     try {
       ApiManager.getListDentists().then(listDentitst => {
         setDentists(listDentitst)

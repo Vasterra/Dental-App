@@ -1,7 +1,7 @@
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
-import {deleteDentist, updateDentist } from "../graphql/mutations";
-import { getDentist, listDentists, listServiceForDentals } from "../graphql/queries";
+import {createAdminSettingsSubscriber, deleteDentist, updateAdminSettingsSubscriber, updateDentist} from "../graphql/mutations";
+import {getAdminSettingsSubscriber, getDentist, listAdminSettingsSubscribers, listDentists, listServiceForDentals} from "../graphql/queries";
 import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
 
@@ -53,13 +53,63 @@ class ApiManager {
     return data.listDentists.items
   }
 
+  public static getAdminSettingsSubscriber = async () => {
+    const {data}: any = await API.graphql({
+      query: getAdminSettingsSubscriber,
+      variables: {
+        id: '1'
+      },
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    return data.getAdminSettingsSubscriber
+  }
+
+  public static createAdminSettingsSubscribers = async (data: any) => {
+    const result = await API.graphql({
+      query: createAdminSettingsSubscriber,
+      variables: {
+        input: {
+          data
+        }
+      },
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    })
+    return result;
+  }
+
+  public static updateAdminSettingsSubscribers = async (data: any) => {
+    const result = await API.graphql({
+      query: updateAdminSettingsSubscriber,
+      variables: {
+        input: {
+          id: '1',
+          freeAppearVerified: data.freeAppearVerified,
+          freeMaxLocations: data.freeMaxLocations,
+          freeMaxServices: data.freeMaxServices,
+          freePhoneNumber: data.freePhoneNumber,
+          freeWebsiteAddress: data.freeWebsiteAddress,
+          paidAppearVerified: data.paidAppearVerified,
+          paidMaxLocations: data.paidMaxLocations,
+          paidMaxServices: data.paidMaxServices,
+          paidPhoneNumber: data.paidPhoneNumber,
+          paidWebsiteAddress: data.paidWebsiteAddress
+        }
+      },
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    })
+    return result;
+  }
+
   public static async changePassword(oldPassword: any, newPassword: any) {
     await Auth.currentAuthenticatedUser()
-      .then(user => {
-        return Auth.changePassword(user, oldPassword, newPassword);
-      })
-      .then(data => console.log(data))
-      .catch(err => console.log(err));
+    .then(user => {
+      return Auth.changePassword(user, oldPassword, newPassword);
+    })
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
   }
 
   public static async downloadImages(currentDentist: any) {

@@ -11,6 +11,7 @@ export const getDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      address
       city
       street
       postIndex
@@ -80,6 +81,7 @@ export const listDentists = /* GraphQL */ `
         qualifications
         bio
         website
+        address
         city
         street
         postIndex
@@ -238,6 +240,57 @@ export const listImages = /* GraphQL */ `
         service
         nameBefore
         nameAfter
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getAdminSettingsSubscriber = /* GraphQL */ `
+  query GetAdminSettingsSubscriber($id: ID!) {
+    getAdminSettingsSubscriber(id: $id) {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listAdminSettingsSubscribers = /* GraphQL */ `
+  query ListAdminSettingsSubscribers(
+    $filter: ModelAdminSettingsSubscriberFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAdminSettingsSubscribers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        paidMaxLocations
+        paidMaxServices
+        paidWebsiteAddress
+        paidPhoneNumber
+        paidAppearVerified
+        freeMaxLocations
+        freeMaxServices
+        freeWebsiteAddress
+        freePhoneNumber
+        freeAppearVerified
         createdAt
         updatedAt
         owner

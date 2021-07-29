@@ -1,0 +1,13 @@
+.button-on-switcher {
+    position: relative;
+    color: white;
+    z-index: 1;
+    right: -44px;
+}
+
+.button-off-switcher{
+    position: relative;
+    color: #095c5c;
+    z-index: 1;
+    left: -44px;
+}

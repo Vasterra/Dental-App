@@ -65,3 +65,20 @@ type Image
   nameBefore: String!
   nameAfter: String!
 }
+
+
+type AdminSettingsSubscriber
+@model
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  paidMaxLocations: String!
+  paidMaxServices: String!
+  paidWebsiteAddress: Boolean!
+  paidPhoneNumber: Boolean!
+  paidAppearVerified: Boolean!
+  freeMaxLocations: String!
+  freeMaxServices: String!
+  freeWebsiteAddress: Boolean!
+  freePhoneNumber: Boolean!
+  freeAppearVerified: Boolean!
+}
