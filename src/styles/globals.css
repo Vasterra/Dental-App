@@ -1,7 +1,7 @@
 @import './Drawer.module.css';
 @import './Login.module.css';
 @import './Search.module.css';
-@import "node_modules/react-image-gallery/styles/css/image-gallery.css";
+/*@import "node_modules/react-image-gallery/styles/css/image-gallery.css";*/
 
 @import '../../public/fonts/SFPro/stylesheet.css';
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap');
