@@ -1,5 +1,6 @@
 import { CircularProgress } from "@material-ui/core";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import QRCode from "react-qr-code";
 import GalleryPerson from "src/components/Gallery/GalleryPerson";
 import { WrapperFlex } from "src/styles/Main.module";
 
@@ -14,9 +15,15 @@ type Props = {
 }
 
 const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, oldIMages, images, currentAvatar, services, setImages, downloadImages}) => {
+  const [location, setLocation]: any = useState();
+
+  useEffect(() => {
+    setLocation(window.location.href)
+  }, [])
+
   const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
   const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
-  console.log('currentDentist',currentDentist)
+
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null)
     if (e.target.value === 'All Service') return downloadImages()
@@ -37,7 +44,8 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
 
   return (
     <>
-      <section className="container page">
+      { !location && <WrapperFlex><CircularProgress size={120}/></WrapperFlex> }
+      { location && <section className="container page">
         <div className="flex-menu">
           <div className="index-leftmenu">
             <div className="leftmenu-index-cover-image" />
@@ -75,6 +83,9 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
                     })
                   }
                 </div>
+                <div style={{marginTop: '10px'}}>
+                  <QRCode value={location} size={100}/>
+                </div>
               </div>
             </div>
           </div>
@@ -95,7 +106,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
             </div>
           </div>
         </div>
-      </section>
+      </section> }
     </>
   )
 };
