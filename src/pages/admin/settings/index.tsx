@@ -1,6 +1,7 @@
 import React from "react";
 import Menu from "src/components/menu";
 import Services from "src/components/settings/services"
+import Details from "src/components/settings/details"
 
 const AdminSettings = () => {
 
@@ -8,59 +9,7 @@ const AdminSettings = () => {
     <section className="container-profile ">
       <Menu active="Settings"/>
       <div className="main-profile bg-white">
-        <div className="profile-box-form">
-          <div className="form-info-block">
-            <div>
-              <p className="form-login-title green px20">Admin Details</p>
-              <p className="form-login-subtitle gray px12 mb-6px">Login Details</p>
-            </div>
-          </div>
-          <div className="box-2-box">
-            <div className="profile-block-box">
-              <div>
-                <p className="form-profile-label">
-                  <label className="form-profile-label" htmlFor="name">Name</label>
-                </p>
-                <p>
-                  <input className="form-profile-input" type="text" name="name" id="name"
-                         value=""
-                         placeholder="Admin Name" />
-                </p>
-              </div>
-              <div>
-                <p className="form-profile-label">
-                  <label className="form-profile-label" htmlFor="email">Email</label>
-                </p>
-                <p>
-                  <input className="form-profile-input" type="email" name="email" id="email" value=""
-                         placeholder="John.smith@dental.co.uk" />
-                </p>
-              </div>
-
-            </div>
-            <div className="profile-block-box">
-              <div>
-                <p className="form-profile-label">
-                  <label className="form-profile-label">Reset Password</label>
-                </p>
-                <p className="row-content">
-                  <span className="input-span">Current</span> <input className="form-profile-input" type="text"
-                                                                     name="current" id="current" value=""
-                                                                     placeholder="XXXXXXXXXXXXXXX" />
-                </p>
-                <p className="row-content">
-                  <span className="input-span">New</span> <input className="form-profile-input" type="text"
-                                                                 name="new" id="new" value=""
-                                                                 placeholder="Xxxxx" />
-                </p>
-              </div>
-              <p className="row-content">
-                <span className="input-span"></span>
-                <button className="button-green">Reset Password</button>
-              </p>
-            </div>
-          </div>
-        </div>
+        <Details />
         <Services />
         <div className="profile-box-form">
           <div className="form-info-block-paid">
@@ -74,7 +23,7 @@ const AdminSettings = () => {
                       <label className="form-profile-label">Max Locations</label>
                     </p>
                     <p>
-                      <input className="form-profile-input" type="text" name="" id="" value=""
+                      <input className="form-profile-input" type="text" name="" id="" value="1"
                              placeholder="5" />
                     </p>
                   </div>
@@ -83,7 +32,7 @@ const AdminSettings = () => {
                       <label className="form-profile-label">Max Services</label>
                     </p>
                     <p>
-                      <input className="form-profile-input" type="text" name="" id="" value=""
+                      <input className="form-profile-input" type="text" name="" id="" value="2"
                              placeholder="8" />
                     </p>
                   </div>
@@ -118,7 +67,6 @@ const AdminSettings = () => {
                     </p>
                   </div>
                 </div>
-
               </div>
             </div>
             <div>
@@ -131,7 +79,7 @@ const AdminSettings = () => {
                       <label className="form-profile-label">Max Locations</label>
                     </p>
                     <p>
-                      <input className="form-profile-input" type="text" name="" id="" value=""
+                      <input className="form-profile-input" type="text" name="" id="" value="1"
                              placeholder="1" />
                     </p>
                   </div>
@@ -140,7 +88,7 @@ const AdminSettings = () => {
                       <label className="form-profile-label">Max Services</label>
                     </p>
                     <p>
-                      <input className="form-profile-input" type="text" name="" id="" value=""
+                      <input className="form-profile-input" type="text" name="" id="" value="2"
                              placeholder="2" />
                     </p>
                   </div>
@@ -197,32 +145,30 @@ const AdminSettings = () => {
                 </p>
                 <p>
                   <input className="form-profile-input" type="text" name="" id=""
-                         value="" placeholder="Verification Checkmark" />
+                         value="1" placeholder="Verification Checkmark" />
                 </p>
                 <p>
                   <input className="form-profile-input" type="text" name="" id=""
-                         value="" placeholder="Feature 2" />
+                         value="2" placeholder="Feature 2" />
                 </p>
                 <p>
                   <input className="form-profile-input" type="text" name="" id=""
-                         value="" placeholder="Feature 3" />
+                         value="3" placeholder="Feature 3" />
                 </p>
                 <p>
                   <input className="form-profile-input" type="text" name="" id=""
-                         value="" placeholder="Feature 4" />
+                         value="4" placeholder="Feature 4" />
                 </p>
                 <p>
                   <input className="form-profile-input" type="text" name="" id=""
-                         value="" placeholder="Feature 5" />
+                         value="5" placeholder="Feature 5" />
                 </p>
                 <p className="add-plus">
                   <input className="form-profile-input " type="text" name="" id=""
-                         value="" placeholder="" />
+                         value="6" placeholder="" />
                     <img className="plus" id="plus" src="../../../images/plus.svg" alt="" />
                 </p>
               </div>
-
-
             </div>
             <div className="profile-block-box">
               <div>
@@ -231,7 +177,7 @@ const AdminSettings = () => {
                 </p>
                 <p>
                   <input className="form-profile-input" type="text" name="" id=""
-                         value="" placeholder="xx" />
+                         value="1" placeholder="xx" />
                 </p>
               </div>
               <div>
@@ -240,7 +186,7 @@ const AdminSettings = () => {
                 </p>
                 <p>
                   <input className="form-profile-input" type="text" name="" id=""
-                         value="" placeholder="Web Link" />
+                         value="1" placeholder="Web Link" />
                 </p>
               </div>
               <p className="row-content">

@@ -50,7 +50,6 @@ class ApiManager {
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-    console.log(data)
     return data.listDentists.items
   }
 

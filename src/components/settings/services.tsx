@@ -80,8 +80,6 @@ const Services = () => {
     setUpdateServiceName({[key]:e})
   }
 
-  console.log(updateServiceName)
-
   return (
     <div className="profile-box-form">
       <div className="form-info-block">
@@ -115,7 +113,7 @@ const Services = () => {
             {!services && <div className="flex-wrapper"><CircularProgress size={120}/></div>}
             {services && services.map((item: any, key: any) => {
               return (
-                <>
+                <div key={key}>
                   <input type="text"
                          className="form-update-input"
                          name="update_service"
@@ -139,7 +137,7 @@ const Services = () => {
                     })
                     getListServiceForDentals();
                   }} />
-                </>
+                </div>
               )
             })
             }
