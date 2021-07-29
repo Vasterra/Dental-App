@@ -20,6 +20,7 @@ const Services = () => {
 
 
   const getListServiceForDentals = async () => {
+    const arr: any[] = []
     setServices(null)
     const {data}: any = await API.graphql({
       query: listServiceForDentals,
@@ -27,8 +28,9 @@ const Services = () => {
       authMode: 'AWS_IAM'
     });
     data.listServiceForDentals.items.map((item: any, key: any) => {
-      setUpdateServiceName([{...updateServiceName, [key]:item.name}])
+      arr.push(item.name)
     })
+    setUpdateServiceName(arr)
     setServices(data.listServiceForDentals.items)
   }
 
@@ -46,7 +48,7 @@ const Services = () => {
     getListServiceForDentals();
   }
 
-  const updateServiceForDentals = async (key: any) => {
+  const updateServiceForDentals = async (key: any, id: any) => {
     const updateInput: any = document.getElementsByClassName('form-update-input')
     if (updateInput[key].disabled) {
       updateInput[key].disabled = false
@@ -55,21 +57,21 @@ const Services = () => {
     } else {
       updateInput[key].disabled = true
       updateInput[key].style.background = 'none'
+      await API.graphql({
+        query: updateServiceForDental,
+        variables: {
+          input: {
+            id,
+            name: updateServiceName[key],
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      })
+      getListServiceForDentals();
     }
 
 
-    // await API.graphql({
-    //   query: updateServiceForDental,
-    //   variables: {
-    //     input: {
-    //       id,
-    //       name: updateServiceName,
-    //     }
-    //   },
-    //   // @ts-ignore
-    //   authMode: 'AWS_IAM'
-    // })
-    // getListServiceForDentals();
   }
 
   const onChnage = (e: any, key: any) => {
@@ -121,7 +123,7 @@ const Services = () => {
                          id="update_service"
                          disabled
                          onChange={(e: any) => onChnage(e.target.value, key)}/>
-                  <span onClick={() => updateServiceForDentals(key)}>
+                  <span onClick={() => updateServiceForDentals(key, item.id)}>
                     <img className="form-login-input-edit" src="../../../images/edit.svg"/>
                   </span>
                   <Close className="form-login-input-close" onClick={async () => {
