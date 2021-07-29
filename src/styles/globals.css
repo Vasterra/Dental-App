@@ -19,6 +19,14 @@ img {
   height: auto;
 }
 
+.flex-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+
 .container-vh {
   width: 100%;
   height: 100vh;
@@ -824,8 +832,22 @@ input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
   outline: none;
   padding: 9px 11.4px 10.7px 0;
   background: none;
-
 }
+
+.form-update-input {
+  position: relative;
+  margin-bottom: 13px;
+  width: 100%;
+  max-width: 100%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid rgba(31, 31, 31, 0.2);
+  outline: none;
+  padding: 9px 11.4px 10.7px 0;
+  background: none;
+}
+
 
 input[type='file'] {
   cursor: pointer;
