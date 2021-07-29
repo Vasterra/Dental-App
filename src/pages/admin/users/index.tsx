@@ -6,7 +6,9 @@ import {motion} from "framer-motion"
 
 const AdminUsers = () => {
   const [dentists, setDentists]: any = useState();
-  const [userInfoShow, sestUserInfoShow] = useState(false);
+  const [oldDentists, setOldDentists]: any = useState();
+  const [userInfoShow, setUserInfoShow]: any = useState(false);
+  const [searchValue, setSearchValue]: any = useState();
 
   const variants = {
     visible: {opacity: 1, height: 'auto'},
@@ -18,38 +20,56 @@ const AdminUsers = () => {
   }, [])
 
   const getListDentists = async () => {
+
     try {
       ApiManager.getListDentists().then(listDentitst => {
         setDentists(listDentitst)
+        setOldDentists(listDentitst)
       });
     } catch (e) {
       return <Error statusCode={404}/>
     }
-
   };
+
+  const changeSearch = async (e: any) => {
+    setDentists(null)
+    let allDentists: any[] = []
+    let result = oldDentists.map(async (item: any) => {
+      if (item.firstName.toLowerCase().indexOf(e) === 0) {
+        return item
+      }
+    })
+    result = await Promise.all(result)
+    result.forEach((item: string | any[]) => {
+      if (item !== undefined) {
+        allDentists.push(item)
+      }
+    })
+
+    setDentists(allDentists)
+  }
+
 
   const clickRowOpen = (id: number) => {
-    console.log(id)
-    const allRow = document.getElementsByClassName('user-info');
-    // @ts-ignore
-    console.log(allRow)
-
-    // @ts-ignore
+    const allRow: any = document.getElementsByClassName('user-info');
     if (allRow[id].style.display === 'none') {
-      // @ts-ignore
       for (let i = 0; i < allRow.length; i++) {
-        // @ts-ignore
         allRow[i].style.display = 'none'
       }
-      // @ts-ignore
       allRow[id].style.display = 'block';
-      sestUserInfoShow(true);
+      setUserInfoShow(true);
     } else {
-      // @ts-ignore
       allRow[id].style.display = 'none';
-      sestUserInfoShow(false);
+      setUserInfoShow(false);
     }
   };
+
+  const getDate = (dentist: { createdAt: string | number | Date; }) => {
+    const resultDate = new Date(dentist.createdAt)
+    return `${resultDate.getDate() < 10 ?  '0' + resultDate.getDate() : resultDate.getDate()}
+    .${resultDate.getMonth() < 10 ?  '0' + resultDate.getMonth() : resultDate.getMonth()}
+    .${resultDate.getFullYear()}`
+  }
 
   return (
     <section className='container-profile'>
@@ -63,11 +83,15 @@ const AdminUsers = () => {
             </div>
           </div>
           <div className='search'>
-            <input className='search-users' type='search' id='search' name='search' value=''
-                   placeholder=' Search users'/>
+            <input className='search-users'
+                   type='search'
+                   id='search'
+                   name='search'
+                   value={searchValue}
+                   onChange={e => changeSearch(e.target.value)}
+                   placeholder='Search users'/>
             <img className='search-button' src='../../../images/search.svg' alt='search'/>
           </div>
-
           <div className='user-list-header'>
             <div className='form-profile-label'>Dentist</div>
             <div className='form-profile-label select-area' id='account_opened'>Account Opened
@@ -90,22 +114,19 @@ const AdminUsers = () => {
               <img className='pl-13' src='../../../images/arrow-bottom.svg' alt='arrow bottom'/>
             </div>
           </div>
-
           {dentists && dentists.map((item: any, key: any) => {
             return (
-              <div className='user-block'>
+              <div className='user-block' key={key}>
                 <div className='user-list user-list-text bg-white user-data'>
-                  <p>"{item.firstName}"</p>
-                  <p>'{item.createdAt}'</p>
+                  <p>{item.firstName}</p>
+                  <p>{getDate(item)}</p>
                   <p>Paid Subscription Ends: 03/09/2021</p>
                   <a className='row'>
                     <img src='../../../images/user.svg'/>
                     <span>View Profile</span>
                   </a>
                   <p>
-                    <img className='open-user-profile open-info' src='../../../images/plus.svg'
-                         onClick={() => clickRowOpen(key)}
-                    />
+                    <img className='open-user-profile open-info' src='../../../images/plus.svg' onClick={() => clickRowOpen(key)} />
                   </p>
                 </div>
                 <motion.div animate={userInfoShow ? 'visible' : 'hidden'} variants={variants} initial='hidden'>
