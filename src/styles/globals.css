@@ -1364,7 +1364,14 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   border: solid 1px #707070;
   background: #707070;
   border-radius: 50%;
+}
 
+.circle-green {
+  width: 10px;
+  height: 10px;
+  border: solid 1px #095c5c;
+  background: #095c5c;
+  border-radius: 50%;
 }
 
 .years-block > .circle-gray {

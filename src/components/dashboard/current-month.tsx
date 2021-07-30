@@ -1,9 +1,16 @@
-import React from "react";
+import React, {useEffect, useState } from "react";
+import ApiManager from "src/services/ApiManager";
+import Error from "next/error"
 
-const CurrentMonth = ({}) => {
+type Props = {
+  analytics: any
+}
+
+const CurrentMonth: React.FunctionComponent<Props>= ({analytics}) => {
+
     return (
       <div className="profile-box-form">
-        <div>
+        { analytics && <div>
           <p className="form-login-title green px20">Current Month</p>
           <p className="form-login-subtitle gray px12 mb-6px">Summary</p>
           <div className="profile-block-box">
@@ -13,7 +20,12 @@ const CurrentMonth = ({}) => {
                   <label className="form-profile-label">New Subscriptions</label>
                 </p>
                 <p>
-                  <input className="form-profile-input" type="text" name="" id="" value="" placeholder="82"/>
+                  <input className="form-profile-input"
+                         type="text"
+                         name="monthNewSubscriptions"
+                         id="monthNewSubscriptions"
+                         value={analytics.monthNewSubscriptions}
+                  />
                 </p>
               </div>
               <div>
@@ -21,7 +33,12 @@ const CurrentMonth = ({}) => {
                   <label className="form-profile-label">New Free Accounts</label>
                 </p>
                 <p>
-                  <input className="form-profile-input" type="text" name="" id="" value="" placeholder="2"/>
+                  <input className="form-profile-input"
+                         type="text"
+                         name="monthNewFreeAccounts"
+                         id="monthNewFreeAccounts"
+                         value={analytics.monthNewFreeAccounts}
+                  />
                 </p>
               </div>
               <div>
@@ -29,7 +46,12 @@ const CurrentMonth = ({}) => {
                   <label className="form-profile-label">Subscriptions Closed </label>
                 </p>
                 <p>
-                  <input className="form-profile-input" type="text" name="" id="" value="" placeholder="2"/>
+                  <input className="form-profile-input"
+                         type="text"
+                         name="monthSubscriptionsClosed"
+                         id="monthSubscriptionsClosed"
+                         value={analytics.monthSubscriptionsClosed}
+                  />
                 </p>
               </div>
               <div>
@@ -37,7 +59,12 @@ const CurrentMonth = ({}) => {
                   <label className="form-profile-label">Accounts Closed</label>
                 </p>
                 <p>
-                  <input className="form-profile-input" type="text" name="" id="" value="" placeholder="14"/>
+                  <input className="form-profile-input"
+                         type="text"
+                         name="monthAccountsClosed"
+                         id="monthAccountsClosed"
+                         value={analytics.monthAccountsClosed}
+                  />
                 </p>
               </div>
               <div>
@@ -45,12 +72,17 @@ const CurrentMonth = ({}) => {
                   <label className="form-profile-label">Images Uploaded</label>
                 </p>
                 <p>
-                  <input className="form-profile-input" type="text" name="" id="" value="" placeholder="382"/>
+                  <input className="form-profile-input"
+                         type="text"
+                         name="monthImagesUploaded"
+                         id="monthImagesUploaded"
+                         value={analytics.monthImagesUploaded}
+                  />
                 </p>
               </div>
             </div>
           </div>
-        </div>
+        </div> }
       </div>
     );
 };

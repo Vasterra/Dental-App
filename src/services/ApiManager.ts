@@ -1,7 +1,8 @@
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
 import {createAdminSettingsSubscriber, deleteDentist, updateAdminSettingsSubscriber, updateDentist} from "../graphql/mutations";
-import {getAdminSettingsSubscriber, getDentist, listAdminSettingsSubscribers, listDentists, listServiceForDentals} from "../graphql/queries";
+import {getAdminAnalytics, getAdminSettingsSubscriber, getDentist,
+  listAdminAnalyticss, listAdminSettingsSubscribers, listDentists, listServiceForDentals} from "../graphql/queries";
 import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
 
@@ -51,6 +52,19 @@ class ApiManager {
       authMode: 'AWS_IAM'
     });
     return data.listDentists.items
+  }
+
+  public static GET_ADMIN_ANALYTIC = async () => {
+    const {data}: any = await API.graphql({
+      query: getAdminAnalytics,
+      variables: {
+        id: '1'
+      },
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    console.log(data)
+    return data.getAdminAnalytics
   }
 
   public static GET_ADMIN_SETTINGS_SUBSCRIBER = async () => {

@@ -1,6 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Line} from 'react-chartjs-2';
 import ApiManager from 'src/services/ApiManager';
+import moment from "moment"
 
 const MONTHS: any[string] = [
   'January',
@@ -35,13 +36,13 @@ class Graph extends Component {
 
   state: any = {
     dentists: [],
+    currentYear: new Date().getFullYear(),
     config: {
       type: 'line',
-      width:500,
-      height:300,
+      width: 500,
+      height: 300,
       options: {
         responsive: true,
-
         plugins: {
           legend: {
             position: 'top',
@@ -74,11 +75,11 @@ class Graph extends Component {
         y: {
           grid: {
             drawBorder: false,
-            color: function(context: { tick: { value: number; }; }) {
+            color: function (context: { tick: { value: number; }; }) {
               if (context.tick.value > 0) {
-                return CHART_COLORS.green;
+                return '#707070'
               } else if (context.tick.value < 0) {
-                return CHART_COLORS.red;
+                return '#095c5c'
               }
               return '#000000';
             },
@@ -86,50 +87,84 @@ class Graph extends Component {
         }
       }
     },
-    data: {
-      labels: MONTHS,
-      datasets: [
-        {
-          // label: '# of Votes',
-          data: [3, 3, 3, 5, 2, 3],
-          fill: false,
-          backgroundColor: 'rgb(255, 99, 132)',
-          borderColor: 'rgba(255, 99, 132, 0.2)',
-        },
-      ],
-    }
+    data: {}
   }
 
   componentDidMount() {
     this.getListDentists();
-
   }
 
   async getListDentists() {
-    ApiManager.getListDentists().then(listDentitst => {
-      this.setState({dentists: listDentitst})
+    ApiManager.getListDentists().then(listDentist => {
+      this.filterByMonth(listDentist)
+      this.setState({dentists: listDentist})
     });
   }
 
+  filterByYear = async (year: any) => {
+    this.setState({currentYear: year})
+    await ApiManager.getListDentists().then(listDentist => {
+      let filterYear: any;
+      let filterdentistByYear: any[] = [];
+      MONTHS.map((month: any, key: any) => {
+        filterdentistByYear = listDentist.filter((item: any) => (year === new Date(item.createdAt).getFullYear()))
+        this.filterByMonth(filterdentistByYear)
+      })
+    });
+  }
+
+  filterByMonth = (listDentist: any[]) => {
+    const currentDate = moment();
+    let subscription: any;
+    let free: any;
+    let subscriptionDentistsByMonths: any[] = [];
+    let freeDentistsByMonths: any[] = [];
+
+    MONTHS.map((month: any, key: any) => {
+      subscription = listDentist.filter((item: any) => (key + 1 === new Date(item.createdAt).getMonth() && item.hasPaidPlan))
+      free = listDentist.filter((item: any) => (key + 1 === new Date(item.createdAt).getMonth() && !item.hasPaidPlan))
+      subscriptionDentistsByMonths.push(subscription.length)
+      freeDentistsByMonths.push(free.length)
+    })
+
+    this.setState({
+      data: {
+        labels: MONTHS,
+        datasets: [{
+          type: 'line',
+          label: 'Free Accounts',
+          data: freeDentistsByMonths,
+          backgroundColor: '#707070'
+        }, {
+          type: 'line',
+          label: 'Subscriptions',
+          data: subscriptionDentistsByMonths,
+          backgroundColor: '#095c5c'
+        }],
+      }
+    })
+  }
 
   render() {
     return (
       <div className="profile-block-box">
         <div className="stripes">
           <div className="charts-block">
-            <Line data={this.state.data} options={this.state.config} />
+            <Line data={this.state.data} options={this.state.config}/>
           </div>
           <div className="years-block">
-            <p className="year">2021</p>
+            <p className="year">{this.state.currentYear}</p>
             <p className="year-arrows">
-              <img src="../../../images/arrow_left_big.svg" alt="arrow left"/>
-              <img src="../../../images/arrow_right_big.svg" alt="arrow right"/>
+              <img src="../../../images/arrow_left_big.svg" alt="arrow left"
+                   onClick={() => this.filterByYear(this.state.currentYear - 1)}/>
+              <img src="../../../images/arrow_right_big.svg" alt="arrow right"
+                   onClick={() => this.filterByYear(this.state.currentYear + 1)}/>
             </p>
             <p className="circle-gray"></p>
             <p className="year-text">
               Free Accounts
             </p>
-            <p className="circle-gray"></p>
+            <p className="circle-green"></p>
             <p className="year-text">
               Subscriptions
             </p>
