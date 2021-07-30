@@ -77,7 +77,7 @@ const Subscriber = () => {
   }, [])
 
   const createAdminSettingsSubscriber = async () => {
-    await ApiManager.getAdminSettingsSubscriber().then(result => {
+    await ApiManager.GET_ADMIN_SETTINGS_SUBSCRIBER().then(result => {
       setAdminSettingsSubscriber(result)
     })
   }

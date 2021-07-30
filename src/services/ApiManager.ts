@@ -53,7 +53,7 @@ class ApiManager {
     return data.listDentists.items
   }
 
-  public static getAdminSettingsSubscriber = async () => {
+  public static GET_ADMIN_SETTINGS_SUBSCRIBER = async () => {
     const {data}: any = await API.graphql({
       query: getAdminSettingsSubscriber,
       variables: {
@@ -62,6 +62,7 @@ class ApiManager {
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
+    console.log(data)
     return data.getAdminSettingsSubscriber
   }
 

@@ -66,7 +66,6 @@ type Image
   nameAfter: String!
 }
 
-
 type AdminSettingsSubscriber
 @model
 @auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
