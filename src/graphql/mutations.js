@@ -475,3 +475,57 @@ export const deleteAdminSettingsSubscriber = /* GraphQL */ `
     }
   }
 `;
+export const createAdminAnalytics = /* GraphQL */ `
+  mutation CreateAdminAnalytics(
+    $input: CreateAdminAnalyticsInput!
+    $condition: ModelAdminAnalyticsConditionInput
+  ) {
+    createAdminAnalytics(input: $input, condition: $condition) {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateAdminAnalytics = /* GraphQL */ `
+  mutation UpdateAdminAnalytics(
+    $input: UpdateAdminAnalyticsInput!
+    $condition: ModelAdminAnalyticsConditionInput
+  ) {
+    updateAdminAnalytics(input: $input, condition: $condition) {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteAdminAnalytics = /* GraphQL */ `
+  mutation DeleteAdminAnalytics(
+    $input: DeleteAdminAnalyticsInput!
+    $condition: ModelAdminAnalyticsConditionInput
+  ) {
+    deleteAdminAnalytics(input: $input, condition: $condition) {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

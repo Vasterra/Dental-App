@@ -299,3 +299,40 @@ export const listAdminSettingsSubscribers = /* GraphQL */ `
     }
   }
 `;
+export const getAdminAnalytics = /* GraphQL */ `
+  query GetAdminAnalytics($id: ID!) {
+    getAdminAnalytics(id: $id) {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listAdminAnalyticss = /* GraphQL */ `
+  query ListAdminAnalyticss(
+    $filter: ModelAdminAnalyticsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAdminAnalyticss(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        totalSubscriptions
+        totalFreeAccounts
+        totalSubscriptionsClosed
+        totalAccountsClosed
+        totalImagesUploaded
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
