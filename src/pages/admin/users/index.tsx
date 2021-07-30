@@ -3,6 +3,7 @@ import Menu from "src/components/menu";
 import ApiManager from 'src/services/ApiManager';
 import Error from "next/error"
 import {motion} from "framer-motion"
+import moment from "moment"
 
 const AdminUsers = () => {
   const [dentists, setDentists]: any = useState();
@@ -70,6 +71,33 @@ const AdminUsers = () => {
     .${resultDate.getFullYear()}`
   }
 
+  const filterDate = (filter: any) => {
+    const currentDate = moment();
+    let filteredDentists;
+    if (filter === 'Last Week') {
+      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'week'));
+    } else if (filter === 'Last Month') {
+      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month'));
+    } else if (filter === 'Last 3 Months') {
+      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).subtract(3, 'month'));
+    } else if (filter === 'Last 6 Months') {
+      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).subtract(6, 'month'));
+    } else if (filter === 'Last Year') {
+      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'year'));
+    }
+    setDentists(filteredDentists)
+  }
+
+  const filterStatus = (status: any) => {
+    let filteredDentists;
+    if (status === 'Paid') {
+      filteredDentists = oldDentists.filter((item: any) => item.hasPaidPlan === true);
+    } else {
+      filteredDentists = oldDentists.filter((item: any) => item.hasPaidPlan !== true);
+    }
+    setDentists(filteredDentists)
+  }
+
   return (
     <section className='container-profile'>
       <Menu active="Users"/>
@@ -95,17 +123,17 @@ const AdminUsers = () => {
             <div className='form-profile-label'>Dentist</div>
             <div className='form-profile-label select-area' id='account_opened'>Account Opened
               <ul className='account_opened'>
-                <li>Last Week</li>
-                <li>Last Month</li>
-                <li>Last 3 Months</li>
-                <li>Last 6 Months</li>
-                <li>Last Year</li>
+                <li onClick={() => filterDate('Last Week')}>Last Week</li>
+                <li onClick={() => filterDate('Last Month')}>Last Month</li>
+                <li onClick={() => filterDate('Last 3 Months')}>Last 3 Months</li>
+                <li onClick={() => filterDate('Last 6 Months')}>Last 6 Months</li>
+                <li onClick={() => filterDate('Last Year')}>Last Year</li>
               </ul>
             </div>
             <div className='form-profile-label select-area' id='status'>Status
               <ul className='status'>
-                <li>Paid</li>
-                <li>Free</li>
+                <li onClick={() => filterStatus('Paid')}>Paid</li>
+                <li onClick={() => filterStatus('Free')}>Free</li>
               </ul>
             </div>
             <div className='form-profile-label'></div>
