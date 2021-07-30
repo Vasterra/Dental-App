@@ -361,3 +361,108 @@ export const onDeleteImage = /* GraphQL */ `
     }
   }
 `;
+export const onCreateAdminSettingsSubscriber = /* GraphQL */ `
+  subscription OnCreateAdminSettingsSubscriber {
+    onCreateAdminSettingsSubscriber {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateAdminSettingsSubscriber = /* GraphQL */ `
+  subscription OnUpdateAdminSettingsSubscriber {
+    onUpdateAdminSettingsSubscriber {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteAdminSettingsSubscriber = /* GraphQL */ `
+  subscription OnDeleteAdminSettingsSubscriber {
+    onDeleteAdminSettingsSubscriber {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateAdminAnalytics = /* GraphQL */ `
+  subscription OnCreateAdminAnalytics {
+    onCreateAdminAnalytics {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateAdminAnalytics = /* GraphQL */ `
+  subscription OnUpdateAdminAnalytics {
+    onUpdateAdminAnalytics {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteAdminAnalytics = /* GraphQL */ `
+  subscription OnDeleteAdminAnalytics {
+    onDeleteAdminAnalytics {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

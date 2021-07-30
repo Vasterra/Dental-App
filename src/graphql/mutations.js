@@ -406,3 +406,126 @@ export const deleteImage = /* GraphQL */ `
     }
   }
 `;
+export const createAdminSettingsSubscriber = /* GraphQL */ `
+  mutation CreateAdminSettingsSubscriber(
+    $input: CreateAdminSettingsSubscriberInput!
+    $condition: ModelAdminSettingsSubscriberConditionInput
+  ) {
+    createAdminSettingsSubscriber(input: $input, condition: $condition) {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateAdminSettingsSubscriber = /* GraphQL */ `
+  mutation UpdateAdminSettingsSubscriber(
+    $input: UpdateAdminSettingsSubscriberInput!
+    $condition: ModelAdminSettingsSubscriberConditionInput
+  ) {
+    updateAdminSettingsSubscriber(input: $input, condition: $condition) {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteAdminSettingsSubscriber = /* GraphQL */ `
+  mutation DeleteAdminSettingsSubscriber(
+    $input: DeleteAdminSettingsSubscriberInput!
+    $condition: ModelAdminSettingsSubscriberConditionInput
+  ) {
+    deleteAdminSettingsSubscriber(input: $input, condition: $condition) {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const createAdminAnalytics = /* GraphQL */ `
+  mutation CreateAdminAnalytics(
+    $input: CreateAdminAnalyticsInput!
+    $condition: ModelAdminAnalyticsConditionInput
+  ) {
+    createAdminAnalytics(input: $input, condition: $condition) {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateAdminAnalytics = /* GraphQL */ `
+  mutation UpdateAdminAnalytics(
+    $input: UpdateAdminAnalyticsInput!
+    $condition: ModelAdminAnalyticsConditionInput
+  ) {
+    updateAdminAnalytics(input: $input, condition: $condition) {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteAdminAnalytics = /* GraphQL */ `
+  mutation DeleteAdminAnalytics(
+    $input: DeleteAdminAnalyticsInput!
+    $condition: ModelAdminAnalyticsConditionInput
+  ) {
+    deleteAdminAnalytics(input: $input, condition: $condition) {
+      id
+      totalSubscriptions
+      totalFreeAccounts
+      totalSubscriptionsClosed
+      totalAccountsClosed
+      totalImagesUploaded
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

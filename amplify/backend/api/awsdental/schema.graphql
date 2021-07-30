@@ -81,3 +81,14 @@ type AdminSettingsSubscriber
   freePhoneNumber: Boolean!
   freeAppearVerified: Boolean!
 }
+
+type AdminAnalytics
+@model
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  totalSubscriptions: String!
+  totalFreeAccounts: String!
+  totalSubscriptionsClosed: String!
+  totalAccountsClosed: String!
+  totalImagesUploaded: String!
+}
