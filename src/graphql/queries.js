@@ -308,6 +308,11 @@ export const getAdminAnalytics = /* GraphQL */ `
       totalSubscriptionsClosed
       totalAccountsClosed
       totalImagesUploaded
+      monthNewSubscriptions
+      monthNewFreeAccounts
+      monthSubscriptionsClosed
+      monthAccountsClosed
+      monthImagesUploaded
       createdAt
       updatedAt
       owner
@@ -328,6 +333,11 @@ export const listAdminAnalyticss = /* GraphQL */ `
         totalSubscriptionsClosed
         totalAccountsClosed
         totalImagesUploaded
+        monthNewSubscriptions
+        monthNewFreeAccounts
+        monthSubscriptionsClosed
+        monthAccountsClosed
+        monthImagesUploaded
         createdAt
         updatedAt
         owner

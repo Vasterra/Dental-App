@@ -430,6 +430,11 @@ export const onCreateAdminAnalytics = /* GraphQL */ `
       totalSubscriptionsClosed
       totalAccountsClosed
       totalImagesUploaded
+      monthNewSubscriptions
+      monthNewFreeAccounts
+      monthSubscriptionsClosed
+      monthAccountsClosed
+      monthImagesUploaded
       createdAt
       updatedAt
       owner
@@ -445,6 +450,11 @@ export const onUpdateAdminAnalytics = /* GraphQL */ `
       totalSubscriptionsClosed
       totalAccountsClosed
       totalImagesUploaded
+      monthNewSubscriptions
+      monthNewFreeAccounts
+      monthSubscriptionsClosed
+      monthAccountsClosed
+      monthImagesUploaded
       createdAt
       updatedAt
       owner
@@ -460,6 +470,11 @@ export const onDeleteAdminAnalytics = /* GraphQL */ `
       totalSubscriptionsClosed
       totalAccountsClosed
       totalImagesUploaded
+      monthNewSubscriptions
+      monthNewFreeAccounts
+      monthSubscriptionsClosed
+      monthAccountsClosed
+      monthImagesUploaded
       createdAt
       updatedAt
       owner

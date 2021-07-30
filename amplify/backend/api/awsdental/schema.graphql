@@ -91,4 +91,9 @@ type AdminAnalytics
   totalSubscriptionsClosed: String!
   totalAccountsClosed: String!
   totalImagesUploaded: String!
+  monthNewSubscriptions: String!
+  monthNewFreeAccounts: String!
+  monthSubscriptionsClosed: String!
+  monthAccountsClosed: String!
+  monthImagesUploaded: String!
 }
