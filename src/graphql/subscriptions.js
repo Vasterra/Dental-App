@@ -485,6 +485,7 @@ export const onCreateClosedAccount = /* GraphQL */ `
   subscription OnCreateClosedAccount {
     onCreateClosedAccount {
       id
+      dentistId
       closedAccount
       createdAt
       updatedAt
@@ -496,6 +497,7 @@ export const onUpdateClosedAccount = /* GraphQL */ `
   subscription OnUpdateClosedAccount {
     onUpdateClosedAccount {
       id
+      dentistId
       closedAccount
       createdAt
       updatedAt
@@ -507,6 +509,7 @@ export const onDeleteClosedAccount = /* GraphQL */ `
   subscription OnDeleteClosedAccount {
     onDeleteClosedAccount {
       id
+      dentistId
       closedAccount
       createdAt
       updatedAt
@@ -518,6 +521,7 @@ export const onCreateClosedSubscription = /* GraphQL */ `
   subscription OnCreateClosedSubscription {
     onCreateClosedSubscription {
       id
+      dentistId
       closedSubscription
       createdAt
       updatedAt
@@ -529,6 +533,7 @@ export const onUpdateClosedSubscription = /* GraphQL */ `
   subscription OnUpdateClosedSubscription {
     onUpdateClosedSubscription {
       id
+      dentistId
       closedSubscription
       createdAt
       updatedAt
@@ -540,6 +545,7 @@ export const onDeleteClosedSubscription = /* GraphQL */ `
   subscription OnDeleteClosedSubscription {
     onDeleteClosedSubscription {
       id
+      dentistId
       closedSubscription
       createdAt
       updatedAt

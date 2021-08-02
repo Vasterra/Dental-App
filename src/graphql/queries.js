@@ -350,6 +350,7 @@ export const getClosedAccount = /* GraphQL */ `
   query GetClosedAccount($id: ID!) {
     getClosedAccount(id: $id) {
       id
+      dentistId
       closedAccount
       createdAt
       updatedAt
@@ -366,6 +367,7 @@ export const listClosedAccounts = /* GraphQL */ `
     listClosedAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        dentistId
         closedAccount
         createdAt
         updatedAt
@@ -379,6 +381,7 @@ export const getClosedSubscription = /* GraphQL */ `
   query GetClosedSubscription($id: ID!) {
     getClosedSubscription(id: $id) {
       id
+      dentistId
       closedSubscription
       createdAt
       updatedAt
@@ -399,6 +402,7 @@ export const listClosedSubscriptions = /* GraphQL */ `
     ) {
       items {
         id
+        dentistId
         closedSubscription
         createdAt
         updatedAt

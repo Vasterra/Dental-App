@@ -551,6 +551,7 @@ export const createClosedAccount = /* GraphQL */ `
   ) {
     createClosedAccount(input: $input, condition: $condition) {
       id
+      dentistId
       closedAccount
       createdAt
       updatedAt
@@ -565,6 +566,7 @@ export const updateClosedAccount = /* GraphQL */ `
   ) {
     updateClosedAccount(input: $input, condition: $condition) {
       id
+      dentistId
       closedAccount
       createdAt
       updatedAt
@@ -579,6 +581,7 @@ export const deleteClosedAccount = /* GraphQL */ `
   ) {
     deleteClosedAccount(input: $input, condition: $condition) {
       id
+      dentistId
       closedAccount
       createdAt
       updatedAt
@@ -593,6 +596,7 @@ export const createClosedSubscription = /* GraphQL */ `
   ) {
     createClosedSubscription(input: $input, condition: $condition) {
       id
+      dentistId
       closedSubscription
       createdAt
       updatedAt
@@ -607,6 +611,7 @@ export const updateClosedSubscription = /* GraphQL */ `
   ) {
     updateClosedSubscription(input: $input, condition: $condition) {
       id
+      dentistId
       closedSubscription
       createdAt
       updatedAt
@@ -621,6 +626,7 @@ export const deleteClosedSubscription = /* GraphQL */ `
   ) {
     deleteClosedSubscription(input: $input, condition: $condition) {
       id
+      dentistId
       closedSubscription
       createdAt
       updatedAt
