@@ -4,6 +4,7 @@ import ApiManager from 'src/services/ApiManager';
 import Error from "next/error"
 import {motion} from "framer-motion"
 import moment from "moment"
+import { CircularProgress } from '@material-ui/core';
 
 const AdminUsers = () => {
   const [dentists, setDentists]: any = useState();
@@ -141,6 +142,7 @@ const AdminUsers = () => {
               <img className='pl-13' src='../../../images/arrow-bottom.svg' alt='arrow bottom'/>
             </div>
           </div>
+          {!dentists && <div className="flex-wrapper"><CircularProgress size={120}/></div>}
           {dentists && dentists.map((item: any, key: any) => {
             return (
               <div className='user-block' key={key}>

@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import {AmplifyAuthenticator} from '@aws-amplify/ui-react';
-
+import Link from 'next/link'
 import ApiManager from "src/services/ApiManager";
 import Dashboard from 'src/pages/admin/dashboard';
+import { Menu } from "@material-ui/core";
 
 class Login extends Component<{ active: string }> {
   render() {
@@ -43,23 +44,28 @@ class Login extends Component<{ active: string }> {
             <p className="user-description white"><span>Name</span> <span>Surname</span></p>
           </div>
           <ul className="leftmenu-nav-menu">
-            <li className={`leftmenu-list + ${this.props.active === 'Dashboard' ? 'active' : ''}`}>
-              <a className="leftmenu-link" href="../../admin/dashboard/">Dashboard</a>
-              <img className="leftmenu-link-image" src="../../../images/dashboard.svg" alt="link image"/>
-            </li>
-            <li className={`leftmenu-list + ${this.props.active === 'Users' ? 'active' : ''}`}>
-              <a className="leftmenu-link" href="../../admin/users/">Users</a>
-              <img className="leftmenu-link-image" src="../../../images/user.svg" alt="link image"/>
-            </li>
-            <li className={`leftmenu-list + ${this.props.active === 'Settings' ? 'active' : ''}`}>
-              <a className="leftmenu-link" href="../../admin/settings/">Settings</a>
-              <img className="leftmenu-link-image" src="../../../images/more_vert.svg" alt="link image"/>
-            </li>
+            <Link href="../../admin/dashboard/">
+              <li className={`leftmenu-list + ${this.props.active === 'Dashboard' ? ' active' : ''}`}>
+                <img className="leftmenu-link-image" src="../../images/user.svg" alt="link image"/>
+                <a className="leftmenu-link">Dashboard</a>
+              </li>
+            </Link>
+            <Link href="../../admin/users/">
+              <li className={`leftmenu-list + ${this.props.active === 'Users' ? ' active' : ''}`}>
+                <img className="leftmenu-link-image" src="../../images/gallery.svg" alt="link image"/>
+                <a className="leftmenu-link" >Users</a>
+              </li>
+            </Link>
+            <Link href="../../admin/settings/">
+              <li className={`leftmenu-list + ${this.props.active === 'Settings' ? ' active' : ''}`}>
+                <img className="leftmenu-link-image" src="../../images/more_vert.svg" alt="link image"/>
+                <a className="leftmenu-link" >Settings</a>
+              </li>
+            </Link>
             <li className="leftmenu-list logout">
               <a className="leftmenu-link bold" href="#" onClick={ApiManager.signOut}>Logout</a>
               <img className="leftmenu-link-image" src="../../../images/left-arrow.svg" alt="link image"/>
             </li>
-            <li className="fill-mobile"></li>
           </ul>
         </div>
       </div>

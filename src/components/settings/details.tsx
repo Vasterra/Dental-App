@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
 import ApiManager from "src/services/ApiManager";
 import Error from "next/error"
-import { Auth } from "aws-amplify";
+import {Auth} from "aws-amplify";
+import {CircularProgress} from "@material-ui/core";
 
 const Details = () => {
 
@@ -51,80 +52,85 @@ const Details = () => {
 
   return (
     <>
-      { dentist && <div className="profile-box-form">
-          <div className="form-info-block">
-              <div>
-                  <p className="form-login-title green px20">Admin Details</p>
-                  <p className="form-login-subtitle gray px12 mb-6px">Login Details</p>
-              </div>
-          </div>
-          <div className="box-2-box">
-              <div className="profile-block-box">
-                  <div>
-                      <p className="form-profile-label">
-                          <label className="form-profile-label" htmlFor="name">Name</label>
-                      </p>
-                      <p>
-                          <input className="form-profile-input"
-                                 type="text"
-                                 name="name"
-                                 id="name"
-                                 value={fullName}
-                                 onChange={(e) => setFullName(e.target.value)}
-                                 placeholder="Admin Name" />
-                      </p>
-                  </div>
-                  <div>
-                      <p className="form-profile-label">
-                          <label className="form-profile-label" htmlFor="email">Email</label>
-                      </p>
-                      <p>
-                          <input className="form-profile-input"
-                                 type="email"
-                                 name="email"
-                                 id="email"
-                                 value={emailDentist}
-                                 onChange={(e) => setEmailDentist(e.target.value)}
-                                 placeholder="John.smith@dental.co.uk"
-                          />
-                      </p>
-                  </div>
-              </div>
-              <div className="profile-block-box">
-                  <div>
-                      <p className="form-profile-label">
-                          <label className="form-profile-label">Reset Password</label>
-                      </p>
-                      <p className="row-content">
-                          <span className="input-span">Current</span>
-                          <input className="form-profile-input"
-                                 type="text"
-                                 name="current"
-                                 id="current"
-                                 value={oldPassword}
-                                 onChange={(e) => setOldPassword(e.target.value)}
-                                 placeholder="XXXXXXXXXXXXXXX"
-                          />
-                      </p>
-                      <p className="row-content">
-                          <span className="input-span">New</span>
-                          <input className="form-profile-input"
-                                 type="text"
-                                 name="new"
-                                 id="new"
-                                 value={newPassword}
-                                 onChange={(e) => setNewPassword(e.target.value)}
-                                 placeholder="Xxxxx"
-                          />
-                      </p>
-                  </div>
-                  <p className="row-content">
-                      <span className="input-span"></span>
-                      <button className="button-green" onClick={changePassword}>Reset Password</button>
-                  </p>
-              </div>
-          </div>
-      </div>}
+      <div className="profile-box-form">
+        {!dentist && <div className="flex-wrapper"><CircularProgress size={120}/></div>}
+        {dentist &&
+        <>
+            <div className="form-info-block">
+                <div>
+                    <p className="form-login-title green px20">Admin Details</p>
+                    <p className="form-login-subtitle gray px12 mb-6px">Login Details</p>
+                </div>
+            </div>
+            <div className="box-2-box">
+                <div className="profile-block-box">
+                    <div>
+                        <p className="form-profile-label">
+                            <label className="form-profile-label" htmlFor="name">Name</label>
+                        </p>
+                        <p>
+                            <input className="form-profile-input"
+                                   type="text"
+                                   name="name"
+                                   id="name"
+                                   value={fullName}
+                                   onChange={(e) => setFullName(e.target.value)}
+                                   placeholder="Admin Name"/>
+                        </p>
+                    </div>
+                    <div>
+                        <p className="form-profile-label">
+                            <label className="form-profile-label" htmlFor="email">Email</label>
+                        </p>
+                        <p>
+                            <input className="form-profile-input"
+                                   type="email"
+                                   name="email"
+                                   id="email"
+                                   value={emailDentist}
+                                   onChange={(e) => setEmailDentist(e.target.value)}
+                                   placeholder="John.smith@dental.co.uk"
+                            />
+                        </p>
+                    </div>
+                </div>
+                <div className="profile-block-box">
+                    <div>
+                        <p className="form-profile-label">
+                            <label className="form-profile-label">Reset Password</label>
+                        </p>
+                        <p className="row-content">
+                            <span className="input-span">Current</span>
+                            <input className="form-profile-input"
+                                   type="text"
+                                   name="current"
+                                   id="current"
+                                   value={oldPassword}
+                                   onChange={(e) => setOldPassword(e.target.value)}
+                                   placeholder="XXXXXXXXXXXXXXX"
+                            />
+                        </p>
+                        <p className="row-content">
+                            <span className="input-span">New</span>
+                            <input className="form-profile-input"
+                                   type="text"
+                                   name="new"
+                                   id="new"
+                                   value={newPassword}
+                                   onChange={(e) => setNewPassword(e.target.value)}
+                                   placeholder="Xxxxx"
+                            />
+                        </p>
+                    </div>
+                    <p className="row-content">
+                        <span className="input-span"></span>
+                        <button className="button-green" onClick={changePassword}>Reset Password</button>
+                    </p>
+                </div>
+            </div>
+        </>
+        }
+      </div>
     </>
   );
 };

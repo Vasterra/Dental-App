@@ -1,6 +1,7 @@
 import React, {useEffect, useState } from "react";
 import ApiManager from "src/services/ApiManager";
 import Error from "next/error"
+import { CircularProgress } from "@material-ui/core";
 
 type Props = {
   analytics: any
@@ -10,6 +11,7 @@ const CurrentMonth: React.FunctionComponent<Props>= ({analytics}) => {
 
     return (
       <div className="profile-box-form">
+        {!analytics && <div className="flex-wrapper"><CircularProgress size={120}/></div>}
         { analytics && <div>
           <p className="form-login-title green px20">Current Month</p>
           <p className="form-login-subtitle gray px12 mb-6px">Summary</p>

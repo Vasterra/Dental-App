@@ -210,6 +210,11 @@ img {
 .active .leftmenu-link-image {
   filter: invert(0%);
 }
+.leftmenu-list {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
 
 .leftmenu-list:hover .leftmenu-link-image {
   filter: invert(0%);
@@ -228,7 +233,7 @@ img {
   z-index: 2;
   width: 24px;
   position: absolute;
-  margin-top: -32px;
+  /*margin-top: -32px;*/
   filter: invert(100%) brightness(160%);
   transition: all .3s linear;
 }
