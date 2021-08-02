@@ -346,3 +346,65 @@ export const listAdminAnalyticss = /* GraphQL */ `
     }
   }
 `;
+export const getClosedAccount = /* GraphQL */ `
+  query GetClosedAccount($id: ID!) {
+    getClosedAccount(id: $id) {
+      id
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listClosedAccounts = /* GraphQL */ `
+  query ListClosedAccounts(
+    $filter: ModelclosedAccountFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listClosedAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        closedAccount
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getClosedSubscription = /* GraphQL */ `
+  query GetClosedSubscription($id: ID!) {
+    getClosedSubscription(id: $id) {
+      id
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listClosedSubscriptions = /* GraphQL */ `
+  query ListClosedSubscriptions(
+    $filter: ModelclosedSubscriptionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listClosedSubscriptions(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        closedSubscription
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;

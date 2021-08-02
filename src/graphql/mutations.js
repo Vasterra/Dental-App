@@ -544,3 +544,87 @@ export const deleteAdminAnalytics = /* GraphQL */ `
     }
   }
 `;
+export const createClosedAccount = /* GraphQL */ `
+  mutation CreateClosedAccount(
+    $input: CreateClosedAccountInput!
+    $condition: ModelclosedAccountConditionInput
+  ) {
+    createClosedAccount(input: $input, condition: $condition) {
+      id
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateClosedAccount = /* GraphQL */ `
+  mutation UpdateClosedAccount(
+    $input: UpdateClosedAccountInput!
+    $condition: ModelclosedAccountConditionInput
+  ) {
+    updateClosedAccount(input: $input, condition: $condition) {
+      id
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteClosedAccount = /* GraphQL */ `
+  mutation DeleteClosedAccount(
+    $input: DeleteClosedAccountInput!
+    $condition: ModelclosedAccountConditionInput
+  ) {
+    deleteClosedAccount(input: $input, condition: $condition) {
+      id
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const createClosedSubscription = /* GraphQL */ `
+  mutation CreateClosedSubscription(
+    $input: CreateClosedSubscriptionInput!
+    $condition: ModelclosedSubscriptionConditionInput
+  ) {
+    createClosedSubscription(input: $input, condition: $condition) {
+      id
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateClosedSubscription = /* GraphQL */ `
+  mutation UpdateClosedSubscription(
+    $input: UpdateClosedSubscriptionInput!
+    $condition: ModelclosedSubscriptionConditionInput
+  ) {
+    updateClosedSubscription(input: $input, condition: $condition) {
+      id
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteClosedSubscription = /* GraphQL */ `
+  mutation DeleteClosedSubscription(
+    $input: DeleteClosedSubscriptionInput!
+    $condition: ModelclosedSubscriptionConditionInput
+  ) {
+    deleteClosedSubscription(input: $input, condition: $condition) {
+      id
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

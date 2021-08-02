@@ -1,8 +1,8 @@
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
-import {createAdminSettingsSubscriber, deleteDentist, updateAdminSettingsSubscriber, updateDentist} from "../graphql/mutations";
-import {getAdminAnalytics, getAdminSettingsSubscriber, getDentist,
-  listAdminAnalyticss, listAdminSettingsSubscribers, listDentists, listServiceForDentals} from "../graphql/queries";
+import {createAdminSettingsSubscriber, deleteDentist, updateAdminAnalytics, updateAdminSettingsSubscriber, updateDentist} from "../graphql/mutations";
+import {getAdminAnalytics, getAdminSettingsSubscriber, getDentist, listClosedAccounts, listClosedSubscriptions,
+  listAdminAnalyticss, listAdminSettingsSubscribers, listDentists, listImages, listServiceForDentals} from "../graphql/queries";
 import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
 
@@ -32,6 +32,19 @@ class ApiManager {
     }
   }
 
+  public static async getListImages() {
+    try {
+      const {data}: any = await API.graphql({
+        query: listImages,
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      return data.listImages.items
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   public static getDentist = async (id: any) => {
     if (id === null) return
     const {data}: any = await API.graphql({
@@ -52,6 +65,25 @@ class ApiManager {
       authMode: 'AWS_IAM'
     });
     return data.listDentists.items
+  }
+
+  public static GET_LIST_CLOSED_ACCOUNTS = async () => {
+    const {data}: any = await API.graphql({
+      query: listClosedAccounts,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    return data.listClosedAccounts.items
+  }
+
+  public static GET_LIST_CLOSED_SUBSCRIPTIONS = async () => {
+    const {data}: any = await API.graphql({
+      query: listClosedSubscriptions,
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    });
+    console.log(data.listClosedSubscriptions.items)
+    return data.listClosedSubscriptions.items
   }
 
   public static GET_ADMIN_ANALYTIC = async () => {

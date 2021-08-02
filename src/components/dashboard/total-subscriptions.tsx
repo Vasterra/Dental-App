@@ -6,7 +6,6 @@ type Props = {
   analytics: any
 }
 
-
 const CurrentMonth: React.FunctionComponent<Props>= ({analytics}) => {
     return (
       <div className="profile-box-form">

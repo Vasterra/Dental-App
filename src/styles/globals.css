@@ -1345,6 +1345,9 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 .year-arrows {
   align-self: center;
 }
+.year-arrows img {
+  cursor: pointer;
+}
 
 .year-text {
   font-family: Arial;

@@ -97,3 +97,17 @@ type AdminAnalytics
   monthAccountsClosed: String!
   monthImagesUploaded: String!
 }
+
+type closedAccount
+@model
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  closedAccount: String!
+}
+
+type closedSubscription
+@model
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  closedSubscription: String!
+}

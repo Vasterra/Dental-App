@@ -481,3 +481,69 @@ export const onDeleteAdminAnalytics = /* GraphQL */ `
     }
   }
 `;
+export const onCreateClosedAccount = /* GraphQL */ `
+  subscription OnCreateClosedAccount {
+    onCreateClosedAccount {
+      id
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateClosedAccount = /* GraphQL */ `
+  subscription OnUpdateClosedAccount {
+    onUpdateClosedAccount {
+      id
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteClosedAccount = /* GraphQL */ `
+  subscription OnDeleteClosedAccount {
+    onDeleteClosedAccount {
+      id
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateClosedSubscription = /* GraphQL */ `
+  subscription OnCreateClosedSubscription {
+    onCreateClosedSubscription {
+      id
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateClosedSubscription = /* GraphQL */ `
+  subscription OnUpdateClosedSubscription {
+    onUpdateClosedSubscription {
+      id
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteClosedSubscription = /* GraphQL */ `
+  subscription OnDeleteClosedSubscription {
+    onDeleteClosedSubscription {
+      id
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
