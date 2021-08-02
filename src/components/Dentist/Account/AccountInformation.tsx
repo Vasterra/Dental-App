@@ -27,6 +27,7 @@ const AccountInformation: React.FunctionComponent<Props> = ({currentDentist}) =>
             resolve();
           });
           ApiManager.deleteDentist(currentDentist);
+          ApiManager.CREATE_CLOSED_ACCOUNT(currentDentist.id);
         }))
         .catch(e => {
           console.log(e)

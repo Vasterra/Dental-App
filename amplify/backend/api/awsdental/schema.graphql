@@ -97,3 +97,21 @@ type AdminAnalytics
   monthAccountsClosed: String!
   monthImagesUploaded: String!
 }
+
+type closedAccount
+@model
+@key(name: "byDentist", fields: ["dentistId", "closedAccount"])
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  dentistId: ID!
+  closedAccount: String!
+}
+
+type closedSubscription
+@model
+@key(name: "byDentist", fields: ["dentistId", "closedSubscription"])
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  dentistId: ID!
+  closedSubscription: String!
+}

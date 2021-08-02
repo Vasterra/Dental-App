@@ -52,6 +52,20 @@ const Account = ({dentist}: any) => {
     })
   }
 
+  const onCancelSubscription = async () => {
+    ApiManager.CREATE_CLOSED_SUBSCRIPTION(dentist.id)
+    ApiManager.UPDATE_DENTIST(
+      {
+        id: dentist.id,
+        hasPaidPlan: false
+      }
+    ).then(() => {
+      ApiManager.getDentist(dentist.id).then(dent => {
+        setCurrentDentist(dent)
+      })
+    })
+  }
+
   const downloadImages = async () => {
     try {
       ApiManager.downloadImages(currentDentist).then(filesList => {
@@ -78,7 +92,7 @@ const Account = ({dentist}: any) => {
                   </div>
                   <div className="box-2-box">
                     {currentDentist &&
-                    <AccountInformation currentDentist={currentDentist} />}
+                    <AccountInformation currentDentist={currentDentist}/>}
                     {currentDentist && <ResetPassword/>}
                   </div>
               </div>
@@ -93,9 +107,9 @@ const Account = ({dentist}: any) => {
                     {!currentDentist.hasPaidPlan &&
                     <UpgradeToPremium currentDentist={currentDentist}/>}
                     {currentDentist.hasPaidPlan &&
-                    <Mysubscription currentDentist={currentDentist}/>}
+                    <Mysubscription currentDentist={currentDentist} onCancelSubscription={onCancelSubscription}/>}
                     {currentDentist &&
-                    <BillingInformation currentDentist={currentDentist} />}
+                    <BillingInformation currentDentist={currentDentist}/>}
                   </div>
               </div>
           </div>

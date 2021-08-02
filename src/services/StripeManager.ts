@@ -1,5 +1,4 @@
-import {API, Auth} from "aws-amplify";
-import { updateDentist } from "../graphql/mutations";
+import {Auth} from "aws-amplify";
 import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
 

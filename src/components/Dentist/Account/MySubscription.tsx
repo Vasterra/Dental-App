@@ -2,9 +2,10 @@ import React from "react";
 
 type Props = {
   currentDentist: any,
+  onCancelSubscription: Function
 }
 
-const MySubscription: React.FunctionComponent<Props> = ({currentDentist}) => {
+const MySubscription: React.FunctionComponent<Props> = ({currentDentist, onCancelSubscription}) => {
 
   return (
     <div className="profile-block-box">
@@ -28,7 +29,7 @@ const MySubscription: React.FunctionComponent<Props> = ({currentDentist}) => {
           </div>
         </div>
         <p className="row-content">
-          <button className="button-green">Cancel subscription</button>
+          <button className="button-green" onClick={() => onCancelSubscription()}>Cancel subscription</button>
         </p>
       </div>
     </div>

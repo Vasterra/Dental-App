@@ -481,3 +481,75 @@ export const onDeleteAdminAnalytics = /* GraphQL */ `
     }
   }
 `;
+export const onCreateClosedAccount = /* GraphQL */ `
+  subscription OnCreateClosedAccount {
+    onCreateClosedAccount {
+      id
+      dentistId
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateClosedAccount = /* GraphQL */ `
+  subscription OnUpdateClosedAccount {
+    onUpdateClosedAccount {
+      id
+      dentistId
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteClosedAccount = /* GraphQL */ `
+  subscription OnDeleteClosedAccount {
+    onDeleteClosedAccount {
+      id
+      dentistId
+      closedAccount
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateClosedSubscription = /* GraphQL */ `
+  subscription OnCreateClosedSubscription {
+    onCreateClosedSubscription {
+      id
+      dentistId
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateClosedSubscription = /* GraphQL */ `
+  subscription OnUpdateClosedSubscription {
+    onUpdateClosedSubscription {
+      id
+      dentistId
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteClosedSubscription = /* GraphQL */ `
+  subscription OnDeleteClosedSubscription {
+    onDeleteClosedSubscription {
+      id
+      dentistId
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

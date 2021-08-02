@@ -1,6 +1,6 @@
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
-import {deleteDentist, updateDentist} from "../graphql/mutations";
+import {createClosedAccount, createClosedSubscription, deleteDentist, updateDentist} from "../graphql/mutations";
 import {getDentist, listDentists, listImages, listServiceForDentals} from "../graphql/queries";
 import {IStripeCustomer} from "../interfaces/IStripeCustomer";
 import {IStripeSubscription} from "../interfaces/IStripeSubscription";
@@ -28,6 +28,64 @@ class ApiManager {
       await Router.push('/')
     } catch (error) {
       console.log('error signing out: ', error);
+    }
+  }
+
+  public static CREATE_CLOSED_ACCOUNT = async (id: any) => {
+    try {
+      const {data}: any = await API.graphql({
+        query: createClosedAccount,
+        variables: {
+          input: {
+            dentistId: id,
+            closedAccount: 'closed',
+          }
+        },
+        // @ts-ignore
+        authMode: "AWS_IAM",
+      });
+      console.log(data)
+      return data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  public static UPDATE_DENTIST = async (dataDentist: any) => {
+    console.log(dataDentist)
+    try {
+      const {data}: any = await API.graphql({
+        query: updateDentist,
+        variables: {
+          input: dataDentist
+        },
+        // @ts-ignore
+        authMode: "AWS_IAM",
+      });
+      console.log(data)
+      return data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  public static CREATE_CLOSED_SUBSCRIPTION = async (id: any) => {
+    try {
+      const {data}: any = await API.graphql({
+        query: createClosedSubscription,
+        variables: {
+          input: {
+            dentistId: id,
+            closedSubscription: 'closed',
+          }
+        },
+        // @ts-ignore
+        authMode: "AWS_IAM",
+      });
+      console.log(data)
+      return data
+    } catch (e) {
+      console.log(e)
     }
   }
 
