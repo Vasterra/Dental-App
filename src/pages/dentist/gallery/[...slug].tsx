@@ -418,7 +418,7 @@ const GalleryPage = ({dentist}: any) => {
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
 
   return (
-    <Layout title="Gallery" active={'activeGallery'} currentAvatar={currentAvatar}>
+    <Layout title="Gallery" active={'activeGallery'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
       <div className="main-profile bg-white ">
         <div className="profile-box-form">
           <div className="form-info-block">

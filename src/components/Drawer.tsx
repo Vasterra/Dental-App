@@ -12,6 +12,7 @@ const Menu = styled("ul")`{
     justify-content: center;
     padding-left: 36px;
     cursor: pointer;
+
     a {
       position: relative;
       display: block;
@@ -48,7 +49,7 @@ const Menu = styled("ul")`{
   }
 }`;
 
-class Drawer extends Component<{ currentAvatar: string, active: string }> {
+class Drawer extends Component<{ currentAvatar: string, active: string, currentDentist: any }> {
 
   state: any = {
     currentDentist: null,
@@ -57,34 +58,34 @@ class Drawer extends Component<{ currentAvatar: string, active: string }> {
   }
 
   async componentDidMount() {
-    await this.getDentist()
+    await this.getDentist();
   }
 
   async authListener() {
-    const {router}: any = this.props
+    const {router}: any = this.props;
     Hub.listen('auth', (data) => {
       switch (data.payload.event) {
         case 'signIn':
-          return this.setState({signedInUser: true})
+          return this.setState({signedInUser: true});
         case 'signOut':
-          return this.setState({signedInUser: false})
+          return this.setState({signedInUser: false});
       }
     })
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      this.setState({currentUser})
-      this.setState({signedInUser: true})
-      if (!this.state.currentUser.username === this.state.currentDentist.id) return router.push('/dentist/account/' + this.state.currentDentist.id)
+      this.setState({currentUser});
+      this.setState({signedInUser: true});
+      if (!this.state.currentUser.username === this.state.currentDentist.id) return router.push('/dentist/account/' + this.state.currentDentist.id);
     } catch (err) {
     }
   }
 
   async getDentist() {
-    const {router}: any = this.props
+    const {router}: any = this.props;
     if (router.query.slug === undefined) return;
     const currentDentist = await ApiManager.getDentist(router.query.slug[0]);
     this.setState({currentDentist: currentDentist});
-    await this.authListener()
+    await this.authListener();
   }
 
 
@@ -92,8 +93,8 @@ class Drawer extends Component<{ currentAvatar: string, active: string }> {
     try {
       if (this.state.dentist === null) return
       const files = await Storage.list('images/' + this.state.dentist.id + '/')
-      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
-      signedFiles = await Promise.all(signedFiles)
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key));
+      signedFiles = await Promise.all(signedFiles);
       let filesList = signedFiles.map((f: any) => {
         return {
           thumbnail: f,
@@ -104,7 +105,7 @@ class Drawer extends Component<{ currentAvatar: string, active: string }> {
           isSelected: false
         }
       })
-      this.setState({images: filesList})
+      this.setState({images: filesList});
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
@@ -115,7 +116,7 @@ class Drawer extends Component<{ currentAvatar: string, active: string }> {
     return (
       this.state.currentUser &&
       <>
-        {this.state.currentUser.username === this.state.currentDentist.id &&
+        {this.state.currentUser.username === this.props.currentDentist.id &&
         <div className="leftmenu">
             <div className="mobile-topmenu">
                 <p className="menu" id="mobile_menu">
@@ -139,14 +140,15 @@ class Drawer extends Component<{ currentAvatar: string, active: string }> {
             <div className="leftmenu-content">
                 <p className="link-actve">
                     <Link href="/"><img src="../../images/FYD4_beige-on-green@2x.png"
-                                     srcSet="../../images/FYD4_beige-on-green@2x.png 2x, ../../images/FYD4_beige-on-green@3x.png 3x"
-                                     className="logo-image desctop-visible" alt="logo image"/>
+                                        srcSet="../../images/FYD4_beige-on-green@2x.png 2x, ../../images/FYD4_beige-on-green@3x.png 3x"
+                                        className="logo-image desctop-visible" alt="logo image"/>
                     </Link>
                 </p>
                 <div className="leftmenu-user-information">
-                  {this.props.currentAvatar && <img className="user-image" src={this.props.currentAvatar} alt="user image"/>}
-                    <p className="user-description white"><span>{this.state.currentDentist.firstName}</span>
-                        <span>{this.state.currentDentist.lastName}</span></p>
+                  {this.props.currentAvatar &&
+                  <img className="user-image" src={this.props.currentAvatar} alt="user image"/>}
+                    <p className="user-description white"><span>{this.props.currentDentist.firstName}</span>
+                        <span>{this.props.currentDentist.lastName}</span></p>
                 </div>
             </div>
             <Menu>
@@ -159,13 +161,13 @@ class Drawer extends Component<{ currentAvatar: string, active: string }> {
                 <Link href={"../../dentist/gallery/" + this.state.currentUser.username}>
                     <li className={`leftmenu-list + ${this.props.active === 'activeGallery' ? 'active' : ''}`}>
                         <img className="leftmenu-link-image" src="../../images/gallery.svg" alt="link image"/>
-                        <a className="leftmenu-link" >Gallery</a>
+                        <a className="leftmenu-link">Gallery</a>
                     </li>
                 </Link>
                 <Link href={"../../dentist/account/" + this.state.currentUser.username}>
                     <li className={`leftmenu-list + ${this.props.active === 'activeAccount' ? 'active' : ''}`}>
                         <img className="leftmenu-link-image" src="../../images/more_vert.svg" alt="link image"/>
-                        <a className="leftmenu-link" >Account</a>
+                        <a className="leftmenu-link">Account</a>
                     </li>
                 </Link>
                 <li className="leftmenu-list logout">

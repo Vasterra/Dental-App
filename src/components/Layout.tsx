@@ -8,6 +8,7 @@ type Props = {
   title?: string;
   active?: string;
   currentAvatar?: any;
+  currentDentist?: any;
 };
 
 const Layout: React.FunctionComponent<Props> = ({
@@ -15,6 +16,7 @@ const Layout: React.FunctionComponent<Props> = ({
     title = "",
     active = "",
     currentAvatar = {},
+    currentDentist = {},
   }) => (
   <>
     <Container>
@@ -22,6 +24,7 @@ const Layout: React.FunctionComponent<Props> = ({
         <Drawer
           // @ts-ignore
           currentAvatar={currentAvatar}
+          currentDentist={currentDentist}
           active={active}
         />
         {children}

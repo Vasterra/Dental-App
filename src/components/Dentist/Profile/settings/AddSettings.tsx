@@ -1,6 +1,6 @@
 import React from "react";
 import {Formik} from "formik";
-import {API} from "aws-amplify";
+import {API, Auth} from "aws-amplify";
 
 import DentistProfileInput from "src/components/Dentist/Profile/componentForm/Input";
 import DentistProfileArea from "src/components/Dentist/Profile/componentForm/TextArea";
@@ -35,9 +35,9 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
           <div><p className="form-login-title green px20">Bio and Contact Information</p>
             <p className="form-login-subtitle gray px12 mb-6px">Information For Patients</p>
           </div>
-          { !currentDentist.hasPaidPlan && <p className="form-login-buttons">
+          {!currentDentist.hasPaidPlan && <p className="form-login-buttons">
               <button className="button-green-outline">Upgrade</button>
-          </p> }
+          </p>}
         </div>
         {
           <Formik
@@ -47,11 +47,16 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
               console.log(data)
               fetch('https://maps.google.com/maps/api/geocode/json?sensor=false&address=' + data.address + '&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY')
               .then(response => response.json())
-              .then(async(result) => {
-                console.log(result)
-                data.lng = result.results[0].geometry.location.lng
-                data.lat = result.results[0].geometry.location.lat
-                console.log(data)
+              .then(async (result) => {
+                data.lng = result.results[0].geometry.location.lng;
+                data.lat = result.results[0].geometry.location.lat;
+
+                let user = await Auth.currentAuthenticatedUser();
+                console.log('user', user)
+                const updateEmail = await Auth.updateUserAttributes(user, {
+                  'email': data.email,
+                });
+                console.log('updateEmail', updateEmail)
                 try {
                   await API.graphql({
                     query: updateDentist,

@@ -81,7 +81,7 @@ const Account = ({dentist}: any) => {
   return (
     <>
       {currentDentist &&
-      <Layout title="Account" active={'activeAccount'} currentAvatar={currentAvatar}>
+      <Layout title="Account" active={'activeAccount'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
           <div className="main-profile bg-white ">
               <div className="profile-box-form">
                   <div className="form-info-block">

@@ -154,7 +154,7 @@ const Person = ({dentistData}: any) => {
   }
 
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
-  console.log('currentDentist', router.basePath)
+
   return (
     <>
       <Header/>
