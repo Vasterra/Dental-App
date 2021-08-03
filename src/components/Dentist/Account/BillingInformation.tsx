@@ -50,7 +50,6 @@ const BillingInformation: React.FunctionComponent<Props> = ({currentDentist}) =>
       }
 
       const customer = await StripeManager.getStripeCustomerID(currentDentist);
-      ;
 
       if (!customer) {
         throw Error('Could not identify customer');

@@ -421,66 +421,6 @@ export const onDeleteAdminSettingsSubscriber = /* GraphQL */ `
     }
   }
 `;
-export const onCreateAdminAnalytics = /* GraphQL */ `
-  subscription OnCreateAdminAnalytics {
-    onCreateAdminAnalytics {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const onUpdateAdminAnalytics = /* GraphQL */ `
-  subscription OnUpdateAdminAnalytics {
-    onUpdateAdminAnalytics {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const onDeleteAdminAnalytics = /* GraphQL */ `
-  subscription OnDeleteAdminAnalytics {
-    onDeleteAdminAnalytics {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
 export const onCreateClosedAccount = /* GraphQL */ `
   subscription OnCreateClosedAccount {
     onCreateClosedAccount {
