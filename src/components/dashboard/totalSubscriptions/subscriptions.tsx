@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from "react";
-import ApiManager from "src/services/ApiManager";
-import Error from "next/error"
-import { CircularProgress } from "@material-ui/core";
+import React from "react";
 
 type Props = {
   analytics: any
@@ -11,7 +8,6 @@ const Subscriptions: React.FunctionComponent<Props>= ({analytics}) => {
 
   return (
     <div className="profile-block-box">
-      {!analytics && <div className="flex-wrapper"><CircularProgress size={120}/></div>}
       {analytics && <div className="double-blocks-5">
         <div>
           <p className="form-profile-label">

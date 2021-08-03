@@ -25,7 +25,9 @@ const AdminDashboard = () => {
   ];
 
   useEffect(() => {
-    getListDentists()
+    setTimeout(() => {
+      getListDentists()
+    }, 1000)
   }, [])
 
   const getListDentists = async () => {
@@ -58,7 +60,7 @@ const AdminDashboard = () => {
 
   return (
     <section className="container-profile">
-      <Menu active="Dashboard"/>
+      <Menu active="Dashboard" />
       <div className="main-profile bg-white">
         <CurrentMonth analytics={analytics}/>
         <TotalSubscription analytics={analytics}/>

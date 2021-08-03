@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import ApiManager from "src/services/ApiManager";
 import Error from "next/error"
-import {createStyles, Grid, Switch, SwitchClassKey, SwitchProps, Theme, withStyles} from "@material-ui/core";
+import {CircularProgress, createStyles, Grid, Switch, SwitchClassKey, SwitchProps, Theme, withStyles} from "@material-ui/core";
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
   focusVisible?: string;
@@ -89,6 +89,7 @@ const Subscriber = () => {
 
   return (
     <div className="profile-box-form">
+      {!adminSettingsSubscriber && <div className="flex-wrapper"><CircularProgress size={120}/></div>}
       {adminSettingsSubscriber && <div className="form-info-block-paid">
           <div>
               <p className="form-login-title green px20">Paid Subscriber</p>

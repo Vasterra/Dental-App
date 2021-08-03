@@ -1,11 +1,18 @@
-import * as React from "react";
+import React from "react";
 
-import Login from "src/components/login";
+import {AmplifyAuthContainer, AmplifyAuthenticator } from '@aws-amplify/ui-react';
+import Dashboard from 'src/pages/admin/dashboard';
 
-const IndexPage = () => {
+const Login = () => {
   return (
-    <Login />
+    <AmplifyAuthContainer>
+      <AmplifyAuthenticator>
+        <Dashboard />
+      </AmplifyAuthenticator>
+    </AmplifyAuthContainer>
+
   );
 };
 
-export default IndexPage;
+export default Login;
+
