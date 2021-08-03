@@ -187,7 +187,6 @@ const AdminUsers = () => {
       </div>
     </section>
   );
-
 };
 
 export default AdminUsers;

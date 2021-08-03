@@ -6,24 +6,23 @@ import Menu from "src/components/menu";
 import Error from "next/error"
 import moment from "moment"
 
-const MONTHS: any[string] = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-];
-
 const AdminDashboard = () => {
 
-  const [analytics, setAnalytics]: any = useState()
+  const [analytics, setAnalytics]: any = useState();
+  const MONTHS: any[string] = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
 
   useEffect(() => {
     getListDentists()

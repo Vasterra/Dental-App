@@ -1,10 +1,16 @@
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
-import {createAdminSettingsSubscriber, deleteDentist, updateAdminAnalytics, updateAdminSettingsSubscriber, updateDentist} from "../graphql/mutations";
-import {getAdminAnalytics, getAdminSettingsSubscriber, getDentist, listClosedAccounts, listClosedSubscriptions,
-  listAdminAnalyticss, listAdminSettingsSubscribers, listDentists, listImages, listServiceForDentals} from "../graphql/queries";
-import {IStripeCustomer} from "../interfaces/IStripeCustomer";
-import {IStripeSubscription} from "../interfaces/IStripeSubscription";
+import {createAdminSettingsSubscriber, deleteDentist, updateAdminSettingsSubscriber} from "../graphql/mutations";
+import {
+  getAdminAnalytics,
+  getAdminSettingsSubscriber,
+  getDentist,
+  listClosedAccounts,
+  listClosedSubscriptions,
+  listDentists,
+  listImages,
+  listServiceForDentals
+} from "../graphql/queries";
 
 class ApiManager {
 
