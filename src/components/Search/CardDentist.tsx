@@ -35,6 +35,8 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
     return () => cleanupFunction = true;
   }, []);
 
+  const fullName = `${dentist.firstName ? dentist.firstName : ''} ${dentist.lastName ? dentist.lastName : ''}`;
+
   return (
     <div className="index-gallery-image-box" onClick={() => setCurrentDentist(dentist)}>
       <ImageWrapper>
@@ -45,8 +47,9 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
       <img className="index-gallery-image-watermark-img-1" src="../images/check_circle.svg" alt="check"/>
       <Link href={"../../dentist/person/" + dentist.id} target="_blank">
         <div className="index-gallery-image-description">
-          <p className="index-gallery-image-title">{dentist.email}</p>
-          <p className="index-gallery-image-text">{dentist.firstName}</p>
+          <p className="index-gallery-image-title">{'Dr. ' + fullName}</p>
+          <p className="index-gallery-image-text">{dentist.email}</p>
+          <p className="index-gallery-image-text">{dentist.qualifications}</p>
         </div>
       </Link>
     </div>

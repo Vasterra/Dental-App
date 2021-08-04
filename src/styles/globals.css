@@ -1820,7 +1820,6 @@ input:disabled:-ms-input-placeholder {
   justify-self: center;
   position: relative;
   width: 216px;
-  height: 277px;
   border: solid 1px #f6f6f6;
   background-color: #f6f6f6;
 }
@@ -1833,8 +1832,6 @@ input:disabled:-ms-input-placeholder {
 
 .index-gallery-image-description {
   padding: 10px;
-  position: relative;
-  margin-top: -5px;
   overflow-wrap: break-word;
 }
 
