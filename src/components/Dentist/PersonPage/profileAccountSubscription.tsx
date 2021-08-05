@@ -57,7 +57,7 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDent
                   <img className="index-gallery-image-watermark-img relative-img" src="../../../../images/check_circle.svg" alt="check" />
                 </div>
                 <p className="form-login-subtitle gray px12 m-none">{currentDentist.qualifications}</p>
-                <p className="form-login-subtitle gray px12 m-none">GDC No: </p>
+                <p className="form-login-subtitle gray px12 m-none">GDC No: {currentDentist.gdcNumber}</p>
               </div>
               <div className="index-leftmenu-text">
                 <p>Bio</p>

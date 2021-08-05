@@ -18,7 +18,7 @@ interface State {
   showPassword: boolean;
   user: null;
   errorMessage: null;
-  loader: null;
+  loader: false;
 }
 
 const Registration = ({}) => {
@@ -33,11 +33,12 @@ const Registration = ({}) => {
     showPassword: false,
     user: null,
     errorMessage: null,
-    loader: null
+    loader: false
   });
 
   const validate = (values: any) => {
     const passwordRegex = /(?=.*[0-9])/;
+    const gdcNumberRegex = /^\d+$/
     const errors: any = {};
 
     if (!values.username) {
@@ -56,8 +57,10 @@ const Registration = ({}) => {
 
     if (!values.gdcNumber) {
       errors.gdcNumber = 'Required';
-    } else if (values.gdcNumber.length > 15) {
-      errors.gdcNumber = 'Must be 15 characters or less';
+    } else if (values.gdcNumber.length > 6) {
+      errors.gdcNumber = 'Must be 6 characters or less';
+    } else if (!gdcNumberRegex.test(values.gdcNumber)) {
+      errors.gdcNumber = 'Only number';
     }
 
     if (!values.email) {
@@ -66,6 +69,7 @@ const Registration = ({}) => {
       errors.email = 'Invalid email address';
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return errors;
   };
 
@@ -95,7 +99,6 @@ const Registration = ({}) => {
         setValues({ ...values, user });
       } catch (error) {
         setValues({ ...values, errorMessage: error.message });
-        console.log('error signing up:', error);
       }
     }
   });
@@ -104,11 +107,12 @@ const Registration = ({}) => {
     event.preventDefault();
     try {
       setValues({ ...values, user: null });
+      // @ts-ignore
       setValues({ ...values, loader: true });
       await Auth.confirmSignUp(values.username, values.code);
       await Router.replace('/login');
     } catch (error) {
-      console.log('error confirming sign up', error);
+      setValues({ ...values, loader: false });
     }
   }
 
@@ -131,7 +135,7 @@ const Registration = ({}) => {
             />
             <Close className='form-login-input-close'
                    onClick={() => {
-                     formik.setValues({ ...formik.values, username: '' });
+                     void formik.setValues({ ...formik.values, username: '' });
                    }} />
             {formik.errors.username ? <div>{formik.errors.username}</div> : null}
 
@@ -147,7 +151,7 @@ const Registration = ({}) => {
             />
             <Close className='form-login-input-close'
                    onClick={() => {
-                     formik.setValues({ ...formik.values, email: '' });
+                     void formik.setValues({ ...formik.values, email: '' });
                    }} />
             {formik.errors.email ? <div>{formik.errors.email}</div> : null}
           </p>
@@ -162,7 +166,7 @@ const Registration = ({}) => {
             />
             <Close className='form-login-input-close'
                    onClick={() => {
-                     formik.setValues({ ...formik.values, gdcNumber: '' });
+                     void formik.setValues({ ...formik.values, gdcNumber: '' });
                    }} />
             {formik.errors.gdcNumber ? <div>{formik.errors.gdcNumber}</div> : null}
           </p>
@@ -177,7 +181,7 @@ const Registration = ({}) => {
             />
             <Close className='form-login-input-close'
                    onClick={() => {
-                     formik.setValues({ ...formik.values, password: '' });
+                     void formik.setValues({ ...formik.values, password: '' });
                    }} />
             {formik.errors.password ? <div>{formik.errors.password}</div> : null}
           </p>

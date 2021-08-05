@@ -66,7 +66,7 @@ const AccountInformation: React.FunctionComponent<Props> = ({currentDentist}) =>
                  type="text"
                  name="gdc_number"
                  id="gdc_number"
-                 value=""
+                 value={currentDentist.gdcNumber}
                  placeholder="12345678"
                  disabled
           />

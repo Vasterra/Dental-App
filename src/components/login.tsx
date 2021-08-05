@@ -16,6 +16,7 @@ interface State {
   weightRange: string;
   showPassword: boolean;
   user: null;
+  errorMessage: null;
   loader: null;
 }
 
@@ -88,12 +89,11 @@ const Login = ({}) => {
 
       } catch (error) {
         setValues({ ...values, errorMessage: error.message });
-        console.log('error signing in', error);
       }
     }
   });
 
-  async function createNewDentist(user: { attributes: { sub: any; email: any; phone_number: any; }; }) {
+  async function createNewDentist(user: any) {
     await convertCityCoords().then(async (result) => {
       await API.graphql({
         query: createDentist,
@@ -105,7 +105,8 @@ const Login = ({}) => {
             lng: result.lng,
             firstName: values.username,
             registered: true,
-            phone: user.attributes.phone_number
+            phone: user.attributes.phone_number,
+            gdcNumber: user.attributes['custom:gdcNumber']
           }
         },
         // @ts-ignore

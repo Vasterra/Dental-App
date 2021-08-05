@@ -54,7 +54,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
               <div>
                 <p className="form-login-title green px20 mt-30">{fullName}</p>
                 <p className="form-login-subtitle gray px12 m-none">{currentDentist.qualifications}</p>
-                <p className="form-login-subtitle gray px12 m-none">GDC No: </p>
+                <p className="form-login-subtitle gray px12 m-none">GDC No: {currentDentist.gdcNumber}</p>
               </div>
               <div className="index-leftmenu-text">
                 <p>Bio</p>
