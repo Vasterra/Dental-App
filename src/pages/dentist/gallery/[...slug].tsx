@@ -85,14 +85,14 @@ const GalleryPage = ({dentist}: any) => {
     }
   }
 
-  const getDentist = async (id: string) => {
-    await ApiManager.getDentist(route ? route : id)
-    .then(currentDentist => {
-      setCurrentDentist(currentDentist);
-      getListImages()
-      getListServiceForDentals();
-    })
-  }
+  // const getDentist = async (id: string) => {
+  //   await ApiManager.getDentist(route ? route : id)
+  //   .then(currentDentist => {
+  //     setCurrentDentist(currentDentist);
+  //     getListImages()
+  //     getListServiceForDentals();
+  //   })
+  // }
 
   const downloadAvatar = async () => {
     await ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
@@ -159,9 +159,7 @@ const GalleryPage = ({dentist}: any) => {
 
   const saveDataUpdate = async () => {
     if (!check) return console.log('I confirm I have full rights for the use and publication of these images.')
-    if (!imagesUpdate) {
-      uploadUpdateImage()
-    }
+    uploadUpdateImage()
     try {
       await API.graphql({
         query: updateImage,
@@ -246,7 +244,6 @@ const GalleryPage = ({dentist}: any) => {
           setMessageSnackBar('Success Upload!')
           setStatusSnackBar('success')
           setOpenSnackBar(true)
-          console.log('success')
           setTimeout(() => {
             handlerShowGallery();
             getListImages()
@@ -301,7 +298,7 @@ const GalleryPage = ({dentist}: any) => {
       let eachImages: any[] = [];
       let allImages: any[] = []
       let filesList = listImagesData.map(async (e: any) => {
-        const files = await Storage.list('images/' + currentDentist.id + '/' + e.id)
+        const files = await Storage.list("images/" + currentDentist.id + '/' + e.id)
         let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
         signedFiles = await Promise.all(signedFiles)
         return signedFiles.map((f: any, key: string | number) => {
@@ -334,6 +331,7 @@ const GalleryPage = ({dentist}: any) => {
           allImages.push(item)
         }
       })
+      console.log(allImages);
       setTimeout(() => {
         setImages(allImages)
         setOldIMages(allImages)
@@ -357,7 +355,6 @@ const GalleryPage = ({dentist}: any) => {
   }
 
   const editGallery = (val: any) => {
-    console.log(val)
     setImagesUpdate(true)
     setCheckFilesLeft(true)
     setCheckFilesRight(true)
@@ -443,8 +440,8 @@ const GalleryPage = ({dentist}: any) => {
 
         { !showUloadGallery && <div className="flex-end">
           <select className="gallery-select arrows bg-gray" name="services" id="services"
-                  onChange={filterImagesByService}>
-            <option value="All Service" selected>All Service</option>
+                  onChange={() => filterImagesByService}>
+            <option value="All Service">All Service</option>
             {
               currentDentist.services.items.map((el: any, key: any) => {
                 return (
@@ -487,7 +484,7 @@ const GalleryPage = ({dentist}: any) => {
                             saveCrop={saveCrop}
                             desabledButtonFiles={desabledButtonFiles}
                             anchor="left"
-                            updateImg={updateImg && updateImg[0].imgUrl}
+                            updateImg={updateImg && updateImg[0].original}
                             updateImgData={updateImg && updateImg[0]}
                             nameUpdateImg={updateImg && updateImg[0].nameBefore}
                         />
@@ -531,7 +528,7 @@ const GalleryPage = ({dentist}: any) => {
                             saveCrop={saveCrop}
                             desabledButtonFiles={desabledButtonFiles}
                             anchor="rigth"
-                            updateImg={updateImg && updateImg[1].imgUrl}
+                            updateImg={updateImg && updateImg[1].original}
                             updateImgData={updateImg && updateImg[1]}
                             nameUpdateImg={updateImg && updateImg[1].nameAfter}
                         />
@@ -590,7 +587,7 @@ const GalleryPage = ({dentist}: any) => {
                     <p className="form-login-buttons">
                         <button className="button-green" onClick={saveData}
                                 disabled={!checkFilesLeft || !checkFilesRight || !titleBefore || !tagsBefore || !titleAfter ||
-                                !tagsAfter || !service || !check}
+                                !tagsAfter || !service || !check || !fileLeft || !fileRight}
                         >Confirm
                         </button>
                     </p>

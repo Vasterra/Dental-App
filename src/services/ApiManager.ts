@@ -158,6 +158,18 @@ class ApiManager {
     }
   }
 
+  public static async downloadCover(currentDentist: any) {
+    if (currentDentist === null) return
+    try {
+      const files = await Storage.list(`cover/${currentDentist.id}`);
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key));
+      signedFiles = await Promise.all(signedFiles);
+      return signedFiles;
+    } catch (error) {
+      console.log('Error download Avatar file: ', error);
+    }
+  }
+
   public static async deleteDentist(currentDentist: any) {
     try {
       if (currentDentist === null) return

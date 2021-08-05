@@ -10,11 +10,12 @@ type Props = {
   services: any,
   images: any,
   oldIMages: any,
+  currentCover: any,
   setImages: Function,
   downloadImages: Function,
 }
 
-const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDentist, oldIMages, images, currentAvatar, services, setImages, downloadImages}) => {
+const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentCover, currentDentist, oldIMages, images, currentAvatar, services, setImages, downloadImages}) => {
   const [location, setLocation]: any = useState();
 
   useEffect(() => {
@@ -48,7 +49,7 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDent
       { location && <section className="container page">
         <div className="flex-menu">
           <div className="index-leftmenu">
-            <img className="leftmenu-index-cover-image" src="../../../../images/cover-image.jpg" alt="cover image" />
+            <img className="leftmenu-index-cover-image" src={currentCover} alt="cover image" />
             <div className="index-leftmenu-profile-information">
               <img className="index-leftmenu-profile-photo" src={currentAvatar} alt=""/>
               <div>
@@ -57,7 +58,7 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDent
                   <img className="index-gallery-image-watermark-img relative-img" src="../../../../images/check_circle.svg" alt="check" />
                 </div>
                 <p className="form-login-subtitle gray px12 m-none">{currentDentist.qualifications}</p>
-                <p className="form-login-subtitle gray px12 m-none">GDC No: </p>
+                <p className="form-login-subtitle gray px12 m-none">GDC No: {currentDentist.gdcNumber}</p>
               </div>
               <div className="index-leftmenu-text">
                 <p>Bio</p>
