@@ -20,6 +20,15 @@
   flex-direction: column;
 }
 
+.flex-align-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  height: 100%;
+}
+
+
 .ReactCrop__image {
   max-height: 316px;
 }

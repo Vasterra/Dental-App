@@ -13,6 +13,7 @@ import Snackbar from "src/components/Snackbar";
 import {CircularProgress} from "@material-ui/core";
 import Error from "next/error";
 import {WrapperFlex} from "src/styles/Main.module"
+import GalleryPerson from '../../../components/Gallery/GalleryPerson';
 
 const GalleryPage = ({dentist}: any) => {
   const router = useRouter()
@@ -49,6 +50,8 @@ const GalleryPage = ({dentist}: any) => {
   const [searchValue, setSearchValue]: any = useState()
   const [imagesUpdate, setImagesUpdate]: any = useState()
 
+
+
   useEffect(() => {
     if (router.query.slug !== undefined) {
       const {slug} = router.query
@@ -84,6 +87,11 @@ const GalleryPage = ({dentist}: any) => {
       console.log(e)
     }
   }
+
+  const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
+  const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
+
+  const fullName = firstName + ' ' + lastName
 
   const getDentist = async (id: string) => {
     await ApiManager.getDentist(route ? route : id)
@@ -455,6 +463,18 @@ const GalleryPage = ({dentist}: any) => {
           </select>
         </div> }
         {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+
+        {Array.isArray(images) &&
+        <>
+          {images.length === 0 &&
+          <div className="flex-align-center">
+            <p className="index-leftmenu-text">Doctor {fullName} has not yet uploaded any of his works, be sure to check soon</p>
+          </div>}
+          {// @ts-ignore
+            images.length > 0 && <GalleryPerson images={images}/>
+          }
+        </>
+        }
         <div className="gallery-box">
           {!showUloadGallery && images && images.map((val: any[], key: any) => {
             return (
