@@ -43,6 +43,8 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentCove
   const fullName = firstName + ' ' + lastName
   const adress = currentDentist.postIndex + ' ' + currentDentist.city + ' ' + currentDentist.street
 
+  console.log(images);
+
   return (
     <>
       { !location && <WrapperFlex><CircularProgress size={120}/></WrapperFlex> }
@@ -105,9 +107,18 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentCove
                   )
                 })}
               </select>
-              { !images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex> }
-              {// @ts-ignore
-                images && <GalleryPerson images={images}/>
+              {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+
+              {Array.isArray(images) &&
+              <>
+                {images.length === 0 &&
+                <div className="flex-align-center">
+                  <p className="index-leftmenu-text">Doctor {fullName} has not yet uploaded any of his works, be sure to check soon</p>
+                </div>}
+                {// @ts-ignore
+                  images.length > 0 && <GalleryPerson images={images}/>
+                }
+              </>
               }
             </div>
           </div>

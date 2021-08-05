@@ -42,6 +42,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
   const fullName = firstName + ' ' + lastName
   const adress = currentDentist.postIndex + ' ' + currentDentist.city + ' ' + currentDentist.street
 
+
   return (
     <>
       { !location && <WrapperFlex><CircularProgress size={120}/></WrapperFlex> }
@@ -101,10 +102,20 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
               </select>
 
               {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
-              {// @ts-ignore
-                images && <GalleryPerson images={images}/>
+
+              {Array.isArray(images) &&
+                 <>
+                   {images.length === 0 &&
+                   <div className="flex-align-center">
+                     <p className="index-leftmenu-text">Doctor {fullName} has not yet uploaded any of his works, be sure to check soon</p>
+                   </div>}
+                   {// @ts-ignore
+                     images.length > 0 && <GalleryPerson images={images}/>
+                   }
+                 </>
               }
             </div>
+
           </div>
         </div>
       </section> }
