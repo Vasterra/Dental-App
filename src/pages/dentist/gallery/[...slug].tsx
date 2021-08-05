@@ -406,6 +406,8 @@ const GalleryPage = ({dentist}: any) => {
     if (e.keyCode === 13) searchImagesByTitle(e)
   }
 
+  const fullName = `${currentDentist.firstName ? currentDentist.firstName : ''} ${currentDentist.lastName ? currentDentist.lastName : ''}`
+
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
 
   return (
@@ -454,28 +456,30 @@ const GalleryPage = ({dentist}: any) => {
             <p className="index-leftmenu-text">Doctor {fullName} has not yet uploaded any of his works, be sure to check soon</p>
           </div>}
           {// @ts-ignore
-            images.length > 0 && <GalleryPerson images={images}/>
+            images.length > 0 &&
+
+            <div className="gallery-box">
+              {!showUloadGallery && images && images.map((val: any[], key: any) => {
+                return (
+                  <div key={key}>
+                    <Gallery
+                      // @ts-ignore
+                      images={val}
+                      oldIMages={oldIMages}
+                      services={services}
+                      setImages={setFuncImages}
+                      editGallery={editGallery}
+                      downloadImages={downloadImages}
+                      handlerShowUloadGallery={handlerShowUloadGallery}
+                    />
+                  </div>
+                )
+              })}
+            </div>
           }
         </>
         }
-        <div className="gallery-box">
-          {!showUloadGallery && images && images.map((val: any[], key: any) => {
-            return (
-              <div key={key}>
-                <Gallery
-                  // @ts-ignore
-                  images={val}
-                  oldIMages={oldIMages}
-                  services={services}
-                  setImages={setFuncImages}
-                  editGallery={editGallery}
-                  downloadImages={downloadImages}
-                  handlerShowUloadGallery={handlerShowUloadGallery}
-                />
-              </div>
-            )
-          })}
-        </div>
+
         {showUloadGallery && <>
             <div className="row-gallery">
                 <div className="profile-box-form cut-block">

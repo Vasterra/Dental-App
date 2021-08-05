@@ -64,8 +64,7 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentCove
               </div>
               <div className="index-leftmenu-text">
                 <p>Bio</p>
-                <p>Nulla eu tempor tortor. Sed iaculis sit amet purus eu pharetra. Maecenas eu risus sem. Fusce
-                  sollicitudin sollicitudin sapien.</p>
+                <p>{currentDentist.bio}</p>
                 <p className="button-list">
                   {
                     currentDentist.services.items.map((el: any, key: any) => {

@@ -21,9 +21,6 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
     setLocation(window.location.href)
   }, [])
 
-  const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
-  const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
-
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null)
     if (e.target.value === 'All Service') return downloadImages()
@@ -39,7 +36,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
       setImages(newListImages)
     }, 1000)
   }
-  const fullName = firstName + ' ' + lastName
+  const fullName = `${currentDentist.firstName ? currentDentist.firstName : ''} ${currentDentist.lastName ? currentDentist.lastName : ''}`
   const adress = currentDentist.postIndex + ' ' + currentDentist.city + ' ' + currentDentist.street
 
 
