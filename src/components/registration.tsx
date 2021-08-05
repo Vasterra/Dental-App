@@ -1,10 +1,11 @@
-import React, {useState} from "react";
-import ButtonForm from "./Buttons/ButtonForm";
-import {TextField} from "@material-ui/core";
-import {Auth} from "aws-amplify";
-import Router from "next/router";
-import Close from "@material-ui/icons/Close";
-import {useFormik} from 'formik';
+import React, { useState } from 'react';
+import ButtonForm from './Buttons/ButtonForm';
+import { CircularProgress, TextField } from '@material-ui/core';
+import { Auth } from 'aws-amplify';
+import Router from 'next/router';
+import Close from '@material-ui/icons/Close';
+import { useFormik } from 'formik';
+import { WrapperFlex } from '../styles/Main.module';
 
 interface State {
   username: string;
@@ -17,6 +18,7 @@ interface State {
   showPassword: boolean;
   user: null;
   errorMessage: null;
+  loader: null;
 }
 
 const Registration = ({}) => {
@@ -31,12 +33,13 @@ const Registration = ({}) => {
     showPassword: false,
     user: null,
     errorMessage: null,
-
+    loader: null
   });
 
   const validate = (values: any) => {
     const passwordRegex = /(?=.*[0-9])/;
     const errors: any = {};
+
     if (!values.username) {
       errors.username = 'Required';
     } else if (values.username.length > 25) {
@@ -46,9 +49,9 @@ const Registration = ({}) => {
     if (!values.password) {
       errors.password = 'Required';
     } else if (values.password.length < 8) {
-      errors.password = "*Password must be 8 characters long.";
+      errors.password = '*Password must be 8 characters long.';
     } else if (!passwordRegex.test(values.password)) {
-      errors.password = "*Invalid password. Must contain one number.";
+      errors.password = '*Invalid password. Must contain one number.';
     }
 
     if (!values.gdcNumber) {
@@ -76,130 +79,134 @@ const Registration = ({}) => {
       weight: '',
       weightRange: '',
       showPassword: false,
-      user: null,
+      user: null
     },
     validate,
     onSubmit: async (values: any) => {
       try {
-        const {user}: any = await Auth.signUp({
+        const { user }: any = await Auth.signUp({
           username: values.username,
           password: values.password,
           attributes: {
             email: values.email,
-            // gdcNumber: values.gdcNumber,
+            'custom:gdcNumber': values.gdcNumber
           }
         });
-        setValues({...values, user})
+        setValues({ ...values, user });
       } catch (error) {
-        setValues({...values, errorMessage: error.message})
+        setValues({ ...values, errorMessage: error.message });
         console.log('error signing up:', error);
       }
-    },
+    }
   });
 
   async function confirmSignUp(event: { preventDefault: () => void; }) {
     event.preventDefault();
     try {
+      setValues({ ...values, user: null });
+      setValues({ ...values, loader: true });
       await Auth.confirmSignUp(values.username, values.code);
-      await Router.replace('/login')
+      await Router.replace('/login');
     } catch (error) {
       console.log('error confirming sign up', error);
     }
   }
 
   return (
-    <div className="main bg-singup main-box">
-      <div className="form-login">
-        <p className="form-login-title green">Sign Up</p>
-        <p className="form-login-subtitle gray">Create An Account with FYD
+    <div className='main bg-singup main-box'>
+      {!values.loader && <div className='form-login'>
+        <p className='form-login-title green'>Sign Up</p>
+        <p className='form-login-subtitle gray'>Create An Account with FYD
         </p>
         {!values.user &&
         <form onSubmit={formik.handleSubmit}>
-            <p className="form-login-input">
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    placeholder="Username"
-                    value={formik.values.username}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                />
-                <Close className="form-login-input-close"
-                       onClick={() => {
-                         formik.setValues({...formik.values, username: ''})
-                       }}/>
-              {formik.errors.username ? <div>{formik.errors.username}</div> : null}
+          <p className='form-login-input'>
+            <input
+              type='text'
+              id='username'
+              name='username'
+              placeholder='Username'
+              value={formik.values.username}
+              onChange={formik.handleChange}
+            />
+            <Close className='form-login-input-close'
+                   onClick={() => {
+                     formik.setValues({ ...formik.values, username: '' });
+                   }} />
+            {formik.errors.username ? <div>{formik.errors.username}</div> : null}
 
-            </p>
-            <p className="form-login-input">
-                <input
-                    type="email"
-                    name="email"
-                    value={formik.values.email}
-                    id="email"
-                    placeholder="Email"
-                    onChange={formik.handleChange}
-                />
-                <Close className="form-login-input-close"
-                       onClick={() => {
-                         formik.setValues({...formik.values, email: ''})
-                       }}/>
-              {formik.errors.email ? <div>{formik.errors.email}</div> : null}
-            </p>
-            <p className="form-login-input">
-                <input
-                    type="text"
-                    name="gdcNumber"
-                    value={formik.values.gdcNumber}
-                    id="gdcNumber"
-                    placeholder="GDC Number (this cannot be updated later)"
-                    onChange={formik.handleChange}
-                />
-                <Close className="form-login-input-close"
-                       onClick={() => {
-                         formik.setValues({...formik.values, gdcNumber: ''})
-                       }}/>
-              {formik.errors.gdcNumber ? <div>{formik.errors.gdcNumber}</div> : null}
-            </p>
-            <p className="form-login-input">
-                <input
-                    type="password"
-                    name="password"
-                    value={formik.values.password}
-                    id="password"
-                    placeholder="Password"
-                    onChange={formik.handleChange}
-                />
-                <Close className="form-login-input-close"
-                       onClick={() => {
-                         formik.setValues({...formik.values, password: ''})
-                       }}/>
-              {formik.errors.password ? <div>{formik.errors.password}</div> : null}
-            </p>
-            <p className="form-login-buttons">
-                <button type="submit" className="button-green">Sign Up</button>
-            </p>
+          </p>
+          <p className='form-login-input'>
+            <input
+              type='email'
+              name='email'
+              id='email'
+              placeholder='Email'
+              value={formik.values.email}
+              onChange={formik.handleChange}
+            />
+            <Close className='form-login-input-close'
+                   onClick={() => {
+                     formik.setValues({ ...formik.values, email: '' });
+                   }} />
+            {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+          </p>
+          <p className='form-login-input'>
+            <input
+              type='text'
+              name='gdcNumber'
+              id='gdcNumber'
+              placeholder='GDC Number (this cannot be updated later)'
+              value={formik.values.gdcNumber}
+              onChange={formik.handleChange}
+            />
+            <Close className='form-login-input-close'
+                   onClick={() => {
+                     formik.setValues({ ...formik.values, gdcNumber: '' });
+                   }} />
+            {formik.errors.gdcNumber ? <div>{formik.errors.gdcNumber}</div> : null}
+          </p>
+          <p className='form-login-input'>
+            <input
+              type='password'
+              name='password'
+              id='password'
+              placeholder='Password'
+              value={formik.values.password}
+              onChange={formik.handleChange}
+            />
+            <Close className='form-login-input-close'
+                   onClick={() => {
+                     formik.setValues({ ...formik.values, password: '' });
+                   }} />
+            {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+          </p>
+          <p className='form-login-buttons'>
+            <button type='submit' className='button-green'>Sign Up</button>
+          </p>
         </form>
-        }{values.user &&
-      <form onSubmit={confirmSignUp} className="login-form-wrapper">
+        }
+
+        {values.user && <form onSubmit={confirmSignUp} className='login-form-wrapper'>
           <TextField
-              id="filled-password-input"
-              label="Confirm"
-              type="number"
-              className="input-form"
-              placeholder="confirm"
-              onChange={(e) => setValues({...values, code: e.target.value})}
-              margin="normal"
-              variant="outlined"
+            id='filled-password-input'
+            label='Confirm'
+            type='number'
+            className='input-form'
+            placeholder='confirm'
+            onChange={(e) => setValues({ ...values, code: e.target.value })}
+            margin='normal'
+            variant='outlined'
           />
           <ButtonForm title='Confirm'>Confirm</ButtonForm>
-      </form>
-      }
+        </form>
+        }
         <div>{values.errorMessage}</div>
       </div>
+      }
+      {values.loader && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
     </div>
   );
 };
 
-export default Registration
+export default Registration;
