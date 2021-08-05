@@ -99,6 +99,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
                     )
                 })}
               </select>
+
               {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
               {// @ts-ignore
                 images && <GalleryPerson images={images}/>

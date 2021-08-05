@@ -31,10 +31,10 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
           </p>
         </div>
         { currentDentist.hasPaidPlan && <div className="profile-block-box">
-            <AddWatermark />
+            <AddWatermark currentDentist={currentDentist}/>
         </div> }
         { !currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
-          <AddWatermark />
+          <AddWatermark currentDentist={currentDentist}/>
         </div> }
       </div>
     </div>

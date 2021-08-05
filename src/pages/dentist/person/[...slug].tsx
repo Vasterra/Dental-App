@@ -26,6 +26,7 @@ const Person = ({dentistData}: any) => {
   const [images, setImages]: any = useState()
   const [oldIMages, setOldIMages]: any = useState()
   const [route, setRoute]: any = useState()
+  const [currentCover, setCurrentCover]: any = useState()
 
   useEffect(() => {
     if (router.query.slug !== undefined) {
@@ -34,6 +35,7 @@ const Person = ({dentistData}: any) => {
       authListener()
       getListImages()
       getListServiceForDentals();
+      downloadCover();
     }
   }, [router])
 
@@ -153,6 +155,12 @@ const Person = ({dentistData}: any) => {
     }
   }
 
+  const downloadCover = async () => {
+    await ApiManager.downloadCover(currentDentist).then(signedFiles => {
+      setCurrentCover(signedFiles[0])
+    })
+  };
+
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
 
   return (
@@ -170,6 +178,7 @@ const Person = ({dentistData}: any) => {
       {currentDentist && currentDentist.hasPaidPlan && <ProfileAccountSubscription
           currentDentist={currentDentist}
           images={images}
+          currentCover={currentCover}
           oldIMages={oldIMages}
           services={services}
           currentAvatar={currentAvatar}
