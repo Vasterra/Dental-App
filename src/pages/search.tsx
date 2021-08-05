@@ -38,13 +38,7 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
         if (!searchCoords) {
           setSearchCoords(result)
           const findCoordinatesDent: any = findCoordinatesDentists(searchCoords ? searchCoords : result, valueSlider, dentistsData)
-          if (findCoordinatesDent.length > 0) {
-            setTimeout(() => {
-              setSearchDentists(findCoordinatesDent)
-            }, 1000)
-          } else {
-            setSearchDentists(null)
-          }
+          setSearchDentists(findCoordinatesDent)
           setDentists(dentistsData)
           setOldDentists(dentistsData)
         }
@@ -201,8 +195,8 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
     })
     return distanceDent
   }
-  console.log(searchDentists)
-  if (!dentists) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
+  // console.log(searchDentists)
+  // if (!dentists) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
 
   return (
     <Layout title="Search page">
@@ -260,7 +254,7 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
         </div>
         <div className="index-box-to-box">
           <div className="main-index  index-main-box left-size">
-            {!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+            {/*{!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}*/}
             {searchDentists &&
             <GoogleMapReactComponent
                 dentists={searchDentists}
@@ -271,7 +265,7 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
             />}
           </div>
           <div className="main-index index-main-box right-size">
-            {!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
+            {/*{!searchDentists && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}*/}
             <div className="index-gallery-box">
               {searchDentists &&
               searchDentists.map((dentist: any, key: any) => {

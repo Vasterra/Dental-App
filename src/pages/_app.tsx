@@ -9,7 +9,6 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { AppProps } from 'next/app';
 
 import '../styles/globals.css';
-import AuthContext from '../context/AuthContext';
 import config from '../../aws-exports'
 import Amplify from 'aws-amplify';
 
@@ -33,27 +32,12 @@ function DentalApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Elements stripe={stripePromise}>
-        <Head>
-          <title>Dental App</title>
-          <link rel="stylesheet" href="/favicon.ico" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap"
-          />
-          <meta charSet="utf-8" />
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-        </Head>
-        <AuthContext>
           <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
             <Component {...pageProps} />
           </ThemeProvider>
-        </AuthContext>
+
       </Elements>
     </QueryClientProvider>
   );

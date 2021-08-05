@@ -68,7 +68,7 @@ const Login = ({}) => {
                 // @ts-ignore
                 authMode: 'AWS_IAM'
             })
-            await Router.replace('/search')
+            await Router.replace('/')
         })
     }
 

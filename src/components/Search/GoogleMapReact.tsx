@@ -34,6 +34,11 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
         lat: Number(lat),
         lng: Number(lng)
       }
+    } else {
+      centerMe = {
+        lat: 52.205276,
+        lng: 0.119167
+      }
     }
 
     // if (this.props.currentDentist) {
@@ -46,6 +51,7 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
     const onChildClick = (e: any) => {
       console.log(e)
     }
+    console.log(centerMe);
     return (
       <GoogleMapReact
         bootstrapURLKeys={{key: 'AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY'}}

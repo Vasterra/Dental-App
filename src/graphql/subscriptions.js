@@ -11,6 +11,7 @@ export const onCreateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
@@ -76,6 +77,7 @@ export const onUpdateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
@@ -141,6 +143,7 @@ export const onDeleteDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street

@@ -78,9 +78,11 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
             </p>
             <p className="row-content">
               <span className="input-span">Service</span>
-              <select className="form-profile-input arrows" name="services" id="services"
-                      // @ts-ignore
-                      onChange={handleOnChange}>
+              <select className="form-profile-input arrows"
+                      name="services"
+                      id="services"
+                      onChange={() => handleOnChange}
+              >
                 <option value="" disabled selected>Select Service</option>
                 {service.map((item: any, key: any) => (
                   <option key={key} value={item.name}>{item.name}</option>

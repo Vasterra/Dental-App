@@ -83,7 +83,7 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentDent
                   {
                     currentDentist.locations.items.map((el: any, key: any) => {
                       return (
-                        <p><strong>{el.city}</strong> {el.address} - {el.postCode}</p>
+                        <p><strong>{el.city}</strong> {el.address} - {el.postCode.toUpperCase()}</p>
                       )
                     })
                   }
