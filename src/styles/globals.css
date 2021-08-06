@@ -711,8 +711,25 @@ input[type=file]::-webkit-file-upload-button {
   padding: 20px;
 }
 
+.person-name-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.person-name-check_title {
+  font-family: PT Serif, serif;
+  font-size: 33px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 2.06px;
+  margin-right: 10px;
+}
+
 .form-login-title {
-  font-family: PT Serif;
+  font-family: PT Serif, serif;
   font-size: 33px;
   font-weight: bold;
   font-stretch: normal;
@@ -720,7 +737,6 @@ input[type=file]::-webkit-file-upload-button {
   line-height: normal;
   letter-spacing: 2.06px;
   text-align: left;
-  margin-bottom: 16px;
 }
 
 .form-login-subtitle {

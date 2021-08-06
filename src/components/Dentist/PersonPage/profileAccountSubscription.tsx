@@ -55,8 +55,8 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentCove
             <div className="index-leftmenu-profile-information">
               <img className="index-leftmenu-profile-photo" src={currentAvatar} alt=""/>
               <div>
-                <div className="form-login-title green px20 mt-30 row-content">
-                  <p className="form-login-title green px20">{fullName}</p>
+                <div className="person-name-check green px20 mt-30 row-content">
+                  <p className="person-name-check_title green px20">{fullName}</p>
                   <img className="index-gallery-image-watermark-img relative-img" src="../../../../images/check_circle.svg" alt="check" />
                 </div>
                 <p className="form-login-subtitle gray px12 m-none">{currentDentist.qualifications}</p>
