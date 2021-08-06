@@ -41,7 +41,7 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
     <div className="index-gallery-image-box" onClick={() => setCurrentDentist(dentist)}>
       <ImageWrapper>
         {images && <DentistImage src={images} alt="image"/>}
-        {!images && <DentistImageBlockEmpty/>}
+        {!images && <DentistImageBlockEmpty src={"../../../images/empty_avatar.png"}/>}
       </ImageWrapper>
       <p className="index-gallery-image-watermark"></p>
       <img className="index-gallery-image-watermark-img-1" src="../images/check_circle.svg" alt="check"/>
@@ -76,9 +76,9 @@ const DentistImage = styled("img")`
   height: 200px;
 `;
 
-const DentistImageBlockEmpty = styled("div")`
+const DentistImageBlockEmpty = styled("img")`
   display: block;
-  background-color: #0d9da6;
+  /* background-color: #0d9da6; */
   width: 100%;
   height: 200px;
 `;

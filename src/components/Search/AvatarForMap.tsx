@@ -3,7 +3,7 @@ import {Storage} from "aws-amplify";
 import styled from "styled-components";
 import ApiManager from "src/services/ApiManager";
 
-const DentistImageBlockEmpty = styled("div")`
+const DentistImageBlockEmpty = styled("img")`
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -36,7 +36,7 @@ const AvatarForMapComponent: React.FunctionComponent<Props> = ({dentist}) => {
         {images && <img className="map-dentist-block-image" src={images} alt="image"/>}
       </div>
       <div>
-        {!images && <DentistImageBlockEmpty/>}
+        {!images && <DentistImageBlockEmpty src={"../../../images/empty_avatar.png"}/>}
       </div>
     </>
   )

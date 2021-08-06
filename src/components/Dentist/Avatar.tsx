@@ -28,14 +28,13 @@ const DentistAvatar = styled("img")`
   border-radius: 50%;
 `;
 
-const DentistAvatarBlockEmpty = styled("div")`
+const DentistAvatarBlockEmpty = styled("img")`
   display: block;
-  background-color: #0d9da6;
+  background-color: white;
   width: 150px;
   height: 150px;
   margin: 15px;
   border-radius: 50%;
-  border: 1px solid #0d9da6;
 `;
 
 const DentistInfoName = styled('div')`
@@ -49,7 +48,7 @@ const DentistInfoEmail = styled("div")`
   padding: 15px;
 `;
 
-const UploadButtonEmpty = styled("span")`{
+const UploadButtonEmpty = styled("span")`
   position: relative;
   width: 170px;
   cursor: pointer;
@@ -182,7 +181,7 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({
     } else {
       return (
         <>
-          <DentistAvatarBlockEmpty/>
+          <DentistAvatarBlockEmpty src={"../../../images/empty_avatar"}/>
           <UploadButtonEmpty onClick={handleOpen}>
             Upload Avatar
           </UploadButtonEmpty>
@@ -219,7 +218,7 @@ const AvatarProfileComponent: React.FunctionComponent<Props> = ({
   const DentistPhotoWithoutMe = () => {
     console.log(avatarImage)
     return <>
-      { !avatarImage && <DentistAvatarBlockEmpty/> }
+      { !avatarImage && <DentistAvatarBlockEmpty src={"../../../images/empty_avatar"}/> }
       { avatarImage && <DentistAvatar src={avatarImage} alt="avatar"/> }
     </>
   }

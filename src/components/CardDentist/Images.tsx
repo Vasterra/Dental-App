@@ -21,7 +21,7 @@ const DentistImage = styled("img")`
   height: 200px;
 `;
 
-const DentistImageBlockEmpty = styled("div")`
+const DentistImageBlockEmpty = styled("img")`
   display: block;
   background-color: #0d9da6;
   width: 100%;
@@ -46,7 +46,7 @@ const CardDentistImage: React.FunctionComponent<Props> = ({data}) => {
       {avatarImg && <DentistImage
         // @ts-ignore
           src={avatarImg} alt="image"/>}
-      {!avatarImg && <DentistImageBlockEmpty/>}
+      {!avatarImg && <DentistImageBlockEmpty src={"../../../images/empty_avatar"}/>}
     </ImageWrapper>
   )
 }
