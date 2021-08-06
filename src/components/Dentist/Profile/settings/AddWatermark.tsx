@@ -85,7 +85,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
     setOpenSnackBar(false);
   };
 
-  console.log(watermarkImg);
+
   return (
     <>
       <div className='mt-30'>

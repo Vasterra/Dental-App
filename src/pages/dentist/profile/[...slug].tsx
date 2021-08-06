@@ -112,7 +112,7 @@ const Profile = ({dentist}: any) => {
       <Layout title="Profile" active={'activeProfile'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
         <div className="main-profile bg-white ">
           <AddSettings currentDentist={currentDentist} getDentist={getDentist}/>
-          <Location currentDentist={currentDentist} getDentist={getDentist}/>
+          <Location route={route}/>
           <Services currentDentist={currentDentist} getDentist={getDentist}/>
           <DisplayPhotos currentDentist={currentDentist} currentAvatar={currentAvatar}
                            uploadAvatar={uploadAvatar}/>
