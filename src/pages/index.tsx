@@ -1,6 +1,5 @@
-import React from "react";
-
-import {AmplifyAuthContainer, AmplifyAuthenticator } from '@aws-amplify/ui-react';
+import React from 'react';
+import { AmplifyAuthContainer, AmplifyAuthenticator } from '@aws-amplify/ui-react';
 import Dashboard from 'src/pages/admin/dashboard';
 
 const Login = () => {
