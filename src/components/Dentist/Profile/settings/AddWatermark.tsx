@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import ReactImageProcess from 'react-image-process';
 import { Storage } from 'aws-amplify';
 import Snackbar from '../../../Snackbar';
-import Error from 'next/error';
 import ApiManager from '../../../../services/ApiManager';
 
 type Props = {
@@ -93,11 +92,27 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
         <p className='form-profile-label'>
           <label className='form-profile-label'>Cover</label>
         </p>
-        <p className='profile-photo-box'>
+        { !watermarkImg && currentCover && <p className='profile-photo-box'>
           {currentCover && <img className='image' src={currentCover} alt='' />}
-        </p>
+        </p> }
+        { watermarkImg && <p className='profile-photo-box'>
+          <ReactImageProcess
+            mode='waterMark'
+            waterMarkType='image'
+            waterMark={watermarkImg}
+            width={60}
+            height={60}
+            opacity={0.7}
+            coordinate={[10, 10]}
+          >
+            <img className='image'
+                 src={currentCover}
+                 alt="waterMark"
+            />
+          </ReactImageProcess>
+        </p> }
         <p className='row-content'>
-          <label className='button-green-file'>Upload</label>
+          <label className='button-green-file'>Upload Cover</label>
           <input type='file' className='input-file' name='watermark' id='watermark'
                  onChange={addImage} />
         </p>
@@ -106,19 +121,11 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
         <p className='form-profile-label'>
           <label className='form-profile-label'>Watermark</label>
         </p>
-        <p className='profile-photo-box'>
-          {watermarkImg && <ReactImageProcess
-            mode='waterMark'
-            waterMarkType='image'
-            waterMark={watermarkImg}
-            coordinate={[10, 10]}
-          >
-            <img className='image' src={currentCover} alt='' />
-          </ReactImageProcess>
-          }
+         <p className='profile-photo-box'>
+           {watermarkImg &&<img className='image' src={watermarkImg} alt='' />}
         </p>
         <p className='row-content'>
-          <label className='button-green-file'>Upload</label>
+          <label className='button-green-file'>Upload Watermark</label>
           <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={addWatermark} />
         </p>
       </div>

@@ -76,9 +76,9 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentCove
                 </p>
                 <p>Contact </p>
                 <p>
-                  <span><strong>Phone:</strong>{currentDentist.phone}</span><br />
+                  <span><strong>Phone: </strong>{currentDentist.phone}</span><br />
                   <span><strong>Email: </strong>{currentDentist.email}</span><br />
-                  <span> <strong>Website:</strong>{currentDentist.website}</span>
+                  <span> <strong>Website: </strong>{currentDentist.website}</span>
                 </p>
                 <p>Locations</p>
                 <div className="flex-wrapper">

@@ -458,10 +458,10 @@ img {
   background-color: var(--color-green);
   color: var(--color-white);
   margin: 20px 20px 0 0;
-  max-width: 150px;
-  padding: 13px 30px;
+  width: 150px;
+  padding: 12px 20px;
   box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
-  font-family: PT Sans;
+  font-family: PT Sans, serif;
   font-size: 9px;
   font-weight: bold;
   font-stretch: normal;
