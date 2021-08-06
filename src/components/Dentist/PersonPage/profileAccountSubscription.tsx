@@ -89,9 +89,9 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({currentCove
                     })
                   }
                 </div>
-                {/*<div style={{marginTop: '10px'}}>*/}
-                {/*  <QRCode value={location} size={100}/>*/}
-                {/*</div>*/}
+                <div style={{marginTop: '10px'}}>
+                  <QRCode value={location} size={100}/>
+                </div>
               </div>
             </div>
           </div>

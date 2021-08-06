@@ -83,9 +83,9 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
                     })
                   }
                 </div>
-                {/*<div style={{marginTop: '10px'}}>*/}
-                {/*  <QRCode value={location} size={100}/>*/}
-                {/*</div>*/}
+                <div style={{marginTop: '10px'}}>
+                  <QRCode value={location} size={100}/>
+                </div>
               </div>
             </div>
           </div>
