@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
 import { API, Auth } from 'aws-amplify';
 import Router from 'next/router';
 import { createDentist } from 'src/graphql/mutations';
@@ -8,6 +8,8 @@ import Close from '@material-ui/icons/Close';
 import { useFormik } from 'formik';
 import { WrapperFlex } from '../styles/Main.module';
 import { CircularProgress } from '@material-ui/core';
+import useModal from 'src/hooks/useModal';
+import { ModalConfirm } from './Dialog';
 
 interface State {
   username: string;
@@ -130,12 +132,34 @@ const Login = ({}) => {
 
   if (values.user) Router.replace('/');
 
+  const { toggle, visible, text, setText, confirm, setConfirm, funcName, setFuncName } = useModal()
+
+  useEffect(()=>{
+    if(confirm === 'yes'){
+      if(funcName === 'form-submit'){
+        formik.handleSubmit()
+      }
+    }
+    return ()=>{
+      setConfirm('no')
+    }
+  }, [confirm])
+
+  const openModal = (e: SyntheticEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setText('Login with this account?')
+    setFuncName('form-submit')
+    toggle()
+  }
+
   return (
     <div className='main bg-login main-box'>
+      <ModalConfirm visible={visible} toggle={toggle} text={text} setConfirm={setConfirm}/>
       {!values.loader && <div className='form-login'>
         <p className='form-login-title green'>Login</p>
         <p className='form-login-subtitle gray'>Current FYD users</p>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={openModal}>
           <p className='form-login-input'>
             <input
               type='text'
@@ -168,7 +192,10 @@ const Login = ({}) => {
           </p>
           <p className='form-login-buttons'>
             <button type='submit' className='button-green'>Login</button>
-            <button className='button-white'>Reset password</button>
+            <button className='button-white' onClick={(e: SyntheticEvent)=>{
+               e.preventDefault()
+               e.stopPropagation()
+            }}>Reset password</button>
           </p>
         </form>
         <div>{values.errorMessage}</div>
