@@ -3,8 +3,6 @@ import Layout from "src/components/Layout";
 import {Grid} from "@material-ui/core";
 import Header from "src/components/Header";
 import Login from "src/components/login";
-import useModal from "src/hooks/useModal";
-import { ModalY } from "src/components/Dialog/index";
 
 const SignIn = () => {
   return (

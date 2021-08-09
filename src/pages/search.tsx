@@ -1,6 +1,6 @@
 import {API} from "aws-amplify";
-import React, {useEffect, useState} from "react";
-import {CircularProgress} from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Button } from "@material-ui/core";
 
 import Layout from "src/components/Layout";
 import Header from "src/components/Header";
@@ -13,14 +13,12 @@ import ApiManager from "src/services/ApiManager";
 import {switcher} from "src/utils/switcher";
 import {getDentist,} from "src/graphql/queries";
 import {convertCityCoords} from "src/utils/search/converCityCoords";
-import {WrapperFlex} from "src/styles/Main.module";
 
 const Search = ({dentistsData, listServiceForDentals}: any) => {
 
   const [currentDentist, setCurrentDentist]: any = useState()
   const [dentists, setDentists]: any = useState(dentistsData)
   const [oldDentists, setOldDentists]: any = useState()
-  const [services, setServices]: any = useState()
   const [service, setService]: any = useState()
   const [servicesForSearch, setServicesForSearch]: any = useState(listServiceForDentals)
   const [ipCoords, setIpCoords]: any = useState()
@@ -29,6 +27,8 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
   const [searchValue, setSearchValue]: any = useState()
   const [searchCoords, setSearchCoords]: any = useState()
   const [switcherClick, setSwitcherClick]: any = useState()
+  const [searchMile, setSearchMile] = useState<number | null>(null)
+  const [serviceInputValue, setServiceInputValue] = useState<any>(null)
   const [serviceSearch, setServiceSearch]: any = useState('choose service')
 
   useEffect(() => {
@@ -54,9 +54,8 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
     }
   }, [searchDentists])
 
-  const getListDentists = async (service: any, result: any) => {
+  const getListDentists = async (service: any, result?: any) => {
     setSearchDentists(null)
-    setService(service)
     ApiManager.getListDentists().then(listDentist => {
       const findCoordinatesDent = findCoordinatesDentists(searchCoords ? searchCoords : result, valueSlider, listDentist)
       setTimeout(() => {
@@ -123,13 +122,19 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
   }
 
   const onChangeDistance = async (e: any) => {
+   setSearchMile(e.target.value as number)
+  }
+
+  const onClickFind = async()=>{
+    if(!!serviceInputValue){
+      return handleChangeService(serviceInputValue)
+    }
     setSearchDentists(null)
     let distanceDent: any[] = [];
     let searchDent: any[] = [];
-
     if (serviceSearch === 'choose service') {
       setSearchDentists(null)
-      const findCoordinatesDent = findCoordinatesDentists(searchCoords, e.target.value, dentists)
+      const findCoordinatesDent = findCoordinatesDentists(searchCoords, searchMile as number, dentists)
       setTimeout(() => {
         setSearchDentists(findCoordinatesDent)
       }, 1000)
@@ -150,7 +155,7 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
                   * Math.cos((a.Longitude - b.Longitude) * (Math.PI / 180))
                   + Math.sin(a.Latitude * (Math.PI / 180))
                   * Math.sin(b.Latitude * (Math.PI / 180)))))
-            if (distanceCur < e.target.value) {
+            if (searchMile && distanceCur < searchMile ) {
               distanceDent.push(dent)
             }
           }
@@ -195,6 +200,44 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
     })
     return distanceDent
   }
+
+  const handleChangeService = async (value: any) => {
+    let distanceDent: any[] = [];
+    let searchDent: any[] = [];
+
+    setSearchService(value)
+
+    if (value === 'choose service') {
+      return getListDentists(value);
+    }
+    dentists.forEach((item: any) => {
+      searchDent.push(getDentistsFind(item))
+    })
+    searchDent = await Promise.all(searchDent)
+    searchDent.forEach(dent => {
+      dent.services.items.forEach((item: { name: any; }) => {
+        if (item.name == value) {
+          const a = {'Longitude': searchCoords.lng, 'Latitude': searchCoords.lat};
+          const b = {'Longitude': dent.lng, 'Latitude': dent.lat};
+          const distanceCur = (111.111 *
+            (180 / Math.PI) * (
+              Math.acos(Math.cos(a.Latitude * (Math.PI / 180))
+                * Math.cos(b.Latitude * (Math.PI / 180))
+                * Math.cos((a.Longitude - b.Longitude) * (Math.PI / 180))
+                + Math.sin(a.Latitude * (Math.PI / 180))
+                * Math.sin(b.Latitude * (Math.PI / 180)))))
+          if (distanceCur < 50) {
+            distanceDent.push(dent)
+          }
+        }
+      })
+    })
+    setFindDentist(distanceDent);
+  }
+
+  const saveServiceValue = (e: any)=>{
+    setServiceInputValue(e.target.value)
+  }
   // console.log(searchDentists)
   // if (!dentists) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
 
@@ -220,19 +263,18 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
               <p className="row-content-index">
                 {servicesForSearch &&
                 <Services
-                    setFindDentist={setFindDentist}
-                    getListDentists={getListDentists}
-                    setSearchService={setSearchService}
+                    currentService={serviceInputValue}
+                    onHandleChange={saveServiceValue}
                     services={servicesForSearch}
-                    searchCoords={searchCoords}
-                    dentists={dentists}
                 />}
               </p>
               <p className="row-content-index">
-                <select className="index-select arrows" name="services" id="services"
-                        onChange={onChangeDistance}>
-                  <option value="50">Within: 50 Miles
-                  </option>
+                <select 
+                  className="index-select arrows" 
+                  name="services" 
+                  id="services"
+                  onChange={onChangeDistance}>
+                  <option value="50">Within: 50 Miles</option>
                   <option value="1">Within: 1 Mile</option>
                   <option value="5">Within: 5 Miles</option>
                   <option value="10">Within: 10 Miles</option>
@@ -241,6 +283,14 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
                   <option value="40">Within: 40 Miles</option>
                 </select>
               </p>
+              <div>
+                <Button 
+                  style={{background: '#095c5c', margin: '0 20px 0 20px'}}
+                  onClick={onClickFind}
+                >
+                  Find
+                </Button>
+              </div>
             </div>
             <h1 className="title-dentist">Find Your Dentist</h1>
             <div className="box-right">
