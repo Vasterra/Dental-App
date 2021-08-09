@@ -23,7 +23,7 @@ const AdminSettings = () => {
     }
     setOpenSnackbar(false);
   };
-  console.log(openSnackbar);
+
   return (
     <section className='container-profile '>
       <Menu active='Settings' />

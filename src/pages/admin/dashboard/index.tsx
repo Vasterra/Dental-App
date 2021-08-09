@@ -8,21 +8,7 @@ import moment from 'moment';
 
 const AdminDashboard = () => {
 
-  const [analytics, setAnalytics]: any = useState();
-  const MONTHS: any[string] = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
+  const [analytics, setAnalytics] = useState();
 
   useEffect(() => {
     setTimeout(() => {
@@ -30,7 +16,7 @@ const AdminDashboard = () => {
     }, 1000);
   }, []);
 
-  const getListDentists = async () => {
+  const getListDentists = () => {
     const currentDate = moment();
     try {
       void ApiManager.getListDentists().then(listDentists => {
