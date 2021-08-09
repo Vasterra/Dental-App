@@ -88,7 +88,6 @@ class ApiManager {
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-    console.log(data.listClosedSubscriptions.items)
     return data.listClosedSubscriptions.items
   }
 
@@ -101,7 +100,6 @@ class ApiManager {
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-    console.log(data)
     return data.getAdminAnalytics
   }
 
@@ -114,7 +112,6 @@ class ApiManager {
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-    console.log(data)
     return data.getAdminSettingsSubscriber
   }
 

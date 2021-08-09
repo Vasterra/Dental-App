@@ -22,16 +22,6 @@ const BORDER = true;
 const CHART_AREA = true;
 const TICKS = true;
 
-const CHART_COLORS = {
-  red: 'rgb(255, 99, 132)',
-  orange: 'rgb(255, 159, 64)',
-  yellow: 'rgb(255, 205, 86)',
-  green: 'rgb(75, 192, 192)',
-  blue: 'rgb(54, 162, 235)',
-  purple: 'rgb(153, 102, 255)',
-  grey: 'rgb(201, 203, 207)'
-};
-
 class Graph extends Component {
 
   state: any = {
@@ -94,17 +84,17 @@ class Graph extends Component {
     this.getListDentists();
   }
 
-  async getListDentists() {
-    ApiManager.getListDentists().then(listDentist => {
+  getListDentists() {
+    void ApiManager.getListDentists().then(listDentist => {
       this.filterByMonth(listDentist)
       this.setState({dentists: listDentist})
     });
   }
 
   filterByYear = async (year: any) => {
+    this.props.filterAnalytics(year)
     this.setState({currentYear: year})
     await ApiManager.getListDentists().then(listDentist => {
-      let filterYear: any;
       let filterdentistByYear: any[] = [];
       MONTHS.map((month: any, key: any) => {
         filterdentistByYear = listDentist.filter((item: any) => (year === new Date(item.createdAt).getFullYear()))
@@ -114,7 +104,6 @@ class Graph extends Component {
   }
 
   filterByMonth = (listDentist: any[]) => {
-    const currentDate = moment();
     let subscription: any;
     let free: any;
     let subscriptionDentistsByMonths: any[] = [];

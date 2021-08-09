@@ -5,12 +5,16 @@ import Error from "next/error"
 import {motion} from "framer-motion"
 import moment from "moment"
 import { CircularProgress } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
 
 const AdminUsers = () => {
+
+  const articlesOnPage = 10;
+
   const [dentists, setDentists]: any = useState();
   const [oldDentists, setOldDentists]: any = useState();
   const [userInfoShow, setUserInfoShow]: any = useState(false);
-  const [searchValue, setSearchValue]: any = useState();
+  const [countPagination, setCountPagination]: any = useState();
 
   const variants = {
     visible: {opacity: 1, height: 'auto'},
@@ -21,11 +25,12 @@ const AdminUsers = () => {
     getListDentists();
   }, [])
 
-  const getListDentists = async () => {
+  const getListDentists = () => {
     try {
-      ApiManager.getListDentists().then(listDentitst => {
-        setDentists(listDentitst)
-        setOldDentists(listDentitst)
+      ApiManager.getListDentists().then(listDentists => {
+        setCountPagination(Math.ceil(listDentists.length / articlesOnPage))
+        setDentists(listDentists)
+        setOldDentists(listDentists)
       });
     } catch (e) {
       return <Error statusCode={404}/>
@@ -46,10 +51,8 @@ const AdminUsers = () => {
         allDentists.push(item)
       }
     })
-
     setDentists(allDentists)
   }
-
 
   const clickRowOpen = (id: number) => {
     const allRow: any = document.getElementsByClassName('user-info');
@@ -99,6 +102,12 @@ const AdminUsers = () => {
     setDentists(filteredDentists)
   }
 
+  const changePagination = (event: React.ChangeEvent<unknown>, value: number) => {
+    const startFrom = (value - 1) * articlesOnPage
+    const data = oldDentists.slice(startFrom , startFrom + articlesOnPage)
+    setDentists(data)
+  }
+
   return (
     <section className='container-profile'>
       <Menu active="Users"/>
@@ -115,7 +124,6 @@ const AdminUsers = () => {
                    type='search'
                    id='search'
                    name='search'
-                   value={searchValue}
                    onChange={e => changeSearch(e.target.value)}
                    placeholder='Search users'/>
             <img className='search-button' src='../../../images/search.svg' alt='search'/>
@@ -137,7 +145,7 @@ const AdminUsers = () => {
                 <li onClick={() => filterStatus('Free')}>Free</li>
               </ul>
             </div>
-            <div className='form-profile-label'></div>
+            <div className='form-profile-label'/>
             <div className='form-profile-label'>
               <img className='pl-13' src='../../../images/arrow-bottom.svg' alt='arrow bottom'/>
             </div>
@@ -149,7 +157,7 @@ const AdminUsers = () => {
                 <div className='user-list user-list-text bg-white user-data'>
                   <p>{item.firstName}</p>
                   <p>{getDate(item)}</p>
-                  <p>Paid Subscription Ends: 03/09/2021</p>
+                  <p>{item.hasPaidPlan ? 'Paid Subscription Ends: 03/09/2021' : 'Free'}</p>
                   <a className='row'>
                     <img src='../../../images/user.svg'/>
                     <span>View Profile</span>
@@ -183,6 +191,7 @@ const AdminUsers = () => {
               </div>
             )
           })}
+          <Pagination count={countPagination} color="primary" onChange={changePagination}  />
         </div>
       </div>
     </section>

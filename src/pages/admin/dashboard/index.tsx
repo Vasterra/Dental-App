@@ -44,12 +44,17 @@ const AdminDashboard = () => {
     }
   };
 
+  const filterAnalytics = (year: any) => {
+    console.log(year);
+    console.log(analytics);
+  }
+
   return (
     <section className='container-profile'>
       <Menu active='Dashboard' />
       <div className='main-profile bg-white'>
         <CurrentMonth analytics={analytics} />
-        <TotalSubscription analytics={analytics} />
+        <TotalSubscription analytics={analytics} filterAnalytics={filterAnalytics} />
       </div>
     </section>
   );
