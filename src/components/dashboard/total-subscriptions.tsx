@@ -16,7 +16,7 @@ const CurrentMonth: React.FunctionComponent<Props>= ({analytics, filterAnalytics
           <p className="form-login-title green px20">Total Subscriptions</p>
           <p className="form-login-subtitle gray px12 mb-6px">Summary</p>
           <Subscriptions analytics={analytics}/>
-          <Graph filterAnalytics={filterAnalytics}/>
+            <Graph filterAnalytics={filterAnalytics}/>
         </div> }
       </div>
     );

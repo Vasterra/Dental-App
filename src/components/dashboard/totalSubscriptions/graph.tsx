@@ -22,7 +22,7 @@ const BORDER = true;
 const CHART_AREA = true;
 const TICKS = true;
 
-class Graph extends Component {
+class Graph extends Component<{ filterAnalytics: (arg0: any) => void }, any> {
 
   state: any = {
     dentists: [],
