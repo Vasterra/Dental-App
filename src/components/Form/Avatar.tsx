@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const DentistAvatarBlockEmpty = styled("div")`
+const DentistAvatarBlockEmpty = styled("img")`
   display: block;
   background-color: #0d9da6;
   width: 150px;
@@ -13,7 +13,7 @@ const DentistAvatarBlockEmpty = styled("div")`
 
 const AvatarProfileComponent = () => {
   return (
-    <DentistAvatarBlockEmpty/>
+    <DentistAvatarBlockEmpty src={"../../../images/empty_avatar"}/>
   )
 }
 

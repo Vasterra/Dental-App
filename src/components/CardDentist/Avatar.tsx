@@ -10,7 +10,7 @@ const DentistAvatar = styled("img")`
   border-radius: 50%;
 `;
 
-const DentistAvatarBlockEmpty = styled("div")`
+const DentistAvatarBlockEmpty = styled("img")`
   display: block;
   background-color: #0d9da6;
   width: 100px;
@@ -48,7 +48,7 @@ const AvatarDentistComponent: React.FunctionComponent<Props> = ({data}) => {
       {currentAvatar && <DentistAvatar
           // @ts-ignore
           src={currentAvatar} alt="avatar"/>}
-      {!currentAvatar && <DentistAvatarBlockEmpty/>}
+      {!currentAvatar && <DentistAvatarBlockEmpty src={"../../../images/empty_avatar"}/>}
     </>
   )
 }
