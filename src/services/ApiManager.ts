@@ -7,7 +7,13 @@ import {
   deleteService,
   updateDentist
 } from '../graphql/mutations';
-import { getDentist, listDentists, listImages, listServiceForDentals } from '../graphql/queries';
+import {
+  getAdminSettingsSubscriber,
+  getDentist,
+  listDentists,
+  listImages,
+  listServiceForDentals
+} from '../graphql/queries';
 
 class ApiManager {
 
@@ -48,15 +54,29 @@ class ApiManager {
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
-      console.log(data);
       return data;
     } catch (e) {
       console.log(e);
     }
   };
 
+  public static GET_ADMIN_SETTINGS_SUBSCRIBER = async () => {
+    try {
+      const {data}: any = await API.graphql({
+        query: getAdminSettingsSubscriber,
+        variables: {
+          id: '1'
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      return data.getAdminSettingsSubscriber
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   public static UPDATE_DENTIST = async (dataDentist: any) => {
-    console.log(dataDentist);
     try {
       const { data }: any = await API.graphql({
         query: updateDentist,
@@ -66,7 +86,6 @@ class ApiManager {
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
-      console.log(data);
       return data;
     } catch (e) {
       console.log(e);

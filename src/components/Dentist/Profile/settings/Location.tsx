@@ -7,9 +7,10 @@ import ApiManager from '../../../../services/ApiManager';
 
 type Props = {
   route: any,
+  adminSettingSubscriber: any,
 }
 
-const Location: React.FunctionComponent<Props> = ({ route }) => {
+const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscriber }) => {
 
   const [updateDateLocation, setUpdateDateLocation]: any = useState();
   const [currentDentist, setСurrentDentist]: any = useState();
@@ -17,6 +18,7 @@ const Location: React.FunctionComponent<Props> = ({ route }) => {
   useEffect(() => {
     if (route !== undefined) getDentist(route);
   }, [route]);
+
 
   const getDentist = async (id: string) => {
     setСurrentDentist(null);
@@ -259,12 +261,14 @@ const Location: React.FunctionComponent<Props> = ({ route }) => {
                 <label className='form-profile-label'>Locations</label>
               </p>
               {
-                currentDentist.locations.items.map((el: any, key: any) => {
-                  return (
-                    <p className='form-login-input' key={key}>
-                      <input value={`${el.city} ${el.address} ${el.postCode}`} />
-                    </p>
-                  );
+                adminSettingSubscriber && currentDentist.locations.items.map((el: any, key: any) => {
+                  if (key < Number(currentDentist.hasPaidPlan ? adminSettingSubscriber.paidMaxLocations : adminSettingSubscriber.freeMaxLocations)) {
+                    return (
+                      <p className='form-login-input' key={key}>
+                        <input value={`${el.city} ${el.address} ${el.postCode}`} />
+                      </p>
+                    );
+                  }
                 })
               }
             </div>

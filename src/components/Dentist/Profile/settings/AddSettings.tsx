@@ -1,17 +1,18 @@
-import React from "react";
-import {Formik} from "formik";
-import {API, Auth} from "aws-amplify";
+import React from 'react';
+import { Formik } from 'formik';
+import { API, Auth } from 'aws-amplify';
 
-import DentistProfileInput from "src/components/Dentist/Profile/componentForm/Input";
-import DentistProfileArea from "src/components/Dentist/Profile/componentForm/TextArea";
-import {updateDentist} from "src/graphql/mutations";
+import DentistProfileInput from 'src/components/Dentist/Profile/componentForm/Input';
+import DentistProfileArea from 'src/components/Dentist/Profile/componentForm/TextArea';
+import { updateDentist } from 'src/graphql/mutations';
 
 type Props = {
   currentDentist: any,
+  adminSettingSubscriber: any,
   getDentist: Function,
 }
 
-const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
+const AddSettings: React.FunctionComponent<Props> = ({ currentDentist, getDentist, adminSettingSubscriber }) => {
 
   const initialValues = {
     id: currentDentist.id,
@@ -25,26 +26,26 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
     address: currentDentist.address,
     postIndex: currentDentist.postIndex,
     phone: currentDentist.phone,
-    qualifications: currentDentist.qualifications,
-  }
+    qualifications: currentDentist.qualifications
+  };
 
   return (
     <>
-      <div className="profile-box-form">
-        <div className="form-info-block">
-          <div><p className="form-login-title green px20">Bio and Contact Information</p>
-            <p className="form-login-subtitle gray px12 mb-6px">Information For Patients</p>
+      <div className='profile-box-form'>
+        <div className='form-info-block'>
+          <div><p className='form-login-title green px20'>Bio and Contact Information</p>
+            <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
           </div>
-          {!currentDentist.hasPaidPlan && <p className="form-login-buttons">
-              <button className="button-green-outline">Upgrade</button>
+          {!currentDentist.hasPaidPlan && <p className='form-login-buttons'>
+            <button className='button-green-outline'>Upgrade</button>
           </p>}
         </div>
         {
           <Formik
             validateOnBlur={true}
             validateOnChange={true}
-            onSubmit={async (data: any, {setErrors}) => {
-              console.log(data)
+            onSubmit={async (data: any, { setErrors }) => {
+              console.log(data);
               fetch('https://maps.google.com/maps/api/geocode/json?sensor=false&address=' + data.address + '&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY')
               .then(response => response.json())
               .then(async (result) => {
@@ -52,11 +53,10 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                 data.lat = result.results[0].geometry.location.lat;
 
                 let user = await Auth.currentAuthenticatedUser();
-                console.log('user', user)
                 const updateEmail = await Auth.updateUserAttributes(user, {
-                  'email': data.email,
+                  'email': data.email
                 });
-                console.log('updateEmail', updateEmail)
+                console.log('updateEmail', updateEmail);
                 try {
                   await API.graphql({
                     query: updateDentist,
@@ -65,7 +65,7 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                     },
                     // @ts-ignore
                     authMode: 'AWS_IAM'
-                  })
+                  });
 
                 } catch (err) {
                   setErrors(err);
@@ -73,119 +73,121 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
                 getDentist();
               })
               .catch((_error: any) => {
-              })
+              });
 
             }}
             initialValues={initialValues}
           >
             {props => (
-              <form onSubmit={props.handleSubmit} style={{width: '100%'}}>
-                <div className="box-2-box">
-                  <div className="profile-block-box">
-                    <div className="double-blocks">
+              <form onSubmit={props.handleSubmit} style={{ width: '100%' }}>
+                <div className='box-2-box'>
+                  <div className='profile-block-box'>
+                    <div className='double-blocks'>
                       <DentistProfileInput
-                        title="Title"
-                        name="title"
-                        placeholder="Dr."
-                        setValue=""
+                        title='Title'
+                        name='title'
+                        placeholder='Dr.'
+                        setValue=''
                         props={props}
                       />
                       <DentistProfileInput
-                        title="Name"
-                        name="firstName"
-                        placeholder="John Smith"
+                        title='Name'
+                        name='firstName'
+                        placeholder='John Smith'
                         setValue={props.values.firstName}
                         props={props}
                       />
                     </div>
                     <div>
                       <DentistProfileInput
-                        title="Contact Email"
-                        name="email"
-                        placeholder="John.smith@dental.co.uk"
+                        title='Contact Email'
+                        name='email'
+                        placeholder='John.smith@dental.co.uk'
                         setValue={props.values.email}
                         props={props}
                       />
                     </div>
                     <div>
                       <DentistProfileInput
-                        title="Qualifications"
-                        name="qualifications"
-                        placeholder=""
+                        title='Qualifications'
+                        name='qualifications'
+                        placeholder=''
                         setValue={props.values.qualifications}
                         props={props}
                       />
                     </div>
                     <div>
                       <DentistProfileArea
-                        title="Profile Bio"
+                        title='Profile Bio'
                         name='bio'
-                        placeholder="Profile Bio"
+                        placeholder='Profile Bio'
                         setValue={props.values.bio}
                         props={props}
                       />
                     </div>
-                    <p className="form-login-buttons">
-                      <button className="button-green" type="submit">Confirm</button>
+                    <p className='form-login-buttons'>
+                      <button className='button-green' type='submit'>Confirm</button>
                     </p>
                   </div>
-                  {!currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
-                      <div>
-                          <p className="form-profile-label">
-                              <label className="form-profile-label" htmlFor="website">Website Address - Premium</label>
-                          </p>
-                          <p>
-                              <input className="form-profile-input"
-                                     type="text"
-                                     name="website"
-                                     id="website"
-                                     value=""
-                                     placeholder="dental.co.uk"
-                                     disabled
-                              />
-                          </p>
-                      </div>
-                      <div>
-                          <p className="form-profile-label">
-                              <label className="form-profile-label" htmlFor="phone">Phone - Premium</label>
-                          </p>
-                          <p>
-                              <input className="form-profile-input"
-                                     type="text"
-                                     name="phone"
-                                     id="phone"
-                                     value=""
-                                     placeholder="0203 123 4567"
-                                     disabled
-                              />
-                          </p>
-                      </div>
-                  </div>}
-                  {currentDentist.hasPaidPlan && <div className="profile-block-box">
-                      <DentistProfileInput
-                          title="Website Address"
-                          name="website"
-                          placeholder="dental.co.uk"
-                          setValue={props.values.website}
-                          props={props}
-                      />
-                      <DentistProfileInput
-                          title="Phone"
-                          name="phone"
-                          placeholder="0203 123 4567"
-                          setValue={props.values.phone}
-                          props={props}
-                      />
-                      <DentistProfileInput
-                          title="Address"
-                          name="address"
-                          placeholder="London"
-                          setValue={props.values.address}
-                          props={props}
-                      />
-                      <p className="form-login-buttons">
-                          <button className="button-green" type="submit">Confirm</button>
+                  {adminSettingSubscriber && !currentDentist.hasPaidPlan && <div className='profile-block-box'>
+                    <div
+                      className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidWebsiteAddress : adminSettingSubscriber.freeWebsiteAddress ? '' : 'disabled'}>
+                      <p className='form-profile-label'>
+                        <label className='form-profile-label' htmlFor='website'>Website Address - Premium</label>
                       </p>
+                      <p>
+                        <input className='form-profile-input'
+                               type='text'
+                               name='website'
+                               id='website'
+                               value={props.values.website}
+                               placeholder='dental.co.uk'
+                               disabled={currentDentist.hasPaidPlan ? !adminSettingSubscriber.paidWebsiteAddress : !adminSettingSubscriber.freeWebsiteAddress}
+                        />
+                      </p>
+                    </div>
+                    <div
+                      className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidPhoneNumber : adminSettingSubscriber.freePhoneNumber ? '' : 'disabled'}>
+                      <p className='form-profile-label'>
+                        <label className='form-profile-label' htmlFor='phone'>Phone - Premium</label>
+                      </p>
+                      <p>
+                        <input className='form-profile-input'
+                               type='text'
+                               name='phone'
+                               id='phone'
+                               value={props.values.phone}
+                               placeholder='0203 123 4567'
+                               disabled={currentDentist.hasPaidPlan ? !adminSettingSubscriber.paidPhoneNumber : !adminSettingSubscriber.freePhoneNumber}
+                        />
+                      </p>
+                    </div>
+                  </div>}
+                  {currentDentist.hasPaidPlan && <div className='profile-block-box'>
+                    <DentistProfileInput
+                      title='Website Address'
+                      name='website'
+                      placeholder='dental.co.uk'
+                      setValue={props.values.website}
+                      props={props}
+                    />
+                    <DentistProfileInput
+                      title='Phone'
+                      name='phone'
+                      placeholder='0203 123 4567'
+                      setValue={props.values.phone}
+                      props={props}
+                    />
+                    <DentistProfileInput
+                      title='Address'
+                      name='address'
+                      placeholder='London'
+                      setValue={props.values.address}
+                      props={props}
+                    />
+                    <p className='form-login-buttons'>
+                      <button className='button-green' type='submit'>Confirm</button>
+                    </p>
                   </div>}
                 </div>
               </form>
@@ -194,7 +196,7 @@ const AddSettings: React.FunctionComponent<Props> = ({currentDentist, getDentist
         }
       </div>
     </>
-  )
+  );
 };
 
-export default AddSettings
+export default AddSettings;

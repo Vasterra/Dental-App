@@ -23,6 +23,7 @@ const Profile = ({ dentist }: any) => {
   const [currentUser, setCurrentUser]: any = useState();
   const [images, setImages]: any = useState();
   const [route, setRoute]: any = useState();
+  const [adminSettingSubscriber, setAdminSettingSubscriber] = useState();
 
   useEffect(() => {
     if (router.query.slug !== undefined) {
@@ -30,8 +31,13 @@ const Profile = ({ dentist }: any) => {
       setRoute(slug[0]);
       authListener();
       downloadAvatar(currentDentist);
+      void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
     }
   }, [router]);
+
+  const getAdminSettingSubscriber = () => {
+    return ApiManager.GET_ADMIN_SETTINGS_SUBSCRIBER();
+  };
 
   const authListener = async () => {
     const signedInUser = ApiManager.authListener();
@@ -111,9 +117,9 @@ const Profile = ({ dentist }: any) => {
       {currentDentist &&
       <Layout title='Profile' active={'activeProfile'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
         <div className='main-profile bg-white '>
-          <AddSettings currentDentist={currentDentist} getDentist={getDentist} />
-          <Location route={route} />
-          <Services route={route} />
+          <AddSettings currentDentist={currentDentist} getDentist={getDentist} adminSettingSubscriber={adminSettingSubscriber}/>
+          <Location route={route} adminSettingSubscriber={adminSettingSubscriber} />
+          <Services route={route} adminSettingSubscriber={adminSettingSubscriber} />
           <DisplayPhotos currentDentist={currentDentist} currentAvatar={currentAvatar}
                          uploadAvatar={uploadAvatar} />
         </div>

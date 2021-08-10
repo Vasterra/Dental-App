@@ -62,7 +62,7 @@ type Image
   tagsBefore: String!
   titleAfter: String!
   tagsAfter: String!
-  service: String!
+  service: [String!]
   nameBefore: String!
   nameAfter: String!
 }
