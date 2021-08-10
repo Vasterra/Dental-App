@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Auth, Storage, withSSRContext} from "aws-amplify";
+import { API, Auth, Storage, withSSRContext } from 'aws-amplify';
 import {useRouter} from "next/router";
 
 import Layout from "src/components/Layout";
@@ -13,6 +13,7 @@ import {CircularProgress} from "@material-ui/core";
 import {WrapperFlex} from "src/styles/Main.module"
 import {getDentist} from "src/graphql/queries";
 import {GetServerSideProps} from "next";
+import { deleteService } from '../../../graphql/mutations';
 
 const Profile = ({dentist}: any) => {
   const router = useRouter()
@@ -113,7 +114,7 @@ const Profile = ({dentist}: any) => {
         <div className="main-profile bg-white ">
           <AddSettings currentDentist={currentDentist} getDentist={getDentist}/>
           <Location route={route}/>
-          <Services currentDentist={currentDentist} getDentist={getDentist}/>
+          <Services route={route}/>
           <DisplayPhotos currentDentist={currentDentist} currentAvatar={currentAvatar}
                            uploadAvatar={uploadAvatar}/>
         </div>

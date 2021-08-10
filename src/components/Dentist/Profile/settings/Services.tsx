@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {Formik} from "formik";
 import {API} from "aws-amplify";
 import {
@@ -24,14 +24,17 @@ import {ButtonSubmitWrapper, Label} from "src/styles/Form.module";
 
 import {createService, deleteService, updateDentist} from "src/graphql/mutations";
 import { listServiceForDentals } from "src/graphql/queries";
+import ApiManager from '../../../../services/ApiManager';
 
 type Props = {
-  currentDentist: any,
-  getDentist: Function,
+  route: any
 }
 
-const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) => {
-  const [personName, setPersonName] = useState([]);
+const Services: React.FunctionComponent<Props> = ({route}) => {
+
+  const [currentDentist, setCurrentDentist] = useState(null)
+  const [serviceName, setServiceName] = useState();
+  const [listServiceName, setListServiceName] = useState();
   const [service, setService] = useState([]);
   const [statusSnackbar, setStatusSnackbar] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -40,18 +43,27 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
   const disabled = service.length === 0;
 
   React.useEffect(() => {
-    getListServiceForDentals()
+    getListServiceForDental();
   }, []);
 
-  const getServices = () => {
-    setPersonName(currentDentist.services.items.map((item: { name: any; }) => item.name))
+  useEffect(() => {
+    if (route !== undefined) getDentist(route);
+  }, [route]);
+
+
+  const getDentist = async (id: string) => {
+    setCurrentDentist(null)
+    try {
+      await ApiManager.getDentist(route ? route : id)
+      .then(currentDentist => {
+        setCurrentDentist(currentDentist);
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
-  const handleOnChange = async (event: { target: { value: React.SetStateAction<never[]>; }; }) => {
-    setPersonName(event.target.value);
-  };
-
-  const getListServiceForDentals = async () => {
+  const getListServiceForDental = async () => {
     const {data}: any = await API.graphql({
       query: listServiceForDentals,
       // @ts-ignore
@@ -60,13 +72,66 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
     setService(data.listServiceForDentals.items)
   }
 
+  const addService = async () => {
+    const filterService: boolean[] = [];
+    console.log(serviceName);
+    if (serviceName) {
+      currentDentist.services.items.map((item: any) => {
+        if (item.name === serviceName) {
+          filterService.push(item)
+        }
+      });
+    }
+
+    if (filterService.length !== 0) {
+      setStatusSnackbar('warning');
+      setSnackbarMessage(`The service ${serviceName} is already`);
+      setOpenSnackbar(true);
+      return false;
+    }
+
+    await API.graphql({
+      query: createService,
+      variables: {
+        input: {
+          name: serviceName,
+          dentistId: currentDentist.id
+        }
+      },
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    })
+
+    getDentist();
+    setStatusSnackbar('success');
+    setSnackbarMessage(`Service ${serviceName} created`);
+    setOpenSnackbar(true);
+  }
+
+  const deleteServiceDentist = async (el: any) => {
+    await API.graphql({
+      query: deleteService,
+      variables: {
+        input: {
+          id: el.id
+        }
+      },
+      // @ts-ignore
+      authMode: 'AWS_IAM'
+    })
+    getDentist();
+    setStatusSnackbar('success');
+    setSnackbarMessage(`Service ${el.name} deleted`);
+    setOpenSnackbar(true);
+  };
+
   return (
     <div className="profile-box-form">
       <div className="form-info-block" >
         <div><p className="form-login-title green px20">Services</p>
           <p className="form-login-subtitle gray px12 mb-6px">Information For Patients</p>
         </div>
-        { !currentDentist.hasPaidPlan && <p className="form-login-buttons">
+        { currentDentist && !currentDentist.hasPaidPlan && <p className="form-login-buttons">
           <button className="button-green-outline">Upgrade</button>
         </p> }
       </div>
@@ -81,7 +146,7 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
               <select className="form-profile-input arrows"
                       name="services"
                       id="services"
-                      onChange={() => handleOnChange}
+                      onChange={(event: any) => setServiceName(event.target.value)}
               >
                 <option value="" disabled selected>Select Service</option>
                 {service.map((item: any, key: any) => (
@@ -91,65 +156,19 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
             </p>
           </div>
           <p className="row-content">
-            <span className="input-span"></span>
-            <button className="button-green" disabled={disabled} onClick={async () => {
-
-              if (personName.length === 0) return false;
-              const filterService: boolean[] = [];
-              currentDentist.services.items.map(async (item: any) => {
-                if (item.name === personName) { filterService.push(item) }
-              });
-
-              if (filterService.length !== 0) {
-                setStatusSnackbar('warning');
-                setSnackbarMessage(`The service ${personName} is already`);
-                setOpenSnackbar(true);
-                return false;
-              }
-
-              await API.graphql({
-                query: createService,
-                variables: {
-                  input: {
-                    name: personName,
-                    dentistId: currentDentist.id
-                  }
-                },
-                // @ts-ignore
-                authMode: 'AWS_IAM'
-              })
-              getDentist();
-              setStatusSnackbar('success');
-              setSnackbarMessage(`Service ${personName} created`);
-              setOpenSnackbar(true);
-            }}>Confirm</button>
+            <span className='input-span'/>
+            <button className="button-green" disabled={disabled} onClick={() => addService()}>Confirm</button>
           </p>
           <div className="mt-big">
             <p className="form-profile-label">
               <label className="form-profile-label">Selected Services</label>
             </p>
-            {
-              currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
+            {currentDentist && currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
                 if (key < 2) {
                   return (
                     <p className="form-login-input" key={key}>
                       <input value={el.name} />
-                      <Close className="form-login-input-close" onClick={async () => {
-                        await API.graphql({
-                          query: deleteService,
-                          variables: {
-                            input: {
-                              id: el.id
-                            }
-                          },
-                          // @ts-ignore
-                          authMode: 'AWS_IAM'
-                        })
-                        getDentist();
-                        setStatusSnackbar('success');
-                        setSnackbarMessage(`Service ${el.name} deleted`);
-                        setOpenSnackbar(true);
-                      }}/>
+                      <Close className="form-login-input-close" onClick={() => deleteServiceDentist(el)} />
                     </p>
                   )
                 }
@@ -157,41 +176,25 @@ const Services: React.FunctionComponent<Props> = ({currentDentist, getDentist}) 
             }
           </div>
         </div>
-        { currentDentist.hasPaidPlan && <div className="profile-block-box">
+        {currentDentist && currentDentist.hasPaidPlan && <div className="profile-block-box">
           <div>
-
             <p className="form-profile-label">
               <label className="form-profile-label">Additional Services</label>
             </p>
-            { currentDentist.hasPaidPlan &&  currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
-                if (key >= 2) {
-                  return (
-                    <p className="form-profile-empty-input" key={key}>
-                      <input type="text" name="empty" value={el.name} id="empty" placeholder="" />
-                      <Close className="form-login-input-close" onClick={async () => {
-                        await API.graphql({
-                          query: deleteService,
-                          variables: {
-                            input: {
-                              id: el.id
-                            }
-                          },
-                          // @ts-ignore
-                          authMode: 'AWS_IAM'
-                        })
-                        getDentist();
-                        setStatusSnackbar('success');
-                        setSnackbarMessage(`Service ${el.name} deleted`);
-                        setOpenSnackbar(true);
-                      }}/>
-                    </p>
-                  )
-                }
-              })
+            {currentDentist && currentDentist.hasPaidPlan &&  currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
+              if (key >= 2) {
+                return (
+                  <p className="form-profile-empty-input" key={key}>
+                    <input type="text" name="empty" value={el.name} id="empty" placeholder="" />
+                    <Close className="form-login-input-close" onClick={async () => deleteServiceDentist(el)}/>
+                  </p>
+                )
+              }
+            })
             }
           </div>
         </div> }
-        { !currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
+        {currentDentist && !currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
           <div>
             <p className="form-profile-label">
               <label className="form-profile-label">Additional Services - Premium</label>

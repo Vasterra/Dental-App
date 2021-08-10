@@ -198,6 +198,18 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
   // console.log(searchDentists)
   // if (!dentists) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
 
+  const triggerFunctionDeleteService = () => {
+    const getListServiceForDentals = ApiManager.getListServiceForDentals();
+    getListServiceForDentals.map(item => {
+      currentDentist.services.map(service => {
+        console.log(item);
+        console.log(service);
+        // if (item.name !== service.name)
+      })
+    })
+
+  }
+
   return (
     <Layout title="Search page">
       <Header/>
