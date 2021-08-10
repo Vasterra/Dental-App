@@ -27,8 +27,8 @@ const Search = ({dentistsData, listServiceForDentals}: any) => {
   const [searchValue, setSearchValue]: any = useState()
   const [searchCoords, setSearchCoords]: any = useState()
   const [switcherClick, setSwitcherClick]: any = useState()
-  const [searchMile, setSearchMile] = useState<number | null>(null)
-  const [serviceInputValue, setServiceInputValue] = useState<any>(null)
+  const [searchMile, setSearchMile] = useState<number | string>('')
+  const [serviceInputValue, setServiceInputValue] = useState<any>('')
   const [serviceSearch, setServiceSearch]: any = useState('choose service')
 
   useEffect(() => {
