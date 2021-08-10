@@ -200,9 +200,6 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
         variant="persistent"
         anchor="left"
         open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
       >
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>

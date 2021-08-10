@@ -23,7 +23,9 @@ const AdminDashboard = () => {
         void ApiManager.getListImages().then(listImages => {
           void ApiManager.GET_LIST_CLOSED_ACCOUNTS().then(listClosedAccounts => {
             void ApiManager.GET_LIST_CLOSED_SUBSCRIPTIONS().then(listClosedSubscriptions => {
-              setAnalytics({
+
+              return setAnalytics({
+                // @ts-ignore
                 totalSubscriptions: listDentists.filter((item: any) => item.hasPaidPlan).length,
                 totalFreeAccounts: listDentists.filter((item: any) => !item.hasPaidPlan).length,
                 totalSubscriptionsClosed: listClosedSubscriptions.length,
