@@ -32,9 +32,9 @@ type Props = {
 
 const Services: React.FunctionComponent<Props> = ({route}) => {
 
-  const [currentDentist, setCurrentDentist] = useState(null)
+  const [currentDentist, setCurrentDentist]: any = useState()
   const [serviceName, setServiceName] = useState();
-  const [listServiceName, setListServiceName] = useState();
+
   const [service, setService] = useState([]);
   const [statusSnackbar, setStatusSnackbar] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -47,14 +47,14 @@ const Services: React.FunctionComponent<Props> = ({route}) => {
   }, []);
 
   useEffect(() => {
-    if (route !== undefined) getDentist(route);
+    if (route !== undefined) getDentist();
   }, [route]);
 
 
-  const getDentist = async (id: string) => {
-    setCurrentDentist(null)
+  const getDentist = async () => {
+    setCurrentDentist(null);
     try {
-      await ApiManager.getDentist(route ? route : id)
+      await ApiManager.getDentist(route ? route : route.id)
       .then(currentDentist => {
         setCurrentDentist(currentDentist);
       })
@@ -74,8 +74,7 @@ const Services: React.FunctionComponent<Props> = ({route}) => {
 
   const addService = async () => {
     const filterService: boolean[] = [];
-    console.log(serviceName);
-    if (serviceName) {
+    if (serviceName && currentDentist) {
       currentDentist.services.items.map((item: any) => {
         if (item.name === serviceName) {
           filterService.push(item)
@@ -157,7 +156,7 @@ const Services: React.FunctionComponent<Props> = ({route}) => {
           </div>
           <p className="row-content">
             <span className='input-span'/>
-            <button className="button-green" disabled={disabled} onClick={() => addService()}>Confirm</button>
+            <button className="button-green" disabled={disabled} onClick={addService}>Confirm</button>
           </p>
           <div className="mt-big">
             <p className="form-profile-label">
