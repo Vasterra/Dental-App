@@ -20,6 +20,15 @@
   flex-direction: column;
 }
 
+.flex-align-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  height: 100%;
+}
+
+
 .ReactCrop__image {
   max-height: 316px;
 }
@@ -449,10 +458,10 @@ img {
   background-color: var(--color-green);
   color: var(--color-white);
   margin: 20px 20px 0 0;
-  max-width: 150px;
-  padding: 13px 30px;
+  width: 150px;
+  padding: 12px 20px;
   box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
-  font-family: PT Sans;
+  font-family: PT Sans, serif;
   font-size: 9px;
   font-weight: bold;
   font-stretch: normal;
@@ -702,8 +711,25 @@ input[type=file]::-webkit-file-upload-button {
   padding: 20px;
 }
 
+.person-name-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.person-name-check_title {
+  font-family: PT Serif, serif;
+  font-size: 33px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 2.06px;
+  margin-right: 10px;
+}
+
 .form-login-title {
-  font-family: PT Serif;
+  font-family: PT Serif, serif;
   font-size: 33px;
   font-weight: bold;
   font-stretch: normal;
@@ -711,7 +737,6 @@ input[type=file]::-webkit-file-upload-button {
   line-height: normal;
   letter-spacing: 2.06px;
   text-align: left;
-  margin-bottom: 16px;
 }
 
 .form-login-subtitle {

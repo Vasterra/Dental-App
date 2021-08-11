@@ -21,9 +21,6 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
     setLocation(window.location.href)
   }, [])
 
-  const lastName = currentDentist.lastName === null ? '' : currentDentist.lastName
-  const firstName = currentDentist.firstName === null ? '' : currentDentist.firstName
-
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null)
     if (e.target.value === 'All Service') return downloadImages()
@@ -39,8 +36,9 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
       setImages(newListImages)
     }, 1000)
   }
-  const fullName = firstName + ' ' + lastName
+  const fullName = `${currentDentist.firstName ? currentDentist.firstName : ''} ${currentDentist.lastName ? currentDentist.lastName : ''}`
   const adress = currentDentist.postIndex + ' ' + currentDentist.city + ' ' + currentDentist.street
+
 
   return (
     <>
@@ -101,10 +99,20 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({currentDentist, old
               </select>
 
               {!images && <WrapperFlex><CircularProgress size={120}/></WrapperFlex>}
-              {// @ts-ignore
-                images && <GalleryPerson images={images}/>
+
+              {Array.isArray(images) &&
+                 <>
+                   {images.length === 0 &&
+                   <div className="flex-align-center">
+                     <p className="index-leftmenu-text">Doctor {fullName} has not yet uploaded any of his works, be sure to check soon</p>
+                   </div>}
+                   {// @ts-ignore
+                     images.length > 0 && <GalleryPerson images={images}/>
+                   }
+                 </>
               }
             </div>
+
           </div>
         </div>
       </section> }

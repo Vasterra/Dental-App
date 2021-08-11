@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,7 +8,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { AppProps } from 'next/app';
 
 import '../styles/globals.css';
-import config from '../../aws-exports'
+import config from '../../aws-exports';
 import Amplify from 'aws-amplify';
 
 Amplify.configure({ ...config, ssr: true });
@@ -32,11 +31,11 @@ function DentalApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Elements stripe={stripePromise}>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <Component {...pageProps} />
-          </ThemeProvider>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
 
       </Elements>
     </QueryClientProvider>

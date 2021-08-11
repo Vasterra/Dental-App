@@ -1,7 +1,8 @@
-import {API} from "aws-amplify";
-import React, {useEffect, useState} from "react";
-import styled from "styled-components";
-import {getDentist, listServiceForDentals} from "src/graphql/queries";
+import React from 'react';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { Theme, useTheme } from '@material-ui/core/styles';
 
 type Props = {
   services: any,
@@ -9,25 +10,61 @@ type Props = {
   saveService: Function,
 }
 
-const Services: React.FunctionComponent<Props> = ({saveService, services, updateService}) => {
-  const [service, setService]: any = useState(updateService);
+function getStyles(name: string, personName: string[], theme: Theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium
+  };
+}
 
-  const handleChange = async (e: any) => {
-    setService(e.target.value)
-    saveService(e.target.value)
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
   }
+};
+
+const Services: React.FunctionComponent<Props> = ({ saveService, services, updateService }) => {
+  const [service, setService] = React.useState<string[]>(updateService ? updateService : []);
+  const theme = useTheme();
+  const handleChange = (e: any) => {
+    setService(e.target.value as string[]);
+    saveService(e.target.value);
+  };
 
   return (
-    <select className="gallery-select" name="services" id="services" value={service} onChange={handleChange}>
-      <option value="" disabled selected>Select from your services</option>
-      {services.map((data: any) => {
-          return (
-            <option key={data.id} value={data.name}>{data.name}</option>
-          )
+    <Select
+      labelId='demo-mutiple-name-label'
+      id='demo-mutiple-name'
+      multiple
+      displayEmpty
+      value={service}
+      onChange={handleChange}
+      input={<Input />}
+      renderValue={(selected) => {
+        if ((selected as string[]).length === 0) {
+          return <em>Select from your services</em>;
         }
-      )}
-    </select>
-  )
-}
+        return (selected as string[]).join(', ');
+      }}
+      MenuProps={MenuProps}
+    >
+      <MenuItem disabled value=''>
+        <em>Select from your services</em>
+      </MenuItem>
+      {services.map((name: any) => (
+        <MenuItem key={name.id} value={name.name} style={getStyles(name, service, theme)}>
+          {name.name}
+        </MenuItem>
+      ))}
+    </Select>
+  );
+};
 
 export default Services;

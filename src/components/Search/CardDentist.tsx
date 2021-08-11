@@ -33,7 +33,7 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
       console.error(e.message);
     }
     return () => cleanupFunction = true;
-  }, []);
+  }, [dentist]);
 
   const fullName = `${dentist.firstName ? dentist.firstName : ''} ${dentist.lastName ? dentist.lastName : ''}`;
 
@@ -43,9 +43,9 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
         {images && <DentistImage src={images} alt="image"/>}
         {!images && <DentistImageBlockEmpty src={"../../../images/empty_avatar.png"}/>}
       </ImageWrapper>
-      <p className="index-gallery-image-watermark"></p>
-      <img className="index-gallery-image-watermark-img-1" src="../images/check_circle.svg" alt="check"/>
-      <Link href={"../../dentist/person/" + dentist.id} target="_blank">
+      {/*<p className="index-gallery-image-watermark"></p>*/}
+      { dentist.hasPaidPlan && <img className="index-gallery-image-watermark-img-1" src="../images/check_circle.svg" alt="check"/> }
+      <Link href={`../../dentist/person/${dentist.id}`} target="_blank">
         <div className="index-gallery-image-description">
           <p className="index-gallery-image-title">{'Dr. ' + fullName}</p>
           <p className="index-gallery-image-text">{dentist.email}</p>
