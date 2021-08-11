@@ -54,7 +54,7 @@ function FacebookCircularProgress(props: CircularProgressProps) {
 }
 
 type Props = {
-  backInSingIn: Function,
+  backInSingIn: any,
   setValues: any,
   values: any
 }
