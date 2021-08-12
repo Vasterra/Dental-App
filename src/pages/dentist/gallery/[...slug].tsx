@@ -386,8 +386,7 @@ const GalleryPage = ({ dentist }: any) => {
       })
       return filterImages
     })
-    // const filterImages = oldIMages.map((img: any[]) => img.filter((item: any) => item.service.filter((val: string) => val === e.target.value)));
-    console.log('filterImages', filterImages);
+
     filterImages.forEach((arr: any) => {
       if (arr.length !== 0) {
         newListImages.push(arr);

@@ -36,7 +36,7 @@ const ResetPassword = () => {
                  id="new"
                  value={newPassword}
                  onChange={(e) => setNewPassword(e.target.value)}
-                 placeholder="Xxxxx"
+                 placeholder="XXXXXXXXXXXXXXX"
           />
         </p>
       </div>

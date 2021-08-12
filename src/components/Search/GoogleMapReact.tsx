@@ -51,7 +51,7 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
     const onChildClick = (e: any) => {
       console.log(e)
     }
-    console.log(centerMe);
+
     return (
       <GoogleMapReact
         bootstrapURLKeys={{key: 'AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY'}}

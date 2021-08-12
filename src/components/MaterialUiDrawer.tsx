@@ -54,13 +54,13 @@ export default function TemporaryDrawer({currentUser}) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List >
-          <ListItem className="flex-align-center">
+          <ListItem className="MuiListItem-item">
             <Link  href={`../../dentist/account/${currentUser}`}>Account</Link>
           </ListItem>
-        <ListItem className="flex-align-center">
+        <ListItem className="MuiListItem-item">
           <Link  href={`../../dentist/profile/${currentUser}`}>Profile</Link>
         </ListItem>
-        <ListItem className="flex-align-center">
+        <ListItem className="MuiListItem-item">
           <Link  href={`../../dentist/gallery/${currentUser}`}>Gallery</Link>
         </ListItem>
       </List>

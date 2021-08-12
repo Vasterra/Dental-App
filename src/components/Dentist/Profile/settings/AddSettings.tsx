@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { API, Auth } from 'aws-amplify';
-
+import Router from 'next/router';
 import DentistProfileInput from 'src/components/Dentist/Profile/componentForm/Input';
 import DentistProfileArea from 'src/components/Dentist/Profile/componentForm/TextArea';
 import { updateDentist } from 'src/graphql/mutations';
@@ -37,7 +37,7 @@ const AddSettings: React.FunctionComponent<Props> = ({ currentDentist, getDentis
             <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
           </div>
           {!currentDentist.hasPaidPlan && <p className='form-login-buttons'>
-            <button className='button-green-outline'>Upgrade</button>
+            <button className='button-green-outline' onClick={() => {void Router.push(`../../dentist/account/${currentDentist.id}`)}}>Upgrade</button>
           </p>}
         </div>
         {

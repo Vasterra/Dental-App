@@ -1,6 +1,5 @@
 import { API } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
-import { CircularProgress } from '@material-ui/core';
 
 import Layout from 'src/components/Layout';
 import Header from 'src/components/Header';
@@ -13,7 +12,6 @@ import ApiManager from 'src/services/ApiManager';
 import { switcher } from 'src/utils/switcher';
 import { getDentist } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
-import { WrapperFlex } from 'src/styles/Main.module';
 
 const Search = ({ dentistsData, listServiceForDentals }: any) => {
 
@@ -32,18 +30,45 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
   const [serviceSearch, setServiceSearch]: any = useState('choose service');
 
   useEffect(() => {
-    if (!ipCoords) {
-      convertCityCoords().then((result) => {
-        setIpCoords(result);
-        if (!searchCoords) {
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    function success() {
+      if (!ipCoords) {
+        convertCityCoords().then((result) => {
+          setIpCoords(result);
           setSearchCoords(result);
           const findCoordinatesDent: any = findCoordinatesDentists(searchCoords ? searchCoords : result, valueSlider, dentistsData);
           setSearchDentists(findCoordinatesDent);
           setDentists(dentistsData);
           setOldDentists(dentistsData);
-        }
+        });
+      }
+    };
+
+    function error(err: { code: any; message: any; }) {
+      setIpCoords({
+        lng: '0.119167',
+        lat: '52.205276'
       });
-    }
+      setSearchCoords({
+        lng: '0.119167',
+        lat: '52.205276'
+      });
+      const findCoordinatesDent: any = findCoordinatesDentists(searchCoords ? searchCoords : {
+        lng: '0.119167',
+        lat: '52.205276'
+      }, valueSlider, dentistsData);
+      setSearchDentists(findCoordinatesDent);
+      setDentists(dentistsData);
+      setOldDentists(dentistsData);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
   }, []);
 
   useEffect(() => {
@@ -195,8 +220,6 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
     });
     return distanceDent;
   };
-  // console.log(searchDentists)
-  // if (!dentists) return <WrapperFlex><CircularProgress size={120}/></WrapperFlex>
 
   return (
     <Layout title='Search page'>

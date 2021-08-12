@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { API } from 'aws-amplify';
 import { Snackbar } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
 import Close from '@material-ui/icons/Close';
 
 import { createService, deleteService } from 'src/graphql/mutations';
 import { listServiceForDentals } from 'src/graphql/queries';
 import ApiManager from '../../../../services/ApiManager';
+import Router from 'next/router';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
+
 
 type Props = {
   route: any,
@@ -18,9 +24,10 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
   const [currentDentist, setCurrentDentist]: any = useState();
   const [serviceName, setServiceName] = useState();
   const [service, setService] = useState([]);
-  const [statusSnackbar, setStatusSnackbar] = useState('');
-  const [snackbarMessage, setSnackbarMessage] = useState('');
+
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity] = useState('');
 
   const disabled = service.length === 0;
 
@@ -64,8 +71,15 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
     }
 
     if (filterService.length !== 0) {
-      setStatusSnackbar('warning');
-      setSnackbarMessage(`The service ${serviceName} is already`);
+      setMessageSnackbar(`The service ${serviceName} is already`);
+      setSeverity('warning');
+      setOpenSnackbar(true);
+      return false;
+    }
+
+    if (currentDentist.services.items.length === Number(adminSettingSubscriber.freeMaxServices)) {
+      setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxServices} services.`);
+      setSeverity('warning');
       setOpenSnackbar(true);
       return false;
     }
@@ -83,9 +97,16 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
     });
 
     getDentist();
-    setStatusSnackbar('success');
-    setSnackbarMessage(`Service ${serviceName} created`);
+    setMessageSnackbar(`Service ${serviceName} created`);
+    setSeverity('success');
     setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   const deleteServiceDentist = async (el: any) => {
@@ -100,8 +121,8 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
       authMode: 'AWS_IAM'
     });
     getDentist();
-    setStatusSnackbar('success');
-    setSnackbarMessage(`Service ${el.name} deleted`);
+    setMessageSnackbar(`Service ${el.name} deleted`);
+    setSeverity('success');
     setOpenSnackbar(true);
   };
 
@@ -112,7 +133,7 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
           <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
         </div>
         {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
-          <button className='button-green-outline'>Upgrade</button>
+          <button className='button-green-outline' onClick={() => {void Router.push(`../../dentist/account/${currentDentist.id}`)}}>Upgrade</button>
         </p>}
       </div>
       <div className='box-2-box'>
@@ -137,7 +158,7 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
           </div>
           <p className='row-content'>
             <span className='input-span' />
-            <button className='button-green' disabled={disabled} onClick={addService}>Confirm</button>
+            <button className='button-green' disabled={!serviceName} onClick={addService}>Confirm</button>
           </p>
           <div className='mt-big'>
             <p className='form-profile-label'>
@@ -201,20 +222,11 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
 
         </div>}
       </div>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-        open={openSnackbar}
-        autoHideDuration={2000}
-      >
-        <Alert
-          variant='filled'
+      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar}
           // @ts-ignore
-          severity={statusSnackbar}
-        >
-          {snackbarMessage}
+               severity={severity}>
+          {messageSnackbar}
         </Alert>
       </Snackbar>
     </div>

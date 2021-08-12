@@ -92,7 +92,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
         <p className='form-profile-label'>
           <label className='form-profile-label'>Cover</label>
         </p>
-        { !watermarkImg && currentCover && <p className='profile-photo-box'>
+        { !watermarkImg && !currentCover && <p className='profile-photo-box'>
           {currentCover && <img className='image' src={currentCover} alt='' />}
         </p> }
         { watermarkImg && <p className='profile-photo-box'>
@@ -114,7 +114,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
         <p className='row-content'>
           <label className='button-green-file'>Upload Cover</label>
           <input type='file' className='input-file' name='watermark' id='watermark'
-                 onChange={addImage} />
+                 onChange={addImage} disabled={!currentDentist.hasPaidPlan}/>
         </p>
       </div>
       <div>
@@ -126,7 +126,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
         </p>
         <p className='row-content'>
           <label className='button-green-file'>Upload Watermark</label>
-          <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={addWatermark} />
+          <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={addWatermark} disabled={!currentDentist.hasPaidPlan}/>
         </p>
       </div>
       <Snackbar

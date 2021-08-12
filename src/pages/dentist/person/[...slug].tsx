@@ -143,6 +143,7 @@ const Person = ({ dentistData }: any) => {
           allImages.push(item);
         }
       });
+      console.log('allImages', allImages);
       setTimeout(() => {
         setImages(allImages);
         setOldIMages(allImages);
