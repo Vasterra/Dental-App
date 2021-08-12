@@ -16,7 +16,6 @@ import { WrapperFlex } from 'src/styles/Main.module';
 import { GetServerSideProps } from 'next';
 
 const GalleryPage = ({ dentist }: any) => {
-  console.log(dentist);
   const router = useRouter();
 
   const [currentDentist, setCurrentDentist]: any = useState(dentist);
@@ -233,8 +232,8 @@ const GalleryPage = ({ dentist }: any) => {
       try {
         await Storage.put('images/' + currentDentist.id + '/' + updateImg[key].id + '/' + file.name, file, {
           contentType: 'image/png'
-        }).then(result => {
-          setMessageSnackBar('Success Upload!');
+        }).then(() => {
+          setMessageSnackBar('Success update!');
           setStatusSnackBar('success');
           setOpenSnackBar(true);
           setTimeout(() => {
@@ -376,10 +375,20 @@ const GalleryPage = ({ dentist }: any) => {
     if (e.target.value === 'All Service') {
       getListImages();
     }
-    console.log(oldIMages);
+
     let newListImages: any[] = [];
-    const filterImages = oldIMages.map((img: any[]) => img.filter((item: any) => item.service.filter((val: string) => val === e.target.value)));
-    console.log(filterImages);
+    let filterImages: any[] = [];
+    oldIMages.forEach((slider: any) => {
+      slider[0].service.forEach((service: string) => {
+        if (service === e.target.value) {
+          console.log('e.target.value', e.target.value);
+          filterImages.push(slider)
+        }
+      })
+      return filterImages
+    })
+    // const filterImages = oldIMages.map((img: any[]) => img.filter((item: any) => item.service.filter((val: string) => val === e.target.value)));
+    console.log('filterImages', filterImages);
     filterImages.forEach((arr: any) => {
       if (arr.length !== 0) {
         newListImages.push(arr);
@@ -590,7 +599,7 @@ const GalleryPage = ({ dentist }: any) => {
                   </p>
                   <div className='row-content space-between'>
                     {services &&
-                    <Services saveService={saveService} services={services}
+                    <Services saveService={saveService} services={currentDentist.services.items}
                               updateService={updateService} />}
                     {/*<img className='gallery-select-arrow' src='../../../public/images/down-select.png'*/}
                     {/*     alt='select' />*/}

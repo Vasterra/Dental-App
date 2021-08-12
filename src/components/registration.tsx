@@ -229,7 +229,6 @@ const Registration = ({}) => {
           <ButtonForm title='Confirm'>Confirm</ButtonForm>
         </form>
         }
-        <div>{values.errorMessage}</div>
       </div>
       }
       <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>

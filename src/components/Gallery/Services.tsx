@@ -12,6 +12,7 @@ type Props = {
 
 function getStyles(name: string, personName: string[], theme: Theme) {
   return {
+    color: 'black',
     fontWeight:
       personName.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
@@ -40,8 +41,6 @@ const Services: React.FunctionComponent<Props> = ({ saveService, services, updat
 
   return (
     <Select
-      labelId='demo-mutiple-name-label'
-      id='demo-mutiple-name'
       multiple
       displayEmpty
       value={service}
@@ -56,7 +55,7 @@ const Services: React.FunctionComponent<Props> = ({ saveService, services, updat
       MenuProps={MenuProps}
     >
       <MenuItem disabled value=''>
-        <em>Select from your services</em>
+        <div style={{color: 'black'}}>Select from your services</div>
       </MenuItem>
       {services.map((name: any) => (
         <MenuItem key={name.id} value={name.name} style={getStyles(name, service, theme)}>
