@@ -2460,7 +2460,7 @@ input:disabled:-ms-input-placeholder {
   }
 
   .main-box {
-    height: 70%;
+    min-height: 100vh;
   }
 
   .container-profile {
@@ -2834,3 +2834,5 @@ input:disabled:-ms-input-placeholder {
 @media only screen and (max-width: 300px) {
   .prev, .next,.text {font-size: 11px}
 }
+
+

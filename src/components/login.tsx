@@ -155,11 +155,11 @@ const Login = ({}) => {
 
   return (
     <div className='main bg-login main-box'>
-      <ModalConfirm visible={visible} toggle={toggle} text={text} setConfirm={setConfirm}/>
+      {/* <ModalConfirm visible={visible} toggle={toggle} text={text} setConfirm={setConfirm}/> */}
       {!values.loader && <div className='form-login'>
         <p className='form-login-title green'>Login</p>
         <p className='form-login-subtitle gray'>Current FYD users</p>
-        <form onSubmit={openModal}>
+        <form onSubmit={()=>{formik.handleSubmit()}}>
           <p className='form-login-input'>
             <input
               type='text'
