@@ -381,7 +381,6 @@ const GalleryPage = ({ dentist }: any) => {
     oldIMages.forEach((slider: any) => {
       slider[0].service.forEach((service: string) => {
         if (service === e.target.value) {
-          console.log('e.target.value', e.target.value);
           filterImages.push(slider)
         }
       })
@@ -656,7 +655,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   } catch (e) {
     console.log(e);
   }
-  console.log(dentistData);
+
   return {
     props: {
       dentist: dentistData ? dentistData.data.getDentist : null

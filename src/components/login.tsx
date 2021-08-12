@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useState } from 'react';
-import { Auth } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import Router from 'next/router';
 import Close from '@material-ui/icons/Close';
 import { useFormik } from 'formik';
@@ -8,6 +8,9 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
 import ForgotPassword from 'src/components/forgotPassword';
+import { createDentist } from 'src/graphql/mutations';
+import { listDentists } from 'src/graphql/queries';
+import { convertCityCoords } from 'src/utils/search/converCityCoords';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -128,8 +131,25 @@ const Login = () => {
     onSubmit: async (val: any) => {
       setValues({ ...values, loaderButtonSubmit: true });
       try {
-        const user = await Auth.signIn(val.username, val.password);
+        const user = await Auth.signIn(val.email, val.password);
         setValues({ ...values, user });
+
+        const dentists: any = await API.graphql({
+          query: listDentists,
+          // @ts-ignore
+          authMode: 'AWS_IAM'
+        });
+        const dentistEmail = dentists.data.listDentists.items.find((item: { email: any; }) => item.email === user.attributes.email);
+        setValues({ ...values, loader: true });
+        if (dentists.data.listDentists.items.length !== 0) {
+          if (!dentistEmail) {
+            await createNewDentist(user);
+          }
+        } else {
+          await createNewDentist(user);
+        }
+
+
         setMessageSnackbar('The Login successfully!');
         setSeverity('success');
         setOpenSnackbar(true);
@@ -143,6 +163,29 @@ const Login = () => {
       }
     }
   });
+
+  async function createNewDentist(user: any) {
+    await convertCityCoords().then(async (result) => {
+      await API.graphql({
+        query: createDentist,
+        variables: {
+          input: {
+            id: user.attributes.sub,
+            email: user.attributes.email,
+            lat: result.lat,
+            lng: result.lng,
+            firstName: user.attributes.name,
+            registered: true,
+            phone: user.attributes.phone_number,
+            gdcNumber: user.attributes['custom:gdcNumber']
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      await Router.replace('/');
+    });
+  }
 
   const backInSingIn = () => {
     setValues({ ...values, resetPassword: false });
@@ -160,18 +203,18 @@ const Login = () => {
         <form onSubmit={formikAuth.handleSubmit}>
           <p className='form-login-input'>
             <input
-              type='text'
-              name='username'
-              id='username'
-              placeholder='Username'
-              value={formikAuth.values.username}
+              type='email'
+              name='email'
+              id='email'
+              placeholder='Email'
+              value={formikAuth.values.email}
               onChange={formikAuth.handleChange}
             />
             <Close className='form-login-input-close'
                    onClick={() => {
-                     void formikAuth.setValues({ ...formikAuth.values, username: '' });
+                     void formikAuth.setValues({ ...formikAuth.values, email: '' });
                    }} />
-            {formikAuth.errors.username ? <div>{formikAuth.errors.username}</div> : null}
+            {formikAuth.errors.email ? <div>{formikAuth.errors.email}</div> : null}
           </p>
           <p className='form-login-input'>
             <input
