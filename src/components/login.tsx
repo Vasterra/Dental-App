@@ -153,11 +153,12 @@ const Login = () => {
 
   return (
     <div className='main bg-login main-box'>
-      {values.resetPassword && <ForgotPassword backInSingIn={backInSingIn} setValues={setValues} values={values} />}
-      {!values.resetPassword && <div className='form-login'>
+      {/* <ModalConfirm visible={visible} toggle={toggle} text={text} setConfirm={setConfirm}/> */}
+      {!values.loader && <div className='form-login'>
         <p className='form-login-title green'>Login</p>
         <p className='form-login-subtitle gray'>Current FYD users</p>
-        <form onSubmit={formikAuth.handleSubmit}>
+        <form onSubmit={()=>{formik.handleSubmit()}}>
+
           <p className='form-login-input'>
             <input
               type='text'
