@@ -115,9 +115,9 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
   render() {
     if (!this.state.signedInUser) return null;
     return (
-      this.state.currentUser &&
+
       <>
-        {this.state.currentUser.username === this.props.currentDentist.id &&
+        { this.state.currentUser && this.state.currentUser.username === this.props.currentDentist.id &&
         <div className="leftmenu">
             <div className="mobile-topmenu">
                 <p className="menu" id="mobile_menu">

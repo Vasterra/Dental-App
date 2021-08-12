@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import ButtonForm from './Buttons/ButtonForm';
-import { CircularProgress, TextField } from '@material-ui/core';
+import { Snackbar, TextField } from '@material-ui/core';
 import { Auth } from 'aws-amplify';
 import Router from 'next/router';
 import Close from '@material-ui/icons/Close';
 import { useFormik } from 'formik';
-import { WrapperFlex } from '../styles/Main.module';
+import { Alert } from '@material-ui/lab';
 
 interface State {
   username: string;
@@ -18,7 +18,8 @@ interface State {
   showPassword: boolean;
   user: null;
   errorMessage: null;
-  loader: false;
+  loader: boolean;
+  loaderButtonSubmit: boolean;
 }
 
 const Registration = ({}) => {
@@ -33,12 +34,24 @@ const Registration = ({}) => {
     showPassword: false,
     user: null,
     errorMessage: null,
-    loader: false
+    loader: false,
+    loaderButtonSubmit: false
   });
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity] = useState('');
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   const validate = (values: any) => {
     const passwordRegex = /(?=.*[0-9])/;
-    const gdcNumberRegex = /^\d+$/
+    const gdcNumberRegex = /^\d+$/;
     const errors: any = {};
 
     if (!values.username) {
@@ -83,7 +96,10 @@ const Registration = ({}) => {
       weight: '',
       weightRange: '',
       showPassword: false,
-      user: null
+      user: null,
+      errorMessage: null,
+      loader: false,
+      loaderButtonSubmit: false
     },
     validate,
     onSubmit: async (values: any) => {
@@ -98,6 +114,9 @@ const Registration = ({}) => {
         });
         setValues({ ...values, user });
       } catch (error) {
+        setMessageSnackbar(error.message);
+        setSeverity('warning');
+        setOpenSnackbar(true);
         setValues({ ...values, errorMessage: error.message });
       }
     }
@@ -107,11 +126,16 @@ const Registration = ({}) => {
     event.preventDefault();
     try {
       setValues({ ...values, user: null });
-      // @ts-ignore
       setValues({ ...values, loader: true });
       await Auth.confirmSignUp(values.username, values.code);
+      setMessageSnackbar('The Register successfully!');
+      setSeverity('success');
+      setOpenSnackbar(true);
       await Router.replace('/login');
     } catch (error) {
+      setMessageSnackbar(error.message);
+      setSeverity('warning');
+      setOpenSnackbar(true);
       setValues({ ...values, loader: false });
     }
   }
@@ -208,7 +232,13 @@ const Registration = ({}) => {
         <div>{values.errorMessage}</div>
       </div>
       }
-      {values.loader && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
+      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar}
+          // @ts-ignore
+               severity={severity}>
+          {messageSnackbar}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

@@ -1,15 +1,58 @@
-import React, { SyntheticEvent, useEffect } from 'react';
-import { API, Auth } from 'aws-amplify';
+import React, { SyntheticEvent, useState } from 'react';
+import { Auth } from 'aws-amplify';
 import Router from 'next/router';
-import { createDentist } from 'src/graphql/mutations';
-import { listDentists } from 'src/graphql/queries';
-import { convertCityCoords } from 'src/utils/search/converCityCoords';
 import Close from '@material-ui/icons/Close';
 import { useFormik } from 'formik';
-import { WrapperFlex } from '../styles/Main.module';
-import { CircularProgress } from '@material-ui/core';
-import useModal from 'src/hooks/useModal';
-import { ModalConfirm } from './Dialog';
+import { Snackbar } from '@material-ui/core';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
+import ForgotPassword from 'src/components/forgotPassword';
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
+
+const useStylesFacebook = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      position: 'relative',
+      marginBottom: '27px'
+    },
+    bottom: {
+      color: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700]
+    },
+    top: {
+      color: '#1a90ff',
+      animationDuration: '550ms',
+      position: 'absolute',
+      left: 0
+    },
+    circle: {
+      strokeLinecap: 'round'
+    }
+  })
+);
+
+function FacebookCircularProgress(props: CircularProgressProps) {
+  const classes = useStylesFacebook();
+
+  return (
+    <div className={classes.root}>
+      <CircularProgress
+        variant='indeterminate'
+        disableShrink
+        className={classes.top}
+        classes={{
+          circle: classes.circle
+        }}
+        size={30}
+        thickness={4}
+        {...props}
+      />
+    </div>
+  );
+}
 
 interface State {
   username: string;
@@ -19,12 +62,14 @@ interface State {
   showPassword: boolean;
   user: null;
   errorMessage: null;
-  loader: null;
+  resetPassword: boolean;
+  loader: boolean;
+  loaderButtonSubmit: boolean;
+  loaderButtonReset: boolean;
 }
 
-const Login = ({}) => {
-
-  const [values, setValues] = React.useState<State>({
+const Login = () => {
+  const [values, setValues] = useState<State>({
     username: '',
     password: '',
     weight: '',
@@ -32,8 +77,21 @@ const Login = ({}) => {
     showPassword: false,
     user: null,
     errorMessage: null,
-    loader: null
+    resetPassword: false,
+    loaderButtonSubmit: false,
+    loaderButtonReset: false,
+    loader: false
   });
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity] = useState('');
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   const validate = (values: any) => {
     const passwordRegex = /(?=.*[0-9])/;
@@ -52,11 +110,9 @@ const Login = ({}) => {
     } else if (!passwordRegex.test(values.password)) {
       errors.password = '*Invalid password. Must contain one number.';
     }
-
-    return errors;
   };
 
-  const formik = useFormik({
+  const formikAuth = useFormik({
     initialValues: {
       username: '',
       password: '',
@@ -69,89 +125,31 @@ const Login = ({}) => {
       user: null
     },
     validate,
-    onSubmit: async (values: any) => {
+    onSubmit: async (val: any) => {
+      setValues({ ...values, loaderButtonSubmit: true });
       try {
-        const user = await Auth.signIn(values.username, values.password);
+        const user = await Auth.signIn(val.username, val.password);
         setValues({ ...values, user });
-
-        const dentists: any = await API.graphql({
-          query: listDentists,
-          // @ts-ignore
-          authMode: 'AWS_IAM'
-        });
-        const dentistEmail = dentists.data.listDentists.items.find((item: { email: any; }) => item.email === user.attributes.email);
+        setMessageSnackbar('The Login successfully!');
+        setSeverity('success');
+        setOpenSnackbar(true);
+        setValues({ ...values, loaderButtonSubmit: false });
         setValues({ ...values, loader: true });
-        if (dentists.data.listDentists.items.length !== 0) {
-          if (!dentistEmail) {
-            await createNewDentist(user);
-          }
-        } else {
-          await createNewDentist(user);
-        }
-
       } catch (error) {
+        setMessageSnackbar(error.message);
+        setSeverity('warning');
+        setOpenSnackbar(true);
         setValues({ ...values, errorMessage: error.message });
       }
     }
   });
 
-  async function createNewDentist(user: any) {
-    await convertCityCoords().then(async (result) => {
-      await API.graphql({
-        query: createDentist,
-        variables: {
-          input: {
-            id: user.attributes.sub,
-            email: user.attributes.email,
-            lat: result.lat,
-            lng: result.lng,
-            firstName: values.username,
-            registered: true,
-            phone: user.attributes.phone_number,
-            gdcNumber: user.attributes['custom:gdcNumber']
-          }
-        },
-        // @ts-ignore
-        authMode: 'AWS_IAM'
-      });
-      await Router.replace('/');
-    });
-  }
-
-  const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value });
+  const backInSingIn = () => {
+    setValues({ ...values, resetPassword: false });
   };
 
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
-  };
+  if (values.user) void Router.replace('/');
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
-
-  if (values.user) Router.replace('/');
-
-  const { toggle, visible, text, setText, confirm, setConfirm, funcName, setFuncName } = useModal()
-
-  useEffect(()=>{
-    if(confirm === 'yes'){
-      if(funcName === 'form-submit'){
-        formik.handleSubmit()
-      }
-    }
-    return ()=>{
-      setConfirm('no')
-    }
-  }, [confirm])
-
-  const openModal = (e: SyntheticEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setText('Login with this account?')
-    setFuncName('form-submit')
-    toggle()
-  }
 
   return (
     <div className='main bg-login main-box'>
@@ -160,20 +158,21 @@ const Login = ({}) => {
         <p className='form-login-title green'>Login</p>
         <p className='form-login-subtitle gray'>Current FYD users</p>
         <form onSubmit={()=>{formik.handleSubmit()}}>
+
           <p className='form-login-input'>
             <input
               type='text'
               name='username'
               id='username'
               placeholder='Username'
-              value={formik.values.username}
-              onChange={formik.handleChange}
+              value={formikAuth.values.username}
+              onChange={formikAuth.handleChange}
             />
             <Close className='form-login-input-close'
                    onClick={() => {
-                     formik.setValues({ ...formik.values, username: '' });
+                     void formikAuth.setValues({ ...formikAuth.values, username: '' });
                    }} />
-            {formik.errors.username ? <div>{formik.errors.username}</div> : null}
+            {formikAuth.errors.username ? <div>{formikAuth.errors.username}</div> : null}
           </p>
           <p className='form-login-input'>
             <input
@@ -181,27 +180,36 @@ const Login = ({}) => {
               name='password'
               id='password'
               placeholder='Password'
-              value={formik.values.password}
-              onChange={formik.handleChange}
+              value={formikAuth.values.password}
+              onChange={formikAuth.handleChange}
             />
             <Close className='form-login-input-close'
                    onClick={() => {
-                     formik.setValues({ ...formik.values, password: '' });
+                     void formikAuth.setValues({ ...formikAuth.values, password: '' });
                    }} />
-            {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+            {formikAuth.errors.password ? <div>{formikAuth.errors.password}</div> : null}
           </p>
           <p className='form-login-buttons'>
-            <button type='submit' className='button-green'>Login</button>
-            <button className='button-white' onClick={(e: SyntheticEvent)=>{
-               e.preventDefault()
-               e.stopPropagation()
-            }}>Reset password</button>
+            <button type='submit' disabled={values.loader} className='button-green'>{values.loaderButtonSubmit ?
+              <FacebookCircularProgress /> : 'Login'}</button>
+            <button className='button-white' disabled={values.loader} onClick={(e: SyntheticEvent) => {
+              e.preventDefault();
+              setValues({ ...values, resetPassword: true });
+            }}>Reset password
+            </button>
           </p>
         </form>
         <div>{values.errorMessage}</div>
       </div>
       }
-      {values.loader && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
+      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+
+        <Alert onClose={handleCloseSnackbar}
+          // @ts-ignore
+               severity={severity}>
+          {messageSnackbar}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
