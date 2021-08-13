@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // @ts-ignore
-import Cropper from 'react-cropper';
+  import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 
 type Props = {
@@ -22,13 +22,17 @@ const UploadImage: React.FunctionComponent<Props> = ({
    }) => {
   const [image, setImage]: any = useState(updateImg);
   const [file, setFile]: any = useState([updateImgData]);
-  const [cropData, setCropData]: any = useState('#');
+  const [cropData, setCropData]: any = useState(false);
   const [cropper, setCropper]: any = useState<any>();
   const [completedCrop, setCompletedCrop]: any = useState(false);
 
   useEffect(() => {
     !updateImg ? setCompletedCrop(false) : setCompletedCrop(true);
   }, []);
+
+  useEffect(() => {
+    console.log('cropData', cropData);
+  }, [cropData]);
 
   const onChange = (e: any) => {
     e.preventDefault();
@@ -51,13 +55,12 @@ const UploadImage: React.FunctionComponent<Props> = ({
   const cancel = () => {
     setImage(null);
     setCompletedCrop(null);
+    setCropData(false)
     desabledButtonFiles(anchor);
   };
 
   const getCropData = (file: { name: any; }[]) => {
     if (typeof cropper !== 'undefined') {
-      // setCropData(cropper.getCroppedCanvas().toDataURL());
-
       if (!cropper.getCroppedCanvas()) {
         return;
       }
@@ -67,6 +70,8 @@ const UploadImage: React.FunctionComponent<Props> = ({
           b.lastModifiedDate = new Date();
           b.name = nameUpdateImg ? nameUpdateImg : file[0].name;
           saveCrop(blob, anchor);
+          setCropData(true)
+          // setCropData(cropper.getCroppedCanvas().toDataURL());
         }, 'image/jpeg', 1);
       }
       // saveCrop(cropper.getCroppedCanvas(), anchor);
@@ -98,15 +103,17 @@ const UploadImage: React.FunctionComponent<Props> = ({
           onInitialized={(instance) => {
             setCropper(instance);
           }}
+          cropend={() => {
+            setCropData(false)
+          }}
           guides={true}
         />
-
         <div className='uploadimage-settings'>
           <img className='delete-button' src='../../images/delete_forever.svg' alt='delete' onClick={cancel} />
-          <button className='button-green' onClick={() =>
+          {!cropData && <button className='button-green' disabled={cropData} onClick={() =>
             getCropData(file)
-          }>Crop
-          </button>
+          }>{cropData ? 'Crop' : 'Save Crop'}
+          </button> }
         </div>
       </>
       }

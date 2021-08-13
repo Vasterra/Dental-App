@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { API } from 'aws-amplify';
-
 import { createService, deleteService } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
@@ -15,12 +14,12 @@ type Props = {
 }
 
 const Services: React.FunctionComponent<Props> = ({
-                                                    route,
-                                                    adminSettingSubscriber,
-                                                    setOpenSnackbar,
-                                                    setMessageSnackbar,
-                                                    setSeverity
-                                                  }) => {
+    route,
+    adminSettingSubscriber,
+    setOpenSnackbar,
+    setMessageSnackbar,
+    setSeverity
+  }) => {
 
   const [currentDentist, setCurrentDentist] = useState<any | null>(null);
   const [serviceName, setServiceName] = useState();
@@ -88,13 +87,6 @@ const Services: React.FunctionComponent<Props> = ({
     setMessageSnackbar(`Service ${serviceName} created`);
     setSeverity('success');
     setOpenSnackbar(true);
-  };
-
-  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
   };
 
   const deleteServiceDentist = async (el: any) => {
@@ -210,7 +202,6 @@ const Services: React.FunctionComponent<Props> = ({
               <input type='text' name='empty' value='' id='empty' placeholder='' disabled />
             </p>
           </div>
-
         </div>}
       </div>
     </div>

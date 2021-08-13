@@ -21,13 +21,11 @@ const GalleryPage = ({ dentist }: any) => {
   const [currentDentist, setCurrentDentist]: any = useState(dentist);
   const [currentAvatar, setCurrentAvatar]: any = useState();
   const [signedInUser, setSignedInUser]: any = useState();
-  const [images, setImages]: any = useState();
+  const [imagesData, setImagesData]: any = useState();
   const [oldIMages, setOldIMages]: any = useState();
   const [route, setRoute]: any = useState();
-  const [loading, setLoading]: any = useState();
   const [updateImg, setUpdateImg]: any = useState();
   const [listImagesData, setListImagesData]: any = useState();
-  const [deleteImage, setDeleteImage]: any = useState();
   const [updateService, setUpdateService]: any = useState();
   const [uuid, setUuid]: any = useState();
   const [fileLeft, setFileLeft]: any = useState();
@@ -47,7 +45,6 @@ const GalleryPage = ({ dentist }: any) => {
   const [openSnackBar, setOpenSnackBar]: any = useState();
   const [updateImgEvent, setUpdateImgEvent]: any = useState();
   const [searchValue, setSearchValue]: any = useState();
-  const [imagesUpdate, setImagesUpdate]: any = useState();
 
 
   useEffect(() => {
@@ -187,6 +184,10 @@ const GalleryPage = ({ dentist }: any) => {
   };
 
   const saveData = async () => {
+    setCheckFilesLeft(null);
+    setCheckFilesRight(null);
+    setImagesData(null);
+    setOldIMages(null);
     if (updateImgEvent) {
       saveDataUpdate();
       return;
@@ -225,18 +226,16 @@ const GalleryPage = ({ dentist }: any) => {
 
   const uploadUpdateImage = () => {
     const files = [fileRight, fileLeft];
-    files.forEach(async (file: any, key: any) => {
+    files.forEach((file: any, key: any) => {
       try {
-        await Storage.put('images/' + currentDentist.id + '/' + updateImg[key].id + '/' + file.name, file, {
+        Storage.put('images/' + currentDentist.id + '/' + updateImg[key].id + '/' + file.name, file, {
           contentType: 'image/png'
-        }).then(() => {
+        }).then(result => {
+          handlerShowGallery();
+          getListImages();
           setMessageSnackBar('Success update!');
           setStatusSnackBar('success');
           setOpenSnackBar(true);
-          setTimeout(() => {
-            handlerShowGallery();
-            getListImages();
-          }, 1000);
         })
         .catch((error: any) => {
           setMessageSnackBar(error);
@@ -253,18 +252,16 @@ const GalleryPage = ({ dentist }: any) => {
 
   const uploadImage = () => {
     const files = [fileLeft, fileRight];
-    files.forEach(async (file: any) => {
+    files.forEach((file: any) => {
       try {
-        await Storage.put('images/' + currentDentist.id + '/' + uuid + '/' + file.name, file, {
+        Storage.put('images/' + currentDentist.id + '/' + uuid + '/' + file.name, file, {
           contentType: 'image/png'
-        }).then(result => {
+        }).then(() => {
+          handlerShowGallery();
+          getListImages();
           setMessageSnackBar('Success Upload!');
           setStatusSnackBar('success');
           setOpenSnackBar(true);
-          setTimeout(() => {
-            handlerShowGallery();
-            getListImages();
-          }, 1000);
         })
         .catch((error: any) => {
           setMessageSnackBar(error);
@@ -280,11 +277,10 @@ const GalleryPage = ({ dentist }: any) => {
   };
 
   const downloadImages = async () => {
-    setImages(null);
+    setImagesData(null);
     setOldIMages(null);
     try {
       if (currentDentist === null) return;
-      let eachImages: any[] = [];
       let allImages: any[] = [];
       let filesList = listImagesData.map(async (e: any) => {
         const files = await Storage.list('images/' + currentDentist.id + '/' + e.id);
@@ -323,17 +319,13 @@ const GalleryPage = ({ dentist }: any) => {
         }
       });
       setTimeout(() => {
-        setImages(allImages);
+        setImagesData(allImages);
         setOldIMages(allImages);
       }, 1000);
 
     } catch (e) {
       return <Error statusCode={404} />;
     }
-  };
-
-  const setFuncImages = (images: any) => {
-    setImages(images);
   };
 
   const handlerShowUloadGallery = () => {
@@ -350,12 +342,10 @@ const GalleryPage = ({ dentist }: any) => {
   const handlerShowGallery = () => {
     setUpdateImgEvent(false);
     setShowUloadGallery(false);
+    setCheck(false);
   };
 
   const editGallery = (val: any) => {
-    setImagesUpdate(true);
-    setCheckFilesLeft(true);
-    setCheckFilesRight(true);
     setShowUloadGallery(true);
     setUpdateImgEvent(true);
     setUpdateImg(val);
@@ -368,7 +358,7 @@ const GalleryPage = ({ dentist }: any) => {
   };
 
   const filterImagesByService = (e: { target: { value: string; }; }) => {
-    setImages(null);
+    setImagesData(null);
     if (e.target.value === 'All Service') {
       getListImages();
     }
@@ -389,13 +379,11 @@ const GalleryPage = ({ dentist }: any) => {
         newListImages.push(arr);
       }
     });
-    setTimeout(() => {
-      setImages(newListImages);
-    }, 1000);
+    setImagesData(newListImages);
   };
 
   const searchImagesByTitle = async (e: any) => {
-    setImages(null);
+    setImagesData(null);
     setSearchValue(e);
     let allImages: any[] = [];
     let result = oldIMages.map(async (item: any) => {
@@ -410,9 +398,7 @@ const GalleryPage = ({ dentist }: any) => {
         allImages.push(item);
       }
     });
-    setTimeout(() => {
-      setImages(allImages);
-    }, 2000);
+    setImagesData(allImages);
   };
 
   const enterKeyDown = (e: { keyCode: number; }) => {
@@ -449,7 +435,7 @@ const GalleryPage = ({ dentist }: any) => {
             </div>
           </div>}
 
-          {!showUloadGallery && <div className='flex-end'>
+          {oldIMages && oldIMages.length !== 0 && <div className='flex-end'>
             <select className='gallery-select arrows bg-gray' name='services' id='services'
                     onChange={filterImagesByService}>
               <option value='All Service'>All Service</option>
@@ -462,32 +448,29 @@ const GalleryPage = ({ dentist }: any) => {
               }
             </select>
           </div>}
-          {!images && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
+          {!imagesData && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
 
-          {Array.isArray(images) &&
+          {Array.isArray(imagesData) &&
           <>
-            {images.length === 0 && !showUloadGallery &&
+            {imagesData.length === 0 && !showUloadGallery &&
             <div className='flex-align-center'>
               <p className='index-leftmenu-text'>Doctor {fullName} has not yet uploaded any of his works, be sure to
                 check
                 soon</p>
             </div>}
             {// @ts-ignore
-              images.length > 0 &&
+              imagesData.length > 0 &&
 
               <div className='gallery-box'>
-                {!showUloadGallery && images && images.map((val: any[], key: any) => {
+                {!showUloadGallery && imagesData && imagesData.map((val: any[], key: any) => {
+
                   return (
                     <div key={key}>
                       <Gallery
                         // @ts-ignore
-                        images={val}
-                        oldIMages={oldIMages}
-                        services={services}
-                        setImages={setFuncImages}
+                        imagesData={val}
                         editGallery={editGallery}
                         downloadImages={downloadImages}
-                        handlerShowUloadGallery={handlerShowUloadGallery}
                       />
                     </div>
                   );
@@ -614,7 +597,7 @@ const GalleryPage = ({ dentist }: any) => {
                 <p className='form-login-buttons'>
                   <button className='button-green' onClick={saveData}
                           disabled={!checkFilesLeft || !checkFilesRight || !titleBefore || !tagsBefore || !titleAfter ||
-                          !tagsAfter || !service || !check || !fileLeft || !fileRight}
+                          !tagsAfter || !check}
                   >Confirm
                   </button>
                 </p>
