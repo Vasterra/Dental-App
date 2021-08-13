@@ -11,6 +11,7 @@ import ForgotPassword from 'src/components/forgotPassword';
 import { createDentist } from 'src/graphql/mutations';
 import { listDentists } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
+import { CloseButton } from './common/CloseButton';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -210,7 +211,7 @@ const Login = () => {
               value={formikAuth.values.email}
               onChange={formikAuth.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formikAuth.setValues({ ...formikAuth.values, email: '' });
                    }} />
@@ -225,7 +226,7 @@ const Login = () => {
               value={formikAuth.values.password}
               onChange={formikAuth.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formikAuth.setValues({ ...formikAuth.values, password: '' });
                    }} />

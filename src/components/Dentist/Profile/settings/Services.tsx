@@ -160,7 +160,7 @@ const Services: React.FunctionComponent<Props> = ({
                 return (
                   <p className='form-login-input' key={key}>
                     <input value={el.name} />
-                    <Close className='form-login-input-close' onClick={() => deleteServiceDentist(el)} />
+                    <CloseButton onClick={() => deleteServiceDentist(el)} />
                   </p>
                 );
               }
@@ -178,7 +178,7 @@ const Services: React.FunctionComponent<Props> = ({
                 return (
                   <p className='form-profile-empty-input' key={key}>
                     <input type='text' name='empty' value={el.name} id='empty' placeholder='' />
-                    <Close className='form-login-input-close' onClick={async () => deleteServiceDentist(el)} />
+                    <CloseButton onClick={async () => deleteServiceDentist(el)} />
                   </p>
                 );
               }
