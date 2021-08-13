@@ -75,7 +75,9 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
       {currentDentist && <section className='container page'>
         <div className='flex-menu'>
           <div className='index-leftmenu'>
-            <img className='leftmenu-index-cover-image' src={currentCover} alt='cover image' />
+            {currentCover ?
+              <img className='leftmenu-index-cover-image' src={currentCover} alt='cover image' /> :
+            <div className='leftmenu-index-cover-image' /> }
             <div className='index-leftmenu-profile-information'>
               <img className='index-leftmenu-profile-photo' src={currentAvatar} alt='' />
               <div>
@@ -123,7 +125,7 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
           </div>
           <div className='index-box-to-box'>
             <div className='gallery-block'>
-              <div className='gallery-block-services'>
+              { oldIMages && oldIMages.length !== 0 && <div className='gallery-block-services'>
                 <select className='gallery-select arrows bg-gray' name='services' id='services'
                         onChange={filterImagesByService}>
                   <option value='All Service' selected>All Service</option>
@@ -133,14 +135,14 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
                     );
                   })}
                 </select>
-              </div>
+              </div>}
               {!images && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
 
               {Array.isArray(images) &&
               <>
                 {images.length === 0 &&
                 <div className='flex-align-center'>
-                  <p className='index-leftmenu-text'>{ !notFound ? 'Doctor {fullName} has not yet uploaded any of his works, be sure to check soon' : 'Not Found'}</p>
+                  <p className='index-leftmenu-text'>{ !notFound ? `Doctor ${fullName} has not yet uploaded any of his works, be sure to check soon` : 'Not Found'}</p>
                 </div>}
                 {// @ts-ignore
                   images.length > 0 && <GalleryPerson images={images} />

@@ -2,7 +2,7 @@ import { withSSRContext } from 'aws-amplify';
 import { GetServerSideProps } from 'next';
 import * as React from 'react';
 import { listDentists, listServiceForDentals } from 'src/graphql/queries';
-import Search from './search';
+import Search from '../components/search';
 
 const IndexPage = ({ dentistsData, listServiceForDentals }: any) => {
   return (

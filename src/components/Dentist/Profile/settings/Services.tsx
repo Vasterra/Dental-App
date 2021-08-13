@@ -5,7 +5,6 @@ import Close from '@material-ui/icons/Close';
 import { createService, deleteService } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
-import { ICurrentDentist } from '../../../../interfaces/ICurrentDentist';
 
 type Props = {
   route: any,
