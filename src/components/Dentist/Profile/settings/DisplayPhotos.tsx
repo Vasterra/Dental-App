@@ -5,7 +5,7 @@ import AddWatermark from "./AddWatermark";
 type Props = {
   currentDentist: any,
   currentAvatar: any,
-  uploadAvatar: Function,
+  uploadAvatar: any,
 }
 
 const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentAvatar, uploadAvatar}) => {

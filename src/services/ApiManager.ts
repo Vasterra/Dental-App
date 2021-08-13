@@ -32,6 +32,15 @@ class ApiManager {
     });
   }
 
+  public static async SIGN_OUT() {
+    try {
+      await Auth.signOut();
+      await Router.push('/login');
+    } catch (error) {
+      console.log('error signing out: ', error);
+    }
+  }
+
   public static async signOut() {
     try {
       await Auth.signOut();
@@ -107,6 +116,22 @@ class ApiManager {
       });
       console.log(data);
       return data;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  public static GET_DENTIST = async (id: any) => {
+    try {
+      if (id === null) return;
+      return await API.graphql({
+        query: getDentist,
+        variables: {
+          id: id
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
     } catch (e) {
       console.log(e);
     }
@@ -229,6 +254,18 @@ class ApiManager {
       console.log(e);
     }
   }
+
+  public static GET_LIST_FOR_DENTAL = async () => {
+    try {
+      return await API.graphql({
+        query: listServiceForDentals,
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   public static getListServiceForDentals = async () => {
     try {

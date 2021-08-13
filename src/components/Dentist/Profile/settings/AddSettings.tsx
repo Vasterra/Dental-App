@@ -1,32 +1,84 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { API, Auth } from 'aws-amplify';
 import Router from 'next/router';
 import DentistProfileInput from 'src/components/Dentist/Profile/componentForm/Input';
 import DentistProfileArea from 'src/components/Dentist/Profile/componentForm/TextArea';
 import { updateDentist } from 'src/graphql/mutations';
+import ApiManager from '../../../../services/ApiManager';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
+import { ICurrentDentist } from '../../../../interfaces/ICurrentDentist';
 
-type Props = {
-  currentDentist: any,
-  adminSettingSubscriber: any,
-  getDentist: Function,
+const useStylesFacebook = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      position: 'relative',
+      marginBottom: '27px'
+    },
+    bottom: {
+      color: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700]
+    },
+    top: {
+      color: '#1a90ff',
+      animationDuration: '550ms',
+      position: 'absolute',
+      left: 0
+    },
+    circle: {
+      strokeLinecap: 'round'
+    }
+  })
+);
+
+function FacebookCircularProgress(props: CircularProgressProps) {
+  const classes = useStylesFacebook();
+
+  return (
+    <div className={classes.root}>
+      <CircularProgress
+        variant='indeterminate'
+        disableShrink
+        className={classes.top}
+        classes={{
+          circle: classes.circle
+        }}
+        size={30}
+        thickness={4}
+        {...props}
+      />
+    </div>
+  );
 }
 
-const AddSettings: React.FunctionComponent<Props> = ({ currentDentist, getDentist, adminSettingSubscriber }) => {
+type Props = {
+  route: any,
+  adminSettingSubscriber: any,
+  setMessageSnackbar: any,
+  setOpenSnackbar: any,
+  setSeverity: any,
+}
 
-  const initialValues = {
-    id: currentDentist.id,
-    firstName: currentDentist.firstName,
-    lastName: currentDentist.lastName,
-    bio: currentDentist.bio,
-    email: currentDentist.email,
-    website: currentDentist.website,
-    city: currentDentist.city,
-    street: currentDentist.street,
-    address: currentDentist.address,
-    postIndex: currentDentist.postIndex,
-    phone: currentDentist.phone,
-    qualifications: currentDentist.qualifications
+const AddSettings: React.FunctionComponent<Props> = ({
+   route,
+   adminSettingSubscriber,
+   setMessageSnackbar,
+   setOpenSnackbar,
+   setSeverity
+ }) => {
+
+  const [currentDentist, setCurrentDentist] = useState<any | null>(null);
+  const [loaderButtonSubmit, setLoaderButtonSubmit] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (route !== undefined) void getDentist();
+  }, [route]);
+
+  const getDentist = async () => {
+    return await ApiManager.GET_DENTIST(route).then((result: any) => {
+      setCurrentDentist(result.data.getDentist)
+      setLoaderButtonSubmit(false)
+    });
   };
 
   return (
@@ -36,27 +88,27 @@ const AddSettings: React.FunctionComponent<Props> = ({ currentDentist, getDentis
           <div><p className='form-login-title green px20'>Bio and Contact Information</p>
             <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
           </div>
-          {!currentDentist.hasPaidPlan && <p className='form-login-buttons'>
-            <button className='button-green-outline' onClick={() => {void Router.push(`../../dentist/account/${currentDentist.id}`)}}>Upgrade</button>
+          {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
+            <button className='button-green-outline' onClick={() => {
+              void Router.push(`../../dentist/account/${currentDentist.id}`);
+            }}>Upgrade
+            </button>
           </p>}
         </div>
-        {
+        { currentDentist &&
           <Formik
-            validateOnBlur={true}
-            validateOnChange={true}
-            onSubmit={async (data: any, { setErrors }) => {
-              console.log(data);
-              fetch('https://maps.google.com/maps/api/geocode/json?sensor=false&address=' + data.address + '&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY')
+            onSubmit={async (data: any) => {
+              setLoaderButtonSubmit(true)
+              await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
               .then(response => response.json())
               .then(async (result) => {
                 data.lng = result.results[0].geometry.location.lng;
                 data.lat = result.results[0].geometry.location.lat;
 
-                let user = await Auth.currentAuthenticatedUser();
-                const updateEmail = await Auth.updateUserAttributes(user, {
+                const user = await Auth.currentAuthenticatedUser();
+                await Auth.updateUserAttributes(user, {
                   'email': data.email
                 });
-                console.log('updateEmail', updateEmail);
                 try {
                   await API.graphql({
                     query: updateDentist,
@@ -66,17 +118,37 @@ const AddSettings: React.FunctionComponent<Props> = ({ currentDentist, getDentis
                     // @ts-ignore
                     authMode: 'AWS_IAM'
                   });
-
+                  setMessageSnackbar('The information was updated successfully!');
+                  setSeverity('success');
+                  setOpenSnackbar(true);
                 } catch (err) {
-                  setErrors(err);
+                  setMessageSnackbar('The information has not been updated!');
+                  setSeverity('warning');
+                  setOpenSnackbar(true);
                 }
-                getDentist();
+                void await getDentist();
               })
-              .catch((_error: any) => {
+              .catch((error: any) => {
+                setMessageSnackbar(error);
+                setSeverity('warning');
+                setOpenSnackbar(true);
               });
 
             }}
-            initialValues={initialValues}
+            initialValues={{
+              id: currentDentist.id,
+              firstName: currentDentist.firstName,
+              lastName: currentDentist.lastName,
+              bio: currentDentist.bio,
+              email: currentDentist.email,
+              website: currentDentist.website,
+              city: currentDentist.city,
+              street: currentDentist.street,
+              address: currentDentist.address,
+              postIndex: currentDentist.postIndex,
+              phone: currentDentist.phone,
+              qualifications: currentDentist.qualifications
+            }}
           >
             {props => (
               <form onSubmit={props.handleSubmit} style={{ width: '100%' }}>
@@ -126,7 +198,8 @@ const AddSettings: React.FunctionComponent<Props> = ({ currentDentist, getDentis
                       />
                     </div>
                     <p className='form-login-buttons'>
-                      <button className='button-green' type='submit'>Confirm</button>
+                      <button className='button-green' type='submit'>{loaderButtonSubmit ?
+                        <FacebookCircularProgress /> : 'Confirm'}</button>
                     </p>
                   </div>
                   {adminSettingSubscriber && !currentDentist.hasPaidPlan && <div className='profile-block-box'>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Auth, Storage, withSSRContext } from 'aws-amplify';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 import Layout from 'src/components/Layout';
 import AddSettings from 'src/components/Dentist/Profile/settings/AddSettings';
@@ -8,30 +8,37 @@ import Location from 'src/components/Dentist/Profile/settings/Location';
 import Services from 'src/components/Dentist/Profile/settings/Services';
 import DisplayPhotos from 'src/components/Dentist/Profile/settings/DisplayPhotos';
 import ApiManager from 'src/services/ApiManager';
-import { CircularProgress } from '@material-ui/core';
-
-import { WrapperFlex } from 'src/styles/Main.module';
+import { Snackbar } from '@material-ui/core';
 import { getDentist } from 'src/graphql/queries';
 import { GetServerSideProps } from 'next';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 const Profile = ({ dentist }: any) => {
   const router = useRouter();
 
-  const [currentDentist, setCurrentDentist]: any = useState(dentist);
-  const [currentAvatar, setCurrentAvatar]: any = useState();
-  const [signedInUser, setSignedInUser]: any = useState();
-  const [currentUser, setCurrentUser]: any = useState();
-  const [images, setImages]: any = useState();
-  const [route, setRoute]: any = useState();
+  const [currentDentist, setCurrentDentist] = useState(dentist);
+  const [currentAvatar, setCurrentAvatar] = useState('');
+  const [signedInUser, setSignedInUser] = useState(false);
+  const [route, setRoute] = useState('');
   const [adminSettingSubscriber, setAdminSettingSubscriber] = useState();
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity] = useState('');
 
   useEffect(() => {
     if (router.query.slug !== undefined) {
       const { slug } = router.query;
       setRoute(slug[0]);
-      authListener();
-      downloadAvatar(currentDentist);
-      void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
+      void authListener().then(() => {
+        downloadAvatar(currentDentist);
+        void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
+      });
+
     }
   }, [router]);
 
@@ -40,24 +47,20 @@ const Profile = ({ dentist }: any) => {
   };
 
   const authListener = async () => {
-    const signedInUser = ApiManager.authListener();
-    setSignedInUser(signedInUser);
     try {
-      const currentUser = await Auth.currentAuthenticatedUser();
-      setCurrentUser(currentUser);
+      await Auth.currentAuthenticatedUser();
       setSignedInUser(true);
     } catch (e) {
-      console.log(e);
+      void await Router.push('/login');
     }
   };
 
-  const getDentist = async (id: string) => {
+  const getDentist = (id: string) => {
     setCurrentDentist(null);
     try {
-      await ApiManager.getDentist(route ? route : id)
+      void ApiManager.getDentist(route ? route : id)
       .then(currentDentist => {
         setCurrentDentist(currentDentist);
-        authListener();
         downloadAvatar(currentDentist);
       });
     } catch (e) {
@@ -65,21 +68,21 @@ const Profile = ({ dentist }: any) => {
     }
   };
 
-  const downloadAvatar = async (currentDentist: any) => {
-    ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
+  const downloadAvatar = (currentDentist: any) => {
+    void ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
       setCurrentAvatar(signedFiles);
     });
   };
 
-  const downloadImages = async () => {
-    try {
-      ApiManager.downloadImages(currentDentist).then(filesList => {
-        setImages(filesList);
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const downloadImages = async () => {
+  //   try {
+  //     ApiManager.downloadImages(currentDentist).then(filesList => {
+  //       setImages(filesList);
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   const uploadAvatar = async (files: any) => {
     files.preventDefault();
@@ -94,36 +97,67 @@ const Profile = ({ dentist }: any) => {
         signedFiles = await signedFiles.then((item: any) => {
           return item;
         });
+        setMessageSnackbar('The avatar upload successfully!');
+        setSeverity('success');
+        setOpenSnackbar(true);
         setCurrentAvatar(signedFiles);
         downloadAvatar(currentDentist);
-        // setDownloadMessage('Success!')
-        // setStatusSnackbar('success')
-        // setOpenSnackbar(true)
-        // setOpen(false)
       })
       .catch((_error: any) => {
-        // setDownloadMessage('File upload error')
-        // setStatusSnackbar('error')
-        // setOpenSnackbar(true)
+        setMessageSnackbar('The avatar was not uploaded!');
+        setSeverity('warning');
+        setOpenSnackbar(true);
       });
     } catch (error) {
-      console.log('Error uploading file: ', error);
+      setMessageSnackbar(`Error uploading file: ${error}`);
+      setSeverity('warning');
+      setOpenSnackbar(true);
     }
   };
 
-  !currentDentist && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
   return (
     <>
-      {currentDentist &&
+      {currentDentist && signedInUser &&
       <Layout title='Profile' active={'activeProfile'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
         <div className='main-profile bg-white '>
-          <AddSettings currentDentist={currentDentist} getDentist={getDentist} adminSettingSubscriber={adminSettingSubscriber}/>
-          <Location route={route} adminSettingSubscriber={adminSettingSubscriber} />
-          <Services route={route} adminSettingSubscriber={adminSettingSubscriber} />
-          <DisplayPhotos currentDentist={currentDentist} currentAvatar={currentAvatar}
-                         uploadAvatar={uploadAvatar} />
+          <AddSettings route={route}
+                       adminSettingSubscriber={adminSettingSubscriber}
+                       setMessageSnackbar={setMessageSnackbar}
+                       setOpenSnackbar={setOpenSnackbar}
+                       setSeverity={setSeverity}
+          />
+          <Location route={route}
+                    adminSettingSubscriber={adminSettingSubscriber}
+                    setMessageSnackbar={setMessageSnackbar}
+                    setOpenSnackbar={setOpenSnackbar}
+                    setSeverity={setSeverity}
+          />
+          <Services route={route}
+                    adminSettingSubscriber={adminSettingSubscriber}
+                    setMessageSnackbar={setMessageSnackbar}
+                    setOpenSnackbar={setOpenSnackbar}
+                    setSeverity={setSeverity}
+          />
+          <DisplayPhotos currentDentist={currentDentist}
+                         currentAvatar={currentAvatar}
+                         uploadAvatar={uploadAvatar}
+          />
         </div>
       </Layout>}
+      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar}
+          // @ts-ignore
+               severity={severity}>
+          {messageSnackbar}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

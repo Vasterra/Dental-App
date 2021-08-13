@@ -5,46 +5,84 @@ import { API } from 'aws-amplify';
 import { createLocation, deleteLocation, updateLocation } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
-import { Snackbar } from '@material-ui/core';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant='filled' {...props} />;
+const useStylesFacebook = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      position: 'relative',
+      marginBottom: '27px'
+    },
+    bottom: {
+      color: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700]
+    },
+    top: {
+      color: '#1a90ff',
+      animationDuration: '550ms',
+      position: 'absolute',
+      left: 0
+    },
+    circle: {
+      strokeLinecap: 'round'
+    }
+  })
+);
+
+function FacebookCircularProgress(props: CircularProgressProps) {
+  const classes = useStylesFacebook();
+
+  return (
+    <div className={classes.root}>
+      <CircularProgress
+        variant='indeterminate'
+        disableShrink
+        className={classes.top}
+        classes={{
+          circle: classes.circle
+        }}
+        size={30}
+        thickness={4}
+        {...props}
+      />
+    </div>
+  );
 }
 
 type Props = {
   route: any,
   adminSettingSubscriber: any,
+  setOpenSnackbar: any,
+  setMessageSnackbar: any,
+  setSeverity: any,
 }
 
-const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscriber }) => {
+const Location: React.FunctionComponent<Props> = ({
+    route,
+    adminSettingSubscriber,
+    setOpenSnackbar,
+    setMessageSnackbar,
+    setSeverity
+  }) => {
 
-  const [updateDateLocation, setUpdateDateLocation]: any = useState();
-  const [currentDentist, setСurrentDentist]: any = useState();
-
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [messageSnackbar, setMessageSnackbar] = useState('');
-  const [severity, setSeverity] = useState('');
+  const [currentDentist, setCurrentDentist] = useState<any | null>(null);
+  const [updateDateLocation, setUpdateDateLocation] = useState<any | null>(null);
+  const [loaderButtonSubmit, setLoaderButtonSubmit] = useState<any | null>(null);
 
   useEffect(() => {
-    if (route !== undefined) getDentist(route);
+    if (route !== undefined) void getDentist();
   }, [route]);
 
 
-  const getDentist = async (id: string) => {
-    setСurrentDentist(null);
-    try {
-      await ApiManager.getDentist(id)
-      .then(currentDentist => {
-        setСurrentDentist(currentDentist);
-      });
-    } catch (e) {
-      console.log(e);
-    }
+  const getDentist = async () => {
+    return await ApiManager.GET_DENTIST(route).then((result: any) => {
+      setCurrentDentist(result.data.getDentist);
+      setLoaderButtonSubmit(false);
+    });
   };
 
   const handleSubmitUpdate = async (data: any, { setErrors }: any) => {
-    setUpdateDateLocation(null);
+    setLoaderButtonSubmit(true);
     try {
       await API.graphql({
         query: updateLocation,
@@ -63,15 +101,16 @@ const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
     } catch (err) {
       setErrors(err);
     }
-    getDentist(route);
+    await getDentist();
   };
 
   const handleSubmit = async (data: any, form: any) => {
-    console.log(currentDentist.locations.items);
+    setLoaderButtonSubmit(true);
     if (currentDentist.locations.items.length === Number(adminSettingSubscriber.freeMaxLocations)) {
       setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxLocations} locations.`);
       setSeverity('warning');
       setOpenSnackbar(true);
+      setLoaderButtonSubmit(false);
       return false;
     }
 
@@ -92,18 +131,11 @@ const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
       setMessageSnackbar(`The location ${data.city} ${data.address} ${data.postCode} is already`);
       setSeverity('success');
       setOpenSnackbar(true);
-      form.resetForm()
+      form.resetForm();
     } catch (err) {
       form.setErrors(err);
     }
-    getDentist(route);
-  };
-
-  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
+    await getDentist();
   };
 
   const handleDelete = async (el: any) => {
@@ -120,7 +152,7 @@ const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
     setMessageSnackbar(`The location ${el.city} ${el.address} ${el.postCode} is delete`);
     setSeverity('success');
     setOpenSnackbar(true);
-    getDentist(route);
+    await getDentist();
   };
 
   return (
@@ -131,7 +163,10 @@ const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
             <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
           </div>
           {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
-            <button className='button-green-outline' onClick={() => {void Router.push(`../../dentist/account/${currentDentist.id}`)}}>Upgrade</button>
+            <button className='button-green-outline' onClick={() => {
+              void Router.push(`../../dentist/account/${currentDentist.id}`);
+            }}>Upgrade
+            </button>
           </p>}
         </div>
         <div className='box-2-box'>
@@ -148,7 +183,7 @@ const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
                   initialValues={{
                     city: '',
                     address: '',
-                    postCode: '',
+                    postCode: ''
                   }}
                 >
                   {({
@@ -190,7 +225,10 @@ const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
                       </p>
                       <p className='row-content'>
                         <span className='input-span' />
-                        <button className='button-green' disabled={!values.city || !values.address || !values.postCode} type='submit'>Confirm</button>
+                        <button className='button-green' disabled={!values.city || !values.address || !values.postCode}
+                                type='submit'>{loaderButtonSubmit ?
+                          <FacebookCircularProgress /> : 'Confirm'}
+                        </button>
                       </p>
                     </form>
                   )}
@@ -253,7 +291,9 @@ const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
                         </p>
                         <p className='row-content'>
                           <span className='input-span' />
-                          <button className='button-green' disabled={!values.city && !values.address && !values.postCode} type='submit'>Update</button>
+                          <button className='button-green'
+                                  disabled={!values.city && !values.address && !values.postCode} type='submit'>Update
+                          </button>
                           <button className='button-green' onClick={() => setUpdateDateLocation(null)}>Cancel</button>
                         </p>
                       </form>
@@ -273,11 +313,11 @@ const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
                       <input
                         type='text'
                         className='form-update-input'
-                        value={el.city + ' ' + el.address + ' ' + el.postCode}
+                        value={`${el.city} ${el.address} ${el.postCode}`}
                         disabled
                       />
                       <span onClick={() => setUpdateDateLocation(el)}>
-                        <img className='form-login-input-edit' src='../../../images/edit.svg'  alt="edit" />
+                        <img className='form-login-input-edit' src='../../../images/edit.svg' alt='edit' />
                       </span>
                       <Close className='form-login-input-close' onClick={() => handleDelete(el)} />
                     </p>
@@ -307,13 +347,6 @@ const Location: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
           </div>}
         </div>
       </>
-      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar}
-          // @ts-ignore
-               severity={severity}>
-          {messageSnackbar}
-        </Alert>
-      </Snackbar>
     </div>
   );
 };

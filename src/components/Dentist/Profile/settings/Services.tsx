@@ -1,38 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { API } from 'aws-amplify';
-import { Snackbar } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 
 import { createService, deleteService } from 'src/graphql/mutations';
-import { listServiceForDentals } from 'src/graphql/queries';
 import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant='filled' {...props} />;
-}
-
+import { ICurrentDentist } from '../../../../interfaces/ICurrentDentist';
 
 type Props = {
   route: any,
-  adminSettingSubscriber: any
+  adminSettingSubscriber: any,
+  setOpenSnackbar: any,
+  setMessageSnackbar: any,
+  setSeverity: any,
 }
 
-const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscriber }) => {
+const Services: React.FunctionComponent<Props> = ({
+    route,
+    adminSettingSubscriber,
+    setOpenSnackbar,
+    setMessageSnackbar,
+    setSeverity
+  }) => {
 
-  const [currentDentist, setCurrentDentist]: any = useState();
+  const [currentDentist, setCurrentDentist] = useState<any | null>(null);
   const [serviceName, setServiceName] = useState();
   const [service, setService] = useState([]);
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [messageSnackbar, setMessageSnackbar] = useState('');
-  const [severity, setSeverity] = useState('');
-
-  const disabled = service.length === 0;
-
   React.useEffect(() => {
-    getListServiceForDental();
+    void ApiManager.GET_LIST_FOR_DENTAL().then((result: any) => {
+      setService(result.data.listServiceForDentals.items);
+    });
   }, []);
 
   useEffect(() => {
@@ -43,21 +41,12 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
     setCurrentDentist(null);
     try {
       void ApiManager.getDentist(route ? route : route.id)
-      .then(currentDentist => {
-        setCurrentDentist(currentDentist);
+      .then(result => {
+        setCurrentDentist(result);
       });
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const getListServiceForDental = async () => {
-    const { data }: any = await API.graphql({
-      query: listServiceForDentals,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    setService(data.listServiceForDentals.items);
   };
 
   const addService = async () => {
@@ -133,7 +122,10 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
           <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
         </div>
         {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
-          <button className='button-green-outline' onClick={() => {void Router.push(`../../dentist/account/${currentDentist.id}`)}}>Upgrade</button>
+          <button className='button-green-outline' onClick={() => {
+            void Router.push(`../../dentist/account/${currentDentist.id}`);
+          }}>Upgrade
+          </button>
         </p>}
       </div>
       <div className='box-2-box'>
@@ -222,13 +214,6 @@ const Services: React.FunctionComponent<Props> = ({ route, adminSettingSubscribe
 
         </div>}
       </div>
-      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar}
-          // @ts-ignore
-               severity={severity}>
-          {messageSnackbar}
-        </Alert>
-      </Snackbar>
     </div>
 
   );
