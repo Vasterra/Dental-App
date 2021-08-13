@@ -7,6 +7,7 @@ import { Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
+import { CloseButton } from './common/CloseButton';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -152,7 +153,7 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
               value={formikResetPassword.values.username}
               onChange={formikResetPassword.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formikResetPassword.setValues({ ...formikResetPassword.values, username: '' });
                    }} />
@@ -178,7 +179,7 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
               value={formikVerificationCode.values.code}
               onChange={formikVerificationCode.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formikVerificationCode.setValues({ ...formikVerificationCode.values, code: '' });
                    }} />
@@ -193,7 +194,7 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
               value={formikVerificationCode.values.username}
               onChange={formikVerificationCode.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formikVerificationCode.setValues({ ...formikVerificationCode.values, username: '' });
                    }} />
@@ -207,7 +208,7 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
               value={formikVerificationCode.values.new_password}
               onChange={formikVerificationCode.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formikVerificationCode.setValues({ ...formikVerificationCode.values, new_password: '' });
                    }} />

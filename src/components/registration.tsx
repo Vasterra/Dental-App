@@ -6,6 +6,7 @@ import Router from 'next/router';
 import Close from '@material-ui/icons/Close';
 import { useFormik } from 'formik';
 import { Alert } from '@material-ui/lab';
+import { CloseButton } from './common/CloseButton';
 
 interface State {
   username: string;
@@ -158,7 +159,7 @@ const Registration = ({}) => {
               value={formik.values.username}
               onChange={formik.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formik.setValues({ ...formik.values, username: '' });
                    }} />
@@ -174,7 +175,7 @@ const Registration = ({}) => {
               value={formik.values.email}
               onChange={formik.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formik.setValues({ ...formik.values, email: '' });
                    }} />
@@ -189,7 +190,7 @@ const Registration = ({}) => {
               value={formik.values.gdcNumber}
               onChange={formik.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formik.setValues({ ...formik.values, gdcNumber: '' });
                    }} />
@@ -204,7 +205,7 @@ const Registration = ({}) => {
               value={formik.values.password}
               onChange={formik.handleChange}
             />
-            <Close className='form-login-input-close'
+            <CloseButton
                    onClick={() => {
                      void formik.setValues({ ...formik.values, password: '' });
                    }} />

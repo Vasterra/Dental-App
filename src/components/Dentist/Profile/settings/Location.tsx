@@ -7,6 +7,7 @@ import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
+import { CloseButton } from 'src/components/common/CloseButton';
 
 const useStylesFacebook = makeStyles((theme: Theme) =>
   createStyles({
@@ -319,7 +320,7 @@ const Location: React.FunctionComponent<Props> = ({
                       <span onClick={() => setUpdateDateLocation(el)}>
                         <img className='form-login-input-edit' src='../../../images/edit.svg' alt='edit' />
                       </span>
-                      <Close className='form-login-input-close' onClick={() => handleDelete(el)} />
+                      <CloseButton onClick={() => handleDelete(el)} />
                     </p>
                   );
                 })
