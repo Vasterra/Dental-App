@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { API } from 'aws-amplify';
-import Close from '@material-ui/icons/Close';
 
 import { createService, deleteService } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
+import { CloseButton } from '../../../common/CloseButton';
 
 type Props = {
   route: any,
@@ -15,12 +15,12 @@ type Props = {
 }
 
 const Services: React.FunctionComponent<Props> = ({
-    route,
-    adminSettingSubscriber,
-    setOpenSnackbar,
-    setMessageSnackbar,
-    setSeverity
-  }) => {
+                                                    route,
+                                                    adminSettingSubscriber,
+                                                    setOpenSnackbar,
+                                                    setMessageSnackbar,
+                                                    setSeverity
+                                                  }) => {
 
   const [currentDentist, setCurrentDentist] = useState<any | null>(null);
   const [serviceName, setServiceName] = useState();
