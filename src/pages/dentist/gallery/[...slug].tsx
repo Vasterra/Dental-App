@@ -116,6 +116,7 @@ const GalleryPage = ({ dentist }: any) => {
   };
 
   const saveCrop = (value: any, anchor: any) => {
+    console.log(value);
     if (anchor === 'left') {
       setFileLeft(value);
       setCheckFilesLeft(true);

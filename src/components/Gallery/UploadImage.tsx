@@ -1,18 +1,16 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // @ts-ignore
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 
 type Props = {
-  saveCrop: Function
-  desabledButtonFiles: Function
+  saveCrop: any
+  desabledButtonFiles: any
   anchor: any
   updateImg: any
   updateImgData: any
   nameUpdateImg: any
 }
-const defaultSrc =
-  'https://raw.githubusercontent.com/roadmanfong/react-cropper/master/example/img/child.jpg';
 
 const UploadImage: React.FunctionComponent<Props> = ({
      saveCrop,
@@ -65,13 +63,13 @@ const UploadImage: React.FunctionComponent<Props> = ({
       }
       if (cropper.getCroppedCanvas().toBlob) {
         cropper.getCroppedCanvas().toBlob(function(blob: any) {
-          let b: any = blob;
+          const b: any = blob;
           b.lastModifiedDate = new Date();
           b.name = nameUpdateImg ? nameUpdateImg : file[0].name;
           saveCrop(blob, anchor);
         }, 'image/jpeg', 1);
       }
-      saveCrop(cropper.getCroppedCanvas(), anchor);
+      // saveCrop(cropper.getCroppedCanvas(), anchor);
     }
   };
 
