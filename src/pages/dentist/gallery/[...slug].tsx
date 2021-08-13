@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 import Layout from 'src/components/Layout';
 import { API, Auth, Storage, withSSRContext } from 'aws-amplify';
@@ -21,7 +21,6 @@ const GalleryPage = ({ dentist }: any) => {
   const [currentDentist, setCurrentDentist]: any = useState(dentist);
   const [currentAvatar, setCurrentAvatar]: any = useState();
   const [signedInUser, setSignedInUser]: any = useState();
-  const [currentUser, setCurrentUser]: any = useState();
   const [images, setImages]: any = useState();
   const [oldIMages, setOldIMages]: any = useState();
   const [route, setRoute]: any = useState();
@@ -76,14 +75,11 @@ const GalleryPage = ({ dentist }: any) => {
   }, [listImagesData]);
 
   const authListener = async () => {
-    const signedInUser = ApiManager.authListener();
-    setSignedInUser(signedInUser);
     try {
-      const currentUser = await Auth.currentAuthenticatedUser();
-      setCurrentUser(currentUser);
+      await Auth.currentAuthenticatedUser();
       setSignedInUser(true);
     } catch (e) {
-      console.log(e);
+      void await Router.push('/login');
     }
   };
 
@@ -120,6 +116,7 @@ const GalleryPage = ({ dentist }: any) => {
   };
 
   const saveCrop = (value: any, anchor: any) => {
+    console.log(value);
     if (anchor === 'left') {
       setFileLeft(value);
       setCheckFilesLeft(true);
@@ -381,11 +378,11 @@ const GalleryPage = ({ dentist }: any) => {
     oldIMages.forEach((slider: any) => {
       slider[0].service.forEach((service: string) => {
         if (service === e.target.value) {
-          filterImages.push(slider)
+          filterImages.push(slider);
         }
-      })
-      return filterImages
-    })
+      });
+      return filterImages;
+    });
 
     filterImages.forEach((arr: any) => {
       if (arr.length !== 0) {
@@ -427,214 +424,218 @@ const GalleryPage = ({ dentist }: any) => {
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
 
   return (
-    <Layout title='Gallery' active={'activeGallery'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
-      <div className='main-profile bg-white '>
-        {!showUloadGallery && <div className='profile-box-form'>
-          <div className='form-info-block'>
-            <div>
-              <p className='form-login-title green px20'>Gallery</p>
-              <p className='form-login-subtitle gray px12 mb-6px'>Add and edit your portfolio</p>
+    <>
+      {signedInUser &&
+      <Layout title='Gallery' active={'activeGallery'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
+        <div className='main-profile bg-white '>
+          {!showUloadGallery && <div className='profile-box-form'>
+            <div className='form-info-block'>
+              <div>
+                <p className='form-login-title green px20'>Gallery</p>
+                <p className='form-login-subtitle gray px12 mb-6px'>Add and edit your portfolio</p>
+              </div>
             </div>
-          </div>
-          <div className='search-gallery'>
-            <input className='search-users'
-                   type='search'
-                   id='search'
-                   name='search'
-                   value={searchValue}
-                   onKeyDown={enterKeyDown}
-                   onChange={e => searchImagesByTitle(e.target.value)}
-                   placeholder='Search Images' />
-            <img className='search-button' src='../../images/search.svg' alt='search' />
-            <button className='button-green centered' onClick={handlerShowUloadGallery}>Upload to gallery</button>
-          </div>
-        </div>}
-
-        {!showUloadGallery && <div className='flex-end'>
-          <select className='gallery-select arrows bg-gray' name='services' id='services'
-                  onChange={filterImagesByService}>
-            <option value='All Service'>All Service</option>
-            {
-              currentDentist.services.items.map((el: any, key: any) => {
-                return (
-                  <option key={key} value={el.name}>{el.name}</option>
-                );
-              })
-            }
-          </select>
-        </div>}
-        {!images && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
-
-        {Array.isArray(images) &&
-        <>
-          {images.length === 0 && !showUloadGallery &&
-          <div className='flex-align-center'>
-            <p className='index-leftmenu-text'>Doctor {fullName} has not yet uploaded any of his works, be sure to check
-              soon</p>
+            <div className='search-gallery'>
+              <input className='search-users'
+                     type='search'
+                     id='search'
+                     name='search'
+                     value={searchValue}
+                     onKeyDown={enterKeyDown}
+                     onChange={e => searchImagesByTitle(e.target.value)}
+                     placeholder='Search Images' />
+              <img className='search-button' src='../../images/search.svg' alt='search' />
+              <button className='button-green centered' onClick={handlerShowUloadGallery}>Upload to gallery</button>
+            </div>
           </div>}
-          {// @ts-ignore
-            images.length > 0 &&
 
-            <div className='gallery-box'>
-              {!showUloadGallery && images && images.map((val: any[], key: any) => {
-                return (
-                  <div key={key}>
-                    <Gallery
-                      // @ts-ignore
-                      images={val}
-                      oldIMages={oldIMages}
-                      services={services}
-                      setImages={setFuncImages}
-                      editGallery={editGallery}
-                      downloadImages={downloadImages}
-                      handlerShowUloadGallery={handlerShowUloadGallery}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+          {!showUloadGallery && <div className='flex-end'>
+            <select className='gallery-select arrows bg-gray' name='services' id='services'
+                    onChange={filterImagesByService}>
+              <option value='All Service'>All Service</option>
+              {
+                currentDentist.services.items.map((el: any, key: any) => {
+                  return (
+                    <option key={key} value={el.name}>{el.name}</option>
+                  );
+                })
+              }
+            </select>
+          </div>}
+          {!images && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
+
+          {Array.isArray(images) &&
+          <>
+            {images.length === 0 && !showUloadGallery &&
+            <div className='flex-align-center'>
+              <p className='index-leftmenu-text'>Doctor {fullName} has not yet uploaded any of his works, be sure to
+                check
+                soon</p>
+            </div>}
+            {// @ts-ignore
+              images.length > 0 &&
+
+              <div className='gallery-box'>
+                {!showUloadGallery && images && images.map((val: any[], key: any) => {
+                  return (
+                    <div key={key}>
+                      <Gallery
+                        // @ts-ignore
+                        images={val}
+                        oldIMages={oldIMages}
+                        services={services}
+                        setImages={setFuncImages}
+                        editGallery={editGallery}
+                        downloadImages={downloadImages}
+                        handlerShowUloadGallery={handlerShowUloadGallery}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            }
+          </>
           }
-        </>
-        }
 
-        {showUloadGallery && <>
-          <div className='row-gallery'>
-            <div className='profile-box-form cut-block'>
-              <div className='form-info-block one-block'>
-                <div>
-                  <p className='form-login-title green px20'>Upload Before Image</p>
-                  <p className='form-login-subtitle gray px12 mb-6px'>Add and edit your images</p>
+          {showUloadGallery && <>
+            <div className='row-gallery'>
+              <div className='profile-box-form cut-block'>
+                <div className='form-info-block one-block'>
+                  <div>
+                    <p className='form-login-title green px20'>Upload Before Image</p>
+                    <p className='form-login-subtitle gray px12 mb-6px'>Add and edit your images</p>
+                  </div>
+                </div>
+                <div className='profile-block-box'>
+                  <UploadImage
+                    saveCrop={saveCrop}
+                    desabledButtonFiles={desabledButtonFiles}
+                    anchor='left'
+                    updateImg={updateImg && updateImg[0].original}
+                    updateImgData={updateImg && updateImg[0]}
+                    nameUpdateImg={updateImg && updateImg[0].nameBefore}
+                  />
+                  <div>
+                    <p className='form-profile-label'>Title</p>
+                    <p>
+                      <input className='form-profile-input'
+                             type='text'
+                             name='title'
+                             id='title'
+                             value={titleBefore}
+                             placeholder='Image Title'
+                             onChange={(e) => setTitleBefore(e.target.value)}
+                      />
+                    </p>
+                  </div>
+                  <div>
+                    <p className='form-profile-label'>Alt Tags</p>
+                    <p>
+                      <input className='form-profile-input'
+                             type='text'
+                             name='tags'
+                             id='tags'
+                             value={tagsBefore}
+                             placeholder='Alt Tag'
+                             onChange={(e) => setTagsBefore(e.target.value)}
+                      />
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className='profile-block-box'>
-                <UploadImage
-                  saveCrop={saveCrop}
-                  desabledButtonFiles={desabledButtonFiles}
-                  anchor='left'
-                  updateImg={updateImg && updateImg[0].original}
-                  updateImgData={updateImg && updateImg[0]}
-                  nameUpdateImg={updateImg && updateImg[0].nameBefore}
-                />
-                <div>
-                  <p className='form-profile-label'>Title</p>
-                  <p>
-                    <input className='form-profile-input'
-                           type='text'
-                           name='title'
-                           id='title'
-                           value={titleBefore}
-                           placeholder='Image Title'
-                           onChange={(e) => setTitleBefore(e.target.value)}
-                    />
-                  </p>
+              <div className='profile-box-form cut-block'>
+                <div className='form-info-block one-block'>
+                  <div>
+                    <p className='form-login-title green px20'>Upload After Image</p>
+                    <p className='form-login-subtitle gray px12 mb-6px'>Add and edit your images</p>
+                  </div>
                 </div>
-                <div>
-                  <p className='form-profile-label'>Alt Tags</p>
-                  <p>
-                    <input className='form-profile-input'
-                           type='text'
-                           name='tags'
-                           id='tags'
-                           value={tagsBefore}
-                           placeholder='Alt Tag'
-                           onChange={(e) => setTagsBefore(e.target.value)}
-                    />
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className='profile-box-form cut-block'>
-              <div className='form-info-block one-block'>
-                <div>
-                  <p className='form-login-title green px20'>Upload After Image</p>
-                  <p className='form-login-subtitle gray px12 mb-6px'>Add and edit your images</p>
-                </div>
-              </div>
-              <div className='profile-block-box'>
-                <UploadImage
-                  saveCrop={saveCrop}
-                  desabledButtonFiles={desabledButtonFiles}
-                  anchor='rigth'
-                  updateImg={updateImg && updateImg[1].original}
-                  updateImgData={updateImg && updateImg[1]}
-                  nameUpdateImg={updateImg && updateImg[1].nameAfter}
-                />
-                <div>
-                  <p className='form-profile-label'>Title</p>
-                  <p>
-                    <input className='form-profile-input'
-                           type='text'
-                           name='title'
-                           id='title'
-                           value={titleAfter}
-                           placeholder='Image Title'
-                           onChange={(e) => setTitleAfter(e.target.value)}
-                    />
-                  </p>
-                </div>
-                <div>
-                  <p className='form-profile-label'>Alt Tags</p>
-                  <p>
-                    <input className='form-profile-input'
-                           type='text'
-                           name='tags'
-                           id='tags'
-                           value={tagsAfter}
-                           placeholder='Alt Tag'
-                           onChange={(e) => setTagsAfter(e.target.value)}
-                    />
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='row-gallery'>
-            <div className='profile-box-form cut-block-2'>
-              <div className='profile-block-box'>
-                <div>
-                  <p className='form-profile-label'>
-                    <label className='form-profile-label'>Service</label>
-                  </p>
-                  <div className='row-content space-between'>
-                    {services &&
-                    <Services saveService={saveService} services={currentDentist.services.items}
-                              updateService={updateService} />}
-                    {/*<img className='gallery-select-arrow' src='../../../public/images/down-select.png'*/}
-                    {/*     alt='select' />*/}
-                    <p className='checkbox'>
-                      <input type='checkbox' name='delete' id='delete'
-                             onChange={checkHandler} />
-                      <span className='gallery-checkbox-text'>I confirm I have full rights for the use and publication of these images.</span>
+                <div className='profile-block-box'>
+                  <UploadImage
+                    saveCrop={saveCrop}
+                    desabledButtonFiles={desabledButtonFiles}
+                    anchor='rigth'
+                    updateImg={updateImg && updateImg[1].original}
+                    updateImgData={updateImg && updateImg[1]}
+                    nameUpdateImg={updateImg && updateImg[1].nameAfter}
+                  />
+                  <div>
+                    <p className='form-profile-label'>Title</p>
+                    <p>
+                      <input className='form-profile-input'
+                             type='text'
+                             name='title'
+                             id='title'
+                             value={titleAfter}
+                             placeholder='Image Title'
+                             onChange={(e) => setTitleAfter(e.target.value)}
+                      />
+                    </p>
+                  </div>
+                  <div>
+                    <p className='form-profile-label'>Alt Tags</p>
+                    <p>
+                      <input className='form-profile-input'
+                             type='text'
+                             name='tags'
+                             id='tags'
+                             value={tagsAfter}
+                             placeholder='Alt Tag'
+                             onChange={(e) => setTagsAfter(e.target.value)}
+                      />
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className='gallery-button-block'>
-              <p className='form-login-buttons'>
-                <button className='button-green' onClick={saveData}
-                        disabled={!checkFilesLeft || !checkFilesRight || !titleBefore || !tagsBefore || !titleAfter ||
-                        !tagsAfter || !service || !check || !fileLeft || !fileRight}
-                >Confirm
-                </button>
-              </p>
-              <p className='form-login-buttons'>
-                <button className='button-green-outline'
-                        onClick={handlerShowGallery}>Cancel
-                </button>
-              </p>
+            <div className='row-gallery'>
+              <div className='profile-box-form cut-block-2'>
+                <div className='profile-block-box'>
+                  <div>
+                    <p className='form-profile-label'>
+                      <label className='form-profile-label'>Service</label>
+                    </p>
+                    <div className='row-content space-between'>
+                      {services &&
+                      <Services saveService={saveService} services={currentDentist.services.items}
+                                updateService={updateService} />}
+                      {/*<img className='gallery-select-arrow' src='../../../public/images/down-select.png'*/}
+                      {/*     alt='select' />*/}
+                      <p className='checkbox'>
+                        <input type='checkbox' name='delete' id='delete'
+                               onChange={checkHandler} />
+                        <span className='gallery-checkbox-text'>I confirm I have full rights for the use and publication of these images.</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className='gallery-button-block'>
+                <p className='form-login-buttons'>
+                  <button className='button-green' onClick={saveData}
+                          disabled={!checkFilesLeft || !checkFilesRight || !titleBefore || !tagsBefore || !titleAfter ||
+                          !tagsAfter || !service || !check || !fileLeft || !fileRight}
+                  >Confirm
+                  </button>
+                </p>
+                <p className='form-login-buttons'>
+                  <button className='button-green-outline'
+                          onClick={handlerShowGallery}>Cancel
+                  </button>
+                </p>
+              </div>
             </div>
-          </div>
-        </>
-        }
-      </div>
-      <Snackbar
-        messageSnackBar={messageSnackBar}
-        statusSnackBar={statusSnackBar}
-        openSnackBar={openSnackBar}
-        handleCloseSnackbar={handleCloseSnackbar}
-      />
-    </Layout>
+          </>
+          }
+        </div>
+        <Snackbar
+          messageSnackBar={messageSnackBar}
+          statusSnackBar={statusSnackBar}
+          openSnackBar={openSnackBar}
+          handleCloseSnackbar={handleCloseSnackbar}
+        />
+      </Layout>}
+    </>
   );
 };
 

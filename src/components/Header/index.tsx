@@ -36,6 +36,10 @@ class Header extends React.Component {
     }
   }
 
+  signOut() {
+    void ApiManager.SIGN_OUT();
+  }
+
   render() {
     return (
       <AppBar position='fixed' style={{ background: '#095c5c' }}>
@@ -43,16 +47,16 @@ class Header extends React.Component {
           <div style={{ alignItems: 'center', display: 'flex' }}>
             {this.state.signedInUser && <TemporaryDrawer currentUser={this.state.currentUser.username} />}
           </div>
-          <Link href='/'>
-            <p className='link-actve'>
+          <a href='/'>
+            <a className='link-actve'>
               <img src='../../images/FYD4_beige-on-green@2x.png'
                    srcSet='../../images/FYD4_beige-on-green@2x.png 2x,
-             ../../images/FYD4_beige-on-green@3x.png 3x' className='logo-image' />
-            </p>
-          </Link>
+             ../../images/FYD4_beige-on-green@3x.png 3x' className='logo-image'  alt='logo'/>
+            </a>
+          </a>
           {!this.state.signedInUser && (
             <div style={{ alignItems: 'center', display: 'flex' }}>
-              {this.state.signedInUser && <a href={'../../dentist/account/' + this.state.currentUser.username}>
+              {this.state.signedInUser && <a href={`../../dentist/account/'${this.state.currentUser.username}`}>
                 <div className='user-logo-circle'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='16px' viewBox='0 0 19 16' width='19px' fill='#707070'>
                     <path d='M0 0h24v24H0V0z' fill='none' />
@@ -71,7 +75,7 @@ class Header extends React.Component {
           )}
           {this.state.signedInUser && (
             <div style={{ alignItems: 'center', display: 'flex' }}>
-              <a href={'../../dentist/account/' + this.state.currentUser.username}>
+              <a href={`../../dentist/account/${this.state.currentUser.username}`}>
                 <div className='user-logo-circle'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='16px' viewBox='0 0 19 16' width='19px' fill='#707070'>
                     <path d='M0 0h24v24H0V0z' fill='none' />
@@ -80,7 +84,7 @@ class Header extends React.Component {
                   </svg>
                 </div>
               </a>
-              <Button onClick={ApiManager.signOut} color='inherit'>Logout</Button>
+              <Button onClick={this.signOut} color='inherit'>Logout</Button>
             </div>
           )}
         </Toolbar>

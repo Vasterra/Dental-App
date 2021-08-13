@@ -11,6 +11,7 @@ import Error from 'next/error';
 
 import { WrapperFlex } from 'src/styles/Main.module';
 import { GetServerSideProps } from 'next';
+import Footer from '../../../components/Footer';
 
 const Person = ({ dentistData }: any) => {
   const router = useRouter();
@@ -33,13 +34,14 @@ const Person = ({ dentistData }: any) => {
       authListener();
       getListImages();
       getListServiceForDentals();
-      downloadCover();
+
     }
   }, [router]);
 
   useEffect(() => {
     if (currentDentist !== undefined) {
       downloadAvatar();
+      downloadCover();
     }
   }, [currentDentist]);
 
@@ -185,6 +187,7 @@ const Person = ({ dentistData }: any) => {
         setImages={setFuncImages}
         downloadImages={downloadImages}
       />}
+      <Footer />
     </>
   );
 };

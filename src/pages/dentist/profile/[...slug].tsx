@@ -55,34 +55,11 @@ const Profile = ({ dentist }: any) => {
     }
   };
 
-  const getDentist = (id: string) => {
-    setCurrentDentist(null);
-    try {
-      void ApiManager.getDentist(route ? route : id)
-      .then(currentDentist => {
-        setCurrentDentist(currentDentist);
-        downloadAvatar(currentDentist);
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const downloadAvatar = (currentDentist: any) => {
     void ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
       setCurrentAvatar(signedFiles);
     });
   };
-
-  // const downloadImages = async () => {
-  //   try {
-  //     ApiManager.downloadImages(currentDentist).then(filesList => {
-  //       setImages(filesList);
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
 
   const uploadAvatar = async (files: any) => {
     files.preventDefault();

@@ -168,8 +168,7 @@ class ApiManager {
     .then((user: any) => {
       return Auth.changePassword(user, oldPassword, newPassword);
     })
-    .then((data: any) => console.log(data))
-    .catch((err: any) => console.log(err));
+    .catch((err: any) => err);
   }
 
   public static async downloadImages(currentDentist: any) {

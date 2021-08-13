@@ -79,8 +79,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
               </div>
               <div className='index-leftmenu-text'>
                 <p>Bio</p>
-                <p>Nulla eu tempor tortor. Sed iaculis sit amet purus eu pharetra. Maecenas eu risus sem. Fusce
-                  sollicitudin sollicitudin sapien.</p>
+                <p>{currentDentist.bio}</p>
                 <p className='button-list'>
                   {
                     currentDentist.services.items.map((el: any, key: any) => {
@@ -112,7 +111,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
           </div>
           <div className='index-box-to-box'>
             <div className='gallery-block'>
-              <div className='gallery-block-services'>
+              { oldIMages && oldIMages.length !== 0 && <div className='gallery-block-services'>
                 <select className='gallery-select arrows bg-gray' name='services' id='services'
                         onChange={filterImagesByService}>
                   <option value='All Service' selected>All Service</option>
@@ -122,15 +121,13 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
                     );
                   })}
                 </select>
-              </div>
-
+              </div> }
               {!images && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
-
               {Array.isArray(images) &&
               <>
                 {images.length === 0 &&
                 <div className='flex-align-center'>
-                  <p className='index-leftmenu-text'>{ !notFound ? 'Doctor {fullName} has not yet uploaded any of his works, be sure to check soon' : 'Not Found'}</p>
+                  <p className='index-leftmenu-text'>{ !notFound ? `Doctor ${fullName} has not yet uploaded any of his works, be sure to check soon` : 'Not Found'}</p>
                 </div>}
                 {// @ts-ignore
                   images.length > 0 && <GalleryPerson images={images} />
