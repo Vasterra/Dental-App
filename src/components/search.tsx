@@ -1,33 +1,28 @@
 import { API } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
-
 import Layout from 'src/components/Layout';
 import Header from 'src/components/Header';
 import Services from 'src/components/Search/Services';
 import CardDentistComponent from 'src/components/Search/CardDentist';
 import GoogleMapReactComponent from 'src/components/Search/GoogleMapReact';
 import Footer from 'src/components/Footer';
-
-import ApiManager from 'src/services/ApiManager';
 import { switcher } from 'src/utils/switcher';
 import { getDentist } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
+import { CloseButton } from './common/CloseButton';
 
 const Search = ({ dentistsData, listServiceForDentals }: any) => {
 
-  const [currentDentist, setCurrentDentist]: any = useState();
+  const [currentDentist, setCurrentDentist] = useState();
   const [dentists, setDentists]: any = useState(dentistsData);
-  const [oldDentists, setOldDentists]: any = useState();
-  const [services, setServices]: any = useState();
-  const [service, setService]: any = useState();
+  const [oldDentists, setOldDentists]: any = useState(dentistsData);
   const [servicesForSearch, setServicesForSearch]: any = useState(listServiceForDentals);
-  const [ipCoords, setIpCoords]: any = useState();
-  const [searchDentists, setSearchDentists]: any = useState();
-  const [valueSlider, setValueSlider]: any = useState(50);
-  const [searchValue, setSearchValue]: any = useState();
-  const [searchCoords, setSearchCoords]: any = useState();
-  const [switcherClick, setSwitcherClick]: any = useState();
-  const [serviceSearch, setServiceSearch]: any = useState('choose service');
+  const [serviceForSearch, setServiceForSearch] = useState('choose service');
+  const [distanceForSearch, setDistanceForSearch] = useState(50);
+  const [ipCoords, setIpCoords] = useState();
+  const [searchDentists, setSearchDentists] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [searchCoords, setSearchCoords]: any = useState('');
 
   useEffect(() => {
     const options = {
@@ -38,10 +33,10 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
 
     function success() {
       if (!ipCoords) {
-        convertCityCoords().then((result) => {
+        void convertCityCoords().then((result) => {
           setIpCoords(result);
           setSearchCoords(result);
-          const findCoordinatesDent: any = findCoordinatesDentists(searchCoords ? searchCoords : result, valueSlider, dentistsData);
+          const findCoordinatesDent: any = findCoordinatesDentists(searchCoords ? searchCoords : result, distanceForSearch, dentistsData);
           setSearchDentists(findCoordinatesDent);
           setDentists(dentistsData);
           setOldDentists(dentistsData);
@@ -49,19 +44,17 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
       }
     };
 
-    function error(err: { code: any; message: any; }) {
-      setIpCoords({
+    function error() {
+      const CambridgeCoords: any = {
         lng: '0.119167',
         lat: '52.205276'
-      });
-      setSearchCoords({
-        lng: '0.119167',
-        lat: '52.205276'
-      });
+      };
+      setIpCoords(CambridgeCoords);
+      setSearchCoords(CambridgeCoords);
       const findCoordinatesDent: any = findCoordinatesDentists(searchCoords ? searchCoords : {
         lng: '0.119167',
         lat: '52.205276'
-      }, valueSlider, dentistsData);
+      }, distanceForSearch, dentistsData);
       setSearchDentists(findCoordinatesDent);
       setDentists(dentistsData);
       setOldDentists(dentistsData);
@@ -79,85 +72,33 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
     }
   }, [searchDentists]);
 
-  const getListDentists = async (service: any, result: any) => {
-    setSearchDentists(null);
-    setService(service);
-    ApiManager.getListDentists().then(listDentist => {
-      const findCoordinatesDent = findCoordinatesDentists(searchCoords ? searchCoords : result, valueSlider, listDentist);
-      setTimeout(() => {
-        setSearchDentists(findCoordinatesDent);
-      }, 1000);
-      setDentists(listDentist);
-      setOldDentists(listDentist);
-    });
-  };
-
-  const setFindDentist = (findDentist: any) => {
-    setSearchDentists(null);
-    const findCoordinatesDent = findCoordinatesDentists(searchCoords, valueSlider, findDentist);
-    setTimeout(() => {
-      setSearchDentists(findCoordinatesDent);
-    }, 1000);
-  };
-
   const enterKeyDown = (e: { keyCode: number; }) => {
     if (e.keyCode === 13) changeSearch();
-  };
-
-  const handleBlur = () => {
-    if (valueSlider < 0) {
-      setValueSlider(0);
-    } else if (valueSlider < 100) {
-      setValueSlider(100);
-    }
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValueSlider(event.target.value === '' ? '' : Number(event.target.value));
-  };
-
-  const getDentistForService = (dentists: any) => {
-    setSearchDentists(dentists);
   };
 
   const setFunctCurrentDentist = (currentDentist: any) => {
     setCurrentDentist(currentDentist);
   };
 
-  const handlerClickSwitch = () => {
-    setSwitcherClick(true);
-  };
-
-  const setSearchService = (service: any) => {
-    setServiceSearch(service);
-  };
-
   const changeSearch = () => {
-    setSearchDentists(null);
-    fetch('https://maps.google.com/maps/api/geocode/json?sensor=false&address=' + searchValue + '&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY')
+    fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${searchValue}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
     .then(response => response.json())
     .then(result => {
       setSearchCoords(result.results[0].geometry.location);
-      const findCoordinatesDent = findCoordinatesDentists(result.results[0].geometry.location, valueSlider, dentists);
-      setTimeout(() => {
-        setSearchDentists(findCoordinatesDent);
-      }, 1000);
+      const findCoordinatesDent: any = findCoordinatesDentists(result.results[0].geometry.location, distanceForSearch, dentists);
+      setSearchDentists(findCoordinatesDent);
     })
     .catch((_error: any) => {
     });
   };
 
-  const onChangeDistance = async (e: any) => {
-    setSearchDentists(null);
-    let distanceDent: any[] = [];
+  const searchResult = async () => {
+    let distanceDent: any = [];
     let searchDent: any[] = [];
 
-    if (serviceSearch === 'choose service') {
-      setSearchDentists(null);
-      const findCoordinatesDent = findCoordinatesDentists(searchCoords, e.target.value, dentists);
-      setTimeout(() => {
-        setSearchDentists(findCoordinatesDent);
-      }, 1000);
+    if (serviceForSearch === 'choose service') {
+      const findCoordinatesDent: any = findCoordinatesDentists(searchCoords, distanceForSearch, dentists);
+      setSearchDentists(findCoordinatesDent);
     } else {
       oldDentists.forEach((item: any) => {
         searchDent.push(getDentistsFind(item));
@@ -165,7 +106,7 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
       searchDent = await Promise.all(searchDent);
       searchDent.forEach((dent: any) => {
         dent.services.items.forEach((val: { name: any; }) => {
-          if (val.name === serviceSearch) {
+          if (val.name === serviceForSearch) {
             const a = { 'Longitude': searchCoords.lng, 'Latitude': searchCoords.lat };
             const b = { 'Longitude': dent.lng, 'Latitude': dent.lat };
             const distanceCur = (111.111 *
@@ -175,15 +116,12 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
                   * Math.cos((a.Longitude - b.Longitude) * (Math.PI / 180))
                   + Math.sin(a.Latitude * (Math.PI / 180))
                   * Math.sin(b.Latitude * (Math.PI / 180)))));
-            if (distanceCur < e.target.value) {
+            if (distanceCur < distanceForSearch) {
               distanceDent.push(dent);
             }
           }
         });
-        setTimeout(() => {
-          setSearchDentists(distanceDent);
-        }, 1000);
-
+        setSearchDentists(distanceDent);
       });
     }
   };
@@ -200,7 +138,7 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
     return data.getDentist;
   };
 
-  const findCoordinatesDentists = (coordinate: any, distance: number, dentists: []): object | [] => {
+  const findCoordinatesDentists = (coordinate: any, distance: number, dentists: []) => {
     let distanceDent: any[] = [];
     if (!dentists) return {};
 
@@ -221,6 +159,22 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
     return distanceDent;
   };
 
+  const clearSearchInput = () => {
+    const clear: any = document.getElementsByClassName('clearSearchInput');
+    setSearchValue("");
+    clear[0].style.display = 'none';
+  };
+
+  const changeSearchValue = (e: any) => {
+    const clear: any = document.getElementsByClassName('clearSearchInput');
+    setSearchValue(e.target.value);
+    if (e.target.value === "") {
+      clear[0].style.display = 'none';
+    } else {
+      clear[0].style.display = 'block';
+    }
+  };
+
   return (
     <Layout title='Search page'>
       <Header />
@@ -228,32 +182,33 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
         <div className='index-box-to-box'>
           <div className='index-box-to-box-top'>
             <div className='box-left'>
-              <div className='index-search-gallery '>
+              <div className='index-search-gallery'>
                 <input className='search-postcode'
-                       type='search'
+                       type='text'
                        id='postcode'
                        name='postcode'
                        value={searchValue}
-                       onChange={e => setSearchValue(e.target.value)}
+                       onChange={(e: any) => changeSearchValue(e)}
                        onKeyDown={enterKeyDown}
                        placeholder=' Postcode'
                 />
+                <div className='clearSearchInput'>
+                  <CloseButton onClick={() => clearSearchInput()} />
+                </div>
+
                 <img className='search-button' src='../images/search.svg' alt='search' />
-              </div>
+              </  div>
               <p className='row-content-index'>
                 {servicesForSearch &&
                 <Services
-                  setFindDentist={setFindDentist}
-                  getListDentists={getListDentists}
-                  setSearchService={setSearchService}
                   services={servicesForSearch}
-                  searchCoords={searchCoords}
-                  dentists={dentists}
+                  setServiceForSearch={setServiceForSearch}
                 />}
               </p>
               <p className='row-content-index'>
                 <select className='index-select arrows' name='services' id='services'
-                        onChange={onChangeDistance}>
+                        onChange={(e: any) => setDistanceForSearch(e.target.value)}
+                >
                   <option value='50'>Within: 50 Miles
                   </option>
                   <option value='1'>Within: 1 Mile</option>
@@ -264,12 +219,13 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
                   <option value='40'>Within: 40 Miles</option>
                 </select>
               </p>
+              <button className='button-green-search' onClick={searchResult}>Search Dentist</button>
             </div>
             <h1 className='title-dentist'>Find Your Dentist</h1>
             <div className='box-right'>
               <p className='switcher-text'>List Search</p>
               <p className='switcher'>
-                <span className='switcher-dot'></span>
+                <span className='switcher-dot' />
               </p>
               <p className='switcher-text strong'>Map Search</p>
             </div>
@@ -281,7 +237,6 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
             {searchDentists &&
             <GoogleMapReactComponent
               dentists={searchDentists}
-              me={searchDentists[0]}
               currentDentist={currentDentist}
               searchCoords={searchCoords}
               ipCoords={ipCoords}

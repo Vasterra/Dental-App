@@ -71,7 +71,7 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
           <div className='index-leftmenu'>
             <div className='leftmenu-index-cover-image' />
             <div className='index-leftmenu-profile-information'>
-              <img className='index-leftmenu-profile-photo' src={currentAvatar} alt='' />
+              <img className='index-leftmenu-profile-photo' src={currentAvatar ? currentAvatar : "../../../images/empty_avatar.png"} alt='' />
               <div>
                 <p className='form-login-title green px20 mt-30'>{fullName}</p>
                 <p className='form-login-subtitle gray px12 m-none'>{currentDentist.qualifications}</p>
