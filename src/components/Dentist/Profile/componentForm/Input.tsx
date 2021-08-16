@@ -1,5 +1,4 @@
 import React from "react";
-import {InputFormSettings, Label} from "src/styles/Form.module";
 
 interface InputGroupProps {
   title: any

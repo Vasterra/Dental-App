@@ -9,7 +9,6 @@ import Footer from 'src/components/Footer';
 import { switcher } from 'src/utils/switcher';
 import { getDentist } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
-import { CloseButton } from './common/CloseButton';
 
 const Search = ({ dentistsData, listServiceForDentals }: any) => {
 
@@ -21,7 +20,7 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
   const [distanceForSearch, setDistanceForSearch] = useState(50);
   const [ipCoords, setIpCoords] = useState();
   const [searchDentists, setSearchDentists] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
   const [searchCoords, setSearchCoords]: any = useState('');
 
   useEffect(() => {
@@ -161,14 +160,14 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
 
   const clearSearchInput = () => {
     const clear: any = document.getElementsByClassName('clearSearchInput');
-    setSearchValue("");
+    setSearchValue('');
     clear[0].style.display = 'none';
   };
 
   const changeSearchValue = (e: any) => {
     const clear: any = document.getElementsByClassName('clearSearchInput');
     setSearchValue(e.target.value);
-    if (e.target.value === "") {
+    if (e.target.value === '') {
       clear[0].style.display = 'none';
     } else {
       clear[0].style.display = 'block';
@@ -193,7 +192,8 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
                        placeholder=' Postcode'
                 />
                 <div className='clearSearchInput'>
-                  <CloseButton onClick={() => clearSearchInput()} />
+                  <img className='form-login-input-close' src='../images/close.svg'
+                       onClick={() => clearSearchInput()} />
                 </div>
 
                 <img className='search-button' src='../images/search.svg' alt='search' />
@@ -219,7 +219,7 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
                   <option value='40'>Within: 40 Miles</option>
                 </select>
               </p>
-              <button className='button-green-search' onClick={searchResult}>Search Dentist</button>
+              <button className='button-green-search' onClick={searchResult}>Find My Dentist</button>
             </div>
             <h1 className='title-dentist'>Find Your Dentist</h1>
             <div className='box-right'>

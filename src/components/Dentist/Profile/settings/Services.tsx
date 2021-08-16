@@ -3,7 +3,6 @@ import { API } from 'aws-amplify';
 import { createService, deleteService } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
-import { CloseButton } from '../../../common/CloseButton';
 
 type Props = {
   route: any,
@@ -152,7 +151,8 @@ const Services: React.FunctionComponent<Props> = ({
                 return (
                   <p className='form-login-input' key={key}>
                     <input value={el.name} />
-                    <CloseButton onClick={() => deleteServiceDentist(el)} />
+                    <img className='form-login-input-close' src='../../images/close.svg'
+                         onClick={() => deleteServiceDentist(el)} />
                   </p>
                 );
               }
@@ -170,7 +170,8 @@ const Services: React.FunctionComponent<Props> = ({
                 return (
                   <p className='form-profile-empty-input' key={key}>
                     <input type='text' name='empty' value={el.name} id='empty' placeholder='' />
-                    <CloseButton onClick={async () => deleteServiceDentist(el)} />
+                    <img className='form-login-input-close' src='../../images/close.svg'
+                         onClick={() => deleteServiceDentist(el)} />
                   </p>
                 );
               }

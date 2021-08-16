@@ -8,7 +8,6 @@ import { updateDentist } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
-import { ICurrentDentist } from '../../../../interfaces/ICurrentDentist';
 
 const useStylesFacebook = makeStyles((theme: Theme) =>
   createStyles({

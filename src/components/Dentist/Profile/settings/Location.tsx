@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
-import Close from '@material-ui/icons/Close';
 import { API } from 'aws-amplify';
 import { createLocation, deleteLocation, updateLocation } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
-import { CloseButton } from 'src/components/common/CloseButton';
 
 const useStylesFacebook = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,12 +57,12 @@ type Props = {
 }
 
 const Location: React.FunctionComponent<Props> = ({
-    route,
-    adminSettingSubscriber,
-    setOpenSnackbar,
-    setMessageSnackbar,
-    setSeverity
-  }) => {
+                                                    route,
+                                                    adminSettingSubscriber,
+                                                    setOpenSnackbar,
+                                                    setMessageSnackbar,
+                                                    setSeverity
+                                                  }) => {
 
   const [currentDentist, setCurrentDentist] = useState<any | null>(null);
   const [updateDateLocation, setUpdateDateLocation] = useState<any | null>(null);
@@ -320,7 +318,8 @@ const Location: React.FunctionComponent<Props> = ({
                       <span onClick={() => setUpdateDateLocation(el)}>
                         <img className='form-login-input-edit' src='../../../images/edit.svg' alt='edit' />
                       </span>
-                      <CloseButton onClick={() => handleDelete(el)} />
+                      <img className='form-login-input-close' src='../../../images/close.svg'
+                           onClick={() => handleDelete(el)} />
                     </p>
                   );
                 })

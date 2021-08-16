@@ -1,7 +1,6 @@
 import React, { SyntheticEvent, useState } from 'react';
 import { API, Auth } from 'aws-amplify';
 import Router from 'next/router';
-import Close from '@material-ui/icons/Close';
 import { useFormik } from 'formik';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
@@ -11,7 +10,6 @@ import ForgotPassword from 'src/components/forgotPassword';
 import { createDentist } from 'src/graphql/mutations';
 import { listDentists } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
-import { CloseButton } from './common/CloseButton';
 import watermark from '../utils/watermark/builded/index'
 
 function Alert(props: AlertProps) {
@@ -225,10 +223,9 @@ const Login = () => {
               value={formikAuth.values.email}
               onChange={formikAuth.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formikAuth.setValues({ ...formikAuth.values, email: '' });
-                   }} />
+            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+              void formikAuth.setValues({ ...formikAuth.values, email: '' });
+            }} />
             {formikAuth.errors.email ? <div>{formikAuth.errors.email}</div> : null}
           </p>
           <p className='form-login-input'>
@@ -240,13 +237,12 @@ const Login = () => {
               value={formikAuth.values.password}
               onChange={formikAuth.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formikAuth.setValues({ ...formikAuth.values, password: '' });
-                   }} />
+              <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+                void formikAuth.setValues({ ...formikAuth.values, password: '' });
+              }} />
             {formikAuth.errors.password ? <div>{formikAuth.errors.password}</div> : null}
           </p>
-          <p className='form-login-buttons'>
+          <div className='form-login-buttons'>
             <button type='submit' disabled={values.loader} className='button-green'>{values.loaderButtonSubmit ?
               <FacebookCircularProgress /> : 'Login'}</button>
             <button className='button-white' disabled={values.loader} onClick={(e: SyntheticEvent) => {
@@ -254,7 +250,7 @@ const Login = () => {
               setValues({ ...values, resetPassword: true });
             }}>Reset password
             </button>
-          </p>
+          </div>
         </form>
       </div>
       }

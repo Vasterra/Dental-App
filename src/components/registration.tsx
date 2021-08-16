@@ -3,10 +3,8 @@ import ButtonForm from './Buttons/ButtonForm';
 import { Snackbar, TextField } from '@material-ui/core';
 import { Auth } from 'aws-amplify';
 import Router from 'next/router';
-import Close from '@material-ui/icons/Close';
 import { useFormik } from 'formik';
 import { Alert } from '@material-ui/lab';
-import { CloseButton } from './common/CloseButton';
 
 interface State {
   username: string;
@@ -159,12 +157,10 @@ const Registration = ({}) => {
               value={formik.values.username}
               onChange={formik.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formik.setValues({ ...formik.values, username: '' });
-                   }} />
+            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+              void formik.setValues({ ...formik.values, username: '' });
+            }} />
             {formik.errors.username ? <div>{formik.errors.username}</div> : null}
-
           </p>
           <p className='form-login-input'>
             <input
@@ -175,10 +171,9 @@ const Registration = ({}) => {
               value={formik.values.email}
               onChange={formik.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formik.setValues({ ...formik.values, email: '' });
-                   }} />
+            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+              void formik.setValues({ ...formik.values, email: '' });
+            }} />
             {formik.errors.email ? <div>{formik.errors.email}</div> : null}
           </p>
           <p className='form-login-input'>
@@ -190,10 +185,9 @@ const Registration = ({}) => {
               value={formik.values.gdcNumber}
               onChange={formik.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formik.setValues({ ...formik.values, gdcNumber: '' });
-                   }} />
+            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+              void formik.setValues({ ...formik.values, gdcNumber: '' });
+            }} />
             {formik.errors.gdcNumber ? <div>{formik.errors.gdcNumber}</div> : null}
           </p>
           <p className='form-login-input'>
@@ -205,10 +199,9 @@ const Registration = ({}) => {
               value={formik.values.password}
               onChange={formik.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formik.setValues({ ...formik.values, password: '' });
-                   }} />
+            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+              void formik.setValues({ ...formik.values, password: '' });
+            }} />
             {formik.errors.password ? <div>{formik.errors.password}</div> : null}
           </p>
           <p className='form-login-buttons'>

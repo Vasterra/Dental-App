@@ -145,20 +145,24 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
           </div>
           <div className='leftmenu-content'>
             <p className='link-actve'>
-              <Link href='/'><img src='../../images/FYD4_beige-on-green@2x.png'
-                                  srcSet='../../images/FYD4_beige-on-green@2x.png 2x, ../../images/FYD4_beige-on-green@3x.png 3x'
-                                  className='logo-image desctop-visible' alt='logo image' />
+              <Link href='/'>
+                <img src='../../images/FYD4_beige-on-green@2x.png'
+                     srcSet='../../images/FYD4_beige-on-green@2x.png 2x, ../../images/FYD4_beige-on-green@3x.png 3x'
+                     className='logo-image desctop-visible' alt='logo image'
+                />
               </Link>
             </p>
             <div className='leftmenu-user-information'>
               {this.props.currentAvatar &&
-              <img className='user-image' src={this.props.currentAvatar} alt='user image' />}
+              <img className='user-image'
+                   src={this.props.currentAvatar !== '' ? this.props.currentAvatar : '../../../images/empty_avatar.png'}
+                   alt='user image' />}
               <p className='user-description white'><span>{this.props.currentDentist.firstName}</span>
                 <span>{this.props.currentDentist.lastName}</span></p>
             </div>
           </div>
           <Menu>
-            <Link href={`{../../dentist/profile/${this.state.currentUser.username}`}>
+            <Link href={`../../dentist/profile/${this.state.currentUser.username}`}>
               <li className={`leftmenu-list + ${this.props.active === 'activeProfile' ? 'active' : ''}`}>
                 <img className='leftmenu-link-image' src='../../images/user.svg' alt='link image' />
                 <a className='leftmenu-link'>Profile</a>

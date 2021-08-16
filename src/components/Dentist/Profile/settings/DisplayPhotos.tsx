@@ -20,7 +20,7 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
               <label className="form-profile-label">Profile Picture</label>
             </p>
             <p className="load-avatar__block">
-              <img src={currentAvatar} alt="profile image" />
+              <img src={currentAvatar ? currentAvatar : "../../../images/empty_avatar.png"} alt="profile image" />
             </p>
           </div>
           <p className="row-content">
