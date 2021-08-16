@@ -1,13 +1,12 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
 // @ts-ignore
 import GoogleMapReact from 'google-map-react';
-import {customDistanceToMouse} from './helpersMap/custom_distance.js';
+import { customDistanceToMouse } from './helpersMap/custom_distance.js';
 // @ts-ignore
-import {geolocated, GeolocatedProps} from "react-geolocated";
+import { geolocated, GeolocatedProps } from 'react-geolocated';
 
-import Marker from "./Marker";
-import MeMarket from "./MeMarker";
+import Marker from './Marker';
+import MeMarket from './MeMarker';
 
 type Props = {
   dentists: any,
@@ -21,31 +20,31 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
     let centerMe: any = {};
 
     if (this.props.ipCoords) {
-      const {lat, lng} = this.props.ipCoords
+      const { lat, lng } = this.props.ipCoords;
       centerMe = {
         lat: Number(lat),
         lng: Number(lng)
-      }
+      };
     }
     if (this.props.searchCoords) {
-      const {lat, lng} = this.props.searchCoords
+      const { lat, lng } = this.props.searchCoords;
       centerMe = {
         lat: Number(lat),
         lng: Number(lng)
-      }
+      };
     } else {
       centerMe = {
         lat: 52.205276,
         lng: 0.119167
-      }
+      };
     }
     const onChildClick = (e: any) => {
-      console.log(e)
-    }
+      console.log(e);
+    };
 
     return (
       <GoogleMapReact
-        bootstrapURLKeys={{key: 'AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY'}}
+        bootstrapURLKeys={{ key: 'AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY' }}
         center={centerMe}
         zoom={10}
         distanceToMouse={customDistanceToMouse}
@@ -58,7 +57,7 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
           text={'Me'}
         />
         {this.props.dentists !== undefined ? this.props.dentists.map((dent: any, key: any): any => {
-          const {lat, lng, email, address} = dent;
+          const { lat, lng, email, address } = dent;
           return <Marker
             // @ts-ignore
             lat={lat}
@@ -68,11 +67,11 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
             text={email}
             address={address}
             selected={dent === this.props.currentDentist}
-          />
+          />;
         }) : <></>
         }
       </GoogleMapReact>
-    )
+    );
   }
 }
 

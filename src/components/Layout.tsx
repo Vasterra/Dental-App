@@ -1,8 +1,6 @@
-import Head from "next/head";
-import * as React from "react";
-import {Container} from "src/styles/Layout.module"
-import {GlobalStyle} from "src/styles/Global.module"
-import Drawer from "src/components/Drawer";
+import * as React from 'react';
+import Drawer from 'src/components/Drawer';
+import { Container } from '../styles/Main.module';
 
 type Props = {
   title?: string;
@@ -13,10 +11,10 @@ type Props = {
 
 const Layout: React.FunctionComponent<Props> = ({
     children,
-    title = "",
-    active = "",
+    title = '',
+    active = '',
     currentAvatar = {},
-    currentDentist = {},
+    currentDentist = {}
   }) => (
   <>
     <Container>

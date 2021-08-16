@@ -1,25 +1,14 @@
-import React, {useState, useEffect} from "react";
-import {Grid, Link} from "@material-ui/core";
-import styled from "styled-components";
-import {
-  FlexWrapper,
-  ImageDescription,
-  CardWrapper,
-  CardBlock,
-  TitleDescription,
-  SubtitleDescription
-} from "src/styles/CardDentist.module";
-import {
-  ButtonBig,
-} from "src/styles/Button.module";
-import ApiManager from "src/services/ApiManager";
+import React, { useEffect, useState } from 'react';
+import { Link } from '@material-ui/core';
+import styled from 'styled-components';
+import ApiManager from 'src/services/ApiManager';
 
 type Props = {
   dentist: any,
   setCurrentDentist: any
 }
 
-const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurrentDentist}) => {
+const CardDentistComponent: React.FunctionComponent<Props> = ({ dentist, setCurrentDentist }) => {
   const [images, setImages]: any = useState();
 
   // @ts-ignore
@@ -27,8 +16,8 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
     let cleanupFunction = false;
     try {
       ApiManager.downloadAvatar(dentist).then(signedFiles => {
-        if (!cleanupFunction) setImages(signedFiles)
-      })
+        if (!cleanupFunction) setImages(signedFiles);
+      });
     } catch (e) {
       console.error(e.message);
     }
@@ -38,27 +27,28 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({dentist, setCurre
   const fullName = `${dentist.firstName ? dentist.firstName : ''} ${dentist.lastName ? dentist.lastName : ''}`;
 
   return (
-    <div className="index-gallery-image-box" onClick={() => setCurrentDentist(dentist)}>
+    <div className='index-gallery-image-box' onClick={() => setCurrentDentist(dentist)}>
       <ImageWrapper>
-        {images && <DentistImage src={images} alt="image"/>}
-        {!images && <DentistImageBlockEmpty src={"../../../images/empty_avatar.png"}/>}
+        {images && <DentistImage src={images} alt='image' />}
+        {!images && <DentistImageBlockEmpty src={'../../../images/empty_avatar.png'} />}
       </ImageWrapper>
       {/*<p className="index-gallery-image-watermark"></p>*/}
-      { dentist.hasPaidPlan && <img className="index-gallery-image-watermark-img-1" src="../images/check_circle.svg" alt="check"/> }
-      <Link href={`../../dentist/person/${dentist.id}`} target="_blank">
-        <div className="index-gallery-image-description">
-          <p className="index-gallery-image-title">{'Dr. ' + fullName}</p>
-          <p className="index-gallery-image-text">{dentist.email}</p>
-          <p className="index-gallery-image-text">{dentist.qualifications}</p>
+      {dentist.hasPaidPlan &&
+      <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' />}
+      <Link href={`../../dentist/person/${dentist.id}`} target='_blank'>
+        <div className='index-gallery-image-description'>
+          <p className='index-gallery-image-title'>{'Dr. ' + fullName}</p>
+          <p className='index-gallery-image-text'>{dentist.email}</p>
+          <p className='index-gallery-image-text'>{dentist.qualifications}</p>
         </div>
       </Link>
     </div>
-  )
-}
+  );
+};
 
 export default CardDentistComponent;
 
-const ImageWrapper = styled("div")`
+const ImageWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,13 +60,13 @@ const ImageWrapper = styled("div")`
   }
 `;
 
-const DentistImage = styled("img")`
+const DentistImage = styled('img')`
   display: block;
   width: 100%;
   height: 200px;
 `;
 
-const DentistImageBlockEmpty = styled("img")`
+const DentistImageBlockEmpty = styled('img')`
   display: block;
   /* background-color: #0d9da6; */
   width: 100%;

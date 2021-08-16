@@ -37,8 +37,7 @@
 .clearSearchInput {
     display: none;
     position: relative;
-    top: -19px;
-    right: 5px;
+    right: 30px;
 }
 
 .button-green-search:hover {
@@ -897,9 +896,6 @@ input[type=file]::-webkit-file-upload-button {
 
 .form-login-input-close {
     cursor: pointer;
-    position: absolute;
-    margin-left: -25px;
-    margin-top: 6px;
     transition: 0.3s linear;
 }
 

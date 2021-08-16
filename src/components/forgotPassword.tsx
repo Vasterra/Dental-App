@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Auth } from 'aws-amplify';
 import Router from 'next/router';
-import Close from '@material-ui/icons/Close';
 import { useFormik } from 'formik';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
-import { CloseButton } from './common/CloseButton';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -106,8 +104,8 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
         setSeverity('success');
         setOpenSnackbar(true);
         setTimeout(() => {
-          backInSingIn()
-        },1500)
+          backInSingIn();
+        }, 1500);
       })
       .catch(error => {
         setMessageSnackbar(error.message);
@@ -153,10 +151,8 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
               value={formikResetPassword.values.username}
               onChange={formikResetPassword.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formikResetPassword.setValues({ ...formikResetPassword.values, username: '' });
-                   }} />
+            <img className='form-login-input-close' src='../images/close.svg'
+                 onClick={() => formikResetPassword.setValues({ ...formikResetPassword.values, username: '' })} />
           </p>
           <p className='form-login-buttons'>
             <button className='button-green-password-reset' onClick={backInSingIn}>Back to Sign In</button>
@@ -179,10 +175,8 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
               value={formikVerificationCode.values.code}
               onChange={formikVerificationCode.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formikVerificationCode.setValues({ ...formikVerificationCode.values, code: '' });
-                   }} />
+            <img className='form-login-input-close' src='../images/close.svg'
+                 onClick={() => formikVerificationCode.setValues({ ...formikVerificationCode.values, code: '' })} />
             {formikVerificationCode.errors.code ? <div>{formikVerificationCode.errors.code}</div> : null}
           </p>
           <p className='form-login-input'>
@@ -194,10 +188,8 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
               value={formikVerificationCode.values.username}
               onChange={formikVerificationCode.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formikVerificationCode.setValues({ ...formikVerificationCode.values, username: '' });
-                   }} />
+            <img className='form-login-input-close' src='../images/close.svg'
+                 onClick={() => formikVerificationCode.setValues({ ...formikVerificationCode.values, username: '' })} />
           </p>
           <p className='form-login-input'>
             <input
@@ -208,10 +200,11 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
               value={formikVerificationCode.values.new_password}
               onChange={formikVerificationCode.handleChange}
             />
-            <CloseButton
-                   onClick={() => {
-                     void formikVerificationCode.setValues({ ...formikVerificationCode.values, new_password: '' });
-                   }} />
+            <img className='form-login-input-close' src='../images/close.svg'
+                 onClick={() => formikVerificationCode.setValues({
+                   ...formikVerificationCode.values,
+                   new_password: ''
+                 })} />
             {formikVerificationCode.errors.new_password ?
               <div>{formikVerificationCode.errors.new_password}</div> : null}
           </p>
@@ -226,7 +219,7 @@ const ForgotPassword: React.FunctionComponent<Props> = ({ backInSingIn, setValue
       </div>}
       <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar}
-                // @ts-ignore
+          // @ts-ignore
                severity={severity}>
           {messageSnackbar}
         </Alert>
