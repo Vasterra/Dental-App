@@ -223,12 +223,12 @@ const Login = () => {
               value={formikAuth.values.password}
               onChange={formikAuth.handleChange}
             />
-            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
-              void formikAuth.setValues({ ...formikAuth.values, password: '' });
-            }} />
+              <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+                void formikAuth.setValues({ ...formikAuth.values, password: '' });
+              }} />
             {formikAuth.errors.password ? <div>{formikAuth.errors.password}</div> : null}
           </p>
-          <p className='form-login-buttons'>
+          <div className='form-login-buttons'>
             <button type='submit' disabled={values.loader} className='button-green'>{values.loaderButtonSubmit ?
               <FacebookCircularProgress /> : 'Login'}</button>
             <button className='button-white' disabled={values.loader} onClick={(e: SyntheticEvent) => {
@@ -236,7 +236,7 @@ const Login = () => {
               setValues({ ...values, resetPassword: true });
             }}>Reset password
             </button>
-          </p>
+          </div>
         </form>
       </div>
       }

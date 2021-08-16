@@ -832,6 +832,7 @@ input[type=file]::-webkit-file-upload-button {
 }
 
 .form-login-title {
+    overflow-wrap: anywhere;
     font-family: PT Serif, serif;
     font-size: 33px;
     font-weight: bold;
@@ -873,6 +874,7 @@ input[type=file]::-webkit-file-upload-button {
 }
 
 .form-login-input {
+    display: flex;
     margin-bottom: 13px;
 }
 
@@ -886,17 +888,12 @@ input[type=file]::-webkit-file-upload-button {
     background-color: #ffffff;
 }
 
-.form-login-input-edit {
-    cursor: pointer;
-    position: absolute;
-    margin-left: -50px;
-    margin-top: 6px;
-    transition: 0.3s linear;
-}
-
+.form-login-input-edit,
 .form-login-input-close {
     cursor: pointer;
     transition: 0.3s linear;
+    position: relative;
+    right: 30px;
 }
 
 .form-login-input-close:hover {
