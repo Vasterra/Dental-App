@@ -10,7 +10,6 @@ import Marker from "./Marker";
 import MeMarket from "./MeMarker";
 
 type Props = {
-  me: {},
   dentists: any,
   searchCoords: any,
   currentDentist: any,
@@ -40,14 +39,6 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
         lng: 0.119167
       }
     }
-
-    // if (this.props.currentDentist) {
-    //   const {lat, lng} = this.props.currentDentist
-    //   centerMe = {
-    //     lat: Number(lat),
-    //     lng: Number(lng)
-    //   }
-    // }
     const onChildClick = (e: any) => {
       console.log(e)
     }
@@ -86,12 +77,3 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
 }
 
 export default geolocated()(GoogleMapReactComponent);
-
-const SearchPanelWrapper = styled("div")`
-  display: flex;
-  align-items: center;
-  flex-flow: wrap;
-  background: #FFFFFF 0 0 no-repeat padding-box;
-  border-radius: 10px;
-  width: 100%;
-`;
