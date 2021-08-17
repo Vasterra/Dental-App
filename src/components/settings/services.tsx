@@ -3,7 +3,8 @@ import { listServiceForDentals } from 'src/graphql/queries';
 import { API } from 'aws-amplify';
 import { createServiceForDental, deleteServiceForDental, updateServiceForDental } from 'src/graphql/mutations';
 import Close from '@material-ui/icons/Close';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 
 const Services = () => {
@@ -11,6 +12,10 @@ const Services = () => {
   const [services, setServices]: any = useState();
   const [service, setService]: any = useState();
   const [updateServiceName, setUpdateServiceName]: any = useState();
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity]: any = useState();
 
   React.useEffect(() => {
     getListServiceForDentals();
@@ -33,16 +38,25 @@ const Services = () => {
   };
 
   const addServiceForDentals = async () => {
-    await API.graphql({
-      query: createServiceForDental,
-      variables: {
-        input: {
-          name: service
-        }
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
+    try {
+      await API.graphql({
+        query: createServiceForDental,
+        variables: {
+          input: {
+            name: service
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      setMessageSnackbar('The Service was addded successfully!');
+      setSeverity('success');
+      setOpenSnackbar(true);
+    } catch (error) {
+      setMessageSnackbar('Failed to add service');
+      setSeverity('warning');
+      setOpenSnackbar(true);
+    }
     getListServiceForDentals();
   };
 
@@ -55,39 +69,64 @@ const Services = () => {
     } else {
       updateInput[key].disabled = true;
       updateInput[key].style.background = 'none';
+      try {
+        await API.graphql({
+          query: updateServiceForDental,
+          variables: {
+            input: {
+              id,
+              name: updateServiceName[key]
+            }
+          },
+          // @ts-ignore
+          authMode: 'AWS_IAM'
+        });
+        setMessageSnackbar('The Service was updated successfully!');
+        setSeverity('success');
+        setOpenSnackbar(true);
+        getListServiceForDentals();
+      } catch (error) {
+        setMessageSnackbar('Failed to update service');
+        setSeverity('warning');
+        setOpenSnackbar(true);
+      }
+    }
+  };
+
+  const deleteService = async (item: { id: any; }) => {
+    try {
       await API.graphql({
-        query: updateServiceForDental,
+        query: deleteServiceForDental,
         variables: {
           input: {
-            id,
-            name: updateServiceName[key]
+            id: item.id
           }
         },
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
       getListServiceForDentals();
+      setMessageSnackbar('The Service was deleted successfully!');
+      setSeverity('success');
+      setOpenSnackbar(true);
+    } catch (error) {
+      setMessageSnackbar('Failed to delete service');
+      setSeverity('warning');
+      setOpenSnackbar(true);
     }
-  };
-
-  const deleteService = async (item: { id: any; }) => {
-    await API.graphql({
-      query: deleteServiceForDental,
-      variables: {
-        input: {
-          id: item.id
-        }
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    getListServiceForDentals();
   };
 
   const onChnage = (e: any, key: any) => {
     const updateInput: any = document.getElementsByClassName('form-update-input');
     updateInput[key].value = e;
     setUpdateServiceName({ [key]: e });
+  };
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   return (
@@ -143,6 +182,11 @@ const Services = () => {
               }
             </div>
           </div>
+          <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+            <Alert onClose={handleCloseSnackbar} severity={severity}>
+              {messageSnackbar}
+            </Alert>
+          </Snackbar>
         </div>
       </>
       }
