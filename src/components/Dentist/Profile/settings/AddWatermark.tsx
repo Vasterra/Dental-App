@@ -16,6 +16,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
   const [openSnackBar, setOpenSnackBar]: any = useState();
   const [currentCover, setCurrentCover]: any = useState();
   const [currentCoverImg, setCurrentCoverImg]: any = useState();
+  const [isCurrentCover, setIsCurrentCover]: any = useState(false);
 
   useEffect(() => {
     downloadCover();
@@ -34,6 +35,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
     const reader = new FileReader();
     reader.onload = () => {
       setCurrentCover(reader.result as any);
+      setIsCurrentCover(true);
     };
     reader.readAsDataURL(files[0]);
 
@@ -81,6 +83,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
     reader.onload = () => {
       setWatermarkImg(reader.result as any);
       addWaterMark(reader.result);
+      setIsCurrentCover(false);
     };
     reader.readAsDataURL(files[0]);
   };
@@ -142,7 +145,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
           {watermarkImg && <img className='image' src={watermarkImg} alt='' />}
         </p>
         <p className='row-content'>
-          {currentCover && !watermarkImg && <>
+          {isCurrentCover && <>
             <label className='button-green-file'>Upload Watermark</label>
             <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={addWatermark}
                    disabled={currentDentist.hasPaidPlan} />
@@ -155,7 +158,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
                       setWatermarkImg(null);
                     }}
             >
-              Clear All
+              Clear watermark
             </button>
           </>}
         </p>
