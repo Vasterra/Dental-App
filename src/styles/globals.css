@@ -154,6 +154,7 @@ img {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    margin: 20px 0;
 }
 
 .row {
@@ -531,12 +532,13 @@ img {
 }
 
 .input-file {
-    cursor: pointer;
+    /* cursor: pointer; */
     opacity: 0;
     position: absolute;
-    margin-top: 28px;
+    /* margin-top: 28px; */
     display: block;
-    width: 96px;
+    height: 100%;
+    width: 151px;
 }
 
 .input-file2 {
@@ -554,7 +556,7 @@ img {
     cursor: pointer;
     background-color: var(--color-green);
     color: var(--color-white);
-    margin: 20px 20px 0 0;
+    /*margin: 20px 20px 0 0;*/
     width: 150px;
     padding: 12px 20px;
     box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
@@ -1101,11 +1103,23 @@ select.arrows {
     background-color: rgba(31, 31, 31, 0.2);
 }
 
+.watermarkImg::after {
+    content: "";
+    width: 80px;
+    height:80px;
+    opacity: 0.9;
+    background: url(https://learnjamstack.com/logo.svg) no-repeat;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
 .profile-photo-box img {
     max-height: 184px;
 }
 
 .image {
+    text-align: center;
     margin: 0;
     padding: 0;
     object-fit: contain;
