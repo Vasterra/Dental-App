@@ -10,6 +10,7 @@ type Props = {
 
 const CardDentistComponent: React.FunctionComponent<Props> = ({ dentist, setCurrentDentist }) => {
   const [images, setImages]: any = useState();
+  const [adminSettingSubscriber, setAdminSettingSubscriber]: any = useState();
 
   // @ts-ignore
   useEffect(() => {
@@ -18,11 +19,16 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({ dentist, setCurr
       ApiManager.downloadAvatar(dentist).then(signedFiles => {
         if (!cleanupFunction) setImages(signedFiles);
       });
+      void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
     } catch (e) {
       console.error(e.message);
     }
     return () => cleanupFunction = true;
   }, [dentist]);
+
+  const getAdminSettingSubscriber = () => {
+    return ApiManager.GET_ADMIN_SETTINGS_SUBSCRIBER();
+  };
 
   const fullName = `${dentist.firstName ? dentist.firstName : ''} ${dentist.lastName ? dentist.lastName : ''}`;
 
@@ -33,8 +39,10 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({ dentist, setCurr
         {!images && <DentistImageBlockEmpty src={'../../../images/empty_avatar.png'} />}
       </ImageWrapper>
       {/*<p className="index-gallery-image-watermark"></p>*/}
-      {dentist.hasPaidPlan &&
-      <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' />}
+      {adminSettingSubscriber && dentist.hasPaidPlan && adminSettingSubscriber.paidAppearVerified ?
+      <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
+      {adminSettingSubscriber && !dentist.hasPaidPlan && adminSettingSubscriber.freeAppearVerified ?
+        <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
       <Link href={`../../dentist/person/${dentist.id}`} target='_blank'>
         <div className='index-gallery-image-description'>
           <p className='index-gallery-image-title'>{'Dr. ' + fullName}</p>

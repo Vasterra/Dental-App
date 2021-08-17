@@ -37,7 +37,6 @@
 .clearSearchInput {
     display: none;
     position: relative;
-    right: 30px;
 }
 
 .button-green-search:hover {
