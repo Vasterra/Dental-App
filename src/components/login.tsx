@@ -10,7 +10,7 @@ import ForgotPassword from 'src/components/forgotPassword';
 import { createDentist } from 'src/graphql/mutations';
 import { listDentists } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
-import watermark from '../utils/watermark/builded/index'
+import { AuthInputError, AuthInputWrapper } from '../styles/Auth.module';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -99,11 +99,11 @@ const Login = () => {
   const validate = (values: any) => {
     const passwordRegex = /(?=.*[0-9])/;
     const errors: any = {};
-
-    if (!values.username) {
-      errors.username = 'Required';
-    } else if (values.username.length > 25) {
-      errors.username = 'Must be 25 characters or less';
+    console.log(values);
+    if (!values.email) {
+      errors.email = 'Required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+      errors.email = 'Invalid email address';
     }
 
     if (!values.password) {
@@ -120,12 +120,7 @@ const Login = () => {
       username: '',
       password: '',
       email: '',
-      gdcNumber: '',
-      code: '',
-      weight: '',
-      weightRange: '',
       showPassword: false,
-      user: null
     },
     validate,
     onSubmit: async (val: any) => {
@@ -148,18 +143,13 @@ const Login = () => {
         } else {
           await createNewDentist(user);
         }
-
-
         setMessageSnackbar('The Login successfully!');
         setSeverity('success');
         setOpenSnackbar(true);
-        setValues({ ...values, loaderButtonSubmit: false });
-        setValues({ ...values, loader: true });
       } catch (error) {
         setMessageSnackbar(error.message);
         setSeverity('warning');
         setOpenSnackbar(true);
-        setValues({ ...values, errorMessage: error.message });
       }
     }
   });
@@ -201,34 +191,38 @@ const Login = () => {
         <p className='form-login-title green'>Login</p>
         <p className='form-login-subtitle gray'>Current FYD users</p>
         <form onSubmit={formikAuth.handleSubmit}>
-          <p className='form-login-input'>
-            <input
-              type='email'
-              name='email'
-              id='email'
-              placeholder='Email'
-              value={formikAuth.values.email}
-              onChange={formikAuth.handleChange}
-            />
-            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
-              void formikAuth.setValues({ ...formikAuth.values, email: '' });
-            }} />
-            {formikAuth.errors.email ? <div>{formikAuth.errors.email}</div> : null}
-          </p>
-          <p className='form-login-input'>
-            <input
-              type='password'
-              name='password'
-              id='password'
-              placeholder='Password'
-              value={formikAuth.values.password}
-              onChange={formikAuth.handleChange}
-            />
+          <AuthInputWrapper>
+            <p className='form-login-input'>
+              <input
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
+                value={formikAuth.values.email}
+                onChange={formikAuth.handleChange}
+              />
+              <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+                void formikAuth.setValues({ ...formikAuth.values, email: '' });
+              }} />
+            </p>
+            {formikAuth.errors.email ? <AuthInputError>{formikAuth.errors.email}</AuthInputError> : null}
+          </AuthInputWrapper>
+          <AuthInputWrapper>
+            <p className='form-login-input'>
+              <input
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
+                value={formikAuth.values.password}
+                onChange={formikAuth.handleChange}
+              />
               <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
                 void formikAuth.setValues({ ...formikAuth.values, password: '' });
               }} />
-            {formikAuth.errors.password ? <div>{formikAuth.errors.password}</div> : null}
-          </p>
+            </p>
+            {formikAuth.errors.password ? <AuthInputError>{formikAuth.errors.password}</AuthInputError> : null}
+          </AuthInputWrapper>
           <div className='form-login-buttons'>
             <button type='submit' disabled={values.loader} className='button-green'>{values.loaderButtonSubmit ?
               <FacebookCircularProgress /> : 'Login'}</button>

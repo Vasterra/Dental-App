@@ -5,6 +5,7 @@ import { Auth } from 'aws-amplify';
 import Router from 'next/router';
 import { useFormik } from 'formik';
 import { Alert } from '@material-ui/lab';
+import { AuthInputError, AuthInputWrapper } from 'src/styles/Auth.module';
 
 interface State {
   username: string;
@@ -16,7 +17,7 @@ interface State {
   weightRange: string;
   showPassword: boolean;
   user: null;
-  errorMessage: null;
+
   loader: boolean;
   loaderButtonSubmit: boolean;
 }
@@ -32,7 +33,6 @@ const Registration = ({}) => {
     weightRange: '',
     showPassword: false,
     user: null,
-    errorMessage: null,
     loader: false,
     loaderButtonSubmit: false
   });
@@ -96,7 +96,6 @@ const Registration = ({}) => {
       weightRange: '',
       showPassword: false,
       user: null,
-      errorMessage: null,
       loader: false,
       loaderButtonSubmit: false
     },
@@ -117,7 +116,6 @@ const Registration = ({}) => {
         setMessageSnackbar(error.message);
         setSeverity('warning');
         setOpenSnackbar(true);
-        setValues({ ...values, errorMessage: error.message });
       }
     }
   });
@@ -148,68 +146,75 @@ const Registration = ({}) => {
         </p>
         {!values.user &&
         <form onSubmit={formik.handleSubmit}>
-          <p className='form-login-input'>
-            <input
-              type='text'
-              id='username'
-              name='username'
-              placeholder='Username'
-              value={formik.values.username}
-              onChange={formik.handleChange}
-            />
-            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
-              void formik.setValues({ ...formik.values, username: '' });
-            }} />
-            {formik.errors.username ? <div>{formik.errors.username}</div> : null}
-          </p>
-          <p className='form-login-input'>
-            <input
-              type='email'
-              name='email'
-              id='email'
-              placeholder='Email'
-              value={formik.values.email}
-              onChange={formik.handleChange}
-            />
-            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
-              void formik.setValues({ ...formik.values, email: '' });
-            }} />
-            {formik.errors.email ? <div>{formik.errors.email}</div> : null}
-          </p>
-          <p className='form-login-input'>
-            <input
-              type='text'
-              name='gdcNumber'
-              id='gdcNumber'
-              placeholder='GDC Number (this cannot be updated later)'
-              value={formik.values.gdcNumber}
-              onChange={formik.handleChange}
-            />
-            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
-              void formik.setValues({ ...formik.values, gdcNumber: '' });
-            }} />
-            {formik.errors.gdcNumber ? <div>{formik.errors.gdcNumber}</div> : null}
-          </p>
-          <p className='form-login-input'>
-            <input
-              type='password'
-              name='password'
-              id='password'
-              placeholder='Password'
-              value={formik.values.password}
-              onChange={formik.handleChange}
-            />
-            <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
-              void formik.setValues({ ...formik.values, password: '' });
-            }} />
-            {formik.errors.password ? <div>{formik.errors.password}</div> : null}
-          </p>
+          <AuthInputWrapper>
+            <p className='form-login-input'>
+              <input
+                type='text'
+                id='username'
+                name='username'
+                placeholder='Username'
+                value={formik.values.username}
+                onChange={formik.handleChange}
+              />
+              <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+                void formik.setValues({ ...formik.values, username: '' });
+              }} />
+            </p>
+            {formik.errors.username ? <AuthInputError>{formik.errors.username}</AuthInputError> : null}
+          </AuthInputWrapper>
+          <AuthInputWrapper>
+            <p className='form-login-input'>
+              <input
+                type='email'
+                name='email'
+                id='email'
+                placeholder='Email'
+                value={formik.values.email}
+                onChange={formik.handleChange}
+              />
+              <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+                void formik.setValues({ ...formik.values, email: '' });
+              }} />
+            </p>
+            {formik.errors.email ? <AuthInputError>{formik.errors.email}</AuthInputError> : null}
+          </AuthInputWrapper>
+          <AuthInputWrapper>
+            <p className='form-login-input'>
+              <input
+                type='text'
+                name='gdcNumber'
+                id='gdcNumber'
+                placeholder='GDC Number (this cannot be updated later)'
+                value={formik.values.gdcNumber}
+                onChange={formik.handleChange}
+              />
+              <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+                void formik.setValues({ ...formik.values, gdcNumber: '' });
+              }} />
+            </p>
+            {formik.errors.gdcNumber ? <AuthInputError>{formik.errors.gdcNumber}</AuthInputError> : null}
+          </AuthInputWrapper>
+          <AuthInputWrapper>
+            <p className='form-login-input'>
+              <input
+                type='password'
+                name='password'
+                id='password'
+                placeholder='Password'
+                value={formik.values.password}
+                onChange={formik.handleChange}
+              />
+              <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
+                void formik.setValues({ ...formik.values, password: '' });
+              }} />
+            </p>
+            {formik.errors.password ? <AuthInputError>{formik.errors.password}</AuthInputError> : null}
+          </AuthInputWrapper>
           <p className='form-login-buttons'>
             <button type='submit' className='button-green'>Sign Up</button>
           </p>
         </form>
         }
-
         {values.user && <form onSubmit={confirmSignUp} className='login-form-wrapper'>
           <TextField
             id='filled-password-input'

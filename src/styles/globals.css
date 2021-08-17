@@ -876,7 +876,7 @@ input[type=file]::-webkit-file-upload-button {
 
 .form-login-input {
     display: flex;
-    margin-bottom: 13px;
+    /*margin-bottom: 13px;*/
 }
 
 .form-login-input input {
