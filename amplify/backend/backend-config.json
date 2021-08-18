@@ -234,28 +234,6 @@
           ]
         }
       ]
-    },
-    "AdminQueries": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "awsdentale726916b",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "AdminQueries6d3717c9",
-          "attributes": [
-            "Arn",
-            "Name"
-          ]
-        }
-      ]
     }
   },
   "storage": {
@@ -338,20 +316,6 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
-    },
-    "AdminQueries6d3717c9": {
-      "service": "Lambda",
-      "providerPlugin": "awscloudformation",
-      "build": true,
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "awsdentale726916b",
-          "attributes": [
-            "UserPoolId"
-          ]
-        }
-      ]
     }
   }
 }
