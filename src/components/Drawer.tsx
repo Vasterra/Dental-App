@@ -38,10 +38,6 @@ const Menu = styled('ul')`{
         color: #095c5c;
       }
     }
-
-    @media (max-width: 1024px) {
-      display: none;
-    }
   }
 
   li:hover {

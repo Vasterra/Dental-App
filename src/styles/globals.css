@@ -273,8 +273,9 @@ img {
     align-self: stretch;
     min-width: 333px;
     max-width: 100%;
-    /*height: 100vh;*/
+    height: 100vh;
     background-color: #095c5c;
+    position: fixed;
 }
 
 .link-actve {

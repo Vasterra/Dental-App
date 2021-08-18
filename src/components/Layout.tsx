@@ -25,6 +25,7 @@ const Layout: React.FunctionComponent<Props> = ({
           currentDentist={currentDentist}
           active={active}
         />
+        <div style={{ minWidth: '333px' }}/>
         {children}
       </section>
     </Container>
