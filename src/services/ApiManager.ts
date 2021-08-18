@@ -1,6 +1,11 @@
 import {API, Auth, Hub, Storage} from "aws-amplify";
 import Router from "next/router";
-import {createAdminSettingsSubscriber, deleteDentist, updateAdminSettingsSubscriber} from "../graphql/mutations";
+import {
+  createAdminSettingsSubscriber,
+  createClosedAccount,
+  deleteDentist,
+  updateAdminSettingsSubscriber
+} from '../graphql/mutations';
 import {
   getAdminAnalytics,
   getAdminSettingsSubscriber,
@@ -195,6 +200,25 @@ class ApiManager {
       console.log('Error download Avatar file: ', error);
     }
   }
+
+  public static CREATE_CLOSED_ACCOUNT = async (id: any) => {
+    try {
+      const { data }: any = await API.graphql({
+        query: createClosedAccount,
+        variables: {
+          input: {
+            dentistId: id,
+            closedAccount: 'closed'
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      return data;
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   public static async deleteDentist(currentDentist: any) {
     if (currentDentist === null) return

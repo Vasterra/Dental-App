@@ -30,12 +30,12 @@ const AdminDashboard = () => {
                 totalFreeAccounts: listDentists.filter((item: any) => !item.hasPaidPlan).length,
                 totalSubscriptionsClosed: listClosedSubscriptions.length,
                 totalAccountsClosed: listClosedAccounts.length,
-                totalImagesUploaded: listImages.length * 2,
+                totalImagesUploaded: listImages === [] ? listImages.length * 2 : 0,
                 monthNewSubscriptions: listDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month') && item.hasPaidPlan).length,
                 monthNewFreeAccounts: listDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month') && !item.hasPaidPlan).length,
                 monthSubscriptionsClosed: listClosedSubscriptions.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length,
                 monthAccountsClosed: listClosedAccounts.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length,
-                monthImagesUploaded: listImages.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length * 2
+                monthImagesUploaded: listImages === [] ? listImages.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length * 2 : 0
               });
             });
           });

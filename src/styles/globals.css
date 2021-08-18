@@ -1217,7 +1217,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   width: 100%;
   grid-template-columns: 6fr 3fr 6fr 3fr 1fr;
   grid-gap: 20px;
-  cursor: pointer;
+  /*cursor: pointer;*/
   justify-items: flex-start;
   align-items: center;
 }
@@ -1241,7 +1241,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 .open-user-profile {
-  width: 40px;
+  /*width: 40px;*/
 }
 
 .pl-17 {
