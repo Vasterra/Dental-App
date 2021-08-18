@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Menu from 'src/components/menu';
 import ApiManager from 'src/services/ApiManager';
 import Error from 'next/error';
-import moment from "moment"
+import moment from 'moment';
 import { motion } from 'framer-motion';
-import { Auth, API  } from 'aws-amplify';
-import { CognitoUser } from 'amazon-cognito-identity-js';
+import { API, Auth } from 'aws-amplify';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -31,8 +30,8 @@ const AdminUsers = () => {
   const [userInfoShow, setUserInfoShow]: any = useState(false);
   const [countPagination, setCountPagination]: any = useState();
   const [open, setOpen] = React.useState(false);
-  const [deleteAccount, setDeleteAccount] = React.useState();
-  const [accountToDelete, setAccountToDelete] = React.useState();
+  const [deleteAccount, setDeleteAccount]: any = useState();
+  const [accountToDelete, setAccountToDelete] = useState();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
@@ -132,13 +131,12 @@ const AdminUsers = () => {
   };
 
   const handleClickOpen = (account: React.SetStateAction<undefined>) => {
-    setAccountToDelete(account)
+    setAccountToDelete(account);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setDeleteAccount(null);
   };
   let nextToken: any;
 
@@ -147,22 +145,21 @@ const AdminUsers = () => {
     let path = '/listUsers';
     let myInit = {
       headers: {
-        'Content-Type' : 'application/json',
+        'Content-Type': 'application/json',
         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
       }
-    }
-    const { NextToken, ...rest } =  await API.get(apiName, path, myInit);
+    };
+    const { NextToken, ...rest } = await API.get(apiName, path, myInit);
     nextToken = NextToken;
     console.log(rest);
     return rest;
   }
 
   const onRemoveAccount = () => {
-    console.log(deleteAccount);
     if (deleteAccount.toUpperCase() === 'DELETE') {
       console.log(Auth.currentAuthenticatedUser());
       handleClose();
-      getUser()
+      getUser();
       // document.location.href = '/login';
       // user.deleteUser(error => {
       //   if (error) {
@@ -269,7 +266,9 @@ const AdminUsers = () => {
                         <p>{item.postIndex ? item.postIndex : 'none'}</p>
                         <p>13:05 04/04/2021</p>
                         <p>#StripeID</p>
-                        <button className='button-green-outline border-white' onClick={() => handleClickOpen(item)}>Delete</button>
+                        <button className='button-green-outline border-white'
+                                onClick={() => handleClickOpen(item)}>Delete
+                        </button>
                       </div>
                     </div>
                   </div>
