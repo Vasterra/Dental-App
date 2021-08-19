@@ -119,69 +119,73 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
     return (
       <>
         {this.state.currentUser && this.state.currentUser.username === this.props.currentDentist.id &&
-        <div className='leftmenu'>
-          <div className='mobile-topmenu'>
-            <p className='menu' id='mobile_menu'>
-              <svg className='menu-logo' xmlns='http://www.w3.org/2000/svg' height='28px' viewBox='0 0 28 20'
-                   width='20px'>
-                <path d='M0 0h24v24H0V0z' fill='none' />
-                <path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' />
-              </svg>
-            </p>
-            <p className='link-actve'>
-              <Link href='/'>
-                <img src='../../images/FYD4_beige-on-green@2x.png'
-                     srcSet='../../images/FYD4_beige-on-green@2x.png 2x,
+          <>
+            <div className='leftmenu'>
+              <div className='mobile-topmenu'>
+                <p className='menu' id='mobile_menu'>
+                  <svg className='menu-logo' xmlns='http://www.w3.org/2000/svg' height='28px' viewBox='0 0 28 20'
+                       width='20px'>
+                    <path d='M0 0h24v24H0V0z' fill='none' />
+                    <path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' />
+                  </svg>
+                </p>
+                <p className='link-actve'>
+                  <Link href='/'>
+                    <img src='../../images/FYD4_beige-on-green@2x.png'
+                         srcSet='../../images/FYD4_beige-on-green@2x.png 2x,
              ../../images/FYD4_beige-on-green@3x.png 3x' className='logo-image' />
-              </Link>
-            </p>
-            <p>
-              <img className='user-image-mobile' src='../../images/user-image.png' alt='user image' />
-            </p>
-          </div>
-          <div className='leftmenu-content'>
-            <p className='link-actve'>
-              <Link href='/'>
-                <img src='../../images/FYD4_beige-on-green@2x.png'
-                     srcSet='../../images/FYD4_beige-on-green@2x.png 2x, ../../images/FYD4_beige-on-green@3x.png 3x'
-                     className='logo-image desctop-visible' alt='logo image'
-                />
-              </Link>
-            </p>
-            <div className='leftmenu-user-information'>
-              {this.props.currentAvatar &&
-              <img className='user-image'
-                   src={this.props.currentAvatar !== '' ? this.props.currentAvatar : '../../../images/empty_avatar.png'}
-                   alt='user image' />}
-              <p className='user-description white'><span>{this.props.currentDentist.firstName}</span>
-                <span>{this.props.currentDentist.lastName}</span></p>
+                  </Link>
+                </p>
+                <p>
+                  <img className='user-image-mobile' src='../../images/user-image.png' alt='user image' />
+                </p>
+              </div>
+              <div className='leftmenu-content'>
+                <p className='link-actve'>
+                  <Link href='/'>
+                    <img src='../../images/FYD4_beige-on-green@2x.png'
+                         srcSet='../../images/FYD4_beige-on-green@2x.png 2x, ../../images/FYD4_beige-on-green@3x.png 3x'
+                         className='logo-image desctop-visible' alt='logo image'
+                    />
+                  </Link>
+                </p>
+                <div className='leftmenu-user-information'>
+                  {this.props.currentAvatar &&
+                  <img className='user-image'
+                       src={this.props.currentAvatar !== '' ? this.props.currentAvatar : '../../../images/empty_avatar.png'}
+                       alt='user image' />}
+                  <p className='user-description white'><span>{this.props.currentDentist.firstName}</span>
+                    <span>{this.props.currentDentist.lastName}</span></p>
+                </div>
+              </div>
+              <Menu>
+                <Link href={`../../dentist/profile/${this.state.currentUser.username}`}>
+                  <li className={`leftmenu-list + ${this.props.active === 'activeProfile' ? 'active' : ''}`}>
+                    <img className='leftmenu-link-image' src='../../images/user.svg' alt='link image' />
+                    <a className='leftmenu-link'>Profile</a>
+                  </li>
+                </Link>
+                <Link href={`../../dentist/gallery/${this.state.currentUser.username}`}>
+                  <li className={`leftmenu-list + ${this.props.active === 'activeGallery' ? 'active' : ''}`}>
+                    <img className='leftmenu-link-image' src='../../images/gallery.svg' alt='link image' />
+                    <a className='leftmenu-link'>Gallery</a>
+                  </li>
+                </Link>
+                <Link href={`../../dentist/account/${this.state.currentUser.username}`}>
+                  <li className={`leftmenu-list + ${this.props.active === 'activeAccount' ? 'active' : ''}`}>
+                    <img className='leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
+                    <a className='leftmenu-link'>Account</a>
+                  </li>
+                </Link>
+                <li className='leftmenu-list logout'>
+                  <img className='leftmenu-link-image' src='../../images/left-arrow.svg' alt='link image' />
+                  <a className='leftmenu-link' href='/login' onClick={this.signOut}>Logout</a>
+                </li>
+              </Menu>
             </div>
-          </div>
-          <Menu>
-            <Link href={`../../dentist/profile/${this.state.currentUser.username}`}>
-              <li className={`leftmenu-list + ${this.props.active === 'activeProfile' ? 'active' : ''}`}>
-                <img className='leftmenu-link-image' src='../../images/user.svg' alt='link image' />
-                <a className='leftmenu-link'>Profile</a>
-              </li>
-            </Link>
-            <Link href={`../../dentist/gallery/${this.state.currentUser.username}`}>
-              <li className={`leftmenu-list + ${this.props.active === 'activeGallery' ? 'active' : ''}`}>
-                <img className='leftmenu-link-image' src='../../images/gallery.svg' alt='link image' />
-                <a className='leftmenu-link'>Gallery</a>
-              </li>
-            </Link>
-            <Link href={`../../dentist/account/${this.state.currentUser.username}`}>
-              <li className={`leftmenu-list + ${this.props.active === 'activeAccount' ? 'active' : ''}`}>
-                <img className='leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
-                <a className='leftmenu-link'>Account</a>
-              </li>
-            </Link>
-            <li className='leftmenu-list logout'>
-              <img className='leftmenu-link-image' src='../../images/left-arrow.svg' alt='link image' />
-              <a className='leftmenu-link' href='/login' onClick={this.signOut}>Logout</a>
-            </li>
-          </Menu>
-        </div>}
+            <div style={{ minWidth: '333px' }}/>
+          </>
+        }
       </>
     );
   }
