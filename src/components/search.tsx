@@ -71,10 +71,6 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
     }
   }, [searchDentists]);
 
-  const enterKeyDown = (e: { keyCode: number; }) => {
-    if (e.keyCode === 13) changeSearch();
-  };
-
   const setFunctCurrentDentist = (currentDentist: any) => {
     setCurrentDentist(currentDentist);
   };
@@ -94,6 +90,21 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
   const searchResult = async () => {
     let distanceDent: any = [];
     let searchDent: any[] = [];
+
+    if (searchValue !== '') {
+      fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${searchValue}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
+      .then(response => response.json())
+      .then(result => {
+        setSearchCoords(result.results[0].geometry.location);
+        const findCoordinatesDent: any = findCoordinatesDentists(result.results[0].geometry.location, distanceForSearch, dentists);
+        setSearchDentists(findCoordinatesDent);
+        setSearchValue('');
+        return
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
+    }
 
     if (serviceForSearch === 'choose service') {
       const findCoordinatesDent: any = findCoordinatesDentists(searchCoords, distanceForSearch, dentists);
@@ -188,7 +199,6 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
                        name='postcode'
                        value={searchValue}
                        onChange={(e: any) => changeSearchValue(e)}
-                       onKeyDown={enterKeyDown}
                        placeholder=' Postcode'
                 />
                 <div className='clearSearchInput'>
