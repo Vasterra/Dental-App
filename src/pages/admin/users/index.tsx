@@ -42,8 +42,13 @@ const AdminUsers = () => {
     hidden: { opacity: 0, height: 0 }
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     getListDentists();
+    const user = await Auth.currentAuthenticatedUser();
+    console.log(user);
+// Returns an array of groups
+    const groups = user.signInUserSession.accessToken.payload['cognito:groups'];
+    console.log(groups);
   }, []);
 
   const getListDentists = () => {
@@ -138,28 +143,50 @@ const AdminUsers = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  let nextToken: any;
 
-  async function getUser() {
+  async function addUserToGroup() {
     let apiName = 'AdminQueries';
-    let path = '/listUsers';
+    let path = '/addUserToGroup';
     let myInit = {
+      body: {
+        groupname: 'RemoveDental',
+        username: accountToDelete.id
+      },
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
       }
     };
-    const { NextToken, ...rest } = await API.get(apiName, path, myInit);
-    nextToken = NextToken;
-    console.log(rest);
-    return rest;
+    const { NextToken, ...rest } = await API.post(apiName, path, myInit);
+    // setMessageSnackbar(rest);
+    // setSeverity('success');
+    // setOpenSnackbar(true);
+    await disableUser();
+  }
+
+  async function disableUser() {
+    let apiName = 'AdminQueries';
+    let path = '/disableUser';
+    let myInit = {
+      body: {
+        username: accountToDelete.id
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+      }
+    };
+    const { NextToken, ...rest } = await API.post(apiName, path, myInit);
+    // setMessageSnackbar(rest);
+    // setSeverity('success');
+    // setOpenSnackbar(true);
   }
 
   const onRemoveAccount = () => {
     if (deleteAccount.toUpperCase() === 'DELETE') {
       console.log(Auth.currentAuthenticatedUser());
       handleClose();
-      getUser();
+      void addUserToGroup();
       // document.location.href = '/login';
       // user.deleteUser(error => {
       //   if (error) {
@@ -175,9 +202,7 @@ const AdminUsers = () => {
       // });
       // void ApiManager.deleteDentist(accountToDelete);
       // void ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.id);
-      setMessageSnackbar('The user was successfully deleted!');
-      setSeverity('success');
-      setOpenSnackbar(true);
+
     }
   };
 
