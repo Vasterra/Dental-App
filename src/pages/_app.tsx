@@ -4,7 +4,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AppProps } from 'next/app';
 
-import '../styles/globals.css';
+import '../styles/style.css';
 import config from '../../aws-exports';
 import Amplify from 'aws-amplify';
 
