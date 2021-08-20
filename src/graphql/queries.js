@@ -11,6 +11,7 @@ export const getDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
@@ -80,6 +81,7 @@ export const listDentists = /* GraphQL */ `
         phone
         qualifications
         bio
+        gdcNumber
         website
         address
         city

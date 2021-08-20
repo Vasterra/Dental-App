@@ -16,7 +16,7 @@ import { CircularProgress, Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { ButtonRedOutline } from 'src/styles/Buttons.module';
 import ApiManager from 'src/services/ApiManager';
-import { deleteDentist } from '../../../graphql/mutations';
+import { deleteDentist, updateDentist } from '../../../graphql/mutations';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -36,6 +36,7 @@ const AdminUsers = () => {
   const [suspendAccount, setSuspendAccount] = useState('');
   const [accountToDelete, setAccountToDelete]: any = useState();
   const [groupName, setGroupName] = useState();
+  const [gdcNumber, setGdcNumber] = useState('');
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
@@ -50,13 +51,12 @@ const AdminUsers = () => {
     void listUsersGroupDental();
   }, []);
 
-  const changeSearch = async (e: any) => {
+  const changeSearch = (e: any) => {
     const allDentists: any[] = [];
-    let result = oldDentists.map((item: any) => item.firstName.toLowerCase().indexOf(e) === 0);
-    result = await Promise.all(result);
-    result.forEach((item: string | any[]) => {
-      if (item !== undefined) {
-        allDentists.push(item);
+    oldDentists.forEach((dentist: { email: string; }) => {
+      console.log(dentist);
+      if (dentist.email.toLowerCase().indexOf(e) === 0) {
+        allDentists.push(dentist);
       }
     });
     setDentists(allDentists);
@@ -189,33 +189,42 @@ const AdminUsers = () => {
     };
     const { NextToken, ...rest } = await API.get(apiName, path, myInit);
     try {
-      setCountPagination(Math.ceil(rest.Users.length / articlesOnPage));
-      const arr: any[] = [];
       const mergeGroup: any = groupDental.concat(groupCancelDental);
-      mergeGroup.forEach((item: any) => {
-        const arr2 = {
-          email: '',
-          gdcNumber: '',
-          postCode: '',
-          subscription: '',
-          hasPaidPlan: false,
-          suspend: false
-        };
-        item.Attributes.forEach((val: any) => {
-          val.Name === 'email' ? arr2.email = val.Value : '';
-          val.Name === 'custom:gdcNumber' ? arr2.gdcNumber = val.Value : '';
-          val.Name === 'custom:postCode' ? arr2.postCode = val.Value : '';
-          val.Name === 'custom:subscription' ? arr2.subscription = val.Value : '';
-          val.Name === 'custom:hasPaidPlan' ? arr2.hasPaidPlan = val.Value : false;
-          val.Name === 'custom:suspend' ? arr2.suspend = val.Value : false;
+      try {
+        ApiManager.getListDentists().then(listDentists => {
+          const arr: any[] = [];
+          console.log(listDentists);
+          console.log(mergeGroup);
+          mergeGroup.forEach((item: any, key: any) => {
+            const arr2 = {
+              email: '',
+              gdcNumber: '',
+              postCode: '',
+              subscription: '',
+              hasPaidPlan: false,
+              suspend: false
+            };
+            item.Attributes.forEach((val: any) => {
+              val.Name === 'email' ? arr2.email = val.Value : '';
+              item.Username === listDentists[key].id ? arr2.gdcNumber = listDentists[key].gdcNumber : '';
+              val.Name === 'custom:postCode' ? arr2.postCode = val.Value : '';
+              val.Name === 'custom:subscription' ? arr2.subscription = val.Value : '';
+              val.Name === 'custom:hasPaidPlan' ? arr2.hasPaidPlan = val.Value : false;
+              val.Name === 'custom:suspend' ? arr2.suspend = val.Value : false;
+            });
+            arr.push({
+              ...item,
+              ...arr2
+            });
+          });
+          setCountPagination(Math.ceil(arr.length / articlesOnPage));
+          setDentists(arr);
+          setOldDentists(arr);
+          setGdcNumber('');
         });
-        arr.push({
-          ...item,
-          ...arr2
-        });
-      });
-      setDentists(arr);
-      setOldDentists(arr);
+      } catch (e) {
+        console.log(e);
+      }
       return rest;
     } catch (error) {
       console.error('There as an Error', error);
@@ -300,12 +309,12 @@ const AdminUsers = () => {
         query: deleteDentist,
         variables: {
           input: {
-            id: accountToDelete.Username,
+            id: accountToDelete.Username
           }
         },
         // @ts-ignore
         authMode: 'AWS_IAM'
-      })
+      });
       await ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.Username);
       await addUserToGroup();
     }
@@ -323,6 +332,35 @@ const AdminUsers = () => {
       return;
     }
     setOpenSnackbar(false);
+  };
+
+  const updateGdsNumber = async (key: any, dentist: any) => {
+    const updateInput: any = document.getElementsByClassName('gdc-update-input');
+    if (updateInput[key].disabled) {
+      updateInput[key].disabled = false;
+      updateInput[key].style.background = 'var(--color-white)';
+      updateInput[key].style.color = 'var(--color-black)';
+      updateInput[key].style.borderBottom = 'none';
+    } else {
+      updateInput[key].disabled = true;
+      updateInput[key].style.background = 'var(--color-green)';
+      updateInput[key].style.color = 'var(--color-white)';
+      updateInput[key].style.borderBottom = 'none';
+      if (gdcNumber.length !== 0) {
+        await API.graphql({
+          query: updateDentist,
+          variables: {
+            input: {
+              id: dentist.Username,
+              gdcNumber
+            }
+          },
+          // @ts-ignore
+          authMode: 'AWS_IAM'
+        });
+        await listUsersGroupDental();
+      }
+    }
   };
 
   return (
@@ -363,14 +401,13 @@ const AdminUsers = () => {
               </ul>
             </div>
             <div className='form-profile-label' />
-            <div className='form-profile-label'>
+            <div className='form-profile-label cursor-pointer'>
               <img className='pl-13' src='../../../images/arrow-bottom.svg' alt='arrow bottom' />
             </div>
           </div>
           {!dentists && <div className='flex-wrapper'><CircularProgress size={120} /></div>}
           {dentists && dentists.map((item: any, key: any) => {
-            return (
-              <div className='user-block' key={key}>
+            return (key < 10 ? <div className='user-block' key={key}>
                 <div className='user-list user-list-text bg-white user-data'>
                   <p>{item.email}</p>
                   <p>{getDate(item)}</p>
@@ -397,29 +434,42 @@ const AdminUsers = () => {
                         <p><strong>Subscription #:</strong></p>
                         {
                           !item.Enabled ?
-                            <button className='button-green-outline border-white' onClick={() => handleClickOpen(item, 'Dentists', 'suspend')}>
+                            <button className='button-green-outline border-white'
+                                    onClick={() => handleClickOpen(item, 'Dentists', 'suspend')}>
                               Activate
                             </button> :
-                            <ButtonRedOutline
+                            <button className='button-green-outline border-white'
                                     onClick={() => handleClickOpen(item, 'CancelDental', 'suspend')}>
                               Suspend
-                            </ButtonRedOutline>
+                            </button>
                         }
                       </div>
                       <div>
                         <p>{item.email ? item.email : 'none'}</p>
-                        <p>{item.gdcNumber ? item.gdcNumber : 'none'}</p>
+                        <p style={{ display: 'flex' }}>
+                          <input type='text'
+                                 className='gdc-update-input'
+                                 name='gdcNumber'
+                                 value={gdcNumber ? gdcNumber : item.gdcNumber}
+                                 id='gdcNumber'
+                                 disabled
+                                 onChange={(e: any) => setGdcNumber(e.target.value)}
+                          />
+                          <button className='gdc-update-button' onClick={() => updateGdsNumber(key, item)}>
+                            <img className='gdc-input-edit' src='../../../images/edit.svg' />
+                          </button>
+                        </p>
                         <p>{item.postCode ? item.postCode : 'none'}</p>
                         <p>{item.UserLastModifiedDate ? getFullDate(item) : 'none'}</p>
                         <p>{item.subscription ? item.subscription : 'none'}</p>
-                        <button className='button-green-outline border-white'
-                                onClick={() => handleClickOpen(item, 'RemoveDental', 'delete')}>Delete
-                        </button>
+                        <ButtonRedOutline
+                          onClick={() => handleClickOpen(item, 'RemoveDental', 'delete')}>Delete
+                        </ButtonRedOutline>
                       </div>
                     </div>
                   </div>
                 </motion.div>
-              </div>
+              </div> : ''
             );
           })}
           <Pagination count={countPagination} color='primary' onChange={changePagination} />

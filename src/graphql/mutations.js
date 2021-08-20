@@ -82,6 +82,7 @@ export const updateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
