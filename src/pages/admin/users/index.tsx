@@ -221,6 +221,7 @@ const AdminUsers = () => {
           setDentists(arr);
           setOldDentists(arr);
           setGdcNumber('');
+          downloadCSV(arr)
         });
       } catch (e) {
         console.log(e);
@@ -229,6 +230,14 @@ const AdminUsers = () => {
     } catch (error) {
       console.error('There as an Error', error);
     }
+  }
+
+  function downloadCSV(csv: any[] | BlobPart) {
+    let csvFile;
+    csvFile = new Blob([csv], {type:"text/csv"});
+    const csvDownload = document.getElementById('csv-download')
+    csvDownload.download = 'Users.csv';
+    csvDownload.href = window.URL.createObjectURL(csvFile);
   }
 
   async function addUserToGroup() {
@@ -401,9 +410,9 @@ const AdminUsers = () => {
               </ul>
             </div>
             <div className='form-profile-label' />
-            <div className='form-profile-label cursor-pointer'>
+            <a className='form-profile-label cursor-pointer' id="csv-download">
               <img className='pl-13' src='../../../images/arrow-bottom.svg' alt='arrow bottom' />
-            </div>
+            </a>
           </div>
           {!dentists && <div className='flex-wrapper'><CircularProgress size={120} /></div>}
           {dentists && dentists.map((item: any, key: any) => {
