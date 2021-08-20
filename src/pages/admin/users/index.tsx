@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Menu from 'src/components/menu';
-import ApiManager from 'src/services/ApiManager';
-import Error from 'next/error';
 import moment from 'moment';
 import { motion } from 'framer-motion';
 import { API, Auth } from 'aws-amplify';
@@ -16,6 +14,9 @@ import { Pagination } from '@material-ui/lab';
 import { UserViewProfileBlock, UserViewProfileLink } from 'src/styles/PageUsers.module';
 import { CircularProgress, Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { ButtonRedOutline } from 'src/styles/Buttons.module';
+import ApiManager from 'src/services/ApiManager';
+import { deleteDentist } from '../../../graphql/mutations';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -29,9 +30,12 @@ const AdminUsers = () => {
   const [oldDentists, setOldDentists]: any = useState();
   const [userInfoShow, setUserInfoShow]: any = useState(false);
   const [countPagination, setCountPagination]: any = useState();
-  const [open, setOpen] = React.useState(false);
-  const [deleteAccount, setDeleteAccount]: any = useState();
-  const [accountToDelete, setAccountToDelete] = useState();
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [openSuspend, setOpenSuspend] = React.useState(false);
+  const [deleteAccount, setDeleteAccount] = useState('');
+  const [suspendAccount, setSuspendAccount] = useState('');
+  const [accountToDelete, setAccountToDelete]: any = useState();
+  const [groupName, setGroupName] = useState();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
@@ -42,36 +46,13 @@ const AdminUsers = () => {
     hidden: { opacity: 0, height: 0 }
   };
 
-  useEffect(async () => {
-    getListDentists();
-    const user = await Auth.currentAuthenticatedUser();
-    console.log(user);
-// Returns an array of groups
-    const groups = user.signInUserSession.accessToken.payload['cognito:groups'];
-    console.log(groups);
+  useEffect(() => {
+    void listUsersGroupDental();
   }, []);
 
-  const getListDentists = () => {
-    setDentists(null);
-    try {
-      ApiManager.getListDentists().then(listDentists => {
-        setCountPagination(Math.ceil(listDentists.length / articlesOnPage));
-        setDentists(listDentists);
-        setOldDentists(listDentists);
-      });
-    } catch (e) {
-      return <Error statusCode={404} />;
-    }
-  };
-
   const changeSearch = async (e: any) => {
-    setDentists(null);
-    let allDentists: any[] = [];
-    let result = oldDentists.map(async (item: any) => {
-      if (item.firstName.toLowerCase().indexOf(e) === 0) {
-        return item;
-      }
-    });
+    const allDentists: any[] = [];
+    let result = oldDentists.map((item: any) => item.firstName.toLowerCase().indexOf(e) === 0);
     result = await Promise.all(result);
     result.forEach((item: string | any[]) => {
       if (item !== undefined) {
@@ -95,11 +76,16 @@ const AdminUsers = () => {
     }
   };
 
-  const getDate = (dentist: { createdAt: string | number | Date; }) => {
-    const resultDate = new Date(dentist.createdAt);
-    return `${resultDate.getDate() < 10 ? '0' + resultDate.getDate() : resultDate.getDate()}
-    .${resultDate.getMonth() < 10 ? '0' + resultDate.getMonth() : resultDate.getMonth()}
-    .${resultDate.getFullYear()}`;
+  const getDate = (dentist: { UserCreateDate: string | number | Date; }) => {
+    const resultDate = new Date(dentist.UserCreateDate);
+    const month = resultDate.getMonth() + 1;
+    return `${resultDate.getDate() < 10 ? '0' + resultDate.getDate() : resultDate.getDate()}.${month < 10 ? '0' + month : month}.${resultDate.getFullYear()}`;
+  };
+
+  const getFullDate = (dentist: { UserLastModifiedDate: string | number | Date; }) => {
+    const resultDate = new Date(dentist.UserLastModifiedDate);
+    const month = resultDate.getMonth() + 1;
+    return `${resultDate.getDate() < 10 ? '0' + resultDate.getDate() : resultDate.getDate()}.${month < 10 ? '0' + month : month}.${resultDate.getFullYear()} - ${resultDate.getHours() < 10 ? '0' + resultDate.getHours() : resultDate.getHours()}:${resultDate.getMinutes() < 10 ? '0' + resultDate.getMinutes() : resultDate.getMinutes()}`;
   };
 
   const filterDate = (filter: any) => {
@@ -135,74 +121,200 @@ const AdminUsers = () => {
     setDentists(data);
   };
 
-  const handleClickOpen = (account: React.SetStateAction<undefined>) => {
+  const handleClickOpen = (account: any, groupname: any, open: any) => {
     setAccountToDelete(account);
-    setOpen(true);
+    setGroupName(groupname);
+    open === 'delete' ? setOpenDelete(true) : setOpenSuspend(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClose = (open: any) => {
+    open === 'delete' ? setOpenDelete(false) : setOpenSuspend(false);
   };
 
-  async function addUserToGroup() {
-    let apiName = 'AdminQueries';
-    let path = '/addUserToGroup';
-    let myInit = {
-      body: {
-        groupname: 'RemoveDental',
-        username: accountToDelete.id
+  const listUsersGroupCancelDental = async (groupDental: any) => {
+    const apiName = 'AdminQueries';
+    const path = '/listUsersInGroup';
+    const myInit = {
+      queryStringParameters: {
+        groupname: 'CancelDental'
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${(await Auth.currentSession())
+        .getAccessToken()
+        .getJwtToken()}`
+      }
+    };
+    const { NextToken, ...rest } = await API.get(apiName, path, myInit);
+    try {
+      void await getListUser(groupDental, rest.Users);
+    } catch (error) {
+      console.error('There as an Error', error);
+    }
+  };
+
+  const listUsersGroupDental = async () => {
+    const apiName = 'AdminQueries';
+    const path = '/listUsersInGroup';
+    const myInit = {
+      queryStringParameters: {
+        groupname: 'Dentists'
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${(await Auth.currentSession())
+        .getAccessToken()
+        .getJwtToken()}`
+      }
+    };
+    const { NextToken, ...rest } = await API.get(apiName, path, myInit);
+    try {
+      void await listUsersGroupCancelDental(rest.Users);
+    } catch (error) {
+      console.error('There as an Error', error);
+    }
+  };
+
+  async function getListUser(groupDental: string | any[], groupCancelDental: any) {
+    const apiName = 'AdminQueries';
+    const path = '/listUsers';
+    const myInit = {
+      queryStringParameters: {
+        groupname: 'Admins'
       },
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
       }
     };
-    const { NextToken, ...rest } = await API.post(apiName, path, myInit);
-    // setMessageSnackbar(rest);
-    // setSeverity('success');
-    // setOpenSnackbar(true);
-    await disableUser();
+    const { NextToken, ...rest } = await API.get(apiName, path, myInit);
+    try {
+      setCountPagination(Math.ceil(rest.Users.length / articlesOnPage));
+      const arr: any[] = [];
+      const mergeGroup: any = groupDental.concat(groupCancelDental);
+      mergeGroup.forEach((item: any) => {
+        const arr2 = {
+          email: '',
+          gdcNumber: '',
+          postCode: '',
+          subscription: '',
+          hasPaidPlan: false,
+          suspend: false
+        };
+        item.Attributes.forEach((val: any) => {
+          val.Name === 'email' ? arr2.email = val.Value : '';
+          val.Name === 'custom:gdcNumber' ? arr2.gdcNumber = val.Value : '';
+          val.Name === 'custom:postCode' ? arr2.postCode = val.Value : '';
+          val.Name === 'custom:subscription' ? arr2.subscription = val.Value : '';
+          val.Name === 'custom:hasPaidPlan' ? arr2.hasPaidPlan = val.Value : false;
+          val.Name === 'custom:suspend' ? arr2.suspend = val.Value : false;
+        });
+        arr.push({
+          ...item,
+          ...arr2
+        });
+      });
+      setDentists(arr);
+      setOldDentists(arr);
+      return rest;
+    } catch (error) {
+      console.error('There as an Error', error);
+    }
+  }
+
+  async function addUserToGroup() {
+    const apiName = 'AdminQueries';
+    const path = '/addUserToGroup';
+    const myInit = {
+      body: {
+        groupname: groupName,
+        username: accountToDelete.Username
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+      }
+    };
+    await API.post(apiName, path, myInit);
+    if (groupName === 'Dentists') {
+      void await removeUserFromGroup('CancelDental');
+      void await enableUser();
+    } else {
+      void await removeUserFromGroup('Dentists');
+      void await disableUser();
+    }
+  }
+
+  async function removeUserFromGroup(group: string) {
+    const apiName = 'AdminQueries';
+    const path = '/removeUserFromGroup';
+    const myInit = {
+      body: {
+        groupname: group,
+        username: accountToDelete.Username
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+      }
+    };
+    await API.post(apiName, path, myInit);
   }
 
   async function disableUser() {
-    let apiName = 'AdminQueries';
-    let path = '/disableUser';
-    let myInit = {
+    const apiName = 'AdminQueries';
+    const path = '/disableUser';
+    const myInit = {
       body: {
-        username: accountToDelete.id
+        username: accountToDelete.Username
       },
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
       }
     };
-    const { NextToken, ...rest } = await API.post(apiName, path, myInit);
-    // setMessageSnackbar(rest);
-    // setSeverity('success');
-    // setOpenSnackbar(true);
+    await API.post(apiName, path, myInit);
+    void await listUsersGroupDental();
   }
 
-  const onRemoveAccount = () => {
-    if (deleteAccount.toUpperCase() === 'DELETE') {
-      console.log(Auth.currentAuthenticatedUser());
-      handleClose();
-      void addUserToGroup();
-      // document.location.href = '/login';
-      // user.deleteUser(error => {
-      //   if (error) {
-      //     return reject(error);
-      //   }
-      //   void ApiManager.deleteDentist(accountToDelete);
-      //   void ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.id);
-      //
-      //   void ApiManager.signOut();
-      //   document.location.href = '/login';
-      //
-      //   resolve();
-      // });
-      // void ApiManager.deleteDentist(accountToDelete);
-      // void ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.id);
+  async function enableUser() {
+    const apiName = 'AdminQueries';
+    const path = '/enableUser';
+    const myInit = {
+      body: {
+        username: accountToDelete.Username
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+      }
+    };
+    await API.post(apiName, path, myInit);
+    void await listUsersGroupDental();
+  }
 
+  const onRemoveAccount = async () => {
+    if (deleteAccount.toUpperCase() === 'DELETE') {
+      handleClose('delete');
+      await API.graphql({
+        query: deleteDentist,
+        variables: {
+          input: {
+            id: accountToDelete.Username,
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      })
+      await ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.Username);
+      await addUserToGroup();
+    }
+  };
+
+  const onSuspendAccount = async () => {
+    if (suspendAccount.toUpperCase() === 'SUSPEND') {
+      handleClose('suspend');
+      await addUserToGroup();
     }
   };
 
@@ -260,13 +372,13 @@ const AdminUsers = () => {
             return (
               <div className='user-block' key={key}>
                 <div className='user-list user-list-text bg-white user-data'>
-                  <p>{item.firstName}</p>
+                  <p>{item.email}</p>
                   <p>{getDate(item)}</p>
                   <p>{item.hasPaidPlan ? 'Paid Subscription Ends: 03/09/2021' : 'Free'}</p>
                   <UserViewProfileBlock>
                     <img src='../../../images/user.svg' />
                     <UserViewProfileLink target='_blank'
-                                         href={`https://dev.d33ax28zfvruas.amplifyapp.com/dentist/person/${item.id}`}>View
+                                         href={`https://dev.d33ax28zfvruas.amplifyapp.com/dentist/person/${item.Username}`}>View
                       Profile</UserViewProfileLink>
                   </UserViewProfileBlock>
                   <UserViewProfileBlock>
@@ -283,16 +395,25 @@ const AdminUsers = () => {
                         <p><strong>Post Code:</strong></p>
                         <p><strong>Last Logged In:</strong></p>
                         <p><strong>Subscription #:</strong></p>
-                        <button className='button-green-outline border-white'>Suspend</button>
+                        {
+                          !item.Enabled ?
+                            <button className='button-green-outline border-white' onClick={() => handleClickOpen(item, 'Dentists', 'suspend')}>
+                              Activate
+                            </button> :
+                            <ButtonRedOutline
+                                    onClick={() => handleClickOpen(item, 'CancelDental', 'suspend')}>
+                              Suspend
+                            </ButtonRedOutline>
+                        }
                       </div>
                       <div>
                         <p>{item.email ? item.email : 'none'}</p>
                         <p>{item.gdcNumber ? item.gdcNumber : 'none'}</p>
-                        <p>{item.postIndex ? item.postIndex : 'none'}</p>
-                        <p>13:05 04/04/2021</p>
-                        <p>#StripeID</p>
+                        <p>{item.postCode ? item.postCode : 'none'}</p>
+                        <p>{item.UserLastModifiedDate ? getFullDate(item) : 'none'}</p>
+                        <p>{item.subscription ? item.subscription : 'none'}</p>
                         <button className='button-green-outline border-white'
-                                onClick={() => handleClickOpen(item)}>Delete
+                                onClick={() => handleClickOpen(item, 'RemoveDental', 'delete')}>Delete
                         </button>
                       </div>
                     </div>
@@ -304,7 +425,7 @@ const AdminUsers = () => {
           <Pagination count={countPagination} color='primary' onChange={changePagination} />
         </div>
       </div>
-      <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
+      <Dialog open={openDelete} onClose={() => handleClose('delete')} aria-labelledby='form-dialog-title'>
         <DialogTitle id='customized-dialog-title'><p>Delete Account</p></DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -326,11 +447,38 @@ const AdminUsers = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='primary'>
+          <Button onClick={() => handleClose('delete')} color='primary'>
             Cancel
           </Button>
-          <Button disabled={deleteAccount !== 'delete'} onClick={onRemoveAccount} color='primary'>
+          <Button onClick={onRemoveAccount} color='primary'>
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openSuspend} onClose={() => handleClose('suspend')} aria-labelledby='form-dialog-title'>
+        <DialogTitle id='customized-dialog-title'><p>Suspend Account</p></DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <p></p>
+            <br />
+            <h5>Type "SUSPEND" to confirm:</h5>
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin='dense'
+            id='suspend'
+            label='Suspend Account'
+            type='text'
+            onChange={(e) => setSuspendAccount(e.target.value)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClose('suspend')} color='primary'>
+            Cancel
+          </Button>
+          <Button onClick={onSuspendAccount} color='primary'>
+            Suspend
           </Button>
         </DialogActions>
       </Dialog>
@@ -346,4 +494,3 @@ const AdminUsers = () => {
 };
 
 export default AdminUsers;
-
