@@ -210,7 +210,7 @@ const Registration = ({}) => {
             </p>
             {formik.errors.password ? <AuthInputError>{formik.errors.password}</AuthInputError> : null}
           </AuthInputWrapper>
-          <p className='form-login-buttons'>
+          <p className='form-login-buttons' style={{ marginTop: '30px' }}>
             <button type='submit' className='button-green'>Sign Up</button>
           </p>
         </form>

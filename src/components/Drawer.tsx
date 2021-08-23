@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import { Auth, Hub, Storage } from 'aws-amplify';
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { withRouter } from 'next/router';
 import ApiManager from 'src/services/ApiManager';
-
+import styled from 'styled-components';
 
 const Menu = styled('ul')`{
   li {
@@ -154,8 +153,8 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
                   <img className='user-image'
                        src={this.props.currentAvatar !== '' ? this.props.currentAvatar : '../../../images/empty_avatar.png'}
                        alt='user image' />}
-                  <p className='user-description white'><span>{this.props.currentDentist.firstName}</span>
-                    <span>{this.props.currentDentist.lastName}</span></p>
+                  <p className='user-description white'><span>{this.props.currentDentist.firstName || 'firstname'}</span>
+                    <span>{this.props.currentDentist.lastName || 'lastName'}</span></p>
                 </div>
               </div>
               <Menu>

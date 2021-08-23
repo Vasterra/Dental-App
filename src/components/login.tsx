@@ -147,6 +147,7 @@ const Login = () => {
         setSeverity('success');
         setOpenSnackbar(true);
       } catch (error) {
+        setValues({ ...values, loaderButtonSubmit: false, loader: false });
         setMessageSnackbar(error.message);
         setSeverity('warning');
         setOpenSnackbar(true);
@@ -185,7 +186,7 @@ const Login = () => {
 
   return (
 
-    <div className='main bg-login main-box'>
+    <div className='main bg-login main-height-full'>
       {values.resetPassword && <ForgotPassword backInSingIn={backInSingIn} setValues={setValues} values={values} />}
       {!values.resetPassword && <div className='form-login'>
         <p className='form-login-title green'>Login</p>
@@ -223,7 +224,7 @@ const Login = () => {
             </p>
             {formikAuth.errors.password ? <AuthInputError>{formikAuth.errors.password}</AuthInputError> : null}
           </AuthInputWrapper>
-          <div className='form-login-buttons'>
+          <div className='form-login-buttons' style={{ marginTop: '30px' }}>
             <button type='submit' disabled={values.loader} className='button-green'>{values.loaderButtonSubmit ?
               <FacebookCircularProgress /> : 'Login'}</button>
             <button className='button-white' disabled={values.loader} onClick={(e: SyntheticEvent) => {

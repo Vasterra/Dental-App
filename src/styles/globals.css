@@ -271,8 +271,7 @@ img {
 
 .leftmenu {
     align-self: stretch;
-    min-width: 333px;
-    max-width: 100%;
+    width: 333px;
     height: 100vh;
     background-color: #095c5c;
     position: fixed;
