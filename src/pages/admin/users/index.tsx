@@ -17,6 +17,7 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { ButtonRedOutline } from 'src/styles/Buttons.module';
 import ApiManager from 'src/services/ApiManager';
 import { deleteDentist, updateDentist } from '../../../graphql/mutations';
+import { saveAs } from 'file-saver';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -221,7 +222,6 @@ const AdminUsers = () => {
           setDentists(arr);
           setOldDentists(arr);
           setGdcNumber('');
-          downloadCSV(arr)
         });
       } catch (e) {
         console.log(e);
@@ -233,11 +233,23 @@ const AdminUsers = () => {
   }
 
   function downloadCSV(csv: any[] | BlobPart) {
-    let csvFile;
-    csvFile = new Blob([csv], {type:"text/csv"});
-    const csvDownload = document.getElementById('csv-download')
-    csvDownload.download = 'Users.csv';
-    csvDownload.href = window.URL.createObjectURL(csvFile);
+    let csvDataExcel = [];
+
+    oldDentists.forEach((item: any) => {
+      csvDataExcel.push(
+        ['Account Email', item.email ? item.email : 'none'],
+        ['GDC Number', item.gdcNumber ? item.gdcNumber : 'none'],
+        ['Post Code', item.postCode ? item.postCode : 'none'],
+        ['Last Logged In', item.UserLastModifiedDate ? getFullDate(item) : 'none'],
+        ['Subscription', item.subscription ? item.subscription : 'none'],
+        [null, ''],
+      );
+    });
+
+    csvDataExcel = csvDataExcel.map(function(el) {
+      return [el[0], '"' + el[1] + '"'].join(el[0] ? ' - ' : '') + '\r\n';
+    });
+    saveAs(new Blob(csvDataExcel, { type: 'text/csv' }), 'Users.csv');
   }
 
   async function addUserToGroup() {
@@ -372,6 +384,25 @@ const AdminUsers = () => {
     }
   };
 
+  const filterOnDate = () => {
+    // const currentDate = Date.now()
+    let dsfdfs;
+
+    dsfdfs = oldDentists.sort((a: any, b: any) => {
+      console.log(new Date(a.UserCreateDate).getTime() - new Date(b.UserCreateDate).getTime());
+      console.log();
+      Number(new Date(a.UserCreateDate).getTime()) - Number(new Date(b.UserCreateDate).getTime())
+      // console.log(dsfdfs > currentDate);
+      // return !((start && start > dsfdfs) || (end && end < dsfdfs));
+    });
+    setDentists(dsfdfs)
+    console.log(dsfdfs);
+    // oldDentists.map((el: any) => {
+    //   console.log(new Date(getDate(el)));
+    //   console.log(currentDate);
+    // })
+  }
+
   return (
     <section className='container-profile'>
       <Menu active='Users' />
@@ -394,7 +425,7 @@ const AdminUsers = () => {
           </div>
           <div className='user-list-header'>
             <div className='form-profile-label'>Dentist</div>
-            <div className='form-profile-label select-area' id='account_opened'>Account Opened
+            <div className='form-profile-label select-area' id='account_opened' onClick={filterOnDate}>Account Opened
               <ul className='account_opened'>
                 <li onClick={() => filterDate('Last Week')}>Last Week</li>
                 <li onClick={() => filterDate('Last Month')}>Last Month</li>
@@ -410,7 +441,7 @@ const AdminUsers = () => {
               </ul>
             </div>
             <div className='form-profile-label' />
-            <a className='form-profile-label cursor-pointer' id="csv-download">
+            <a className='form-profile-label cursor-pointer' onClick={() => downloadCSV()}>
               <img className='pl-13' src='../../../images/arrow-bottom.svg' alt='arrow bottom' />
             </a>
           </div>
@@ -420,7 +451,7 @@ const AdminUsers = () => {
                 <div className='user-list user-list-text bg-white user-data'>
                   <p>{item.email}</p>
                   <p>{getDate(item)}</p>
-                  <p>{item.hasPaidPlan ? 'Paid Subscription Ends: 03/09/2021' : 'Free'}</p>
+                  <p>{item.hasPaidPlan ? 'Paid' : 'Free'}</p>
                   <UserViewProfileBlock>
                     <img src='../../../images/user.svg' />
                     <UserViewProfileLink target='_blank'
