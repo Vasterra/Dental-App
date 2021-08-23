@@ -19,6 +19,15 @@ import ApiManager from 'src/services/ApiManager';
 import { deleteDentist, updateDentist } from '../../../graphql/mutations';
 import { saveAs } from 'file-saver';
 
+import {
+  AdminUser__searchIcon,
+  AdminUser__searchInput,
+  AdminUser__searchPanel_leftSide,
+  AdminUser__searchPanel_rightSide,
+  AdminUser__searchPanel_wrapperFlexRow
+} from '../../../styles/AdminUser.module';
+import { ButtonGreen } from '../../../styles/Globals.module';
+
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
 }
@@ -93,15 +102,15 @@ const AdminUsers = () => {
     const currentDate = moment();
     let filteredDentists;
     if (filter === 'Last Week') {
-      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'week'));
+      filteredDentists = oldDentists.filter((item: any) => moment(item.UserCreateDate).isSame(currentDate, 'week'));
     } else if (filter === 'Last Month') {
-      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month'));
+      filteredDentists = oldDentists.filter((item: any) => moment(item.UserCreateDate).isSame(currentDate, 'month'));
     } else if (filter === 'Last 3 Months') {
-      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).subtract(3, 'month'));
+      filteredDentists = oldDentists.filter((item: any) => moment(item.UserCreateDate).subtract(3, 'month'));
     } else if (filter === 'Last 6 Months') {
-      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).subtract(6, 'month'));
+      filteredDentists = oldDentists.filter((item: any) => moment(item.UserCreateDate).subtract(6, 'month'));
     } else if (filter === 'Last Year') {
-      filteredDentists = oldDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'year'));
+      filteredDentists = oldDentists.filter((item: any) => moment(item.UserCreateDate).isSame(currentDate, 'year'));
     }
     setDentists(filteredDentists);
   };
@@ -155,6 +164,7 @@ const AdminUsers = () => {
   };
 
   const listUsersGroupDental = async () => {
+    setDentists(null);
     const apiName = 'AdminQueries';
     const path = '/listUsersInGroup';
     const myInit = {
@@ -192,10 +202,8 @@ const AdminUsers = () => {
     try {
       const mergeGroup: any = groupDental.concat(groupCancelDental);
       try {
-        ApiManager.getListDentists().then(listDentists => {
+        void ApiManager.getListDentists().then(listDentists => {
           const arr: any[] = [];
-          console.log(listDentists);
-          console.log(mergeGroup);
           mergeGroup.forEach((item: any, key: any) => {
             const arr2 = {
               email: '',
@@ -232,8 +240,8 @@ const AdminUsers = () => {
     }
   }
 
-  function downloadCSV(csv: any[] | BlobPart) {
-    let csvDataExcel = [];
+  const downloadCSV = () => {
+    let csvDataExcel: any = [];
 
     oldDentists.forEach((item: any) => {
       csvDataExcel.push(
@@ -242,11 +250,11 @@ const AdminUsers = () => {
         ['Post Code', item.postCode ? item.postCode : 'none'],
         ['Last Logged In', item.UserLastModifiedDate ? getFullDate(item) : 'none'],
         ['Subscription', item.subscription ? item.subscription : 'none'],
-        [null, ''],
+        [null, '']
       );
     });
 
-    csvDataExcel = csvDataExcel.map(function(el) {
+    csvDataExcel = csvDataExcel.map(function(el: any[]) {
       return [el[0], '"' + el[1] + '"'].join(el[0] ? ' - ' : '') + '\r\n';
     });
     saveAs(new Blob(csvDataExcel, { type: 'text/csv' }), 'Users.csv');
@@ -384,24 +392,31 @@ const AdminUsers = () => {
     }
   };
 
-  const filterOnDate = () => {
-    // const currentDate = Date.now()
-    let dsfdfs;
-
-    dsfdfs = oldDentists.sort((a: any, b: any) => {
-      console.log(new Date(a.UserCreateDate).getTime() - new Date(b.UserCreateDate).getTime());
-      console.log();
-      Number(new Date(a.UserCreateDate).getTime()) - Number(new Date(b.UserCreateDate).getTime())
-      // console.log(dsfdfs > currentDate);
-      // return !((start && start > dsfdfs) || (end && end < dsfdfs));
+  const filterOnAsc = () => {
+    let filterDate;
+    setDentists(null);
+    setTimeout(() => {
+      filterDate = dentists.sort(function(a: any, b: any) {
+        a = new Date(a.UserCreateDate).getTime();
+        b = new Date(b.UserCreateDate).getTime();
+        return a > b ? -1 : a < b ? 1 : 0;
+      });
+      setDentists(filterDate);
     });
-    setDentists(dsfdfs)
-    console.log(dsfdfs);
-    // oldDentists.map((el: any) => {
-    //   console.log(new Date(getDate(el)));
-    //   console.log(currentDate);
-    // })
-  }
+  };
+
+  const filterOnDesc = () => {
+    let filterDate;
+    setDentists(null);
+    setTimeout(() => {
+      filterDate = dentists.sort(function(a: any, b: any) {
+        a = new Date(a.UserCreateDate).getTime();
+        b = new Date(b.UserCreateDate).getTime();
+        return a < b ? -1 : a > b ? 1 : 0;
+      });
+      setDentists(filterDate);
+    });
+  };
 
   return (
     <section className='container-profile'>
@@ -414,18 +429,28 @@ const AdminUsers = () => {
               <p className='form-login-subtitle gray px12 mb-6px'>Search Users</p>
             </div>
           </div>
-          <div className='search'>
-            <input className='search-users'
-                   type='search'
-                   id='search'
-                   name='search'
-                   onChange={e => changeSearch(e.target.value)}
-                   placeholder='Search users' />
-            <img className='search-button' src='../../../images/search.svg' alt='search' />
-          </div>
+          <AdminUser__searchPanel_wrapperFlexRow>
+            <AdminUser__searchPanel_leftSide>
+              <AdminUser__searchIcon className='search-button' src='../../../images/search.svg' alt='search' />
+              <AdminUser__searchInput
+                type='search'
+                id='search'
+                name='search'
+                onChange={e => changeSearch(e.target.value)}
+                placeholder='Search users' />
+            </AdminUser__searchPanel_leftSide>
+            <AdminUser__searchPanel_rightSide>
+              <ButtonGreen onClick={listUsersGroupDental}>Reset all filters</ButtonGreen>
+            </AdminUser__searchPanel_rightSide>
+          </AdminUser__searchPanel_wrapperFlexRow>
           <div className='user-list-header'>
-            <div className='form-profile-label'>Dentist</div>
-            <div className='form-profile-label select-area' id='account_opened' onClick={filterOnDate}>Account Opened
+            <div className='form-profile-label select-area' id='account_sort'>Dentist
+              <ul className='account_sort'>
+                <li onClick={() => filterOnAsc()}>Sort Asc</li>
+                <li onClick={() => filterOnDesc()}>Sort Desc</li>
+              </ul>
+            </div>
+            <div className='form-profile-label select-area' id='account_opened'>Account Opened
               <ul className='account_opened'>
                 <li onClick={() => filterDate('Last Week')}>Last Week</li>
                 <li onClick={() => filterDate('Last Month')}>Last Month</li>
