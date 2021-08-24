@@ -4,7 +4,6 @@ import { Auth, Hub } from 'aws-amplify';
 import ApiManager from 'src/services/ApiManager';
 import TemporaryDrawer from '../MaterialUiDrawer';
 import { HeaderContainer } from './style';
-import Button from '@material-ui/core/Button';
 
 const initState: any = {
   signedInUser: false,
@@ -95,7 +94,7 @@ class Header extends React.Component {
                   </svg>
                 </div>
               </a>
-              <Button onClick={this.signOut} color='inherit'>Logout</Button>
+              <button onClick={this.signOut} className='square_btn'>Logout</button>
             </div>
           )}
             </div>
