@@ -113,7 +113,7 @@ const Registration = ({}) => {
         });
         setValues({ ...values, user });
       } catch (error) {
-        setMessageSnackbar(error.message);
+        setMessageSnackbar('An error occured during registration, please check your information and try again!');
         setSeverity('warning');
         setOpenSnackbar(true);
       }

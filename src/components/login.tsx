@@ -113,6 +113,7 @@ const Login = () => {
     } else if (!passwordRegex.test(values.password)) {
       errors.password = '*Invalid password. Must contain one number.';
     }
+    return errors
   };
 
   const formikAuth = useFormik({
@@ -148,7 +149,7 @@ const Login = () => {
         setOpenSnackbar(true);
       } catch (error) {
         setValues({ ...values, loaderButtonSubmit: false, loader: false });
-        setMessageSnackbar(error.message);
+        setMessageSnackbar('The username or password is incorrect!');
         setSeverity('warning');
         setOpenSnackbar(true);
       }
@@ -209,7 +210,7 @@ const Login = () => {
             {formikAuth.errors.email ? <AuthInputError>{formikAuth.errors.email}</AuthInputError> : null}
           </AuthInputWrapper>
           <AuthInputWrapper>
-            <p className='form-login-input'>
+            <p className='form-login-input' style={{position: 'relative'}}>
               <input
                 type='password'
                 name='password'
@@ -218,6 +219,7 @@ const Login = () => {
                 value={formikAuth.values.password}
                 onChange={formikAuth.handleChange}
               />
+              {/* <span style={{ position: 'absolute', top: '-5px', fontSize: '12px', color: 'red', width: '100%'}}>{formikAuth.errors.password}</span> */}
               <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
                 void formikAuth.setValues({ ...formikAuth.values, password: '' });
               }} />
