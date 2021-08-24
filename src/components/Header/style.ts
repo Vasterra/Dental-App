@@ -47,4 +47,19 @@ export const HeaderContainer = styled.div`
   .login-button{
     color: 'white'
   }
+
+  .square_btn {
+    display: inline-block;
+    padding: 0.3em 1em;
+    text-decoration: none;
+    background: transparent;
+    color: white;
+    transition: .4s;
+    border-radius: 20px;
+  }
+
+  .square_btn:hover {
+      background: white;
+      color: #095C5C;
+}
 `

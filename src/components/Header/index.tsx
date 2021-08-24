@@ -77,10 +77,10 @@ class Header extends React.Component {
                 </div>
               </a>}
               <Link href={'../../../login'}>
-                <Button color='inherit'>Login</Button>
+                <button className='square_btn'>Login</button>
               </Link>
               <Link href={'../../../registration'}>
-                <Button color='inherit'>Register</Button>
+                <button className='square_btn'>Register</button>
               </Link>
             </div>
           )}
