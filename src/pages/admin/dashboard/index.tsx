@@ -5,10 +5,11 @@ import ApiManager from 'src/services/ApiManager';
 import Menu from 'src/components/menu';
 import Error from 'next/error';
 import moment from 'moment';
+import { IAnalytics, IDentist, IImages, IListClosedAccounts, IListClosedSubscriptions } from '../../../types/types';
 
 const AdminDashboard = () => {
 
-  const [analytics, setAnalytics] = useState();
+  const [analytics, setAnalytics] = useState<IAnalytics>();
 
   useEffect(() => {
     setTimeout(() => {
@@ -19,13 +20,11 @@ const AdminDashboard = () => {
   const getListDentists = () => {
     const currentDate = moment();
     try {
-      void ApiManager.getListDentists().then(listDentists => {
-        void ApiManager.getListImages().then(listImages => {
-          void ApiManager.GET_LIST_CLOSED_ACCOUNTS().then(listClosedAccounts => {
-            void ApiManager.GET_LIST_CLOSED_SUBSCRIPTIONS().then(listClosedSubscriptions => {
-
+      void ApiManager.GET_LIST_DENTIST().then((listDentists: IDentist[]) => {
+        void ApiManager.GET_LIST_IMAGES().then((listImages: IImages[]) => {
+          void ApiManager.GET_LIST_CLOSED_ACCOUNTS().then((listClosedAccounts: IListClosedAccounts[]) => {
+            void ApiManager.GET_LIST_CLOSED_SUBSCRIPTIONS().then((listClosedSubscriptions: IListClosedSubscriptions[]) => {
               return setAnalytics({
-                // @ts-ignore
                 totalSubscriptions: listDentists.filter((item: any) => item.hasPaidPlan).length,
                 totalFreeAccounts: listDentists.filter((item: any) => !item.hasPaidPlan).length,
                 totalSubscriptionsClosed: listClosedSubscriptions.length,

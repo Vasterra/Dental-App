@@ -108,9 +108,9 @@ const Services = () => {
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-    void ApiManager.getListDentists().then((listDentists: any) => {
+    void ApiManager.GET_LIST_DENTIST().then((listDentists: any) => {
       listDentists.forEach((dentist: { id: any; }) => {
-        void ApiManager.getDentist(dentist.id).then(dent => {
+        void ApiManager.GET_DENTIST(dentist.id).then(dent => {
           dent.services.items.forEach(async (service: any) => {
             if (service.name === item.name) {
               await API.graphql({
@@ -161,18 +161,14 @@ const Services = () => {
         <div className='box-2-box'>
           <div className='profile-block-box'>
             <div>
-              <p className='form-profile-label'>
-                <label className='form-profile-label'>Add Service</label>
-              </p>
-              <p>
-                <input className='form-profile-input'
-                       type='text'
-                       name='add_service'
-                       id='add_service'
-                       value={service}
-                       onChange={(e: any) => setService(e.target.value)}
-                       placeholder='Service Name Here' />
-              </p>
+              <label className='form-profile-label'>Add Service</label>
+              <input className='form-profile-input'
+                     type='text'
+                     name='add_service'
+                     id='add_service'
+                     value={service}
+                     onChange={(e: any) => setService(e.target.value)}
+                     placeholder='Service Name Here' />
             </div>
             <p className='row-content'>
               <button className='button-green' onClick={addServiceForDental}>Add service</button>

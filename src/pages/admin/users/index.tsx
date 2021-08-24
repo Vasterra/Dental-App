@@ -12,45 +12,37 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { Pagination } from '@material-ui/lab';
 import { UserViewProfileBlock, UserViewProfileLink } from 'src/styles/PageUsers.module';
-import { CircularProgress, Snackbar } from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { ButtonRedOutline } from 'src/styles/Buttons.module';
 import ApiManager from 'src/services/ApiManager';
-import { deleteDentist, updateDentist } from '../../../graphql/mutations';
 import { saveAs } from 'file-saver';
-
-import {
-  AdminUser__searchIcon,
-  AdminUser__searchInput,
-  AdminUser__searchPanel_leftSide,
-  AdminUser__searchPanel_rightSide,
-  AdminUser__searchPanel_wrapperFlexRow
-} from '../../../styles/AdminUser.module';
-import { ButtonGreen } from '../../../styles/Globals.module';
+import UsersSearchPanel from '../../../components/users/usersSearchPanel';
+import { IDentists } from '../../../types/types';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
 }
 
+const articlesOnPage: any = 10;
+
 const AdminUsers = () => {
 
-  const articlesOnPage = 10;
+  const [dentists, setDentists] = useState<IDentists[]>([]);
+  const [oldDentists, setOldDentists] = useState<IDentists[]>([]);
+  const [userInfoShow, setUserInfoShow] = useState<boolean>(false);
+  const [countPagination, setCountPagination] = useState<any>();
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const [openSuspend, setOpenSuspend] = useState<boolean>(false);
+  const [deleteAccount, setDeleteAccount] = useState<string>('');
+  const [suspendAccount, setSuspendAccount] = useState<string>('');
+  const [accountToDelete, setAccountToDelete] = useState<any>();
+  const [groupName, setGroupName] = useState<string>('');
+  const [gdcNumber, setGdcNumber] = useState<string>('');
 
-  const [dentists, setDentists]: any = useState();
-  const [oldDentists, setOldDentists]: any = useState();
-  const [userInfoShow, setUserInfoShow]: any = useState(false);
-  const [countPagination, setCountPagination]: any = useState();
-  const [openDelete, setOpenDelete] = React.useState(false);
-  const [openSuspend, setOpenSuspend] = React.useState(false);
-  const [deleteAccount, setDeleteAccount] = useState('');
-  const [suspendAccount, setSuspendAccount] = useState('');
-  const [accountToDelete, setAccountToDelete]: any = useState();
-  const [groupName, setGroupName] = useState();
-  const [gdcNumber, setGdcNumber] = useState('');
-
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [messageSnackbar, setMessageSnackbar] = useState('');
-  const [severity, setSeverity] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [messageSnackbar, setMessageSnackbar] = useState<string>('');
+  const [severity, setSeverity] = useState<any>();
 
   const variants = {
     visible: { opacity: 1, height: 'auto' },
@@ -64,8 +56,7 @@ const AdminUsers = () => {
   const changeSearch = (e: any) => {
     const allDentists: any[] = [];
     oldDentists.forEach((dentist: { email: string; }) => {
-      console.log(dentist);
-      if (dentist.email.toLowerCase().indexOf(e) === 0) {
+      if (dentist.email.toLowerCase().indexOf(e.target.value) === 0) {
         allDentists.push(dentist);
       }
     });
@@ -100,7 +91,7 @@ const AdminUsers = () => {
 
   const filterDate = (filter: any) => {
     const currentDate = moment();
-    let filteredDentists;
+    let filteredDentists: IDentists[] = [];
     if (filter === 'Last Week') {
       filteredDentists = oldDentists.filter((item: any) => moment(item.UserCreateDate).isSame(currentDate, 'week'));
     } else if (filter === 'Last Month') {
@@ -164,7 +155,7 @@ const AdminUsers = () => {
   };
 
   const listUsersGroupDental = async () => {
-    setDentists(null);
+    setDentists([]);
     const apiName = 'AdminQueries';
     const path = '/listUsersInGroup';
     const myInit = {
@@ -186,7 +177,7 @@ const AdminUsers = () => {
     }
   };
 
-  async function getListUser(groupDental: string | any[], groupCancelDental: any) {
+  async function getListUser(groupDental: IDentists[], groupCancelDental: IDentists[]) {
     const apiName = 'AdminQueries';
     const path = '/listUsers';
     const myInit = {
@@ -198,13 +189,13 @@ const AdminUsers = () => {
         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
       }
     };
-    const { NextToken, ...rest } = await API.get(apiName, path, myInit);
+    await API.get(apiName, path, myInit);
     try {
-      const mergeGroup: any = groupDental.concat(groupCancelDental);
+      const mergeGroup: IDentists[] = groupDental.concat(groupCancelDental);
       try {
-        void ApiManager.getListDentists().then(listDentists => {
+        void ApiManager.GET_LIST_DENTIST().then(listDentists => {
           const arr: any[] = [];
-          mergeGroup.forEach((item: any, key: any) => {
+          mergeGroup.forEach((item: IDentists, key: any) => {
             const arr2 = {
               email: '',
               gdcNumber: '',
@@ -226,7 +217,8 @@ const AdminUsers = () => {
               ...arr2
             });
           });
-          setCountPagination(Math.ceil(arr.length / articlesOnPage));
+          const antPag: any = Math.ceil(arr.length / articlesOnPage);
+          setCountPagination(antPag);
           setDentists(arr);
           setOldDentists(arr);
           setGdcNumber('');
@@ -234,14 +226,13 @@ const AdminUsers = () => {
       } catch (e) {
         console.log(e);
       }
-      return rest;
     } catch (error) {
       console.error('There as an Error', error);
     }
   }
 
   const downloadCSV = () => {
-    let csvDataExcel: any = [];
+    let csvDataExcel: any[] = [];
 
     oldDentists.forEach((item: any) => {
       csvDataExcel.push(
@@ -258,7 +249,7 @@ const AdminUsers = () => {
       return [el[0], '"' + el[1] + '"'].join(el[0] ? ' - ' : '') + '\r\n';
     });
     saveAs(new Blob(csvDataExcel, { type: 'text/csv' }), 'Users.csv');
-  }
+  };
 
   async function addUserToGroup() {
     const apiName = 'AdminQueries';
@@ -334,16 +325,7 @@ const AdminUsers = () => {
   const onRemoveAccount = async () => {
     if (deleteAccount.toUpperCase() === 'DELETE') {
       handleClose('delete');
-      await API.graphql({
-        query: deleteDentist,
-        variables: {
-          input: {
-            id: accountToDelete.Username
-          }
-        },
-        // @ts-ignore
-        authMode: 'AWS_IAM'
-      });
+      await ApiManager.DELETE_DENTIST(accountToDelete);
       await ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.Username);
       await addUserToGroup();
     }
@@ -376,17 +358,7 @@ const AdminUsers = () => {
       updateInput[key].style.color = 'var(--color-white)';
       updateInput[key].style.borderBottom = 'none';
       if (gdcNumber.length !== 0) {
-        await API.graphql({
-          query: updateDentist,
-          variables: {
-            input: {
-              id: dentist.Username,
-              gdcNumber
-            }
-          },
-          // @ts-ignore
-          authMode: 'AWS_IAM'
-        });
+        await ApiManager.GET_UPDATE_DENTISTS(dentist, gdcNumber);
         await listUsersGroupDental();
       }
     }
@@ -394,7 +366,7 @@ const AdminUsers = () => {
 
   const filterOnAsc = () => {
     let filterDate;
-    setDentists(null);
+    setDentists([]);
     setTimeout(() => {
       filterDate = dentists.sort(function(a: any, b: any) {
         a = new Date(a.UserCreateDate).getTime();
@@ -407,7 +379,7 @@ const AdminUsers = () => {
 
   const filterOnDesc = () => {
     let filterDate;
-    setDentists(null);
+    setDentists([]);
     setTimeout(() => {
       filterDate = dentists.sort(function(a: any, b: any) {
         a = new Date(a.UserCreateDate).getTime();
@@ -429,20 +401,7 @@ const AdminUsers = () => {
               <p className='form-login-subtitle gray px12 mb-6px'>Search Users</p>
             </div>
           </div>
-          <AdminUser__searchPanel_wrapperFlexRow>
-            <AdminUser__searchPanel_leftSide>
-              <AdminUser__searchIcon className='search-button' src='../../../images/search.svg' alt='search' />
-              <AdminUser__searchInput
-                type='search'
-                id='search'
-                name='search'
-                onChange={e => changeSearch(e.target.value)}
-                placeholder='Search users' />
-            </AdminUser__searchPanel_leftSide>
-            <AdminUser__searchPanel_rightSide>
-              <ButtonGreen onClick={listUsersGroupDental}>Reset all filters</ButtonGreen>
-            </AdminUser__searchPanel_rightSide>
-          </AdminUser__searchPanel_wrapperFlexRow>
+          <UsersSearchPanel changeSearch={changeSearch} listUsersGroupDental={listUsersGroupDental} />
           <div className='user-list-header'>
             <div className='form-profile-label select-area' id='account_sort'>Dentist
               <ul className='account_sort'>
@@ -470,7 +429,7 @@ const AdminUsers = () => {
               <img className='pl-13' src='../../../images/arrow-bottom.svg' alt='arrow bottom' />
             </a>
           </div>
-          {!dentists && <div className='flex-wrapper'><CircularProgress size={120} /></div>}
+          {/*{dentists.length === 0 && <div className='flex-wrapper'><CircularProgress size={120} /></div>}*/}
           {dentists && dentists.map((item: any, key: any) => {
             return (key < 10 ? <div className='user-block' key={key}>
                 <div className='user-list user-list-text bg-white user-data'>
@@ -598,9 +557,7 @@ const AdminUsers = () => {
         </DialogActions>
       </Dialog>
       <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar}
-          // @ts-ignore
-               severity={severity}>
+        <Alert onClose={handleCloseSnackbar} severity={severity}>
           {messageSnackbar}
         </Alert>
       </Snackbar>

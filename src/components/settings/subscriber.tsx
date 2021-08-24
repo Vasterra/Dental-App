@@ -10,6 +10,7 @@ import {
   Theme,
   withStyles
 } from '@material-ui/core';
+import { IAdminSettingsSubscribers } from '../../types/types';
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
   focusVisible?: string;
@@ -78,7 +79,7 @@ const AntSwitch = withStyles((theme: Theme) =>
 
 const Subscriber = () => {
 
-  const [adminSettingsSubscriber, setAdminSettingsSubscriber]: any = useState();
+  const [adminSettingsSubscriber, setAdminSettingsSubscriber] = useState<IAdminSettingsSubscribers>();
 
   useEffect(() => {
     void createAdminSettingsSubscriber();
@@ -91,7 +92,21 @@ const Subscriber = () => {
   };
 
   const handleChange = async (name: any, value: any) => {
-    setAdminSettingsSubscriber({ ...adminSettingsSubscriber, [name]: value });
+    setAdminSettingsSubscriber({
+      createdAt: '',
+      freeAppearVerified: false,
+      freeMaxLocations: '',
+      freeMaxServices: '',
+      freePhoneNumber: false,
+      freeWebsiteAddress: false,
+      id: '',
+      owner: '',
+      paidAppearVerified: false,
+      paidMaxLocations: '',
+      paidMaxServices: '',
+      paidPhoneNumber: false,
+      paidWebsiteAddress: false,
+      updatedAt: '', ...adminSettingsSubscriber, [name]: value });
     await ApiManager.updateAdminSettingsSubscribers({ ...adminSettingsSubscriber, [name]: value });
   };
 
@@ -132,7 +147,7 @@ const Subscriber = () => {
                   />
                 </p>
               </div>
-              <div></div>
+              <div/>
             </div>
             <div className='double-blocks-3'>
               <div>
@@ -210,7 +225,7 @@ const Subscriber = () => {
                   />
                 </p>
               </div>
-              <div></div>
+              <div/>
             </div>
             <div className='double-blocks-3'>
               <div>

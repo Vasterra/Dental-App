@@ -103,7 +103,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
 
   const getListDentists = async (dentist: any) => {
     try {
-      ApiManager.getListDentists().then(listDentitst => {
+      ApiManager.GET_LIST_DENTIST().then(listDentitst => {
         listDentitst.map((item: any) => {
           if (item.id === dentist.attributes.sub) {
             const nameFull: any = item.firstName ? item.firstName : '' + ' ' + item.lastName ? item.lastName : '';
