@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ApiManager from 'src/services/ApiManager';
 import Dashboard from 'src/pages/admin/dashboard';
-import { Auth } from 'aws-amplify';
+import { Auth, Storage } from 'aws-amplify';
 import Error from 'next/error';
 import clsx from 'clsx';
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -14,66 +14,70 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import { Button } from '@material-ui/core';
+import { Button, Snackbar } from '@material-ui/core';
+import { IDentist } from '../types/types';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
+import { MenuAvatar, MenuAvatar__DownloadInput, MenuAvatar__DownloadLabel } from '../styles/Menu.module';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex',
+      display: 'flex'
     },
     appBar: {
       transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
+        duration: theme.transitions.duration.leavingScreen
+      })
     },
     appBarShift: {
       width: `calc(100% - ${drawerWidth}px)`,
       transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
+        duration: theme.transitions.duration.enteringScreen
+      })
     },
     title: {
-      flexGrow: 1,
+      flexGrow: 1
     },
     hide: {
-      display: 'none',
+      display: 'none'
     },
     drawer: {
-      flexShrink: 0,
+      flexShrink: 0
     },
     drawerHeader: {
       display: 'flex',
       alignItems: 'center',
       padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
       ...theme.mixins.toolbar,
-      justifyContent: 'flex-start',
+      justifyContent: 'flex-start'
     },
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
+        duration: theme.transitions.duration.leavingScreen
+      })
     },
     contentShift: {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
+        duration: theme.transitions.duration.enteringScreen
       }),
-      marginRight: 0,
-    },
-  }),
+      marginRight: 0
+    }
+  })
 );
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 type Props = {
   active: any,
@@ -84,33 +88,33 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [dentist, setDentist]: any = useState();
-  const [currentAuthenticatedUser, setCurrentAuthenticatedUser]: any = useState();
-  const [fullName, setFullName] = useState('');
-  const [emailDentist, setEmailDentist] = useState('');
+  const [dentist, setDentist] = useState<any>();
   const [open, setOpen] = React.useState(false);
+  const [currentAvatar, setCurrentAvatar] = useState('');
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity] = useState<any>();
 
   useEffect(() => {
-    getCurrentAuthenticatedUser();
+    void getCurrentAuthenticatedUser();
   }, []);
 
   const getCurrentAuthenticatedUser = async () => {
     await Auth.currentAuthenticatedUser().then(result => {
-      setCurrentAuthenticatedUser(result);
-      getListDentists(result);
+      void getListDentists(result);
     });
   };
 
   const getListDentists = async (dentist: any) => {
     try {
-      ApiManager.GET_LIST_DENTIST().then(listDentitst => {
-        listDentitst.map((item: any) => {
+      await ApiManager.GET_LIST_DENTIST().then((listDentists: IDentist[]) => {
+        listDentists.map((item: any) => {
           if (item.id === dentist.attributes.sub) {
-            const nameFull: any = item.firstName ? item.firstName : '' + ' ' + item.lastName ? item.lastName : '';
-            const email: any = item.email ? item.email : '';
-            setFullName(nameFull);
-            setEmailDentist(email);
+            // const nameFull: any = item.firstName ? item.firstName : '' + ' ' + item.lastName ? item.lastName : '';
+            // const email: any = item.email ? item.email : '';
             setDentist(item);
+            downloadAvatar(item);
           }
         });
       });
@@ -127,15 +131,59 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
     setOpen(false);
   };
 
+  const downloadAvatar = (currentDentist: any) => {
+    void ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
+      setCurrentAvatar(signedFiles);
+    });
+  };
+
+  const uploadAvatar = async (files: any) => {
+    files.preventDefault();
+    const file: any = files.target.files[0];
+    const filename = file.name.split('.');
+    try {
+      await Storage.put('avatars/' + dentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
+        level: 'public',
+        contentType: 'image/png'
+      }).then(async (result: any) => {
+        let signedFiles: any = Storage.get(result.key);
+        signedFiles = await signedFiles.then((item: any) => {
+          return item;
+        });
+        setMessageSnackbar('The avatar upload successfully!');
+        setSeverity('success');
+        setOpenSnackbar(true);
+        setCurrentAvatar(signedFiles);
+        downloadAvatar(dentist);
+      })
+      .catch(() => {
+        setMessageSnackbar('The avatar was not uploaded!');
+        setSeverity('warning');
+        setOpenSnackbar(true);
+      });
+    } catch (error) {
+      setMessageSnackbar(`Error uploading file: ${error}`);
+      setSeverity('warning');
+      setOpenSnackbar(true);
+    }
+  };
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
   return (
     <>
       <div className='leftmenu'>
         <div className='mobile-topmenu'>
           <p className='menu' id='mobile_menu'>
             <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="end"
+              color='inherit'
+              aria-label='open drawer'
+              edge='end'
               onClick={handleDrawerOpen}
               className={clsx(open && classes.hide)}
             >
@@ -165,7 +213,21 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
             </a>
           </p>
           <div className='leftmenu-user-information'>
-            <img className='user-image' src='../../../images/user-image.png' alt='user image' />
+            {currentAvatar && <>
+              <MenuAvatar src={currentAvatar} alt='user image' />
+              <MenuAvatar__DownloadLabel>
+                <CloudDownloadIcon />
+                <MenuAvatar__DownloadInput type='file' onChange={uploadAvatar} />
+              </MenuAvatar__DownloadLabel>
+            </>
+            }
+            {!currentAvatar && <>
+              <img className='user-image' src='../../../images/user-image.png' alt='user image' />
+              <MenuAvatar__DownloadLabel>
+                <CloudDownloadIcon />
+                <MenuAvatar__DownloadInput type='file' onChange={uploadAvatar} />
+              </MenuAvatar__DownloadLabel>
+            </>}
             {dentist &&
             <p className='user-description white'><span>{dentist.firstName}</span> <span>{dentist.lastName}</span></p>}
           </div>
@@ -189,16 +251,21 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
               </li>
             </Link>
             <li className='leftmenu-list logout'>
-              <a className='leftmenu-link bold' href='/' onClick={ApiManager.signOut}>Logout</a>
+              <a className='leftmenu-link bold' href='/' onClick={() => void ApiManager.signOut}>Logout</a>
               <img className='leftmenu-link-image' src='../../../images/left-arrow.svg' alt='link image' />
             </li>
           </ul>
         </div>
       </div>
+      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity={severity}>
+          {messageSnackbar}
+        </Alert>
+      </Snackbar>
       <Drawer
         className={classes.drawer}
-        variant="persistent"
-        anchor="left"
+        variant='persistent'
+        anchor='left'
         open={open}
       >
         <div className={classes.drawerHeader}>
@@ -218,9 +285,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
         </List>
       </Drawer>
     </>
-
   );
-
 };
 
 export default Login;

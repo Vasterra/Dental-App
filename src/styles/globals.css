@@ -262,7 +262,7 @@ img {
 }
 
 .user-image {
-  margin-right: 22px;
+  /*margin-right: 22px;*/
   width: 100px;
   max-width: 100%;
   height: auto;
