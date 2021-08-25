@@ -251,7 +251,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
               </li>
             </Link>
             <li className='leftmenu-list logout'>
-              <a className='leftmenu-link bold' href='/' onClick={() => void ApiManager.signOut}>Logout</a>
+              <a className='leftmenu-link bold' href='/' onClick={() => Auth.signOut()}>Logout</a>
               <img className='leftmenu-link-image' src='../../../images/left-arrow.svg' alt='link image' />
             </li>
           </ul>

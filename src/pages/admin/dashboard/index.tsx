@@ -22,6 +22,7 @@ const AdminDashboard = () => {
     try {
       void ApiManager.GET_LIST_DENTIST().then((listDentists: IDentist[]) => {
         void ApiManager.GET_LIST_IMAGES().then((listImages: IImages[]) => {
+          console.log(listImages);
           void ApiManager.GET_LIST_CLOSED_ACCOUNTS().then((listClosedAccounts: IListClosedAccounts[]) => {
             void ApiManager.GET_LIST_CLOSED_SUBSCRIPTIONS().then((listClosedSubscriptions: IListClosedSubscriptions[]) => {
               return setAnalytics({
@@ -29,12 +30,12 @@ const AdminDashboard = () => {
                 totalFreeAccounts: listDentists.filter((item: any) => !item.hasPaidPlan).length,
                 totalSubscriptionsClosed: listClosedSubscriptions.length,
                 totalAccountsClosed: listClosedAccounts.length,
-                totalImagesUploaded: listImages === [] ? listImages.length * 2 : 0,
+                totalImagesUploaded: listImages ? listImages.length * 2 : 0,
                 monthNewSubscriptions: listDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month') && item.hasPaidPlan).length,
                 monthNewFreeAccounts: listDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month') && !item.hasPaidPlan).length,
                 monthSubscriptionsClosed: listClosedSubscriptions.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length,
                 monthAccountsClosed: listClosedAccounts.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length,
-                monthImagesUploaded: listImages === [] ? listImages.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length * 2 : 0
+                monthImagesUploaded: listImages  ? listImages.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length * 2 : 0
               });
             });
           });

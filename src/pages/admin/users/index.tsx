@@ -12,7 +12,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { Pagination } from '@material-ui/lab';
 import { UserViewProfileBlock, UserViewProfileLink } from 'src/styles/PageUsers.module';
-import { Snackbar } from '@material-ui/core';
+import { CircularProgress, Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { ButtonRedOutline } from 'src/styles/Buttons.module';
 import ApiManager from 'src/services/ApiManager';
@@ -358,7 +358,11 @@ const AdminUsers = () => {
       updateInput[key].style.color = 'var(--color-white)';
       updateInput[key].style.borderBottom = 'none';
       if (gdcNumber.length !== 0) {
-        await ApiManager.GET_UPDATE_DENTISTS(dentist, gdcNumber);
+        await ApiManager.GET_UPDATE_DENTISTS(dentist, gdcNumber).then(() => {
+          setMessageSnackbar('The GDC number update successfully!');
+          setSeverity('success');
+          setOpenSnackbar(true);
+        })
         await listUsersGroupDental();
       }
     }
@@ -429,7 +433,7 @@ const AdminUsers = () => {
               <img className='pl-13' src='../../../images/arrow-bottom.svg' alt='arrow bottom' />
             </a>
           </div>
-          {/*{dentists.length === 0 && <div className='flex-wrapper'><CircularProgress size={120} /></div>}*/}
+          {dentists.length === 0 && <div className='flex-wrapper'><CircularProgress size={120} /></div>}
           {dentists && dentists.map((item: any, key: any) => {
             return (key < 10 ? <div className='user-block' key={key}>
                 <div className='user-list user-list-text bg-white user-data'>
@@ -496,7 +500,7 @@ const AdminUsers = () => {
               </div> : ''
             );
           })}
-          <Pagination count={countPagination} color='primary' onChange={changePagination} />
+          <Pagination count={countPagination} color='primary' onChange={changePagination} style={{marginTop: '10px'}}/>
         </div>
       </div>
       <Dialog open={openDelete} onClose={() => handleClose('delete')} aria-labelledby='form-dialog-title'>

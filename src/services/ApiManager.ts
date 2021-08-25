@@ -72,7 +72,7 @@ class ApiManager {
 
   public static GET_UPDATE_DENTISTS = async (dentist: { Username: any; }, gdcNumber: any) => {
     try {
-      await API.graphql({
+      return await API.graphql({
         query: updateDentist,
         variables: {
           input: {
