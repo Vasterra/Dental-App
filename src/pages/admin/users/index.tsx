@@ -433,7 +433,7 @@ const AdminUsers = () => {
               <img className='pl-13' src='../../../images/arrow-bottom.svg' alt='arrow bottom' />
             </a>
           </div>
-          {dentists.length === 0 && <div className='flex-wrapper'><CircularProgress size={120} /></div>}
+          {/*{dentists.length === 0 && <div className='flex-wrapper'><CircularProgress size={120} /></div>}*/}
           {dentists && dentists.map((item: any, key: any) => {
             return (key < 10 ? <div className='user-block' key={key}>
                 <div className='user-list user-list-text bg-white user-data'>

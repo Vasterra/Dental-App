@@ -35,7 +35,7 @@ const AdminDashboard = () => {
                 monthNewFreeAccounts: listDentists.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month') && !item.hasPaidPlan).length,
                 monthSubscriptionsClosed: listClosedSubscriptions.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length,
                 monthAccountsClosed: listClosedAccounts.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length,
-                monthImagesUploaded: listImages  ? listImages.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length * 2 : 0
+                monthImagesUploaded: listImages ? listImages.filter((item: any) => moment(item.createdAt).isSame(currentDate, 'month')).length * 2 : 0
               });
             });
           });
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
   const filterAnalytics = (year: any) => {
     console.log(year);
     console.log(analytics);
-  }
+  };
 
   return (
     <section className='container-profile'>
