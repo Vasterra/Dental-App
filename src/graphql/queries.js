@@ -20,6 +20,7 @@ export const getDentist = /* GraphQL */ `
       lat
       lng
       registered
+      IsDisabled
       hasPaidPlan
       services {
         items {
@@ -81,8 +82,8 @@ export const listDentists = /* GraphQL */ `
         phone
         qualifications
         bio
-        gdcNumber
         website
+        gdcNumber
         address
         city
         street
@@ -91,6 +92,7 @@ export const listDentists = /* GraphQL */ `
         lat
         lng
         registered
+        IsDisabled
         hasPaidPlan
         services {
           nextToken
@@ -266,7 +268,6 @@ export const getAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -295,54 +296,6 @@ export const listAdminSettingsSubscribers = /* GraphQL */ `
         freeAppearVerified
         createdAt
         updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const getAdminAnalytics = /* GraphQL */ `
-  query GetAdminAnalytics($id: ID!) {
-    getAdminAnalytics(id: $id) {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const listAdminAnalyticss = /* GraphQL */ `
-  query ListAdminAnalyticss(
-    $filter: ModelAdminAnalyticsFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listAdminAnalyticss(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        totalSubscriptions
-        totalFreeAccounts
-        totalSubscriptionsClosed
-        totalAccountsClosed
-        totalImagesUploaded
-        monthNewSubscriptions
-        monthNewFreeAccounts
-        monthSubscriptionsClosed
-        monthAccountsClosed
-        monthImagesUploaded
-        createdAt
-        updatedAt
-        owner
       }
       nextToken
     }

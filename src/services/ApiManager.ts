@@ -2,7 +2,6 @@ import { API, Auth, Hub, Storage } from 'aws-amplify';
 import Router from 'next/router';
 import { createClosedAccount, deleteDentist, updateAdminSettingsSubscriber, updateDentist } from '../graphql/mutations';
 import {
-  getAdminAnalytics,
   getAdminSettingsSubscriber,
   getDentist,
   listClosedAccounts,
@@ -104,16 +103,16 @@ class ApiManager {
     return data.listClosedSubscriptions.items;
   };
 
-  public static GET_ADMIN_ANALYTIC = async () => {
-    const { data }: any = await API.graphql({
-      query: getAdminAnalytics,
-      variables: {
-        id: '1'
-      },
-      authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
-    });
-    return data.getAdminAnalytics;
-  };
+  // public static GET_ADMIN_ANALYTIC = async () => {
+  //   const { data }: any = await API.graphql({
+  //     query: getAdminAnalytics,
+  //     variables: {
+  //       id: '1'
+  //     },
+  //     authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+  //   });
+  //   return data.getAdminAnalytics;
+  // };
 
   public static GET_ADMIN_SETTINGS_SUBSCRIBER = async () => {
     const { data }: any = await API.graphql({

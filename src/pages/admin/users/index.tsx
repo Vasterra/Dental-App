@@ -194,6 +194,7 @@ const AdminUsers = () => {
       const mergeGroup: IDentists[] = groupDental.concat(groupCancelDental);
       try {
         void ApiManager.GET_LIST_DENTIST().then(listDentists => {
+          console.log(listDentists);
           const arr: any[] = [];
           mergeGroup.forEach((item: IDentists, key: any) => {
             const arr2 = {
@@ -395,7 +396,7 @@ const AdminUsers = () => {
   };
 
   return (
-    <section className='container-profile'>
+    <section className='container-profile'>y
       <Menu active='Users' />
       <div className='main-profile bg-white '>
         <div className='profile-box-form'>
