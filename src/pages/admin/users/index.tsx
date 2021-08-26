@@ -197,7 +197,7 @@ const AdminUsers = () => {
       try {
         void ApiManager.GET_LIST_DENTIST().then(listDentists => {
           const arr: any[] = [];
-          mergeGroup.forEach((item: IDentists, key: any) => {
+          mergeGroup.forEach((item: IDentists) => {
             const arr2 = {
               email: '',
               gdcNumber: '',
@@ -206,12 +206,10 @@ const AdminUsers = () => {
               hasPaidPlan: false,
               suspend: false
             };
-            const sdgdg = listDentists.find((val: { id: string; }) => val.id === item.Username)
-            item.Username === sdgdg.id ? arr2.gdcNumber = sdgdg.gdcNumber : '';
+            const dentFind = listDentists.find((val: { id: string; }) => val.id === item.Username)
+            item.Username === dentFind.id ? arr2.gdcNumber = dentFind.gdcNumber : '';
             item.Attributes.forEach((val: any) => {
               val.Name === 'email' ? arr2.email = val.Value : '';
-
-
               val.Name === 'custom:postCode' ? arr2.postCode = val.Value : '';
               val.Name === 'custom:subscription' ? arr2.subscription = val.Value : '';
               val.Name === 'custom:hasPaidPlan' ? arr2.hasPaidPlan = val.Value : false;
@@ -379,6 +377,7 @@ const AdminUsers = () => {
           setSeverity('success');
           setOpenSnackbar(true);
         })
+        setGdcNumber('')
         await listUsersGroupDental();
       }
     }
@@ -494,7 +493,7 @@ const AdminUsers = () => {
                           <input type='text'
                                  className='gdc-update-input'
                                  name='gdcNumber'
-                                 value={gdcNumber ? gdcNumber : item.gdcNumber}
+                                 value={gdcNumber.length !== 0 ? gdcNumber : item.gdcNumber}
                                  id='gdcNumber'
                                  disabled
                                  onChange={(e: any) => setGdcNumber(e.target.value)}
