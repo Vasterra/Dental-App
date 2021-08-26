@@ -100,6 +100,7 @@ export interface IDentist {
   firstName: string
   gdcNumber: string
   hasPaidPlan: boolean
+  IsDisabled: boolean
   id: string
   images: IImages
   lastName: string

@@ -84,7 +84,6 @@ class ApiManager {
     } catch (error) {
       console.log(error);
     }
-
   };
 
   public static GET_LIST_CLOSED_ACCOUNTS = async () => {

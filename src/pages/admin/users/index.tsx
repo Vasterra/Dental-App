@@ -12,13 +12,15 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { Pagination } from '@material-ui/lab';
 import { UserViewProfileBlock, UserViewProfileLink } from 'src/styles/PageUsers.module';
-import { CircularProgress, Snackbar } from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { ButtonRedOutline } from 'src/styles/Buttons.module';
 import ApiManager from 'src/services/ApiManager';
 import { saveAs } from 'file-saver';
 import UsersSearchPanel from '../../../components/users/usersSearchPanel';
 import { IDentists } from '../../../types/types';
+import { updateDentist } from '../../../graphql/mutations';
+import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql/lib-esm/types';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -194,7 +196,6 @@ const AdminUsers = () => {
       const mergeGroup: IDentists[] = groupDental.concat(groupCancelDental);
       try {
         void ApiManager.GET_LIST_DENTIST().then(listDentists => {
-          console.log(listDentists);
           const arr: any[] = [];
           mergeGroup.forEach((item: IDentists, key: any) => {
             const arr2 = {
@@ -205,9 +206,12 @@ const AdminUsers = () => {
               hasPaidPlan: false,
               suspend: false
             };
+            const sdgdg = listDentists.find((val: { id: string; }) => val.id === item.Username)
+            item.Username === sdgdg.id ? arr2.gdcNumber = sdgdg.gdcNumber : '';
             item.Attributes.forEach((val: any) => {
               val.Name === 'email' ? arr2.email = val.Value : '';
-              item.Username === listDentists[key].id ? arr2.gdcNumber = listDentists[key].gdcNumber : '';
+
+
               val.Name === 'custom:postCode' ? arr2.postCode = val.Value : '';
               val.Name === 'custom:subscription' ? arr2.subscription = val.Value : '';
               val.Name === 'custom:hasPaidPlan' ? arr2.hasPaidPlan = val.Value : false;
@@ -336,6 +340,17 @@ const AdminUsers = () => {
     if (suspendAccount.toUpperCase() === 'SUSPEND') {
       handleClose('suspend');
       await addUserToGroup();
+      await API.graphql({
+        query: updateDentist,
+        variables: {
+          input: {
+            id: accountToDelete.Username,
+            IsDisabled: true
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
     }
   };
 
