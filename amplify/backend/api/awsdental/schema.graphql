@@ -16,7 +16,7 @@ type Dentist
   lat: String
   lng: String
   registered: Boolean
-  IsDisabled: Boolean
+  isDisabled: Boolean
   #  customerID: String
   #  paymentMethodID: String
   #  subscriptionID: String

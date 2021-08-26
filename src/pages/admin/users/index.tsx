@@ -20,7 +20,6 @@ import { saveAs } from 'file-saver';
 import UsersSearchPanel from '../../../components/users/usersSearchPanel';
 import { IDentists } from '../../../types/types';
 import { updateDentist } from '../../../graphql/mutations';
-import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql/lib-esm/types';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -269,11 +268,33 @@ const AdminUsers = () => {
     };
     await API.post(apiName, path, myInit);
     if (groupName === 'Dentists') {
-      void await removeUserFromGroup('CancelDental');
-      void await enableUser();
+      await API.graphql({
+        query: updateDentist,
+        variables: {
+          input: {
+            id: accountToDelete.Username,
+            isDisabled: false
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      await removeUserFromGroup('CancelDental');
+      await enableUser();
     } else {
-      void await removeUserFromGroup('Dentists');
-      void await disableUser();
+      await API.graphql({
+        query: updateDentist,
+        variables: {
+          input: {
+            id: accountToDelete.Username,
+            isDisabled: true
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      await removeUserFromGroup('Dentists');
+      await disableUser();
     }
   }
 
@@ -338,17 +359,6 @@ const AdminUsers = () => {
     if (suspendAccount.toUpperCase() === 'SUSPEND') {
       handleClose('suspend');
       await addUserToGroup();
-      await API.graphql({
-        query: updateDentist,
-        variables: {
-          input: {
-            id: accountToDelete.Username,
-            IsDisabled: true
-          }
-        },
-        // @ts-ignore
-        authMode: 'AWS_IAM'
-      });
     }
   };
 

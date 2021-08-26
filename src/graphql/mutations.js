@@ -23,7 +23,7 @@ export const createDentist = /* GraphQL */ `
       lat
       lng
       registered
-      IsDisabled
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -93,7 +93,7 @@ export const updateDentist = /* GraphQL */ `
       lat
       lng
       registered
-      IsDisabled
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -163,7 +163,7 @@ export const deleteDentist = /* GraphQL */ `
       lat
       lng
       registered
-      IsDisabled
+      isDisabled
       hasPaidPlan
       services {
         items {

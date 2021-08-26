@@ -20,7 +20,7 @@ export const getDentist = /* GraphQL */ `
       lat
       lng
       registered
-      IsDisabled
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -92,7 +92,7 @@ export const listDentists = /* GraphQL */ `
         lat
         lng
         registered
-        IsDisabled
+        isDisabled
         hasPaidPlan
         services {
           nextToken
