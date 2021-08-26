@@ -32,13 +32,13 @@ const MenuProps = {
 };
 
 const Services: React.FunctionComponent<Props> = ({ saveService, services, updateService }) => {
-  const [service, setService] = React.useState<string[]>(updateService ? updateService : []);
+  const [service, setService] = React.useState<string[]>([]);
   const theme = useTheme();
   const handleChange = (e: any) => {
     setService(e.target.value as string[]);
     saveService(e.target.value);
   };
-
+  console.log(updateService);
   return (
     <Select
       multiple

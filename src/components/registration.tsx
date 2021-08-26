@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ButtonForm from './Buttons/ButtonForm';
 import { Snackbar, TextField } from '@material-ui/core';
-import { Auth } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import Router from 'next/router';
 import { useFormik } from 'formik';
 import { Alert } from '@material-ui/lab';
@@ -113,7 +113,7 @@ const Registration = ({}) => {
         });
         setValues({ ...values, user });
       } catch (error) {
-        setMessageSnackbar(error.message);
+        setMessageSnackbar('An error occured during registration, please check your information and try again!');
         setSeverity('warning');
         setOpenSnackbar(true);
       }
@@ -210,7 +210,7 @@ const Registration = ({}) => {
             </p>
             {formik.errors.password ? <AuthInputError>{formik.errors.password}</AuthInputError> : null}
           </AuthInputWrapper>
-          <p className='form-login-buttons'>
+          <p className='form-login-buttons' style={{ marginTop: '30px' }}>
             <button type='submit' className='button-green'>Sign Up</button>
           </p>
         </form>

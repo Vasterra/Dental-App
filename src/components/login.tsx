@@ -99,7 +99,6 @@ const Login = () => {
   const validate = (values: any) => {
     const passwordRegex = /(?=.*[0-9])/;
     const errors: any = {};
-    console.log(values);
     if (!values.email) {
       errors.email = 'Required';
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -113,6 +112,7 @@ const Login = () => {
     } else if (!passwordRegex.test(values.password)) {
       errors.password = '*Invalid password. Must contain one number.';
     }
+    return errors
   };
 
   const formikAuth = useFormik({
@@ -147,6 +147,7 @@ const Login = () => {
         setSeverity('success');
         setOpenSnackbar(true);
       } catch (error) {
+        setValues({ ...values, loaderButtonSubmit: false, loader: false });
         setMessageSnackbar(error.message);
         setSeverity('warning');
         setOpenSnackbar(true);
@@ -164,6 +165,7 @@ const Login = () => {
             email: user.attributes.email,
             lat: result.lat,
             lng: result.lng,
+            isDisabled: false,
             firstName: user.attributes.name,
             registered: true,
             phone: user.attributes.phone_number,
@@ -185,7 +187,7 @@ const Login = () => {
 
   return (
 
-    <div className='main bg-login main-box'>
+    <div className='main bg-login main-height-full'>
       {values.resetPassword && <ForgotPassword backInSingIn={backInSingIn} setValues={setValues} values={values} />}
       {!values.resetPassword && <div className='form-login'>
         <p className='form-login-title green'>Login</p>
@@ -208,7 +210,7 @@ const Login = () => {
             {formikAuth.errors.email ? <AuthInputError>{formikAuth.errors.email}</AuthInputError> : null}
           </AuthInputWrapper>
           <AuthInputWrapper>
-            <p className='form-login-input'>
+            <p className='form-login-input' style={{position: 'relative'}}>
               <input
                 type='password'
                 name='password'
@@ -217,13 +219,14 @@ const Login = () => {
                 value={formikAuth.values.password}
                 onChange={formikAuth.handleChange}
               />
+              {/* <span style={{ position: 'absolute', top: '-5px', fontSize: '12px', color: 'red', width: '100%'}}>{formikAuth.errors.password}</span> */}
               <img className='form-login-input-close' src='../images/close.svg' onClick={() => {
                 void formikAuth.setValues({ ...formikAuth.values, password: '' });
               }} />
             </p>
             {formikAuth.errors.password ? <AuthInputError>{formikAuth.errors.password}</AuthInputError> : null}
           </AuthInputWrapper>
-          <div className='form-login-buttons'>
+          <div className='form-login-buttons' style={{ marginTop: '30px' }}>
             <button type='submit' disabled={values.loader} className='button-green'>{values.loaderButtonSubmit ?
               <FacebookCircularProgress /> : 'Login'}</button>
             <button className='button-white' disabled={values.loader} onClick={(e: SyntheticEvent) => {

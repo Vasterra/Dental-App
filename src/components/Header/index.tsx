@@ -1,11 +1,9 @@
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import Link from 'next/link';
 import React from 'react';
 import { Auth, Hub } from 'aws-amplify';
 import ApiManager from 'src/services/ApiManager';
 import TemporaryDrawer from '../MaterialUiDrawer';
+import { HeaderContainer } from './style';
 
 const initState: any = {
   signedInUser: false,
@@ -40,21 +38,33 @@ class Header extends React.Component {
     void ApiManager.SIGN_OUT();
   }
 
+  menuToggler = ()=>{
+    return (
+      <p className="menu" id="mobile_menu">
+      <svg className="menu-logo" xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 28 20" width="20px">
+          <path d="M0 0h24v24H0V0z" fill="none"/>
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+      </svg>
+      </p>
+    )
+  }
+
   render() {
     return (
-      <AppBar position='fixed' style={{ background: '#095c5c' }}>
-        <Toolbar style={{ justifyContent: 'space-between', display: 'flex' }}>
-          <div style={{ alignItems: 'center', display: 'flex' }}>
-            {this.state.signedInUser && <TemporaryDrawer currentUser={this.state.currentUser.username} />}
-          </div>
-          <a href='/'>
-            <a className='link-actve'>
-              <img src='../../images/FYD4_beige-on-green@2x.png'
-                   srcSet='../../images/FYD4_beige-on-green@2x.png 2x,
-             ../../images/FYD4_beige-on-green@3x.png 3x' className='logo-image'  alt='logo'/>
-            </a>
-          </a>
-          {!this.state.signedInUser && (
+      <HeaderContainer>
+        <section className='container fixed'>
+          <div className="header bg-green">
+            {/* {this.menuToggler()} */}
+            <TemporaryDrawer currentUser={this.state.currentUser}/>
+            <p>
+                <a href="/"> <img src="../images/FYD4_beige-on-green@2x.png"
+                    srcSet="../images/FYD4_beige-on-green@2x.png 2x,
+                ../images/FYD4_beige-on-green@3x.png 3x"
+                  className="logo-image"/>
+                </a>
+            </p>
+            <div>
+            {!this.state.signedInUser && (
             <div style={{ alignItems: 'center', display: 'flex' }}>
               {this.state.signedInUser && <a href={`../../dentist/account/'${this.state.currentUser.username}`}>
                 <div className='user-logo-circle'>
@@ -66,10 +76,10 @@ class Header extends React.Component {
                 </div>
               </a>}
               <Link href={'../../../login'}>
-                <Button color='inherit'>Login</Button>
+                <button className='square_btn'>Login</button>
               </Link>
               <Link href={'../../../registration'}>
-                <Button color='inherit'>Register</Button>
+                <button className='square_btn'>Register</button>
               </Link>
             </div>
           )}
@@ -84,11 +94,13 @@ class Header extends React.Component {
                   </svg>
                 </div>
               </a>
-              <Button onClick={this.signOut} color='inherit'>Logout</Button>
+              <button onClick={this.signOut} className='square_btn'>Logout</button>
             </div>
           )}
-        </Toolbar>
-      </AppBar>
+            </div>
+          </div>
+        </section>
+      </HeaderContainer>
     );
   }
 }
