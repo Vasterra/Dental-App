@@ -99,7 +99,6 @@ const Login = () => {
   const validate = (values: any) => {
     const passwordRegex = /(?=.*[0-9])/;
     const errors: any = {};
-    console.log(values);
     if (!values.email) {
       errors.email = 'Required';
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -149,7 +148,7 @@ const Login = () => {
         setOpenSnackbar(true);
       } catch (error) {
         setValues({ ...values, loaderButtonSubmit: false, loader: false });
-        setMessageSnackbar('The username or password is incorrect!');
+        setMessageSnackbar(error.message);
         setSeverity('warning');
         setOpenSnackbar(true);
       }
@@ -166,6 +165,7 @@ const Login = () => {
             email: user.attributes.email,
             lat: result.lat,
             lng: result.lng,
+            isDisabled: false,
             firstName: user.attributes.name,
             registered: true,
             phone: user.attributes.phone_number,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ButtonForm from './Buttons/ButtonForm';
 import { Snackbar, TextField } from '@material-ui/core';
-import { Auth } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import Router from 'next/router';
 import { useFormik } from 'formik';
 import { Alert } from '@material-ui/lab';

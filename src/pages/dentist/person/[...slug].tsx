@@ -26,6 +26,7 @@ const Person = ({ dentistData }: any) => {
   const [oldIMages, setOldIMages]: any = useState();
   const [route, setRoute]: any = useState();
   const [currentCover, setCurrentCover]: any = useState();
+  const [useriIsNotAuth, setUseriIsNotAuth]: any = useState();
 
   useEffect(() => {
     if (router.query.slug !== undefined) {
@@ -63,14 +64,14 @@ const Person = ({ dentistData }: any) => {
     }
   };
 
-  const getDentist = async (id: string) => {
-    await ApiManager.getDentist(route ? route : id)
-    .then(currentDentist => {
-      setCurrentDentist(currentDentist);
-      getListImages();
-      getListServiceForDentals();
-    });
-  };
+  // const getDentist = async (id: string) => {
+  //   await ApiManager.getDentist(route ? route : id)
+  //   .then(currentDentist => {
+  //     setCurrentDentist(currentDentist);
+  //     getListImages();
+  //     getListServiceForDentals();
+  //   });
+  // };
 
   const downloadAvatar = async () => {
     await ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
@@ -145,7 +146,6 @@ const Person = ({ dentistData }: any) => {
           allImages.push(item);
         }
       });
-      console.log('allImages', allImages);
       setTimeout(() => {
         setImages(allImages);
         setOldIMages(allImages);
@@ -163,33 +163,34 @@ const Person = ({ dentistData }: any) => {
     });
   };
 
-  if (!currentDentist) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
+  if (currentDentist.isDisabled) return <WrapperFlex><div>{useriIsNotAuth}</div></WrapperFlex>
+  if (!currentDentist && !currentDentist.isDisabled) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
 
-  return (
-    <>
-      <Header />
-      {currentDentist && !currentDentist.hasPaidPlan && <ProfileAccountFree
-        currentDentist={currentDentist}
-        images={images}
-        oldIMages={oldIMages}
-        services={services}
-        currentAvatar={currentAvatar}
-        setImages={setFuncImages}
-        downloadImages={downloadImages}
-      />}
-      {currentDentist && currentDentist.hasPaidPlan && <ProfileAccountSubscription
-        currentDentist={currentDentist}
-        images={images}
-        currentCover={currentCover}
-        oldIMages={oldIMages}
-        services={services}
-        currentAvatar={currentAvatar}
-        setImages={setFuncImages}
-        downloadImages={downloadImages}
-      />}
-      <Footer />
-    </>
-  );
+    return (
+      <>
+        <Header />
+        {currentDentist && !currentDentist.hasPaidPlan && <ProfileAccountFree
+          currentDentist={currentDentist}
+          images={images}
+          oldIMages={oldIMages}
+          services={services}
+          currentAvatar={currentAvatar}
+          setImages={setFuncImages}
+          downloadImages={downloadImages}
+        />}
+        {currentDentist && currentDentist.hasPaidPlan && <ProfileAccountSubscription
+          currentDentist={currentDentist}
+          images={images}
+          currentCover={currentCover}
+          oldIMages={oldIMages}
+          services={services}
+          currentAvatar={currentAvatar}
+          setImages={setFuncImages}
+          downloadImages={downloadImages}
+        />}
+        <Footer />
+      </>
+    );
 };
 
 
@@ -211,7 +212,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   } catch (e) {
     console.log(e);
   }
-  console.log('dentistData', dentistData);
   return {
     props: {
       // dentist: dentistData ? dentistData[0] : null
