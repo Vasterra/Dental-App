@@ -40,6 +40,7 @@ const AdminUsers = () => {
   const [accountToDelete, setAccountToDelete] = useState<any>();
   const [groupName, setGroupName] = useState<string>('');
   const [gdcNumber, setGdcNumber] = useState<string>('');
+  const [statusForModalTitle, setStatusForModalTitle] = useState<string>('');
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [messageSnackbar, setMessageSnackbar] = useState<string>('');
@@ -126,6 +127,7 @@ const AdminUsers = () => {
   const handleClickOpen = (account: any, groupname: any, open: any) => {
     setAccountToDelete(account);
     setGroupName(groupname);
+    setStatusForModalTitle(open);
     open === 'delete' ? setOpenDelete(true) : setOpenSuspend(true);
   };
 
@@ -356,7 +358,7 @@ const AdminUsers = () => {
   };
 
   const onSuspendAccount = async () => {
-    if (suspendAccount.toUpperCase() === 'SUSPEND') {
+    if (suspendAccount.toUpperCase() === statusForModalTitle.toUpperCase()) {
       handleClose('suspend');
       await addUserToGroup();
     }
@@ -420,7 +422,7 @@ const AdminUsers = () => {
   };
 
   return (
-    <section className='container-profile'>y
+    <section className='container-profile'>
       <Menu active='Users' />
       <div className='main-profile bg-white '>
         <div className='profile-box-form'>
@@ -488,7 +490,7 @@ const AdminUsers = () => {
                         {
                           !item.Enabled ?
                             <button className='button-green-outline border-white'
-                                    onClick={() => handleClickOpen(item, 'Dentists', 'suspend')}>
+                                    onClick={() => handleClickOpen(item, 'Dentists', 'activate')}>
                               Activate
                             </button> :
                             <button className='button-green-outline border-white'
@@ -558,13 +560,13 @@ const AdminUsers = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={openSuspend} onClose={() => handleClose('suspend')} aria-labelledby='form-dialog-title'>
+      <Dialog open={openSuspend} onClose={() => handleClose(statusForModalTitle)} aria-labelledby='form-dialog-title'>
         <DialogTitle id='customized-dialog-title'><p>Suspend Account</p></DialogTitle>
         <DialogContent>
           <DialogContentText>
             <p></p>
             <br />
-            <h5>Type "SUSPEND" to confirm:</h5>
+            <h5>`Type "{statusForModalTitle.toUpperCase()}" to confirm:`</h5>
           </DialogContentText>
           <TextField
             autoFocus
@@ -581,7 +583,7 @@ const AdminUsers = () => {
             Cancel
           </Button>
           <Button onClick={onSuspendAccount} color='primary'>
-            Suspend
+            {statusForModalTitle}
           </Button>
         </DialogActions>
       </Dialog>
