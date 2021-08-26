@@ -7,7 +7,7 @@ import { deleteImage } from 'src/graphql/mutations';
 import ImageGallery from 'react-image-gallery';
 
 const Gallery: React.FunctionComponent = ({
-                                            imagesData,
+    imagesData,
     downloadImages,
     editGallery
   }: any) => {
