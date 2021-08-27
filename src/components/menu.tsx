@@ -118,7 +118,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
           }
         });
       });
-    } catch (e) {
+    } catch (error: any) {
       return <Error statusCode={404} />;
     }
   };
@@ -161,7 +161,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
         setSeverity('warning');
         setOpenSnackbar(true);
       });
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackbar(`Error uploading file: ${error}`);
       setSeverity('warning');
       setOpenSnackbar(true);
@@ -222,7 +222,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
             </>
             }
             {!currentAvatar && <>
-              <img className='user-image' src='../../../images/user-image.png' alt='user image' />
+              <MenuAvatar src='../../../images/empty_avatar.png' alt='user image' />
               <MenuAvatar__DownloadLabel>
                 <CloudDownloadIcon />
                 <MenuAvatar__DownloadInput type='file' onChange={uploadAvatar} />

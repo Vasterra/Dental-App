@@ -6,16 +6,29 @@ import Menu from 'src/components/menu';
 import Error from 'next/error';
 import moment from 'moment';
 import { IAnalytics, IDentist, IImages, IListClosedAccounts, IListClosedSubscriptions } from '../../../types/types';
+import { Auth } from 'aws-amplify';
+import Router from 'next/router';
 
 const AdminDashboard = () => {
 
   const [analytics, setAnalytics] = useState<IAnalytics>();
 
   useEffect(() => {
+    // void Auth.currentAuthenticatedUser().then(result => {
+    //   console.log(result.signInUserSession.accessToken.payload["cognito:groups"][0] !== 'admin');
+    //   if (result.signInUserSession.accessToken.payload["cognito:groups"][0] !== 'admin') {
+    //     void isNotAdmin()
+    //   }
+    // });
     setTimeout(() => {
       getListDentists();
     }, 1000);
   }, []);
+
+  // const isNotAdmin = async () => {
+  //   await Router.replace('/');
+  //   await Auth.signOut();
+  // }
 
   const getListDentists = () => {
     const currentDate = moment();
@@ -41,7 +54,7 @@ const AdminDashboard = () => {
           });
         });
       });
-    } catch (e) {
+    } catch (e: any) {
       return <Error statusCode={404} />;
     }
   };

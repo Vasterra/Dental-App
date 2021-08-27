@@ -33,7 +33,7 @@ class ApiManager {
     try {
       await Auth.signOut();
       await Router.replace('/');
-    } catch (error) {
+    } catch (error: any) {
       console.log('error signing out: ', error);
     }
   }
@@ -45,7 +45,7 @@ class ApiManager {
         authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
       return data.listImages.items;
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -81,7 +81,7 @@ class ApiManager {
         },
         authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
     }
   };
@@ -173,7 +173,7 @@ class ApiManager {
         };
       });
       return filesList;
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error uploading file: ', error);
     }
   }
@@ -185,7 +185,7 @@ class ApiManager {
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key));
       signedFiles = await Promise.all(signedFiles);
       return signedFiles[signedFiles.length - 1];
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error download Avatar file: ', error);
     }
   }
@@ -202,7 +202,7 @@ class ApiManager {
         },
         authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -218,7 +218,7 @@ class ApiManager {
         },
         authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };

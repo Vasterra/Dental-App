@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Dashboard from 'src/pages/admin/dashboard';
 
 const Login = () => {

@@ -152,7 +152,7 @@ const AdminUsers = () => {
     const { NextToken, ...rest } = await API.get(apiName, path, myInit);
     try {
       void await getListUser(groupDental, rest.Users);
-    } catch (error) {
+    } catch (error: any) {
       console.error('There as an Error', error);
     }
   };
@@ -175,7 +175,7 @@ const AdminUsers = () => {
     const { NextToken, ...rest } = await API.get(apiName, path, myInit);
     try {
       void await listUsersGroupCancelDental(rest.Users);
-    } catch (error) {
+    } catch (error: any) {
       console.error('There as an Error', error);
     }
   };
@@ -227,10 +227,10 @@ const AdminUsers = () => {
           setOldDentists(arr);
           setGdcNumber('');
         });
-      } catch (e) {
+      } catch (e: any) {
         console.log(e);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('There as an Error', error);
     }
   }

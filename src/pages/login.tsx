@@ -78,7 +78,7 @@ const Login = () => {
         setSeverity('success');
         setOpenSnackbar(true);
         setValues({ ...values, user });
-      } catch (error) {
+      } catch (error: any) {
         setMessageSnackbar(error.message);
         setSeverity('warning');
         setOpenSnackbar(true);
