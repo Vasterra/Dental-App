@@ -1,51 +1,50 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 // @ts-ignore
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import SimpleImageSlider from "react-simple-image-slider";
 // @ts-ignore
 import ImageGallery from 'react-image-gallery';
 
 type Props = {
   images: any,
 }
-
-type SliderOptions = {
-  useGPURender: boolean;
-  showNavs: boolean;
-  showBullets: boolean;
-  navStyle: 1 | 2;
-  navSize: number;
-  navMargin: number;
-  duration: number;
-  bgColor: string;
-};
+//
+// type SliderOptions = {
+//   useGPURender: boolean;
+//   showNavs: boolean;
+//   showBullets: boolean;
+//   navStyle: 1 | 2;
+//   navSize: number;
+//   navMargin: number;
+//   duration: number;
+//   bgColor: string;
+// };
 
 const Gallery: React.FunctionComponent = ({images}: any) => {
 
-  const [sliderOptions, setSliderOptions] = useState<SliderOptions>({
-    useGPURender: true,
-    showNavs: false,
-    showBullets: true,
-    navStyle: 1,
-    navSize: 50,
-    navMargin: 30,
-    duration: 0.5,
-    bgColor: '#000'
-  });
+  // const [sliderOptions, setSliderOptions] = useState<SliderOptions>({
+  //   useGPURender: true,
+  //   showNavs: false,
+  //   showBullets: true,
+  //   navStyle: 1,
+  //   navSize: 50,
+  //   navMargin: 30,
+  //   duration: 0.5,
+  //   bgColor: '#000'
+  // });
 
-  const [slideIndexText, setSlideIndexText] = useState<string>('');
-  const [indexData, setIndexData] = useState<number>(0);
-
-  const onClickBullets = (idx: number) => {
-    console.log(`[App onClickBullets] ${idx}`);
-    setIndexData(idx)
-  };
-
-  const onClick = useCallback((idx: number, event: React.SyntheticEvent) => {
-    console.log(`[App onClick] ${idx} ${event.currentTarget}`);
-  }, []);
-  console.log('images', images)
+  // const [slideIndexText, setSlideIndexText] = useState<string>('');
+  // const [indexData, setIndexData] = useState<number>(0);
+  //
+  // const onClickBullets = (idx: number) => {
+  //   console.log(`[App onClickBullets] ${idx}`);
+  //   setIndexData(idx)
+  // };
+  //
+  // const onClick = useCallback((idx: number, event: React.SyntheticEvent) => {
+  //   console.log(`[App onClick] ${idx} ${event.currentTarget}`);
+  // }, []);
+  // console.log('images', images)
   return (
     <>
       {

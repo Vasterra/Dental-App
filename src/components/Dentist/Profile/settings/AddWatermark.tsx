@@ -118,24 +118,32 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
           {currentCover ? <img className='image' src={currentCover} alt='' /> :
             <div className='image' id='exp' />}
         </p>
-        <p className='row-content'>
+        { currentDentist.hasPaidPlan && <p className='row-content'>
           {!currentCover && !watermarkImg && <>
             <label className='button-green-file'>Upload Cover</label>
-            <input type='file' className='input-file' name='watermark'
-                   onChange={addImage} disabled={currentDentist.hasPaidPlan} />
+            <input type='file' className='input-file' name='watermark' onChange={() => {
+              if (currentDentist.hasPaidPlan) {
+                void addImage
+              } else {
+                return false;
+              }
+            }} />
           </>}
           {currentCover && <>
             <button className='button-green'
-                    disabled={currentDentist.hasPaidPlan}
                     onClick={() => {
-                      setCurrentCover(null);
-                      setWatermarkImg(null);
+                      if (currentDentist.hasPaidPlan) {
+                        setCurrentCover(null);
+                        setWatermarkImg(null);
+                      } else {
+                        return false;
+                      }
                     }}
             >
               Delete Cover
             </button>
           </>}
-        </p>
+        </p> }
       </div>
       <div>
         <p className='form-profile-label'>
@@ -147,15 +155,23 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
         <p className='row-content'>
           {isCurrentCover && <>
             <label className='button-green-file'>Upload Watermark</label>
-            <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={addWatermark}
-                   disabled={currentDentist.hasPaidPlan} />
+            <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={() => {
+              if (currentDentist.hasPaidPlan) {
+                void addWatermark
+              } else {
+                return false;
+              }
+            }} />
           </>}
           {currentCoverImg && watermarkImg && <>
             <button className='button-green'
-                    disabled={currentDentist.hasPaidPlan}
                     onClick={() => {
-                      setCurrentCover(null);
-                      setWatermarkImg(null);
+                      if (currentDentist.hasPaidPlan) {
+                        setCurrentCover(null);
+                        setWatermarkImg(null);
+                      } else {
+                        return false;
+                      }
                     }}
             >
               Clear watermark
