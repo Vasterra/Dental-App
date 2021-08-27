@@ -25,6 +25,7 @@ const Profile = ({ dentist }: any) => {
   const [signedInUser, setSignedInUser] = useState(false);
   const [route, setRoute] = useState('');
   const [adminSettingSubscriber, setAdminSettingSubscriber] = useState();
+  const [userName, setUserName] = useState();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
@@ -63,9 +64,9 @@ const Profile = ({ dentist }: any) => {
 
   const uploadAvatar = async (files: any) => {
     files.preventDefault();
-    const file = files.target.files[0];
-    const filename = file.name.split('.');
     try {
+      const file = files.target.files[0];
+      const filename = file.name.split('.');
       await Storage.put('avatars/' + currentDentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
         level: 'public',
         contentType: 'image/png'
@@ -102,10 +103,11 @@ const Profile = ({ dentist }: any) => {
   return (
     <>
       {currentDentist && signedInUser &&
-      <Layout title='Profile' active={'activeProfile'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
+      <Layout title='Profile' active={'activeProfile'} currentAvatar={currentAvatar} currentDentist={currentDentist} userName={userName}>
         <div className='main-profile bg-white '>
           <AddSettings route={route}
                        adminSettingSubscriber={adminSettingSubscriber}
+                       setUserName={setUserName}
                        setMessageSnackbar={setMessageSnackbar}
                        setOpenSnackbar={setOpenSnackbar}
                        setSeverity={setSeverity}

@@ -45,7 +45,7 @@ const Menu = styled('ul')`{
   }
 }`;
 
-class Drawer extends Component<{ currentAvatar: string, active: string, currentDentist: any }> {
+class Drawer extends Component<{ currentAvatar: string, active: string, currentDentist: any, userName: any }> {
 
   state: any = {
     currentDentist: null,
@@ -153,8 +153,9 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
                   <img className='user-image'
                        src={this.props.currentAvatar !== '' ? this.props.currentAvatar : '../../../images/empty_avatar.png'}
                        alt='user image' />}
-                  <p className='user-description white'><span>{this.props.currentDentist.firstName || 'firstname'}</span>
-                    <span>{this.props.currentDentist.lastName || 'lastName'}</span></p>
+                  <p className='user-description white'><span>{this.props.userName ? this.props.userName : this.props.currentDentist.firstName || ''}</span>
+                    {/*<span>{this.props.currentDentist.lastName || ''}</span>*/}
+                  </p>
                 </div>
               </div>
               <Menu>

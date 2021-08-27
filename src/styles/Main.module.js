@@ -99,3 +99,23 @@ export const Stripe = styled("div")`
   margin: 20px 0;
 `;
 
+export const IconClose = styled("img")`
+  cursor: pointer;
+  transition: 0.3s linear;
+  position: relative;
+  right: 55px;
+  :hover {
+    transform: rotate(90deg);
+  }
+`;
+
+export const IconUpdate = styled("img")`
+  cursor: pointer;
+  transition: 0.3s linear;
+  position: relative;
+  right: 60px;
+  :hover {
+    transform: scale(1.3, 1.3);
+  }
+`;
+
