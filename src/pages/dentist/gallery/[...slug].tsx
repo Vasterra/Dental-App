@@ -406,10 +406,6 @@ const GalleryPage = ({ dentist }: any) => {
     setImagesData(allImages);
   };
 
-  const enterKeyDown = (e: { keyCode: number; }) => {
-    if (e.keyCode === 13) searchImagesByTitle(e);
-  };
-
   const fullName = currentDentist && `${currentDentist.firstName ? currentDentist.firstName : ''} ${currentDentist.lastName ? currentDentist.lastName : ''}`;
 
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
@@ -432,7 +428,6 @@ const GalleryPage = ({ dentist }: any) => {
                      id='search'
                      name='search'
                      value={searchValue}
-                     onKeyDown={enterKeyDown}
                      onChange={e => searchImagesByTitle(e.target.value)}
                      placeholder='Search Images' />
               <img className='search-button' src='../../images/search.svg' alt='search' />
