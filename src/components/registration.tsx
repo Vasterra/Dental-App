@@ -112,7 +112,7 @@ const Registration = ({}) => {
           }
         });
         setValues({ ...values, user });
-      } catch (error) {
+      } catch (error: any) {
         setMessageSnackbar('An error occured during registration, please check your information and try again!');
         setSeverity('warning');
         setOpenSnackbar(true);
@@ -130,7 +130,7 @@ const Registration = ({}) => {
       setSeverity('success');
       setOpenSnackbar(true);
       await Router.replace('/login');
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackbar(error.message);
       setSeverity('warning');
       setOpenSnackbar(true);

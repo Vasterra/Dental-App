@@ -5,14 +5,15 @@ import { Container } from '../styles/Main.module';
 type Props = {
   title?: string;
   active?: string;
+  userName?: string;
   currentAvatar?: any;
   currentDentist?: any;
 };
 
 const Layout: React.FunctionComponent<Props> = ({
     children,
-    title = '',
     active = '',
+    userName = '',
     currentAvatar = {},
     currentDentist = {}
   }) => (
@@ -23,6 +24,7 @@ const Layout: React.FunctionComponent<Props> = ({
           // @ts-ignore
           currentAvatar={currentAvatar}
           currentDentist={currentDentist}
+          userName={userName}
           active={active}
         />
         {children}

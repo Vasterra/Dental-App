@@ -25,7 +25,6 @@ const Gallery: React.FunctionComponent = ({
     }
   };
 
-
   const removeImage = async (e: any) => {
     await Storage.remove(e[0].name)
     .then(() => Storage.remove(e[1].name))

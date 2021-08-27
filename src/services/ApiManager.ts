@@ -36,7 +36,7 @@ class ApiManager {
     try {
       await Auth.signOut();
       await Router.push('/login');
-    } catch (error) {
+    } catch (error: any) {
       console.log('error signing out: ', error);
     }
   }
@@ -45,7 +45,7 @@ class ApiManager {
     try {
       await Auth.signOut();
       await Router.push('/');
-    } catch (error) {
+    } catch (error: any) {
       console.log('error signing out: ', error);
     }
   }
@@ -64,7 +64,7 @@ class ApiManager {
         authMode: 'AWS_IAM'
       });
       return data;
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -80,7 +80,7 @@ class ApiManager {
         authMode: 'AWS_IAM'
       });
       return data.getAdminSettingsSubscriber
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   }
@@ -96,7 +96,7 @@ class ApiManager {
         authMode: 'AWS_IAM'
       });
       return data;
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -116,7 +116,7 @@ class ApiManager {
       });
       console.log(data);
       return data;
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -132,7 +132,7 @@ class ApiManager {
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -188,7 +188,7 @@ class ApiManager {
         };
       });
       return filesList;
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error uploading file: ', error);
     }
   }
@@ -200,7 +200,7 @@ class ApiManager {
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key));
       signedFiles = await Promise.all(signedFiles);
       return signedFiles[signedFiles.length - 1];
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error download Avatar file: ', error);
     }
   }
@@ -212,7 +212,7 @@ class ApiManager {
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key));
       signedFiles = await Promise.all(signedFiles);
       return signedFiles;
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error download Avatar file: ', error);
     }
   }

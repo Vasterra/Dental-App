@@ -72,7 +72,7 @@ const BillingInformation: React.FunctionComponent<Props> = ({currentDentist}) =>
           // @ts-ignore
           authMode: 'AWS_IAM'
         })
-      } catch (err) {
+      } catch (err: any) {
       }
       if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
         setRetry(true);
@@ -83,8 +83,8 @@ const BillingInformation: React.FunctionComponent<Props> = ({currentDentist}) =>
         throw Error('Could not process payment.');
       }
       setError('')
-    } catch (e) {
-      setError(e.message)
+    } catch (error: any) {
+      setError(error.message)
     }
   };
 
@@ -114,8 +114,8 @@ const BillingInformation: React.FunctionComponent<Props> = ({currentDentist}) =>
       const paymentID = paymentMethod.id;
       await StripeManager.retryInvoice(customerID, paymentID, invoiceID);
       localStorage.removeItem('latest_invoice_id');
-    } catch (error) {
-      setError(error)
+    } catch (error: any) {
+      setError(error.message)
       // Let the user know that something went wrong here...
     }
   };

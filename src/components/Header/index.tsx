@@ -30,7 +30,7 @@ class Header extends React.Component {
       const currentUser = await Auth.currentAuthenticatedUser();
       this.setState({ currentUser });
       this.setState({ signedInUser: true });
-    } catch (err) {
+    } catch (err: any) {
     }
   }
 

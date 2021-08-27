@@ -146,7 +146,7 @@ const Login = () => {
         setMessageSnackbar('The Login successfully!');
         setSeverity('success');
         setOpenSnackbar(true);
-      } catch (error) {
+      } catch (error: any) {
         setValues({ ...values, loaderButtonSubmit: false, loader: false });
         setMessageSnackbar(error.message);
         setSeverity('warning');

@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
   }
 

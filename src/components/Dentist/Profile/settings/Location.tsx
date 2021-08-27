@@ -7,6 +7,22 @@ import Router from 'next/router';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
 
+import styled from 'styled-components';
+import { IconClose, IconUpdate } from '../../../../styles/Main.module';
+
+export const FormLoginInput = styled('div')`
+  display: flex;
+  margin-bottom: 10px;
+  position: relative;
+  input {
+    display: flex;
+    width: 100%;
+    padding: 10px 65px 10px 10px;
+    border: 0;
+    background-color: white;
+  }
+`;
+
 const useStylesFacebook = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -81,7 +97,7 @@ const Location: React.FunctionComponent<Props> = ({
   };
 
   const handleSubmitUpdate = async (data: any, { setErrors }: any) => {
-    setLoaderButtonSubmit(true);
+    // setLoaderButtonSubmit(true);
     try {
       await API.graphql({
         query: updateLocation,
@@ -97,7 +113,8 @@ const Location: React.FunctionComponent<Props> = ({
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
-    } catch (err) {
+      setUpdateDateLocation(null);
+    } catch (err: any) {
       setErrors(err);
     }
     await getDentist();
@@ -131,7 +148,7 @@ const Location: React.FunctionComponent<Props> = ({
       setSeverity('success');
       setOpenSnackbar(true);
       form.resetForm();
-    } catch (err) {
+    } catch (err: any) {
       form.setErrors(err);
     }
     await getDentist();
@@ -308,19 +325,16 @@ const Location: React.FunctionComponent<Props> = ({
                 </p>
                 {currentDentist && currentDentist.locations.items.map((el: any, key: any) => {
                   return (
-                    <p className='form-login-input' key={key}>
+                    <FormLoginInput>
                       <input
                         type='text'
-                        className='form-update-input'
                         value={`${el.city} ${el.address} ${el.postCode}`}
-                        disabled
                       />
-                      <span onClick={() => setUpdateDateLocation(el)}>
-                        <img className='form-login-input-edit' src='../../../images/edit.svg' alt='edit' />
-                      </span>
-                      <img className='form-login-input-close' src='../../../images/close.svg'
-                           onClick={() => handleDelete(el)} />
-                    </p>
+                      <IconUpdate src='../../../images/edit.svg' alt='edit'
+                                  onClick={() => setUpdateDateLocation(el)} />
+                      <IconClose src='../../../images/close.svg' alt='close'
+                                 onClick={() => handleDelete(el)} />
+                    </FormLoginInput>
                   );
                 })
                 }
@@ -336,9 +350,13 @@ const Location: React.FunctionComponent<Props> = ({
                 adminSettingSubscriber && currentDentist.locations.items.map((el: any, key: any) => {
                   if (key < Number(currentDentist.hasPaidPlan ? adminSettingSubscriber.paidMaxLocations : adminSettingSubscriber.freeMaxLocations)) {
                     return (
-                      <p className='form-login-input' key={key}>
-                        <input value={`${el.city} ${el.address} ${el.postCode}`} />
-                      </p>
+                      <FormLoginInput>
+                        <input
+                          type='text'
+                          disabled={!currentDentist.hasPaidPla}
+                          value={`${el.city} ${el.address} ${el.postCode}`}
+                        />
+                      </FormLoginInput>
                     );
                   }
                 })

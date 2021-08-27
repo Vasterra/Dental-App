@@ -25,7 +25,7 @@ class StripeManager {
       // Update your user in DB to store the customerID
       // updateUserInDB() is *your* implementation of updating a user in the DB
       return customer;
-    } catch (error) {
+    } catch (error: any) {
       console.log('Failed to create customer');
       console.log(error);
       return null;
@@ -149,7 +149,7 @@ class StripeManager {
         type: result.card.brand,
         digits: result.card.last4,
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       return null;
     }
