@@ -50,7 +50,7 @@ const Profile = ({ dentist }: any) => {
     try {
       await Auth.currentAuthenticatedUser();
       setSignedInUser(true);
-    } catch (e) {
+    } catch (e: any) {
       void await Router.push('/login');
     }
   };
@@ -85,7 +85,7 @@ const Profile = ({ dentist }: any) => {
         setSeverity('warning');
         setOpenSnackbar(true);
       });
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackbar(`Error uploading file: ${error}`);
       setSeverity('warning');
       setOpenSnackbar(true);
@@ -153,7 +153,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       },
       authMode: 'AWS_IAM'
     });
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
   }
   return {

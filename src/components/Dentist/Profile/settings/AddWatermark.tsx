@@ -56,7 +56,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
         setStatusSnackBar('error');
         setOpenSnackBar(true);
       });
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackBar(error);
       setStatusSnackBar('error');
       setOpenSnackBar(true);

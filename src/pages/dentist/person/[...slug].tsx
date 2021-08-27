@@ -59,7 +59,7 @@ const Person = ({ dentistData }: any) => {
       const currentUser = await Auth.currentAuthenticatedUser();
       setCurrentUser(currentUser);
       setSignedInUser(true);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -91,7 +91,7 @@ const Person = ({ dentistData }: any) => {
         authMode: 'AWS_IAM'
       });
       setListImagesData(data.listImages.items);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -151,7 +151,7 @@ const Person = ({ dentistData }: any) => {
         setOldIMages(allImages);
       }, 1000);
 
-    } catch (e) {
+    } catch (e: any) {
       return <Error statusCode={404} />;
     }
   };
@@ -163,34 +163,36 @@ const Person = ({ dentistData }: any) => {
     });
   };
 
-  if (currentDentist.isDisabled) return <WrapperFlex><div>{useriIsNotAuth}</div></WrapperFlex>
+  if (currentDentist.isDisabled) return <WrapperFlex>
+    <div>{useriIsNotAuth}</div>
+  </WrapperFlex>;
   if (!currentDentist && !currentDentist.isDisabled) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
 
-    return (
-      <>
-        <Header />
-        {currentDentist && !currentDentist.hasPaidPlan && <ProfileAccountFree
-          currentDentist={currentDentist}
-          images={images}
-          oldIMages={oldIMages}
-          services={services}
-          currentAvatar={currentAvatar}
-          setImages={setFuncImages}
-          downloadImages={downloadImages}
-        />}
-        {currentDentist && currentDentist.hasPaidPlan && <ProfileAccountSubscription
-          currentDentist={currentDentist}
-          images={images}
-          currentCover={currentCover}
-          oldIMages={oldIMages}
-          services={services}
-          currentAvatar={currentAvatar}
-          setImages={setFuncImages}
-          downloadImages={downloadImages}
-        />}
-        <Footer />
-      </>
-    );
+  return (
+    <>
+      <Header />
+      {currentDentist && !currentDentist.hasPaidPlan && <ProfileAccountFree
+        currentDentist={currentDentist}
+        images={images}
+        oldIMages={oldIMages}
+        services={services}
+        currentAvatar={currentAvatar}
+        setImages={setFuncImages}
+        downloadImages={downloadImages}
+      />}
+      {currentDentist && currentDentist.hasPaidPlan && <ProfileAccountSubscription
+        currentDentist={currentDentist}
+        images={images}
+        currentCover={currentCover}
+        oldIMages={oldIMages}
+        services={services}
+        currentAvatar={currentAvatar}
+        setImages={setFuncImages}
+        downloadImages={downloadImages}
+      />}
+      <Footer />
+    </>
+  );
 };
 
 
@@ -209,7 +211,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       },
       authMode: 'AWS_IAM'
     });
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
   }
   return {

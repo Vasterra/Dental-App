@@ -41,8 +41,8 @@ const Services: React.FunctionComponent<Props> = ({
       .then(result => {
         setCurrentDentist(result);
       });
-    } catch (e) {
-      console.log(e);
+    } catch (error: any) {
+      console.log(error);
     }
   };
 
@@ -62,7 +62,7 @@ const Services: React.FunctionComponent<Props> = ({
       setOpenSnackbar(true);
       return false;
     }
-
+    console.log(adminSettingSubscriber);
     if (currentDentist.services.items.length === Number(adminSettingSubscriber.freeMaxServices)) {
       setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxServices} services.`);
       setSeverity('warning');

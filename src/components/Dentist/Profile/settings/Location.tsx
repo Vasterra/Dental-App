@@ -97,7 +97,7 @@ const Location: React.FunctionComponent<Props> = ({
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
-    } catch (err) {
+    } catch (err: any) {
       setErrors(err);
     }
     await getDentist();
@@ -131,7 +131,7 @@ const Location: React.FunctionComponent<Props> = ({
       setSeverity('success');
       setOpenSnackbar(true);
       form.resetForm();
-    } catch (err) {
+    } catch (err: any) {
       form.setErrors(err);
     }
     await getDentist();

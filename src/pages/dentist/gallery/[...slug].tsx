@@ -76,7 +76,7 @@ const GalleryPage = ({ dentist }: any) => {
     try {
       await Auth.currentAuthenticatedUser();
       setSignedInUser(true);
-    } catch (e) {
+    } catch (e: any) {
       void await Router.push('/login');
     }
   };
@@ -99,7 +99,7 @@ const GalleryPage = ({ dentist }: any) => {
         authMode: 'AWS_IAM'
       });
       setListImagesData(data.listImages.items);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -176,7 +176,7 @@ const GalleryPage = ({ dentist }: any) => {
           setCheck(null);
         }, 1000);
       }
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackBar(error);
       setStatusSnackBar('error');
       setOpenSnackBar(true);
@@ -202,11 +202,11 @@ const GalleryPage = ({ dentist }: any) => {
           input: {
             id: uuid,
             dentistId: currentDentist.id,
-            titleBefore: titleBefore,
-            tagsBefore: tagsBefore,
-            titleAfter: titleAfter,
-            tagsAfter: tagsAfter,
-            service: service,
+            titleBefore: titleBefore ? titleBefore : '',
+            tagsBefore: tagsBefore ? tagsBefore : '',
+            titleAfter: titleAfter ? titleAfter : '',
+            tagsAfter: tagsAfter ? tagsAfter : '',
+            service: service ? service : '',
             nameBefore: fileLeft.name,
             nameAfter: fileRight.name
           }
@@ -218,7 +218,7 @@ const GalleryPage = ({ dentist }: any) => {
       setMessageSnackBar('Success!');
       setStatusSnackBar('success');
       setOpenSnackBar(true);
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackBar(error);
       setStatusSnackBar('error');
       setOpenSnackBar(true);
@@ -243,7 +243,7 @@ const GalleryPage = ({ dentist }: any) => {
           setStatusSnackBar('error');
           setOpenSnackBar(true);
         });
-      } catch (error) {
+      } catch (error: any) {
         setMessageSnackBar(error);
         setStatusSnackBar('error');
         setOpenSnackBar(true);
@@ -269,7 +269,7 @@ const GalleryPage = ({ dentist }: any) => {
           setStatusSnackBar('error');
           setOpenSnackBar(true);
         });
-      } catch (error) {
+      } catch (error: any) {
         setMessageSnackBar(error);
         setStatusSnackBar('error');
         setOpenSnackBar(true);
@@ -639,7 +639,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       },
       authMode: 'AWS_IAM'
     });
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
   }
 

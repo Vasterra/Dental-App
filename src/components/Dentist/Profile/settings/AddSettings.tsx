@@ -120,7 +120,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                   setMessageSnackbar('The information was updated successfully!');
                   setSeverity('success');
                   setOpenSnackbar(true);
-                } catch (err) {
+                } catch (err: any) {
                   setMessageSnackbar('The information has not been updated!');
                   setSeverity('warning');
                   setOpenSnackbar(true);

@@ -39,7 +39,7 @@ export default function AuthContext({ children }: Props): ReactElement {
     try {
       const amplifyUser = await Auth.currentAuthenticatedUser();
       setUser(amplifyUser);
-    } catch (error) {
+    } catch (error: any) {
       // No current signed in user.
       console.error(error);
       setUser(null);
