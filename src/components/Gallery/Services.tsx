@@ -31,14 +31,13 @@ const MenuProps = {
   }
 };
 
-const Services: React.FunctionComponent<Props> = ({ saveService, services, updateService }) => {
-  const [service, setService] = React.useState<string[]>(updateService ? updateService : []);
+const Services: React.FunctionComponent<Props> = ({ saveService, services }) => {
+  const [service, setService] = React.useState<string[]>([]);
   const theme = useTheme();
   const handleChange = (e: any) => {
     setService(e.target.value as string[]);
     saveService(e.target.value);
   };
-
   return (
     <Select
       multiple
@@ -55,7 +54,7 @@ const Services: React.FunctionComponent<Props> = ({ saveService, services, updat
       MenuProps={MenuProps}
     >
       <MenuItem disabled value=''>
-        <div style={{color: 'black'}}>Select from your services</div>
+        <div style={{ color: 'black' }}>Select from your services</div>
       </MenuItem>
       {services.map((name: any) => (
         <MenuItem key={name.id} value={name.name} style={getStyles(name, service, theme)}>

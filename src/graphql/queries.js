@@ -20,6 +20,7 @@ export const getDentist = /* GraphQL */ `
       lat
       lng
       registered
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -91,6 +92,7 @@ export const listDentists = /* GraphQL */ `
         lat
         lng
         registered
+        isDisabled
         hasPaidPlan
         services {
           nextToken
@@ -266,7 +268,6 @@ export const getAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
     }
   }
 `;

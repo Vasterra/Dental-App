@@ -52,6 +52,7 @@ function FacebookCircularProgress(props: CircularProgressProps) {
 
 type Props = {
   route: any,
+  setUserName: any,
   adminSettingSubscriber: any,
   setMessageSnackbar: any,
   setOpenSnackbar: any,
@@ -63,8 +64,9 @@ const AddSettings: React.FunctionComponent<Props> = ({
    adminSettingSubscriber,
    setMessageSnackbar,
    setOpenSnackbar,
-   setSeverity
- }) => {
+   setSeverity,
+   setUserName
+  }) => {
 
   const [currentDentist, setCurrentDentist] = useState<any | null>(null);
   const [loaderButtonSubmit, setLoaderButtonSubmit] = useState<any | null>(null);
@@ -75,8 +77,8 @@ const AddSettings: React.FunctionComponent<Props> = ({
 
   const getDentist = async () => {
     return await ApiManager.GET_DENTIST(route).then((result: any) => {
-      setCurrentDentist(result.data.getDentist)
-      setLoaderButtonSubmit(false)
+      setCurrentDentist(result.data.getDentist);
+      setLoaderButtonSubmit(false);
     });
   };
 
@@ -94,177 +96,180 @@ const AddSettings: React.FunctionComponent<Props> = ({
             </button>
           </p>}
         </div>
-        { currentDentist &&
-          <Formik
-            onSubmit={async (data: any) => {
-              setLoaderButtonSubmit(true)
-              await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
-              .then(response => response.json())
-              .then(async (result) => {
-                data.lng = result.results[0].geometry.location.lng;
-                data.lat = result.results[0].geometry.location.lat;
+        {currentDentist &&
+        <Formik
+          onSubmit={async (data: any) => {
+            setLoaderButtonSubmit(true);
+            await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
+            .then(response => response.json())
+            .then(async (result) => {
+              data.lng = result.results[0].geometry.location.lng;
+              data.lat = result.results[0].geometry.location.lat;
 
-                const user = await Auth.currentAuthenticatedUser();
-                await Auth.updateUserAttributes(user, {
-                  'email': data.email
+              const user = await Auth.currentAuthenticatedUser();
+              await Auth.updateUserAttributes(user, {
+                'email': data.email
+              });
+              setUserName(data.firstName);
+              console.log(data);
+              try {
+                await API.graphql({
+                  query: updateDentist,
+                  variables: {
+                    input: data
+                  },
+                  // @ts-ignore
+                  authMode: 'AWS_IAM'
                 });
-                try {
-                  await API.graphql({
-                    query: updateDentist,
-                    variables: {
-                      input: data
-                    },
-                    // @ts-ignore
-                    authMode: 'AWS_IAM'
-                  });
-                  setMessageSnackbar('The information was updated successfully!');
-                  setSeverity('success');
-                  setOpenSnackbar(true);
-                } catch (err) {
-                  setMessageSnackbar('The information has not been updated!');
-                  setSeverity('warning');
-                  setOpenSnackbar(true);
-                }
-                void await getDentist();
-              })
-              .catch((error: any) => {
-                setMessageSnackbar(error);
+                setMessageSnackbar('The information was updated successfully!');
+                setSeverity('success');
+                setOpenSnackbar(true);
+              } catch (err: any) {
+                setMessageSnackbar('The information has not been updated!');
                 setSeverity('warning');
                 setOpenSnackbar(true);
-              });
+              }
+              await getDentist();
+            })
+            .catch((error: any) => {
+              setMessageSnackbar(error);
+              setSeverity('warning');
+              setOpenSnackbar(true);
+            });
 
-            }}
-            initialValues={{
-              id: currentDentist.id,
-              firstName: currentDentist.firstName,
-              lastName: currentDentist.lastName,
-              bio: currentDentist.bio,
-              email: currentDentist.email,
-              website: currentDentist.website,
-              city: currentDentist.city,
-              street: currentDentist.street,
-              address: currentDentist.address,
-              postIndex: currentDentist.postIndex,
-              phone: currentDentist.phone,
-              qualifications: currentDentist.qualifications
-            }}
-          >
-            {props => (
-              <form onSubmit={props.handleSubmit} style={{ width: '100%' }}>
-                <div className='box-2-box'>
-                  <div className='profile-block-box'>
-                    <div className='double-blocks'>
-                      <DentistProfileInput
-                        title='Title'
-                        name='title'
-                        placeholder='Dr.'
-                        setValue=''
-                        props={props}
+          }}
+          initialValues={{
+            id: currentDentist.id,
+            firstName: currentDentist.firstName,
+            lastName: currentDentist.lastName,
+            bio: currentDentist.bio,
+            email: currentDentist.email,
+            website: currentDentist.website,
+            city: currentDentist.city,
+            street: currentDentist.street,
+            address: currentDentist.address,
+            postIndex: currentDentist.postIndex,
+            phone: currentDentist.phone,
+            qualifications: currentDentist.qualifications
+          }}
+        >
+          {props => (
+            <form onSubmit={props.handleSubmit} style={{ width: '100%' }}>
+              <div className='box-2-box'>
+                <div className='profile-block-box'>
+                  <div className='double-blocks'>
+                    <DentistProfileInput
+                      title='Title'
+                      name='lastName'
+                      placeholder='Dr.'
+                      setValue=''
+                      props={props}
+                    />
+                    <DentistProfileInput
+                      title='Name'
+                      name='firstName'
+                      placeholder='John Smith'
+                      setValue={props.values.firstName}
+                      props={props}
+                    />
+                  </div>
+                  <div>
+                    <DentistProfileInput
+                      title='Contact Email'
+                      name='email'
+                      placeholder='John.smith@dental.co.uk'
+                      setValue={props.values.email}
+                      props={props}
+                    />
+                  </div>
+                  <div>
+                    <DentistProfileInput
+                      title='Qualifications'
+                      name='qualifications'
+                      placeholder=''
+                      setValue={props.values.qualifications}
+                      props={props}
+                    />
+                  </div>
+                  <div>
+                    <DentistProfileArea
+                      title='Profile Bio'
+                      name='bio'
+                      placeholder='Profile Bio'
+                      setValue={props.values.bio}
+                      props={props}
+                    />
+                  </div>
+                  {!currentDentist.hasPaidPlan && <p className='form-login-buttons'>
+                    <button className='button-green' type='submit'>{loaderButtonSubmit ?
+                      <FacebookCircularProgress /> : 'Confirm'}</button>
+                  </p>}
+                </div>
+                {adminSettingSubscriber && !currentDentist.hasPaidPlan && <div className='profile-block-box'>
+                  <div
+                    className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidWebsiteAddress : adminSettingSubscriber.freeWebsiteAddress ? '' : 'disabled'}>
+                    <p className='form-profile-label'>
+                      <label className='form-profile-label' htmlFor='website'>Website Address - Premium</label>
+                    </p>
+                    <p>
+                      <input className='form-profile-input'
+                             type='text'
+                             name='website'
+                             id='website'
+                             value={props.values.website}
+                             placeholder='dental.co.uk'
+                             disabled={currentDentist.hasPaidPlan ? !adminSettingSubscriber.paidWebsiteAddress : !adminSettingSubscriber.freeWebsiteAddress}
                       />
-                      <DentistProfileInput
-                        title='Name'
-                        name='firstName'
-                        placeholder='John Smith'
-                        setValue={props.values.firstName}
-                        props={props}
-                      />
-                    </div>
-                    <div>
-                      <DentistProfileInput
-                        title='Contact Email'
-                        name='email'
-                        placeholder='John.smith@dental.co.uk'
-                        setValue={props.values.email}
-                        props={props}
-                      />
-                    </div>
-                    <div>
-                      <DentistProfileInput
-                        title='Qualifications'
-                        name='qualifications'
-                        placeholder=''
-                        setValue={props.values.qualifications}
-                        props={props}
-                      />
-                    </div>
-                    <div>
-                      <DentistProfileArea
-                        title='Profile Bio'
-                        name='bio'
-                        placeholder='Profile Bio'
-                        setValue={props.values.bio}
-                        props={props}
-                      />
-                    </div>
-                    <p className='form-login-buttons'>
-                      <button className='button-green' type='submit'>{loaderButtonSubmit ?
-                        <FacebookCircularProgress /> : 'Confirm'}</button>
                     </p>
                   </div>
-                  {adminSettingSubscriber && !currentDentist.hasPaidPlan && <div className='profile-block-box'>
-                    <div
-                      className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidWebsiteAddress : adminSettingSubscriber.freeWebsiteAddress ? '' : 'disabled'}>
-                      <p className='form-profile-label'>
-                        <label className='form-profile-label' htmlFor='website'>Website Address - Premium</label>
-                      </p>
-                      <p>
-                        <input className='form-profile-input'
-                               type='text'
-                               name='website'
-                               id='website'
-                               value={props.values.website}
-                               placeholder='dental.co.uk'
-                               disabled={currentDentist.hasPaidPlan ? !adminSettingSubscriber.paidWebsiteAddress : !adminSettingSubscriber.freeWebsiteAddress}
-                        />
-                      </p>
-                    </div>
-                    <div
-                      className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidPhoneNumber : adminSettingSubscriber.freePhoneNumber ? '' : 'disabled'}>
-                      <p className='form-profile-label'>
-                        <label className='form-profile-label' htmlFor='phone'>Phone - Premium</label>
-                      </p>
-                      <p>
-                        <input className='form-profile-input'
-                               type='text'
-                               name='phone'
-                               id='phone'
-                               value={props.values.phone}
-                               placeholder='0203 123 4567'
-                               disabled={currentDentist.hasPaidPlan ? !adminSettingSubscriber.paidPhoneNumber : !adminSettingSubscriber.freePhoneNumber}
-                        />
-                      </p>
-                    </div>
-                  </div>}
-                  {currentDentist.hasPaidPlan && <div className='profile-block-box'>
-                    <DentistProfileInput
-                      title='Website Address'
-                      name='website'
-                      placeholder='dental.co.uk'
-                      setValue={props.values.website}
-                      props={props}
-                    />
-                    <DentistProfileInput
-                      title='Phone'
-                      name='phone'
-                      placeholder='0203 123 4567'
-                      setValue={props.values.phone}
-                      props={props}
-                    />
-                    <DentistProfileInput
-                      title='Address'
-                      name='address'
-                      placeholder='London'
-                      setValue={props.values.address}
-                      props={props}
-                    />
-                    <p className='form-login-buttons'>
-                      <button className='button-green' type='submit'>Confirm</button>
+                  <div
+                    className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidPhoneNumber : adminSettingSubscriber.freePhoneNumber ? '' : 'disabled'}>
+                    <p className='form-profile-label'>
+                      <label className='form-profile-label' htmlFor='phone'>Phone - Premium</label>
                     </p>
-                  </div>}
-                </div>
-              </form>
-            )}
-          </Formik>
+                    <p>
+                      <input className='form-profile-input'
+                             type='text'
+                             name='phone'
+                             id='phone'
+                             value={props.values.phone}
+                             placeholder='0203 123 4567'
+                             disabled={currentDentist.hasPaidPlan ? !adminSettingSubscriber.paidPhoneNumber : !adminSettingSubscriber.freePhoneNumber}
+                      />
+                    </p>
+                  </div>
+                </div>}
+                {currentDentist.hasPaidPlan && <div className='profile-block-box'>
+                  <DentistProfileInput
+                    title='Website Address'
+                    name='website'
+                    placeholder='dental.co.uk'
+                    setValue={props.values.website}
+                    props={props}
+                  />
+                  <DentistProfileInput
+                    title='Phone'
+                    name='phone'
+                    placeholder='0203 123 4567'
+                    setValue={props.values.phone}
+                    props={props}
+                  />
+                  <DentistProfileInput
+                    title='Address'
+                    name='address'
+                    placeholder='London'
+                    setValue={props.values.address}
+                    props={props}
+                  />
+                  <p className='form-login-buttons'>
+                    <button className='button-green' type='submit'>{loaderButtonSubmit ?
+                      <FacebookCircularProgress /> : 'Confirm'}</button>
+                  </p>
+                </div>}
+              </div>
+            </form>
+          )}
+        </Formik>
         }
       </div>
     </>

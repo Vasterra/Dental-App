@@ -3,6 +3,30 @@ import { API } from 'aws-amplify';
 import { createService, deleteService } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
+import styled from 'styled-components';
+
+export const FormLoginInput = styled('div')`
+  display: flex;
+  margin-bottom: 10px;
+  position: relative;
+  input {
+    display: flex;
+    width: 100%;
+    padding: 10px 35px 10px 10px;
+    border: 0;
+    background-color: white;
+  }
+`;
+
+export const IconClose = styled("img")`
+  cursor: pointer;
+  transition: 0.3s linear;
+  position: relative;
+  right: 30px;
+  :hover {
+    transform: rotate(90deg);
+  }
+`;
 
 type Props = {
   route: any,
@@ -13,12 +37,12 @@ type Props = {
 }
 
 const Services: React.FunctionComponent<Props> = ({
-    route,
-    adminSettingSubscriber,
-    setOpenSnackbar,
-    setMessageSnackbar,
-    setSeverity
-  }) => {
+                                                    route,
+                                                    adminSettingSubscriber,
+                                                    setOpenSnackbar,
+                                                    setMessageSnackbar,
+                                                    setSeverity
+                                                  }) => {
 
   const [currentDentist, setCurrentDentist] = useState<any | null>(null);
   const [serviceName, setServiceName] = useState();
@@ -41,8 +65,8 @@ const Services: React.FunctionComponent<Props> = ({
       .then(result => {
         setCurrentDentist(result);
       });
-    } catch (e) {
-      console.log(e);
+    } catch (error: any) {
+      console.log(error);
     }
   };
 
@@ -56,15 +80,15 @@ const Services: React.FunctionComponent<Props> = ({
       });
     }
 
-    if (filterService.length !== 0) {
-      setMessageSnackbar(`The service ${serviceName} is already`);
+    if (currentDentist.services.items.length === Number(adminSettingSubscriber.freeMaxServices)) {
+      setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxServices} services.`);
       setSeverity('warning');
       setOpenSnackbar(true);
       return false;
     }
 
-    if (currentDentist.services.items.length === Number(adminSettingSubscriber.freeMaxServices)) {
-      setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxServices} services.`);
+    if (filterService.length !== 0) {
+      setMessageSnackbar(`The service ${serviceName} is already`);
       setSeverity('warning');
       setOpenSnackbar(true);
       return false;
@@ -108,7 +132,8 @@ const Services: React.FunctionComponent<Props> = ({
   return (
     <div className='profile-box-form'>
       <div className='form-info-block'>
-        <div><p className='form-login-title green px20'>Services</p>
+        <div>
+          <p className='form-login-title green px20'>Services</p>
           <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
         </div>
         {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
@@ -149,11 +174,10 @@ const Services: React.FunctionComponent<Props> = ({
             {currentDentist && adminSettingSubscriber && currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
               if (key < Number(adminSettingSubscriber.freeMaxServices)) {
                 return (
-                  <p className='form-login-input' key={key}>
-                    <input value={el.name} />
-                    <img className='form-login-input-close' src='../../images/close.svg'
-                         onClick={() => deleteServiceDentist(el)} />
-                  </p>
+                  <FormLoginInput key={key}>
+                    <input type='text' value={el.name} />
+                    <IconClose src='../../../images/close.svg' alt='close' onClick={() => deleteServiceDentist(el)} />
+                  </FormLoginInput>
                 );
               }
             })
@@ -168,11 +192,10 @@ const Services: React.FunctionComponent<Props> = ({
             {currentDentist && currentDentist.hasPaidPlan && currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
               if (key < Number(adminSettingSubscriber.paidMaxServices)) {
                 return (
-                  <p className='form-profile-empty-input' key={key}>
-                    <input type='text' name='empty' value={el.name} id='empty' placeholder='' />
-                    <img className='form-login-input-close' src='../../images/close.svg'
-                         onClick={() => deleteServiceDentist(el)} />
-                  </p>
+                  <FormLoginInput key={key}>
+                    <input type='text' value={el.name} />
+                    <IconClose src='../../../images/close.svg' alt='close' onClick={() => deleteServiceDentist(el)} />
+                  </FormLoginInput>
                 );
               }
             })

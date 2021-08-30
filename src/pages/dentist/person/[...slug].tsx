@@ -26,6 +26,7 @@ const Person = ({ dentistData }: any) => {
   const [oldIMages, setOldIMages]: any = useState();
   const [route, setRoute]: any = useState();
   const [currentCover, setCurrentCover]: any = useState();
+  const [useriIsNotAuth, setUseriIsNotAuth]: any = useState();
 
   useEffect(() => {
     if (router.query.slug !== undefined) {
@@ -58,19 +59,19 @@ const Person = ({ dentistData }: any) => {
       const currentUser = await Auth.currentAuthenticatedUser();
       setCurrentUser(currentUser);
       setSignedInUser(true);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
 
-  const getDentist = async (id: string) => {
-    await ApiManager.getDentist(route ? route : id)
-    .then(currentDentist => {
-      setCurrentDentist(currentDentist);
-      getListImages();
-      getListServiceForDentals();
-    });
-  };
+  // const getDentist = async (id: string) => {
+  //   await ApiManager.getDentist(route ? route : id)
+  //   .then(currentDentist => {
+  //     setCurrentDentist(currentDentist);
+  //     getListImages();
+  //     getListServiceForDentals();
+  //   });
+  // };
 
   const downloadAvatar = async () => {
     await ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
@@ -90,7 +91,7 @@ const Person = ({ dentistData }: any) => {
         authMode: 'AWS_IAM'
       });
       setListImagesData(data.listImages.items);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -145,13 +146,12 @@ const Person = ({ dentistData }: any) => {
           allImages.push(item);
         }
       });
-      console.log('allImages', allImages);
       setTimeout(() => {
         setImages(allImages);
         setOldIMages(allImages);
       }, 1000);
 
-    } catch (e) {
+    } catch (e: any) {
       return <Error statusCode={404} />;
     }
   };
@@ -163,7 +163,10 @@ const Person = ({ dentistData }: any) => {
     });
   };
 
-  if (!currentDentist) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
+  if (currentDentist.isDisabled) return <WrapperFlex>
+    <div>{useriIsNotAuth}</div>
+  </WrapperFlex>;
+  if (!currentDentist && !currentDentist.isDisabled) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
 
   return (
     <>
@@ -208,10 +211,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       },
       authMode: 'AWS_IAM'
     });
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
   }
-  console.log('dentistData', dentistData);
   return {
     props: {
       // dentist: dentistData ? dentistData[0] : null

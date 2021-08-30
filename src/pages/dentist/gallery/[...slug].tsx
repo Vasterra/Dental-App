@@ -45,6 +45,7 @@ const GalleryPage = ({ dentist }: any) => {
   const [openSnackBar, setOpenSnackBar]: any = useState();
   const [updateImgEvent, setUpdateImgEvent]: any = useState();
   const [searchValue, setSearchValue]: any = useState();
+  const [showServicesPanel, setShowServicesPanel] = useState<boolean>(true);
 
 
   useEffect(() => {
@@ -75,7 +76,7 @@ const GalleryPage = ({ dentist }: any) => {
     try {
       await Auth.currentAuthenticatedUser();
       setSignedInUser(true);
-    } catch (e) {
+    } catch (e: any) {
       void await Router.push('/login');
     }
   };
@@ -98,7 +99,7 @@ const GalleryPage = ({ dentist }: any) => {
         authMode: 'AWS_IAM'
       });
       setListImagesData(data.listImages.items);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
     }
   };
@@ -175,7 +176,7 @@ const GalleryPage = ({ dentist }: any) => {
           setCheck(null);
         }, 1000);
       }
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackBar(error);
       setStatusSnackBar('error');
       setOpenSnackBar(true);
@@ -184,6 +185,7 @@ const GalleryPage = ({ dentist }: any) => {
 
   const saveData = async () => {
     setCheckFilesLeft(null);
+    setShowServicesPanel(true);
     setCheckFilesRight(null);
     setImagesData(null);
     setOldIMages(null);
@@ -200,11 +202,11 @@ const GalleryPage = ({ dentist }: any) => {
           input: {
             id: uuid,
             dentistId: currentDentist.id,
-            titleBefore: titleBefore,
-            tagsBefore: tagsBefore,
-            titleAfter: titleAfter,
-            tagsAfter: tagsAfter,
-            service: service,
+            titleBefore: titleBefore ? titleBefore : '',
+            tagsBefore: tagsBefore ? tagsBefore : '',
+            titleAfter: titleAfter ? titleAfter : '',
+            tagsAfter: tagsAfter ? tagsAfter : '',
+            service: service ? service : '',
             nameBefore: fileLeft.name,
             nameAfter: fileRight.name
           }
@@ -216,7 +218,7 @@ const GalleryPage = ({ dentist }: any) => {
       setMessageSnackBar('Success!');
       setStatusSnackBar('success');
       setOpenSnackBar(true);
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackBar(error);
       setStatusSnackBar('error');
       setOpenSnackBar(true);
@@ -241,7 +243,7 @@ const GalleryPage = ({ dentist }: any) => {
           setStatusSnackBar('error');
           setOpenSnackBar(true);
         });
-      } catch (error) {
+      } catch (error: any) {
         setMessageSnackBar(error);
         setStatusSnackBar('error');
         setOpenSnackBar(true);
@@ -267,7 +269,7 @@ const GalleryPage = ({ dentist }: any) => {
           setStatusSnackBar('error');
           setOpenSnackBar(true);
         });
-      } catch (error) {
+      } catch (error: any) {
         setMessageSnackBar(error);
         setStatusSnackBar('error');
         setOpenSnackBar(true);
@@ -329,6 +331,7 @@ const GalleryPage = ({ dentist }: any) => {
 
   const handlerShowUloadGallery = () => {
     setShowUloadGallery(true);
+    setShowServicesPanel(false);
     setUpdateService(null);
     setTitleBefore(null);
     setTagsBefore(null);
@@ -342,11 +345,13 @@ const GalleryPage = ({ dentist }: any) => {
     setUpdateImgEvent(false);
     setShowUloadGallery(false);
     setCheck(false);
+    setShowServicesPanel(true);
   };
 
   const editGallery = (val: any) => {
     setShowUloadGallery(true);
     setUpdateImgEvent(true);
+    setShowServicesPanel(false);
     setUpdateImg(val);
     setTitleBefore(val[1].titleBefore);
     setTagsBefore(val[1].tagsBefore);
@@ -365,11 +370,12 @@ const GalleryPage = ({ dentist }: any) => {
     let newListImages: any[] = [];
     let filterImages: any[] = [];
     oldIMages.forEach((slider: any) => {
-      slider[0].service.forEach((service: string) => {
-        if (service === e.target.value) {
+      const c: any[] = slider[0].service.replace(/[\])}[{(]/g, '').split(', ');
+      c.forEach((item: any) => {
+        if (item === e.target.value) {
           filterImages.push(slider);
         }
-      });
+      })
       return filterImages;
     });
 
@@ -430,16 +436,15 @@ const GalleryPage = ({ dentist }: any) => {
                      onChange={e => searchImagesByTitle(e.target.value)}
                      placeholder='Search Images' />
               <img className='search-button' src='../../images/search.svg' alt='search' />
-              <button className='button-green centered' onClick={handlerShowUloadGallery}>Upload to gallery</button>
+              <button className='button-green centered' disabled={imagesData && imagesData.length >= 2} onClick={handlerShowUloadGallery}>Upload to gallery</button>
             </div>
           </div>}
-
-          {oldIMages && oldIMages.length !== 0 && <div className='flex-end'>
+          {showServicesPanel && oldIMages && oldIMages.length !== 0 && <div className='flex-end'>
             <select className='gallery-select arrows bg-gray' name='services' id='services'
                     onChange={filterImagesByService}>
               <option value='All Service'>All Service</option>
               {
-                currentDentist.services.items.map((el: any, key: any) => {
+                currentDentist && currentDentist.services.items.map((el: any, key: any) => {
                   return (
                     <option key={key} value={el.name}>{el.name}</option>
                   );
@@ -634,7 +639,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       },
       authMode: 'AWS_IAM'
     });
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
   }
 

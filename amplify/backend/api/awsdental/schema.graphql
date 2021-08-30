@@ -16,6 +16,7 @@ type Dentist
   lat: String
   lng: String
   registered: Boolean
+  isDisabled: Boolean
   #  customerID: String
   #  paymentMethodID: String
   #  subscriptionID: String
@@ -62,7 +63,7 @@ type Image
   tagsBefore: String!
   titleAfter: String!
   tagsAfter: String!
-  service: [String!]
+  service: String!
   nameBefore: String!
   nameAfter: String!
 }

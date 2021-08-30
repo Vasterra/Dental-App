@@ -1,0 +1,38 @@
+type Dentist
+@model {
+  id: ID
+  firstName: String
+  lastName: String
+  phone: String
+  qualifications: String
+  bio: String
+  website: String
+  city: String
+  street: String
+  postIndex: String
+  email: String
+  lat: String
+  lng: String
+  registered: Boolean
+  services: [Service] @connection(keyName: "byDentist", fields: ["id"])
+  practices: [Practice] @connection(keyName: "byDentist", fields: ["id"])
+}
+
+type Service
+@model
+@key(name: "byDentist", fields: ["dentistId", "name"])
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  dentistId: ID!
+  name: String!
+
+}
+
+type Practice
+@model
+@key(name: "byDentist", fields: ["dentistId", "name"])
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  dentistId: ID!
+  name: String!
+}

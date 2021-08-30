@@ -7,7 +7,7 @@ import { deleteImage } from 'src/graphql/mutations';
 import ImageGallery from 'react-image-gallery';
 
 const Gallery: React.FunctionComponent = ({
-                                            imagesData,
+    imagesData,
     downloadImages,
     editGallery
   }: any) => {
@@ -24,7 +24,6 @@ const Gallery: React.FunctionComponent = ({
       setTags(imagesData[idx].tagsAfter);
     }
   };
-
 
   const removeImage = async (e: any) => {
     await Storage.remove(e[0].name)

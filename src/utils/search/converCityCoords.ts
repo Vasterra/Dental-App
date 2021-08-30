@@ -15,7 +15,7 @@ export async function convertCityCoords() {
       .catch((e) => {
         console.log('Request failed', e);
       })
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(err.message);
   }
 }

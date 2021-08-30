@@ -1,6 +1,7 @@
 import React from "react";
 import {Auth, Storage} from "aws-amplify";
 import AddWatermark from "./AddWatermark";
+import Router from 'next/router';
 
 type Props = {
   currentDentist: any,
@@ -11,13 +12,22 @@ type Props = {
 const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentAvatar, uploadAvatar}) => {
   return (
     <div className="profile-box-form">
-      <p className="form-login-title green px20">Display Photos</p>
-      <p className="form-login-subtitle gray px12 ">Information For Patients</p>
+      <div className='form-info-block'>
+        <div>
+          <p className="form-login-title green px20">Display Photos</p>
+          <p className="form-login-subtitle gray px12 ">Information For Patients</p>
+        </div>
+        {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
+          <button className='button-green-outline' onClick={() => {
+            void Router.push(`../../dentist/account/${currentDentist.id}`);
+          }}>Upgrade
+          </button>
+        </p>}
+      </div>
       <div className="box-2-box">
         <div className="profile-block-box">
           <div>
-            <p className="form-profile-label">
-              <label className="form-profile-label">Profile Picture</label>
+            <p className="form-profile-label"><label className="form-profile-label">Profile Picture</label>
             </p>
             <p className="load-avatar__block">
               <img src={currentAvatar ? currentAvatar : "../../../images/empty_avatar.png"} alt="profile image" />
@@ -30,10 +40,10 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
                    onChange={uploadAvatar}/>
           </p>
         </div>
-        { !currentDentist.hasPaidPlan && <div className="profile-block-box">
+        { !currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
             <AddWatermark currentDentist={currentDentist}/>
         </div> }
-        { currentDentist.hasPaidPlan && <div className="profile-block-box disabled">
+        { currentDentist.hasPaidPlan && <div className="profile-block-box">
           <AddWatermark currentDentist={currentDentist}/>
         </div> }
       </div>

@@ -24,13 +24,13 @@ const ResetPassword: React.FunctionComponent<Props> = ({
           setMessageSnackbar('The password change successfully!');
           setSeverity('success');
           setOpenSnackbar(true);
-        }).catch((error) => {
+        }).catch((error: any) => {
           setMessageSnackbar(error.message);
           setSeverity('warning');
           setOpenSnackbar(true);
         });
       });
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackbar(error.message);
       setSeverity('warning');
       setOpenSnackbar(true);

@@ -24,8 +24,8 @@ const AvatarForMapComponent: React.FunctionComponent<Props> = ({dentist}) => {
       ApiManager.downloadAvatar(dentist).then(signedFiles => {
         if (!cleanupFunction) setImages(signedFiles)
       })
-    } catch (e) {
-      console.error(e.message);
+    } catch (error: any) {
+      console.error(error.message);
     }
     return () => cleanupFunction = true;
   }, []);

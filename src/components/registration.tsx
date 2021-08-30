@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ButtonForm from './Buttons/ButtonForm';
 import { Snackbar, TextField } from '@material-ui/core';
-import { Auth } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import Router from 'next/router';
 import { useFormik } from 'formik';
 import { Alert } from '@material-ui/lab';
@@ -112,7 +112,7 @@ const Registration = ({}) => {
           }
         });
         setValues({ ...values, user });
-      } catch (error) {
+      } catch (error: any) {
         setMessageSnackbar('An error occured during registration, please check your information and try again!');
         setSeverity('warning');
         setOpenSnackbar(true);
@@ -130,7 +130,7 @@ const Registration = ({}) => {
       setSeverity('success');
       setOpenSnackbar(true);
       await Router.replace('/login');
-    } catch (error) {
+    } catch (error: any) {
       setMessageSnackbar(error.message);
       setSeverity('warning');
       setOpenSnackbar(true);

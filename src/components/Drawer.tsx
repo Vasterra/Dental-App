@@ -46,7 +46,7 @@ const Menu = styled('ul')`{
   }
 }`;
 
-class Drawer extends Component<{ currentAvatar: string, active: string, currentDentist: any }> {
+class Drawer extends Component<{ currentAvatar: string, active: string, currentDentist: any, userName: any }> {
 
   state: any = {
     currentDentist: null,
@@ -75,7 +75,7 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
       if (!this.state.currentUser.username === this.state.currentDentist.id) {
         return router.push(`{/dentist/account/'${this.state.currentDentist.id}`);
       }
-    } catch (err) {
+    } catch (err: any) {
     }
   }
 
@@ -105,7 +105,7 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
         };
       });
       this.setState({ images: filesList });
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error uploading file: ', error);
     }
   }

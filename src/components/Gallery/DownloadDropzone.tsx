@@ -47,7 +47,7 @@ const DownloadDropzone: React.FunctionComponent<Props> = ({downloadImages, denti
           setStatusSnackbar('error')
           setOpenSnackbar(true)
         });
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error uploading file: ', error);
     }
   }

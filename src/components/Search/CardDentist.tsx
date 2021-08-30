@@ -20,8 +20,8 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({ dentist, setCurr
         if (!cleanupFunction) setImages(signedFiles);
       });
       void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
-    } catch (e) {
-      console.error(e.message);
+    } catch (error: any) {
+      console.error(error.message);
     }
     return () => cleanupFunction = true;
   }, [dentist]);

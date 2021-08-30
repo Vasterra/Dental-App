@@ -186,7 +186,7 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
   };
 
   return (
-    <Layout title='Search page'>
+    <Layout title='Search page' >
       <Header />
       <section className='container page'>
         <div className='index-box-to-box'>
