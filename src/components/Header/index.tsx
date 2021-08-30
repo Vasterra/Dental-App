@@ -57,10 +57,11 @@ class Header extends React.Component {
             {/* {this.menuToggler()} */}
             <TemporaryDrawer currentUser={this.state.currentUser}/>
             <p>
-                <a href="/"> <img src="../images/FYD4_beige-on-green@2x.png"
-                    srcSet="../images/FYD4_beige-on-green@2x.png 2x,
-                ../images/FYD4_beige-on-green@3x.png 3x"
-                  className="logo-image"/>
+                <a href="/">
+                  <img src="../../images/FYD4_beige-on-green@2x.png"
+                      srcSet="../../images/FYD4_beige-on-green@2x.png 2x,
+                  ../../images/FYD4_beige-on-green@3x.png 3x"
+                    className="logo-image"/>
                 </a>
             </p>
             <div>
