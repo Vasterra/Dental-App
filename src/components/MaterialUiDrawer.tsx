@@ -6,6 +6,74 @@ import { Drawer, Link } from '@material-ui/core';
 import styled from 'styled-components'
 import Layout from './Layout';
 
+const LeftMenuWrapper = styled('div')`
+  & ._leftmenu{
+    align-self: stretch;
+    width: 333px;
+    height: 100vh;
+    background-color: #095c5c;
+    position: fixed;
+  }
+
+  & ._leftmenu-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 30px 25px 0 46px;
+  }
+
+  & ._leftmenu-list{}
+  & ._leftmenu-list:hover ._leftmenu-link-image {
+    filter: invert(0%);
+  }
+
+  & ._leftmenu-link-image{
+    z-index: 2;
+    width: 24px;
+    filter: invert(100%) brightness(160%);
+    transition: all 0.3s linear;
+  }
+
+  & ._leftmenu-link{
+    position: relative;
+    display: block;
+    width: 333px;
+    padding: 10px 0 10px 33%;
+    font-family: PT Sans;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1.05px;
+    text-align: left;
+    text-decoration: none;
+    color: var(--color-white);
+    /*margin-bottom: 23px;*/
+    margin-left: -46px;
+    transition: all 0.3s linear;
+    z-index: 1;
+  }
+
+  & ._leftmenu-nav-menu{
+    list-style: none;
+  }
+
+  & a {
+    cursor: pointer;
+  }
+
+  & ._logo-image {
+    width: 98px;
+    height: 47px;
+    object-fit: contain;
+  }
+  & ._desctop-visible{
+    display: block;
+  }
+`
+
 const Menu = styled('ul')`{
   li {
     display: flex;
@@ -90,67 +158,48 @@ export default function TemporaryDrawer({currentUser}) {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-         <>
-            <div className='leftmenu'>
-              <div className='mobile-topmenu'>
-                <p className='menu' id='mobile_menu'>
-                  <svg className='menu-logo' xmlns='http://www.w3.org/2000/svg' height='28px' viewBox='0 0 28 20'
-                       width='20px'>
-                    <path d='M0 0h24v24H0V0z' fill='none' />
-                    <path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' />
-                  </svg>
-                </p>
-                <p className='link-actve'>
-                  <Link href='/'>
-                    <img src='../../images/FYD4_beige-on-green@2x.png'
-                         srcSet='../../images/FYD4_beige-on-green@2x.png 2x,
-             ../../images/FYD4_beige-on-green@3x.png 3x' className='logo-image' />
-                  </Link>
-                </p>
-                <p>
-                  <img className='user-image-mobile' src='../../images/user-image.png' alt='user image' />
-                </p>
-              </div>
-              <div className='leftmenu-content'>
-                <p className='link-actve'>
+         <LeftMenuWrapper>
+            <div className='_leftmenu'>
+              <div className='_leftmenu-content'>
+                <p className='_link-actve'>
                   <Link href='/'>
                     <img src='../../images/FYD4_beige-on-green@2x.png'
                          srcSet='../../images/FYD4_beige-on-green@2x.png 2x, ../../images/FYD4_beige-on-green@3x.png 3x'
-                         className='logo-image desctop-visible' alt='logo image'
+                         className='_logo-image _desctop-visible' alt='logo image'
                     />
                   </Link>
                 </p>
               </div>
-              <Menu className='leftmenu-nav-menu'>
+              <Menu className='_leftmenu-nav-menu'>
                 <Link href={`../../dentist/profile/${currentUser.username}`}>
-                  <li className={`leftmenu-list`}>
-                    <img className='leftmenu-link-image' src='../../images/user.svg' alt='link image' />
-                    <a className='leftmenu-link'>Profile</a>
+                  <li className="_leftmenu-list">
+                    <img className='_leftmenu-link-image' src='../../images/user.svg' alt='link image' />
+                    <a className='_leftmenu-link'>Profile</a>
                   </li>
                 </Link>
                 <Link href={`../../dentist/gallery/${currentUser.username}`}>
-                  <li className={`leftmenu-list`}>
-                    <img className='leftmenu-link-image' src='../../images/gallery.svg' alt='link image' />
-                    <a className='leftmenu-link'>Gallery</a>
+                  <li className="_leftmenu-list">
+                    <img className='_leftmenu-link-image' src='../../images/gallery.svg' alt='link image' />
+                    <a className='_leftmenu-link'>Gallery</a>
                   </li>
                 </Link>
                 <Link href={`../../dentist/account/${currentUser.username}`}>
-                  <li className={`leftmenu-list`}>
-                    <img className='leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
-                    <a className='leftmenu-link'>Account</a>
+                  <li className="_leftmenu-list">
+                    <img className='_leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
+                    <a className='_leftmenu-link'>Account</a>
                   </li>
                 </Link>
               </Menu>
             </div>
             <div style={{ minWidth: '333px' }}/>
-          </>
+          </LeftMenuWrapper>
     </div>
   );
 
   
   const menuToggler = (onToggle: any)=>{
     return (
-      <p className="menu" id="mobile_menu" onClick={currentUser && onToggle}>
+      <p onClick={currentUser && onToggle}>
       <svg className="menu-logo" xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 28 20" width="20px">
           <path d="M0 0h24v24H0V0z" fill="none"/>
           <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>

@@ -310,6 +310,10 @@ img {
     z-index: 1;
 }
 
+.mobile-header{
+    display: none;
+}
+
 .active {
     background: var(--color-white);
     color: var(--color-green);
@@ -2609,7 +2613,17 @@ input:disabled:-ms-input-placeholder {
         z-index: 5;
         position: fixed;
         min-width: 100%;
-        height: 61px;
+        /* height: 61px; */
+        display: none;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    .mobile-header{
+        z-index: 15;
+        position: fixed;
+        min-width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
