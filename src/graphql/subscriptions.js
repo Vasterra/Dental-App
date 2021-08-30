@@ -11,6 +11,7 @@ export const onCreateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
@@ -19,6 +20,7 @@ export const onCreateDentist = /* GraphQL */ `
       lat
       lng
       registered
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -76,6 +78,7 @@ export const onUpdateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
@@ -84,6 +87,7 @@ export const onUpdateDentist = /* GraphQL */ `
       lat
       lng
       registered
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -141,6 +145,7 @@ export const onDeleteDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
@@ -149,6 +154,7 @@ export const onDeleteDentist = /* GraphQL */ `
       lat
       lng
       registered
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -377,7 +383,6 @@ export const onCreateAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -397,7 +402,6 @@ export const onUpdateAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -417,67 +421,6 @@ export const onDeleteAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
-    }
-  }
-`;
-export const onCreateAdminAnalytics = /* GraphQL */ `
-  subscription OnCreateAdminAnalytics {
-    onCreateAdminAnalytics {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const onUpdateAdminAnalytics = /* GraphQL */ `
-  subscription OnUpdateAdminAnalytics {
-    onUpdateAdminAnalytics {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const onDeleteAdminAnalytics = /* GraphQL */ `
-  subscription OnDeleteAdminAnalytics {
-    onDeleteAdminAnalytics {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
     }
   }
 `;

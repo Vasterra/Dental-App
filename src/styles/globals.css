@@ -3,6 +3,7 @@
 
 :root {
   --color-green: #095c5c;
+  --color-red: #dc3545;
   --color-white: #fff;
   --color-gray: #787878;
   --color-black: #1f1f1f;
@@ -12,6 +13,9 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 
 img {
@@ -258,7 +262,7 @@ img {
 }
 
 .user-image {
-  margin-right: 22px;
+  /*margin-right: 22px;*/
   width: 100px;
   max-width: 100%;
   height: auto;
@@ -751,9 +755,9 @@ input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
 }
 
 .search-users {
-  position: relative;
-  height: 40px;
-  margin: 28px 0.4px 29px 1px;
+  /*position: relative;*/
+  /*height: 40px;*/
+  /*margin: 28px 0.4px 29px 1px;*/
   padding: 11.5px 0 11.5px 40px;
   background-color: #ffffff;
   width: 100%;
@@ -823,6 +827,41 @@ input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
   text-align: left;
   color: var(--color-black);
   margin: 16px 0;
+}
+
+.gdc-update-input {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  /*border-bottom: 1px solid rgba(31, 31, 31, 0.2);*/
+  border-bottom: none;
+  background-color: var(--color-green);
+  color: var(--color-white);
+  outline: none;
+}
+
+.gdc-update-button {
+  margin-left: 5px;
+  width: 20px;
+  height: 17px;
+  border-radius: 50%;
+  outline: 0;
+  border: none;
+}
+
+.gdc-update-button:hover {
+  opacity: 0.4
+}
+
+.gdc-input-edit {
+  cursor: pointer;
+  width: 13px;
+  -webkit-transition: .3s linear;
+  -moz-transition: .3s linear;
+  transition: .3s linear;
 }
 
 .form-profile-input {
@@ -1063,6 +1102,34 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   position: relative;
 }
 
+.account_sort {
+  box-shadow: 0 0 5px #fff;
+  transition: .3s linear;
+  z-index: 10;
+  border: 1px solid var(--color-green);
+  display: none;
+  position: absolute;
+  width: 100px;
+  top: 15px;
+  right: -13px;
+  list-style: none;
+  font-family: Arial;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  color: var(--color-white);
+  background: var(--color-green);
+  /*padding: 10px;*/
+}
+
+#account_sort {
+  position: relative;
+}
+
 .account_opened {
   box-shadow: 0 0 5px #fff;
   transition: .3s linear;
@@ -1098,6 +1165,20 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 #account_opened:hover .account_opened {
+  display: block;
+}
+
+.account_sort li {
+  padding: 5px;
+  transition: .3s linear;
+}
+
+.account_sort li:hover {
+  color: var(--color-green);
+  background: var(--color-white);
+}
+
+#account_sort:hover .account_sort {
   display: block;
 }
 
@@ -1207,7 +1288,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   width: 100%;
   grid-template-columns: 6fr 3fr 6fr 3fr 1fr;
   grid-gap: 20px;
-  cursor: pointer;
+  /*cursor: pointer;*/
   justify-items: flex-start;
   align-items: center;
 }
@@ -1217,7 +1298,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   width: 100%;
   grid-template-columns: 6fr 3fr 6fr 3fr 1fr;
   grid-gap: 20px;
-  cursor: pointer;
+  /*cursor: pointer;*/
   justify-items: flex-start;
   align-items: center;
 }
@@ -1225,6 +1306,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 .select-area {
   position: relative;
   border: none;
+  cursor: pointer;
   outline: none;
   background: transparent;
 }
@@ -1241,7 +1323,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 .open-user-profile {
-  width: 40px;
+  /*width: 40px;*/
 }
 
 .pl-17 {

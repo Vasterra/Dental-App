@@ -14,6 +14,7 @@ export const createDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
@@ -22,6 +23,7 @@ export const createDentist = /* GraphQL */ `
       lat
       lng
       registered
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -82,6 +84,7 @@ export const updateDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
@@ -90,6 +93,7 @@ export const updateDentist = /* GraphQL */ `
       lat
       lng
       registered
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -150,6 +154,7 @@ export const deleteDentist = /* GraphQL */ `
       qualifications
       bio
       website
+      gdcNumber
       address
       city
       street
@@ -158,6 +163,7 @@ export const deleteDentist = /* GraphQL */ `
       lat
       lng
       registered
+      isDisabled
       hasPaidPlan
       services {
         items {
@@ -425,7 +431,6 @@ export const createAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -448,7 +453,6 @@ export const updateAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -471,76 +475,6 @@ export const deleteAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
-    }
-  }
-`;
-export const createAdminAnalytics = /* GraphQL */ `
-  mutation CreateAdminAnalytics(
-    $input: CreateAdminAnalyticsInput!
-    $condition: ModelAdminAnalyticsConditionInput
-  ) {
-    createAdminAnalytics(input: $input, condition: $condition) {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const updateAdminAnalytics = /* GraphQL */ `
-  mutation UpdateAdminAnalytics(
-    $input: UpdateAdminAnalyticsInput!
-    $condition: ModelAdminAnalyticsConditionInput
-  ) {
-    updateAdminAnalytics(input: $input, condition: $condition) {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const deleteAdminAnalytics = /* GraphQL */ `
-  mutation DeleteAdminAnalytics(
-    $input: DeleteAdminAnalyticsInput!
-    $condition: ModelAdminAnalyticsConditionInput
-  ) {
-    deleteAdminAnalytics(input: $input, condition: $condition) {
-      id
-      totalSubscriptions
-      totalFreeAccounts
-      totalSubscriptionsClosed
-      totalAccountsClosed
-      totalImagesUploaded
-      monthNewSubscriptions
-      monthNewFreeAccounts
-      monthSubscriptionsClosed
-      monthAccountsClosed
-      monthImagesUploaded
-      createdAt
-      updatedAt
-      owner
     }
   }
 `;

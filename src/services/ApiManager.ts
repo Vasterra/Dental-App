@@ -1,8 +1,7 @@
-import {API, Auth, Hub, Storage} from "aws-amplify";
-import Router from "next/router";
-import {createAdminSettingsSubscriber, deleteDentist, updateAdminSettingsSubscriber} from "../graphql/mutations";
+import { API, Auth, Hub, Storage } from 'aws-amplify';
+import Router from 'next/router';
+import { createClosedAccount, deleteDentist, updateAdminSettingsSubscriber, updateDentist } from '../graphql/mutations';
 import {
-  getAdminAnalytics,
   getAdminSettingsSubscriber,
   getDentist,
   listClosedAccounts,
@@ -10,7 +9,8 @@ import {
   listDentists,
   listImages,
   listServiceForDentals
-} from "../graphql/queries";
+} from '../graphql/queries';
+import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql/lib-esm/types';
 
 class ApiManager {
 
@@ -22,112 +22,107 @@ class ApiManager {
     Hub.listen('auth', (data) => {
       switch (data.payload.event) {
         case 'signIn':
-          return true
+          return true;
         case 'signOut':
-          return false
+          return false;
       }
-    })
+    });
   }
 
   public static async signOut() {
     try {
       await Auth.signOut();
-      await Router.replace('/')
-    } catch (error) {
+      await Router.replace('/');
+    } catch (error: any) {
       console.log('error signing out: ', error);
     }
   }
 
-  public static async getListImages() {
+  public static GET_LIST_IMAGES = async () => {
     try {
-      const {data}: any = await API.graphql({
+      const { data }: any = await API.graphql({
         query: listImages,
-        // @ts-ignore
-        authMode: 'AWS_IAM'
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
-      return data.listImages.items
-    } catch (e) {
-      console.log(e)
+      return data.listImages.items;
+    } catch (e: any) {
+      console.log(e);
     }
-  }
+  };
 
-  public static getDentist = async (id: any) => {
-    if (id === null) return
-    const {data}: any = await API.graphql({
+  public static GET_DENTIST = async (id: any) => {
+    const { data }: any = await API.graphql({
       query: getDentist,
       variables: {
         id: id
       },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
+      authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
     });
-    return data.getDentist
-  }
+    return data.getDentist;
+  };
 
-  public static getListDentists = async () => {
-    const {data}: any = await API.graphql({
+  public static GET_LIST_DENTIST = async () => {
+    const { data }: any = await API.graphql({
       query: listDentists,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
+      authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
     });
-    return data.listDentists.items
-  }
+    return data.listDentists.items;
+  };
+
+  public static GET_UPDATE_DENTISTS = async (dentist: { Username: any; }, gdcNumber: any) => {
+    try {
+      return await API.graphql({
+        query: updateDentist,
+        variables: {
+          input: {
+            id: dentist.Username,
+            gdcNumber
+          }
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   public static GET_LIST_CLOSED_ACCOUNTS = async () => {
-    const {data}: any = await API.graphql({
+    const { data }: any = await API.graphql({
       query: listClosedAccounts,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
+      authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
     });
-    return data.listClosedAccounts.items
-  }
+    return data.listClosedAccounts.items;
+  };
 
   public static GET_LIST_CLOSED_SUBSCRIPTIONS = async () => {
-    const {data}: any = await API.graphql({
+    const { data }: any = await API.graphql({
       query: listClosedSubscriptions,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
+      authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
     });
-    return data.listClosedSubscriptions.items
-  }
+    return data.listClosedSubscriptions.items;
+  };
 
-  public static GET_ADMIN_ANALYTIC = async () => {
-    const {data}: any = await API.graphql({
-      query: getAdminAnalytics,
-      variables: {
-        id: '1'
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    return data.getAdminAnalytics
-  }
+  // public static GET_ADMIN_ANALYTIC = async () => {
+  //   const { data }: any = await API.graphql({
+  //     query: getAdminAnalytics,
+  //     variables: {
+  //       id: '1'
+  //     },
+  //     authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+  //   });
+  //   return data.getAdminAnalytics;
+  // };
 
   public static GET_ADMIN_SETTINGS_SUBSCRIBER = async () => {
-    const {data}: any = await API.graphql({
+    const { data }: any = await API.graphql({
       query: getAdminSettingsSubscriber,
       variables: {
         id: '1'
       },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
+      authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
     });
-    return data.getAdminSettingsSubscriber
-  }
-
-  public static createAdminSettingsSubscribers = async (data: any) => {
-    const result = await API.graphql({
-      query: createAdminSettingsSubscriber,
-      variables: {
-        input: {
-          data
-        }
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    })
-    return result;
-  }
+    return data.getAdminSettingsSubscriber;
+  };
 
   public static updateAdminSettingsSubscribers = async (data: any) => {
     const result = await API.graphql({
@@ -147,11 +142,10 @@ class ApiManager {
           paidWebsiteAddress: data.paidWebsiteAddress
         }
       },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    })
+      authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+    });
     return result;
-  }
+  };
 
   public static async changePassword(oldPassword: any, newPassword: any) {
     await Auth.currentAuthenticatedUser()
@@ -164,10 +158,10 @@ class ApiManager {
 
   public static async downloadImages(currentDentist: any) {
     try {
-      if (currentDentist === null) return
-      const files = await Storage.list('images/' + currentDentist.id + '/')
-      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key))
-      signedFiles = await Promise.all(signedFiles)
+      if (currentDentist === null) return;
+      const files = await Storage.list('images/' + currentDentist.id + '/');
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key));
+      signedFiles = await Promise.all(signedFiles);
       let filesList = signedFiles.map((f: any) => {
         return {
           thumbnail: f,
@@ -176,49 +170,66 @@ class ApiManager {
           thumbnailWidth: 320,
           thumbnailHeight: 212,
           isSelected: false
-        }
-      })
-      return filesList
-    } catch (error) {
+        };
+      });
+      return filesList;
+    } catch (error: any) {
       console.log('Error uploading file: ', error);
     }
   }
 
   public static async downloadAvatar(currentDentist: any) {
-    if (currentDentist === null) return
+    if (currentDentist === null) return;
     try {
       const files = await Storage.list('avatars/' + currentDentist.id + '/');
       let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key));
       signedFiles = await Promise.all(signedFiles);
       return signedFiles[signedFiles.length - 1];
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error download Avatar file: ', error);
     }
   }
 
-  public static async deleteDentist(currentDentist: any) {
-    if (currentDentist === null) return
-    await API.graphql({
-      query: deleteDentist,
-      variables: {
-        input: {
-          id: currentDentist.id,
-        }
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    })
-  }
+  public static CREATE_CLOSED_ACCOUNT = async (id: any) => {
+    try {
+      await API.graphql({
+        query: createClosedAccount,
+        variables: {
+          input: {
+            dentistId: id,
+            closedAccount: 'closed'
+          }
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
 
+  public static DELETE_DENTIST = async (currentDentist: any) => {
+    try {
+      await API.graphql({
+        query: deleteDentist,
+        variables: {
+          input: {
+            id: currentDentist.id
+          }
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
 
   public static getListServiceForDentals = async () => {
-    const {data}: any = await API.graphql({
+    const { data }: any = await API.graphql({
       query: listServiceForDentals,
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    })
-    return data.listServiceForDentals.items
-  }
+      authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+    });
+    return data.listServiceForDentals.items;
+  };
 
 }
 

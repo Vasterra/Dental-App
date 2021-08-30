@@ -1,80 +1,65 @@
-import React from "react";
+import React from 'react';
 
 type Props = {
   analytics: any
 }
 
-const Subscriptions: React.FunctionComponent<Props>= ({analytics}) => {
+const Subscriptions: React.FunctionComponent<Props> = ({ analytics }) => {
 
   return (
-    <div className="profile-block-box">
-      {analytics && <div className="double-blocks-5">
+    <div className='profile-block-box'>
+      {analytics && <div className='double-blocks-5'>
         <div>
-          <p className="form-profile-label">
-            <label className="form-profile-label">Subscriptions</label>
-          </p>
-          <p>
-            <input className="form-profile-input"
-                   type="text"
-                   name="totalSubscriptions"
-                   id="totalSubscriptions"
-                   value={analytics.totalSubscriptions}
-            />
-          </p>
+          <label className='form-profile-label'>Subscriptions</label>
+          <input className='form-profile-input'
+                 type='text'
+                 disabled
+                 name='totalSubscriptions'
+                 id='totalSubscriptions'
+                 value={analytics.totalSubscriptions}
+          />
         </div>
         <div>
-          <p className="form-profile-label">
-            <label className="form-profile-label">Free Accounts</label>
-          </p>
-          <p>
-            <input className="form-profile-input"
-                   type="text"
-                   name="totalFreeAccounts"
-                   id="totalFreeAccounts"
-                   value={analytics.totalFreeAccounts}
-            />
-          </p>
+          <label className='form-profile-label'>Free Accounts</label>
+          <input className='form-profile-input'
+                 type='text'
+                 disabled
+                 name='totalFreeAccounts'
+                 id='totalFreeAccounts'
+                 value={analytics.totalFreeAccounts}
+          />
         </div>
         <div>
-          <p className="form-profile-label">
-            <label className="form-profile-label">Subscriptions Closed </label>
-          </p>
-          <p>
-            <input className="form-profile-input"
-                   type="text"
-                   name="totalSubscriptionsClosed"
-                   id="totalSubscriptionsClosed"
-                   value={analytics.totalSubscriptionsClosed}
-            />
-          </p>
+          <label className='form-profile-label'>Subscriptions Closed </label>
+          <input className='form-profile-input'
+                 type='text'
+                 disabled
+                 name='totalSubscriptionsClosed'
+                 id='totalSubscriptionsClosed'
+                 value={analytics.totalSubscriptionsClosed}
+          />
         </div>
         <div>
-          <p className="form-profile-label">
-            <label className="form-profile-label">Accounts Closed</label>
-          </p>
-          <p>
-            <input className="form-profile-input"
-                   type="text"
-                   name="totalAccountsClosed"
-                   id="totalAccountsClosed"
-                   value={analytics.totalAccountsClosed}
-            />
-          </p>
+          <label className='form-profile-label'>Accounts Closed</label>
+          <input className='form-profile-input'
+                 type='text'
+                 disabled
+                 name='totalAccountsClosed'
+                 id='totalAccountsClosed'
+                 value={analytics.totalAccountsClosed}
+          />
         </div>
         <div>
-          <p className="form-profile-label">
-            <label className="form-profile-label">Images Uploaded</label>
-          </p>
-          <p>
-            <input className="form-profile-input"
-                   type="text"
-                   name="totalImagesUploaded"
-                   id="totalImagesUploaded"
-                   value={analytics.totalImagesUploaded}
-            />
-          </p>
+          <label className='form-profile-label'>Images Uploaded</label>
+          <input className='form-profile-input'
+                 type='text'
+                 disabled
+                 name='totalImagesUploaded'
+                 id='totalImagesUploaded'
+                 value={analytics.totalImagesUploaded}
+          />
         </div>
-      </div> }
+      </div>}
     </div>
   );
 };

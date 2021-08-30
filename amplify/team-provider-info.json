@@ -18,7 +18,7 @@
       "function": {
         "createSubscription": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
-          "s3Key": "amplify-builds/createSubscription-484d4357324f72506170-build.zip"
+          "s3Key": "amplify-builds/createSubscription-4e436c30794c70473356-build.zip"
         },
         "handleSubscription": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
@@ -71,6 +71,10 @@
         "updatePlan": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
           "s3Key": "amplify-builds/updatePlan-47643346775634694c77-build.zip"
+        },
+        "AdminQueries8afa39f9": {
+          "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
+          "s3Key": "amplify-builds/AdminQueries8afa39f9-33553478765951646269-build.zip"
         }
       }
     }

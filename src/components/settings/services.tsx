@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import { listServiceForDentals } from 'src/graphql/queries';
 import { API } from 'aws-amplify';
-import { createServiceForDental, deleteServiceForDental, updateServiceForDental } from 'src/graphql/mutations';
+import {
+  createServiceForDental,
+  deleteService,
+  deleteServiceForDental,
+  updateServiceForDental
+} from 'src/graphql/mutations';
 import Close from '@material-ui/icons/Close';
 import { CircularProgress, Snackbar } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import ApiManager from '../../services/ApiManager';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 const Services = () => {
 
@@ -15,29 +24,42 @@ const Services = () => {
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
-  const [severity, setSeverity]: any = useState();
+  const [severity, setSeverity] = useState<'error' | 'info' | 'success' | 'warning'>();
 
   React.useEffect(() => {
-    getListServiceForDentals();
+    void getListServiceForDentals();
   }, []);
 
 
   const getListServiceForDentals = async () => {
-    const arr: any[] = [];
-    setServices(null);
+    const arr: any = [];
     const { data }: any = await API.graphql({
       query: listServiceForDentals,
       // @ts-ignore
       authMode: 'AWS_IAM'
     });
-    data.listServiceForDentals.items.map((item: any, key: any) => {
+    data.listServiceForDentals.items.map((item: any) => {
       arr.push(item.name);
     });
     setUpdateServiceName(arr);
     setServices(data.listServiceForDentals.items);
   };
 
-  const addServiceForDentals = async () => {
+  const addServiceForDental = async () => {
+    if (service.length === 0) return false;
+    const filterService: boolean[] = [];
+    services.map(async (item: any) => {
+      if (item.name === service) {
+        filterService.push(item);
+      }
+    });
+
+    if (filterService.length !== 0) {
+      setMessageSnackbar(`The service ${service} is already`);
+      setSeverity('warning');
+      setOpenSnackbar(true);
+      return false;
+    }
     try {
       await API.graphql({
         query: createServiceForDental,
@@ -52,15 +74,15 @@ const Services = () => {
       setMessageSnackbar('The Service was addded successfully!');
       setSeverity('success');
       setOpenSnackbar(true);
+      await getListServiceForDentals();
     } catch (error) {
       setMessageSnackbar('Failed to add service');
       setSeverity('warning');
       setOpenSnackbar(true);
     }
-    getListServiceForDentals();
   };
 
-  const updateServiceForDentals = async (key: any, id: any) => {
+  const updateService = async (key: any, id: any) => {
     const updateInput: any = document.getElementsByClassName('form-update-input');
     if (updateInput[key].disabled) {
       updateInput[key].disabled = false;
@@ -93,7 +115,7 @@ const Services = () => {
     }
   };
 
-  const deleteService = async (item: { id: any; }) => {
+  const deleteServiceDental = async (item: any ) => {
     try {
       await API.graphql({
         query: deleteServiceForDental,
@@ -105,18 +127,38 @@ const Services = () => {
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
-      getListServiceForDentals();
-      setMessageSnackbar('The Service was deleted successfully!');
-      setSeverity('success');
-      setOpenSnackbar(true);
+      void ApiManager.GET_LIST_DENTIST().then((listDentists: any) => {
+        listDentists.forEach((dentist: { id: any; }) => {
+          void ApiManager.GET_DENTIST(dentist.id).then(dent => {
+            dent.services.items.forEach(async (service: any) => {
+              if (service.name === item.name) {
+                await API.graphql({
+                  query: deleteService,
+                  variables: {
+                    input: {
+                      id: service.id
+                    }
+                  },
+                  // @ts-ignore
+                  authMode: 'AWS_IAM'
+                });
+              }
+              setMessageSnackbar(`Service ${service.name} deleted!`);
+              setSeverity('success');
+              setOpenSnackbar(true);
+            });
+          });
+        });
+      });
     } catch (error) {
       setMessageSnackbar('Failed to delete service');
       setSeverity('warning');
       setOpenSnackbar(true);
     }
+    await getListServiceForDentals();
   };
 
-  const onChnage = (e: any, key: any) => {
+  const onChange = (e: any, key: any) => {
     const updateInput: any = document.getElementsByClassName('form-update-input');
     updateInput[key].value = e;
     setUpdateServiceName({ [key]: e });
@@ -143,26 +185,22 @@ const Services = () => {
         <div className='box-2-box'>
           <div className='profile-block-box'>
             <div>
-              <p className='form-profile-label'>
-                <label className='form-profile-label'>Add Service</label>
-              </p>
-              <p>
-                <input className='form-profile-input'
-                       type='text'
-                       name='add_service'
-                       id='add_service'
-                       value={service}
-                       onChange={(e: any) => setService(e.target.value)}
-                       placeholder='Service Name Here' />
-              </p>
+              <label className='form-profile-label'>Add Service</label>
+              <input className='form-profile-input'
+                     type='text'
+                     name='add_service'
+                     id='add_service'
+                     value={service}
+                     onChange={(e: any) => setService(e.target.value)}
+                     placeholder='Service Name Here' />
             </div>
             <p className='row-content'>
-              <button className='button-green' onClick={addServiceForDentals}>Add service</button>
+              <button className='button-green' onClick={addServiceForDental}>Add service</button>
             </p>
           </div>
           <div className='profile-block-box'>
             <div>
-              {services.map((item: any, key: any) => {
+              {services && services.map((item: any, key: any) => {
                 return (
                   <div key={key}>
                     <input type='text'
@@ -171,11 +209,11 @@ const Services = () => {
                            value={updateServiceName[key]}
                            id='update_service'
                            disabled
-                           onChange={(e: any) => onChnage(e.target.value, key)} />
-                    <span onClick={() => updateServiceForDentals(key, item.id)}>
+                           onChange={(e: any) => onChange(e.target.value, key)} />
+                    <span onClick={() => updateService(key, item.id)}>
                     <img className='form-login-input-edit' src='../../../images/edit.svg' />
                   </span>
-                    <Close className='form-login-input-close' onClick={() => deleteService(item)} />
+                    <Close className='form-login-input-close' onClick={() => deleteServiceDental(item)} />
                   </div>
                 );
               })
@@ -188,6 +226,13 @@ const Services = () => {
             </Alert>
           </Snackbar>
         </div>
+        <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+          <Alert onClose={handleCloseSnackbar}
+            // @ts-ignore
+                 severity={severity}>
+            {messageSnackbar}
+          </Alert>
+        </Snackbar>
       </>
       }
     </div>
