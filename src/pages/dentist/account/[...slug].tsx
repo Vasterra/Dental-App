@@ -22,7 +22,7 @@ const Account = ({ dentist }: any) => {
   const router = useRouter();
 
   const [currentDentist, setCurrentDentist] = useState(dentist);
-  const [currentAvatar, setCurrentAvatar] = useState();
+  const [currentAvatar, setCurrentAvatar] = useState('');
   const [signedInUser, setSignedInUser] = useState(false);
   const [route, setRoute]: any = useState();
 
@@ -50,7 +50,9 @@ const Account = ({ dentist }: any) => {
 
   const downloadAvatar = (currentDentist: any) => {
     void ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
-      setCurrentAvatar(signedFiles);
+      if (signedFiles !== undefined) {
+        setCurrentAvatar(signedFiles);
+      }
     });
   };
 

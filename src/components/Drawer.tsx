@@ -134,12 +134,11 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
                     </Link>
                   </p>
                   <div className='leftmenu-user-information'>
-                    {this.props.currentAvatar &&
                     <img className='user-image'
-                        src={this.props.currentAvatar !== '' ? this.props.currentAvatar : '../../../images/empty_avatar.png'}
-                        alt='user image' />}
-                    <p className='user-description white'><span>{this.props.currentDentist.firstName || 'firstname'}</span>
-                      <span>{this.props.currentDentist.lastName || 'lastName'}</span></p>
+                        src={this.props.currentAvatar  ? this.props.currentAvatar : "../../images/empty_avatar.png"}
+                        alt="profile image" />
+                    <p className='user-description white'><span>{this.props.currentDentist.firstName || ''}</span>
+                      <span>{this.props.currentDentist.lastName || ''}</span></p>
                   </div>
               </div>
               <Menu>
