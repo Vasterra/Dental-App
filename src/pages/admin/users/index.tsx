@@ -12,7 +12,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { Pagination } from '@material-ui/lab';
 import { UserViewProfileBlock, UserViewProfileLink } from 'src/styles/PageUsers.module';
-import { Snackbar } from '@material-ui/core';
+import { CircularProgress, Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { ButtonRedOutline } from 'src/styles/Buttons.module';
 import ApiManager from 'src/services/ApiManager';
@@ -41,6 +41,7 @@ const AdminUsers = () => {
   const [groupName, setGroupName] = useState<string>('');
   const [gdcNumber, setGdcNumber] = useState<string>('');
   const [statusForModalTitle, setStatusForModalTitle] = useState<string>('');
+  const [listGdcNumbers, setListGdcNumbers] = useState<any>([]);
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [messageSnackbar, setMessageSnackbar] = useState<string>('');
@@ -225,6 +226,7 @@ const AdminUsers = () => {
           setCountPagination(antPag);
           setDentists(arr);
           setOldDentists(arr);
+          setListGdcNumbers(arr.map(item => item.gdcNumber))
           setGdcNumber('');
         });
       } catch (e: any) {
@@ -238,7 +240,7 @@ const AdminUsers = () => {
   const downloadCSV = () => {
     let csvDataExcel: any[] = [];
 
-    oldDentists.forEach((item: any) => {
+    dentists.forEach((item: any) => {
       csvDataExcel.push(
         ['Account Email', item.email ? item.email : 'none'],
         ['GDC Number', item.gdcNumber ? item.gdcNumber : 'none'],
@@ -389,8 +391,8 @@ const AdminUsers = () => {
           setSeverity('success');
           setOpenSnackbar(true);
         })
-        setGdcNumber('')
-        await listUsersGroupDental();
+        // setGdcNumber('')
+        // await listUsersGroupDental();
       }
     }
   };
@@ -505,10 +507,13 @@ const AdminUsers = () => {
                           <input type='text'
                                  className='gdc-update-input'
                                  name='gdcNumber'
-                                 value={gdcNumber.length !== 0 ? gdcNumber : item.gdcNumber}
+                                 value={listGdcNumbers[key]}
                                  id='gdcNumber'
                                  disabled
-                                 onChange={(e: any) => setGdcNumber(e.target.value)}
+                                 onChange={(e: any) => {
+                                   listGdcNumbers[key] = e.target.value;
+                                   setGdcNumber(e.target.value);
+                                 }}
                           />
                           <button className='gdc-update-button' onClick={() => updateGdsNumber(key, item)}>
                             <img className='gdc-input-edit' src='../../../images/edit.svg' />

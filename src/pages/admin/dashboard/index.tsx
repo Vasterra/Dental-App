@@ -6,8 +6,6 @@ import Menu from 'src/components/menu';
 import Error from 'next/error';
 import moment from 'moment';
 import { IAnalytics, IDentist, IImages, IListClosedAccounts, IListClosedSubscriptions } from '../../../types/types';
-import { Auth } from 'aws-amplify';
-import Router from 'next/router';
 
 const AdminDashboard = () => {
 

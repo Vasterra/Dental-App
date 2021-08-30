@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Auth } from 'aws-amplify';
-import Router from 'next/router';
 import Close from '@material-ui/icons/Close';
 import { useFormik } from 'formik';
 import { Snackbar } from '@material-ui/core';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
+import { CognitoUser } from '@aws-amplify/auth';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -33,9 +33,9 @@ const Login = () => {
     errorMessage: null,
     loader: null
   });
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [messageSnackbar, setMessageSnackbar] = useState('');
-  const [severity, setSeverity]: any = useState();
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>();
+  const [messageSnackbar, setMessageSnackbar] = useState<string>();
+  const [severity, setSeverity] = useState<Color | undefined>();
 
   const validate = (values: any) => {
     const passwordRegex = /(?=.*[0-9])/;
@@ -73,7 +73,7 @@ const Login = () => {
     validate,
     onSubmit: async (values: any) => {
       try {
-        const user = await Auth.signIn(values.username, values.password);
+        const user = await Auth.signIn(values.username, values.password) as CognitoUser;
         setMessageSnackbar('The Login successfully!');
         setSeverity('success');
         setOpenSnackbar(true);
