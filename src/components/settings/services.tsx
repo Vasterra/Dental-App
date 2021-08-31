@@ -60,17 +60,25 @@ const Services = () => {
       setOpenSnackbar(true);
       return false;
     }
-    await API.graphql({
-      query: createServiceForDental,
-      variables: {
-        input: {
-          name: service
-        }
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    await getListServiceForDentals();
+    try {
+      await API.graphql({
+        query: createServiceForDental,
+        variables: {
+          input: {
+            name: service
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      await getListServiceForDentals();
+      setMessageSnackbar(`The service ${service} is add`);
+      setSeverity('success');
+      setOpenSnackbar(true);
+    } catch ({message}) {
+      console.log(message);
+      throw Error
+    }
   };
 
   const updateService = async (key: any, id: any) => {
@@ -82,18 +90,26 @@ const Services = () => {
     } else {
       updateInput[key].disabled = true;
       updateInput[key].style.background = 'none';
-      await API.graphql({
-        query: updateServiceForDental,
-        variables: {
-          input: {
-            id,
-            name: updateServiceName[key]
-          }
-        },
-        // @ts-ignore
-        authMode: 'AWS_IAM'
-      });
-      await getListServiceForDentals();
+      try {
+        await API.graphql({
+          query: updateServiceForDental,
+          variables: {
+            input: {
+              id,
+              name: updateServiceName[key]
+            }
+          },
+          // @ts-ignore
+          authMode: 'AWS_IAM'
+        });
+        await getListServiceForDentals();
+        setMessageSnackbar(`The service ${updateServiceName[key]} is update`);
+        setSeverity('success');
+        setOpenSnackbar(true);
+      } catch ({message}) {
+        console.log(message);
+        throw Error
+      }
     }
   };
 

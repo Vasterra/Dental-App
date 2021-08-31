@@ -11,18 +11,17 @@ type Props = {
 
 const Details: React.FunctionComponent<Props> = ({ setOpenSnackbar, setMessageSnackbar, setSeverity }) => {
 
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [currentAuthenticatedUser, setCurrentAuthenticatedUser] = useState(null);
-  const [nameCurrentAuthenticatedUser, setNameCurrentAuthenticatedUser] = useState('');
-  const [emailCurrentAuthenticatedUser, setEmailCurrentAuthenticatedUser] = useState('');
+  const [oldPassword, setOldPassword] = useState<string>();
+  const [newPassword, setNewPassword] = useState<string>();
+  const [currentAuthenticatedUser, setCurrentAuthenticatedUser] = useState<any>();
+  const [nameCurrentAuthenticatedUser, setNameCurrentAuthenticatedUser] = useState<string>();
+  const [emailCurrentAuthenticatedUser, setEmailCurrentAuthenticatedUser] = useState<string>();
 
   useEffect(() => {
     void getCurrentAuthenticatedUser();
   }, []);
 
   const getCurrentAuthenticatedUser = async () => {
-    setCurrentAuthenticatedUser(null);
     await Auth.currentAuthenticatedUser().then(result => {
       setCurrentAuthenticatedUser(result);
       setNameCurrentAuthenticatedUser(result.attributes.name);
@@ -45,19 +44,18 @@ const Details: React.FunctionComponent<Props> = ({ setOpenSnackbar, setMessageSn
   };
 
   const changePassword = async () => {
-    console.log(currentAuthenticatedUser);
-    await Auth.changePassword(currentAuthenticatedUser, oldPassword, newPassword).then(() => {
-      setMessageSnackbar('The password was changed successfully!');
-      setSeverity('success');
-      setOpenSnackbar(true);
-      setTimeout(() => {
+    if (oldPassword != null && newPassword != null) {
+      await Auth.changePassword(currentAuthenticatedUser, oldPassword, newPassword).then(() => {
+        setMessageSnackbar('The password was changed successfully!');
+        setSeverity('success');
+        setOpenSnackbar(true);
         void ApiManager.signOut();
-      }, 2000);
-    }).catch(error => {
-      setMessageSnackbar(error.message);
-      setSeverity('warning');
-      setOpenSnackbar(true);
-    });
+      }).catch(error => {
+        setMessageSnackbar(error.message);
+        setSeverity('warning');
+        setOpenSnackbar(true);
+      });
+    }
   };
 
   return (
@@ -103,7 +101,10 @@ const Details: React.FunctionComponent<Props> = ({ setOpenSnackbar, setMessageSn
                   />
                 </p>
               </div>
-              <button className='button-green' onClick={changeHandlerAdmin}>Save</button>
+              <button className='button-green'
+                      onClick={changeHandlerAdmin}
+              >Save
+              </button>
             </div>
             <div className='profile-block-box'>
               <div>
@@ -135,7 +136,10 @@ const Details: React.FunctionComponent<Props> = ({ setOpenSnackbar, setMessageSn
               </div>
               <p className='row-content'>
                 <span className='input-span' />
-                <button className='button-green' onClick={changePassword}>Reset Password</button>
+                <button className='button-green'
+                        onClick={changePassword}
+                >Reset Password
+                </button>
               </p>
             </div>
           </div>
