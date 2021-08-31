@@ -70,11 +70,11 @@
         },
         "updatePlan": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
-          "s3Key": "amplify-builds/updatePlan-347478734a655743706c-build.zip"
+          "s3Key": "amplify-builds/updatePlan-47643346775634694c77-build.zip"
         },
         "AdminQueries8afa39f9": {
           "deploymentBucketName": "amplify-awsdental-dev-82304-deployment",
-          "s3Key": "amplify-builds/AdminQueries8afa39f9-385435594b78316a6e47-build.zip"
+          "s3Key": "amplify-builds/AdminQueries8afa39f9-33553478765951646269-build.zip"
         }
       }
     }
