@@ -34,12 +34,43 @@
     -moz-transition: background 0.3s linear;
     transition: background 0.3s linear;
 }
+
+.button-green-logout, .button-green-login, .button-green-register {
+    cursor: pointer;
+    background-color: var(--color-green);
+    color: var(--color-white);
+    min-width: 80px;
+    padding: 12px 28px;
+    margin: 0 0 0 10px;
+    -webkit-box-shadow: 0 2px 48px 0 rgb(0 0 0 / 8%);
+    box-shadow: 0 2px 48px 0 rgb(0 0 0 / 8%);
+    font-family: PT Sans;
+    font-size: 10px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.75px;
+    border-radius: 20px;
+    border: solid 2px var(--color-green);
+    display: -moz-box;
+    -moz-box-pack: center;
+    -moz-transition: background 0.3s linear;
+    transition: background 0.3s linear;
+}
+
 .clearSearchInput {
     display: none;
     position: relative;
 }
 
 .button-green-search:hover {
+    background-color: var(--color-white);
+    color: var(--color-green);
+}
+
+.button-green-logout:hover, .button-green-login:hover, .button-green-register:hover {
     background-color: var(--color-white);
     color: var(--color-green);
 }

@@ -77,10 +77,10 @@ class Header extends React.Component {
                 </div>
               </a>}
               <Link href={'../../../login'}>
-                <button className='square_btn'>Login</button>
+                <button className="button-green-login">Login</button>
               </Link>
               <Link href={'../../../registration'}>
-                <button className='square_btn'>Register</button>
+                <button className="button-green-register">Register</button>
               </Link>
             </div>
           )}
@@ -95,7 +95,11 @@ class Header extends React.Component {
                   </svg>
                 </div>
               </a>
-              <button onClick={this.signOut} className='square_btn'>Logout</button>
+              <>
+                  <button className="button-green-logout" onClick={this.signOut}>
+                      Logout
+                  </button>
+              </>
             </div>
           )}
             </div>
