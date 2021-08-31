@@ -24,7 +24,7 @@ const Services = () => {
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
-  const [severity, setSeverity] = useState('');
+  const [severity, setSeverity] = useState<'error' | 'info' | 'success' | 'warning'>();
 
   React.useEffect(() => {
     void getListServiceForDentals();
@@ -60,17 +60,26 @@ const Services = () => {
       setOpenSnackbar(true);
       return false;
     }
-    await API.graphql({
-      query: createServiceForDental,
-      variables: {
-        input: {
-          name: service
-        }
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    await getListServiceForDentals();
+    try {
+      await API.graphql({
+        query: createServiceForDental,
+        variables: {
+          input: {
+            name: service
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+      setMessageSnackbar('The Service was addded successfully!');
+      setSeverity('success');
+      setOpenSnackbar(true);
+      await getListServiceForDentals();
+    } catch (error) {
+      setMessageSnackbar('Failed to add service');
+      setSeverity('warning');
+      setOpenSnackbar(true);
+    }
   };
 
   const updateService = async (key: any, id: any) => {
@@ -82,56 +91,77 @@ const Services = () => {
     } else {
       updateInput[key].disabled = true;
       updateInput[key].style.background = 'none';
+      try {
+        await API.graphql({
+          query: updateServiceForDental,
+          variables: {
+            input: {
+              id,
+              name: updateServiceName[key]
+            }
+          },
+          // @ts-ignore
+          authMode: 'AWS_IAM'
+        });
+        setMessageSnackbar('The Service was updated successfully!');
+        setSeverity('success');
+        setOpenSnackbar(true);
+        getListServiceForDentals();
+      } catch (error) {
+        setMessageSnackbar('Failed to update service');
+        setSeverity('warning');
+        setOpenSnackbar(true);
+      }
+    }
+  };
+
+  const deleteServiceDental = async (item: any ) => {
+    try {
       await API.graphql({
-        query: updateServiceForDental,
+        query: deleteServiceForDental,
         variables: {
           input: {
-            id,
-            name: updateServiceName[key]
+            id: item.id
           }
         },
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
-      await getListServiceForDentals();
-    }
-  };
-
-  const deleteServiceDental = async (item: any) => {
-    await API.graphql({
-      query: deleteServiceForDental,
-      variables: {
-        input: {
-          id: item.id
-        }
-      },
-      // @ts-ignore
-      authMode: 'AWS_IAM'
-    });
-    void ApiManager.GET_LIST_DENTIST().then((listDentists: any) => {
-      listDentists.forEach((dentist: { id: any; }) => {
-        void ApiManager.GET_DENTIST(dentist.id).then(dent => {
-          dent.services.items.forEach(async (service: any) => {
-            if (service.name === item.name) {
-              await API.graphql({
-                query: deleteService,
-                variables: {
-                  input: {
-                    id: service.id
-                  }
-                },
-                // @ts-ignore
-                authMode: 'AWS_IAM'
-              });
+      void ApiManager.GET_LIST_DENTIST().then((listDentists: any) => {
+        listDentists.forEach((dentist: { id: any; }) => {
+          void ApiManager.GET_DENTIST(dentist.id).then(dent => {
+            dent.services.items.forEach(async (service: any) => {
+              if (service.name === item.name) {
+                await API.graphql({
+                  query: deleteService,
+                  variables: {
+                    input: {
+                      id: service.id
+                    }
+                  },
+                  // @ts-ignore
+                  authMode: 'AWS_IAM'
+                });
+              }
               setMessageSnackbar(`Service ${service.name} deleted!`);
               setSeverity('success');
               setOpenSnackbar(true);
-            }
+            });
           });
         });
       });
-    });
+    } catch (error) {
+      setMessageSnackbar('Failed to delete service');
+      setSeverity('warning');
+      setOpenSnackbar(true);
+    }
     await getListServiceForDentals();
+  };
+
+  const onChange = (e: any, key: any) => {
+    const updateInput: any = document.getElementsByClassName('form-update-input');
+    updateInput[key].value = e;
+    setUpdateServiceName({ [key]: e });
   };
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
@@ -139,12 +169,6 @@ const Services = () => {
       return;
     }
     setOpenSnackbar(false);
-  };
-
-  const onChange = (e: any, key: any) => {
-    const updateInput: any = document.getElementsByClassName('form-update-input');
-    updateInput[key].value = e;
-    setUpdateServiceName({ [key]: e });
   };
 
   return (
@@ -196,6 +220,11 @@ const Services = () => {
               }
             </div>
           </div>
+          <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+            <Alert onClose={handleCloseSnackbar} severity={severity}>
+              {messageSnackbar}
+            </Alert>
+          </Snackbar>
         </div>
         <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
           <Alert onClose={handleCloseSnackbar}

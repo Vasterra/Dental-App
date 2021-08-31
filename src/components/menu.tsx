@@ -1,27 +1,126 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ApiManager from 'src/services/ApiManager';
-import Dashboard from 'src/pages/admin/dashboard';
 import { Auth, Storage } from 'aws-amplify';
 import Error from 'next/error';
 import clsx from 'clsx';
 import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';;
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import { Button, Snackbar } from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
 import { IDentist } from '../types/types';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import styled from 'styled-components'
 
 import { MenuAvatar, MenuAvatar__DownloadInput, MenuAvatar__DownloadLabel } from '../styles/Menu.module';
 
-const drawerWidth = 240;
+const drawerWidth = 333;
+
+const LeftMenuWrapper = styled('div')`
+  & ._leftmenu{
+    align-self: stretch;
+    width: ${drawerWidth+'px'};
+    height: 100vh;
+    background-color: #095c5c;
+    position: fixed;
+  }
+  & ._leftmenu-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 30px 25px 0 46px;
+  }
+  & ._leftmenu-list{}
+  & ._leftmenu-list:hover ._leftmenu-link-image {
+    filter: invert(0%);
+  }
+  & ._leftmenu-link-image{
+    z-index: 2;
+    width: 24px;
+    filter: invert(100%) brightness(160%);
+    transition: all 0.3s linear;
+  }
+  & ._leftmenu-link{
+    position: relative;
+    display: block;
+    width: 333px;
+    padding: 10px 0 10px 33%;
+    font-family: PT Sans;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1.05px;
+    text-align: left;
+    text-decoration: none;
+    color: var(--color-white);
+    /*margin-bottom: 23px;*/
+    margin-left: -46px;
+    transition: all 0.3s linear;
+    z-index: 1;
+  }
+  & ._leftmenu-nav-menu{
+    list-style: none;
+  }
+  & a {
+    cursor: pointer;
+  }
+  & ._logo-image {
+    width: 98px;
+    height: 47px;
+    object-fit: contain;
+  }
+  & ._desctop-visible{
+    display: block;
+  }
+
+  & ._close_button{
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+`
+
+const Menu = styled('ul')`{
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 36px;
+    cursor: pointer;
+    a {
+      position: relative;
+      display: block;
+      width: 100%;
+      padding: 10px 0 10px 24%;
+      font-family: PT Sans;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 1.05px;
+      text-align: left;
+      text-decoration: none;
+      color: #fff;
+      /*margin-bottom: 23px;*/
+      margin-left: -46px;
+      transition: all .3s linear;
+      z-index: 1;
+      &:hover {
+        color: #095c5c;
+      }
+    }
+  }
+  li:hover {
+    color: #095c5c;
+    background: #fff;
+  }
+}`;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -187,7 +286,10 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
               onClick={handleDrawerOpen}
               className={clsx(open && classes.hide)}
             >
-              <MenuIcon />
+              <svg className="menu-logo" xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 28 20" width="20px">
+                <path d="M0 0h24v24H0V0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+              </svg>
             </IconButton>
           </p>
           <p>
@@ -268,21 +370,40 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
         anchor='left'
         open={open}
       >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {['Dashboard', 'Users', 'Settings'].map((text, index) => (
-            <ListItem button key={index}>
-              <Button href={`/admin/${text.toLowerCase()}`}>
-                {text}
-              </Button>
-            </ListItem>
-          ))}
-        </List>
+       <LeftMenuWrapper>
+            <div className='_leftmenu'>
+              <div className='_leftmenu-content'>
+                <p className='_link-actve'>
+                  <div className='_close_button'>
+                    <IconButton onClick={handleDrawerClose}>
+                      <ChevronLeftIcon color='secondary'/>
+                    </IconButton>
+                  </div>
+                </p>
+              </div>
+              <Menu className='_leftmenu-nav-menu'>
+                <Link href={`/admin/dashboard`}>
+                  <li className="_leftmenu-list">
+                    <img className='_leftmenu-link-image' src='../../images/user.svg' alt='link image' />
+                    <a className='_leftmenu-link'>Dashboard</a>
+                  </li>
+                </Link>
+                <Link href={`/admin/users`}>
+                  <li className="_leftmenu-list">
+                    <img className='_leftmenu-link-image' src='../../images/gallery.svg' alt='link image' />
+                    <a className='_leftmenu-link'>Users</a>
+                  </li>
+                </Link>
+                <Link href={`/admin/settings`}>
+                  <li className="_leftmenu-list">
+                    <img className='_leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
+                    <a className='_leftmenu-link'>Settings</a>
+                  </li>
+                </Link>
+              </Menu>
+            </div>
+            <div style={{ minWidth: drawerWidth+'px' }}/>
+          </LeftMenuWrapper>
       </Drawer>
     </>
   );
