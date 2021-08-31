@@ -80,11 +80,13 @@ const Services: React.FunctionComponent<Props> = ({
       });
     }
 
-    if (currentDentist.services.items.length === Number(adminSettingSubscriber.freeMaxServices)) {
-      setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxServices} services.`);
-      setSeverity('warning');
-      setOpenSnackbar(true);
-      return false;
+    if (!currentDentist.hasPaidPlan) {
+      if (currentDentist.services.items.length === Number(adminSettingSubscriber.freeMaxServices)) {
+        setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxServices} services.`);
+        setSeverity('warning');
+        setOpenSnackbar(true);
+        return false;
+      }
     }
 
     if (filterService.length !== 0) {
