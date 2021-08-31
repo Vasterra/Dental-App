@@ -58,7 +58,9 @@ const Profile = ({ dentist }: any) => {
 
   const downloadAvatar = (currentDentist: any) => {
     void ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
-      setCurrentAvatar(signedFiles);
+      if (signedFiles !== undefined) {
+        setCurrentAvatar(signedFiles);
+      }
     });
   };
 

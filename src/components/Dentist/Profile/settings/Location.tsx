@@ -230,8 +230,9 @@ const Location: React.FunctionComponent<Props> = ({
                         />
                       </p>
                       <p className='row-content'>
-                        <span className='input-span'>Post Code</span>
+                        <span className='input-span' style={{width: '84px'}}>Post Code</span>
                         <input className='form-profile-input'
+                               style={{width: '80px'}}
                                name='postCode'
                                placeholder='CB1 2AB'
                                onChange={handleChange}

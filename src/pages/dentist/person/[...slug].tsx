@@ -17,7 +17,7 @@ const Person = ({ dentistData }: any) => {
   const router = useRouter();
 
   const [currentDentist, setCurrentDentist]: any = useState(dentistData);
-  const [currentAvatar, setCurrentAvatar]: any = useState();
+  const [currentAvatar, setCurrentAvatar] = useState('');
   const [signedInUser, setSignedInUser]: any = useState();
   const [currentUser, setCurrentUser]: any = useState();
   const [listImagesData, setListImagesData]: any = useState();
@@ -41,7 +41,7 @@ const Person = ({ dentistData }: any) => {
 
   useEffect(() => {
     if (currentDentist !== undefined) {
-      downloadAvatar();
+      downloadAvatar(currentDentist);
       downloadCover();
     }
   }, [currentDentist]);
@@ -73,9 +73,11 @@ const Person = ({ dentistData }: any) => {
   //   });
   // };
 
-  const downloadAvatar = async () => {
+  const downloadAvatar = async (currentDentist: any) => {
     await ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
-      setCurrentAvatar(signedFiles);
+      if (signedFiles !== undefined) {
+        setCurrentAvatar(signedFiles);
+      }
     });
   };
 

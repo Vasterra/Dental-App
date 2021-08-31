@@ -69,8 +69,7 @@ type Image
 }
 
 type AdminSettingsSubscriber
-@model
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+@model {
   id: ID!
   paidMaxLocations: String!
   paidMaxServices: String!

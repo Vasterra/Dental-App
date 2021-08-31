@@ -19,7 +19,7 @@ const GalleryPage = ({ dentist }: any) => {
   const router = useRouter();
 
   const [currentDentist, setCurrentDentist]: any = useState(dentist);
-  const [currentAvatar, setCurrentAvatar]: any = useState();
+  const [currentAvatar, setCurrentAvatar] = useState('');
   const [signedInUser, setSignedInUser]: any = useState();
   const [imagesData, setImagesData]: any = useState();
   const [oldIMages, setOldIMages]: any = useState();
@@ -62,13 +62,13 @@ const GalleryPage = ({ dentist }: any) => {
 
   useEffect(() => {
     if (currentDentist !== undefined) {
-      downloadAvatar();
+      void downloadAvatar(currentDentist);
     }
   }, [currentDentist]);
 
   useEffect(() => {
     if (listImagesData !== undefined) {
-      downloadImages();
+      void downloadImages();
     }
   }, [listImagesData]);
 
@@ -81,9 +81,13 @@ const GalleryPage = ({ dentist }: any) => {
     }
   };
 
-  const downloadAvatar = async () => {
+  const downloadAvatar = async (currentDentist: any) => {
     await ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
-      setCurrentAvatar(signedFiles);
+
+      if (signedFiles !== undefined) {
+        console.log(signedFiles);
+        setCurrentAvatar(signedFiles);
+      }
     });
   };
 
@@ -406,10 +410,6 @@ const GalleryPage = ({ dentist }: any) => {
     setImagesData(allImages);
   };
 
-  const enterKeyDown = (e: { keyCode: number; }) => {
-    if (e.keyCode === 13) searchImagesByTitle(e);
-  };
-
   const fullName = currentDentist && `${currentDentist.firstName ? currentDentist.firstName : ''} ${currentDentist.lastName ? currentDentist.lastName : ''}`;
 
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
@@ -432,7 +432,6 @@ const GalleryPage = ({ dentist }: any) => {
                      id='search'
                      name='search'
                      value={searchValue}
-                     onKeyDown={enterKeyDown}
                      onChange={e => searchImagesByTitle(e.target.value)}
                      placeholder='Search Images' />
               <img className='search-button' src='../../images/search.svg' alt='search' />
@@ -458,7 +457,7 @@ const GalleryPage = ({ dentist }: any) => {
           <>
             {imagesData.length === 0 && !showUloadGallery &&
             <div className='flex-align-center'>
-              <p className='index-leftmenu-text'>Doctor {fullName} has not yet uploaded any of his works, be sure to
+              <p className='index-leftmenu-text'>Doctor {fullName} has not yet uploaded any of their works, be sure to
                 check
                 soon</p>
             </div>}

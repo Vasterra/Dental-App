@@ -24,6 +24,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
 
   const addImage = async (e: any) => {
     // setCurrentCoverImg(null);
+    console.log(e);
     e.preventDefault();
     let files: any;
     if (e.dataTransfer) {
@@ -38,7 +39,6 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
       setIsCurrentCover(true);
     };
     reader.readAsDataURL(files[0]);
-
     await uploadCover(files);
   };
 
@@ -121,9 +121,9 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
         { currentDentist.hasPaidPlan && <p className='row-content'>
           {!currentCover && !watermarkImg && <>
             <label className='button-green-file'>Upload Cover</label>
-            <input type='file' className='input-file' name='watermark' onChange={() => {
+            <input type='file' className='input-file' name='watermark' onChange={(e) => {
               if (currentDentist.hasPaidPlan) {
-                void addImage
+                void addImage(e);
               } else {
                 return false;
               }
@@ -155,9 +155,9 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
         <p className='row-content'>
           {isCurrentCover && <>
             <label className='button-green-file'>Upload Watermark</label>
-            <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={() => {
+            <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={(e) => {
               if (currentDentist.hasPaidPlan) {
-                void addWatermark
+                void addWatermark(e);
               } else {
                 return false;
               }
