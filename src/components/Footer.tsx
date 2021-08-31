@@ -36,7 +36,7 @@ class Drawer extends Component {
         <div className='footer-bottom bg-green'>
           <div className='social-icons'>
             <a href='#'>
-              <img src='../images/facebook.svg' alt='facebook' />
+              <img src='../../images/facebook.svg' alt='facebook' />
             </a>
           </div>
           <div> ©2021 Find Your Dentist</div>
