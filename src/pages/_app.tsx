@@ -5,13 +5,12 @@ import 'src/styles/globals.css';
 import 'src/styles/graph.css';
 import 'src/styles/users.css';
 import 'src/styles/subscriber.css';
-import config from '../../aws-exports';
+import config from '../../aws-exports.js';
 import Amplify from 'aws-amplify';
 import { AmplifyAuthenticator, AmplifySignIn } from '@aws-amplify/ui-react';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 
 Amplify.configure({ ...config, ssr: true });
-
 
 function DentalApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
