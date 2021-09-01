@@ -542,7 +542,7 @@ const Payment = ({ dentist }: any) => {
   return (
     <>
       {currentDentist && signedInUser &&
-      <Layout title='Account' active={'activeAccount'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
+      <Layout title='Account' active={'activePayment'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
        {/* ---------------------------------Change style this PaymentContent--------------------------------------  */}
         <div className='main-profile' style={{backgroundColor: 'blueviolet', alignItems: 'center', display: 'flex', justifyContent: 'center'}}>
           <PaymentContent/>
