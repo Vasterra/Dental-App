@@ -12,6 +12,7 @@ import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 
 Amplify.configure({ ...config, ssr: true });
 
+
 function DentalApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
 
