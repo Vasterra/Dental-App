@@ -189,6 +189,12 @@ export default function TemporaryDrawer({currentUser}) {
                     <a className='_leftmenu-link'>Account</a>
                   </li>
                 </Link>
+                <Link href={`../../dentist/payment/${currentUser.username}`}>
+                  <li className="_leftmenu-list">
+                    <img className='_leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
+                    <a className='_leftmenu-link'>Payment</a>
+                  </li>
+                </Link>
               </Menu>
             </div>
             <div style={{ minWidth: '333px' }}/>

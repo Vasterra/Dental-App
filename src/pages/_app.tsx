@@ -12,15 +12,15 @@ Amplify.configure({ ...config, ssr: true });
 
 function DentalApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
-  const stripePromise = loadStripe(
-    'pk_test_51J15W0B5Yj7B7VjGcyWF6fMvy3UkvUUS5l6YJ3LQqLGFGZgK7UwNyVHLMMVi2HgDweAsAUxkhuukQBjWlTshTPmu00NmYIp1nd'
-  );
+  // const stripePromise = loadStripe(
+  //   'pk_test_51J15W0B5Yj7B7VjGcyWF6fMvy3UkvUUS5l6YJ3LQqLGFGZgK7UwNyVHLMMVi2HgDweAsAUxkhuukQBjWlTshTPmu00NmYIp1nd'
+  // );
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Elements stripe={stripePromise}>
+      {/* <Elements stripe={stripePromise}> */}
         <Component {...pageProps} />
-      </Elements>
+      {/* </Elements> */}
     </QueryClientProvider>
   );
 }
