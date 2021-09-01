@@ -1,23 +1,23 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Parameters": {
-        "authawsdentale726916bUserPoolId": {
+        "authdentalappaac82a65UserPoolId": {
             "Type": "String",
-            "Default": "authawsdentale726916bUserPoolId"
+            "Default": "authdentalappaac82a65UserPoolId"
         },
         
-        "authawsdentale726916bIdentityPoolId": {
+        "authdentalappaac82a65IdentityPoolId": {
             "Type": "String",
-            "Default": "authawsdentale726916bIdentityPoolId"
+            "Default": "authdentalappaac82a65IdentityPoolId"
         },
         
-        "authawsdentale726916bAppClientID": {
+        "authdentalappaac82a65AppClientID": {
             "Type": "String",
-            "Default": "authawsdentale726916bAppClientID"
+            "Default": "authdentalappaac82a65AppClientID"
         },
-        "authawsdentale726916bAppClientIDWeb": {
+        "authdentalappaac82a65AppClientIDWeb": {
             "Type": "String",
-            "Default": "authawsdentale726916bAppClientIDWeb"
+            "Default": "authdentalappaac82a65AppClientIDWeb"
         },
         "AuthRoleArn": {
             "Type": "String"
@@ -55,7 +55,7 @@
               },
               
               "UserPoolId" : {
-                "Ref": "authawsdentale726916bUserPoolId"
+                "Ref": "authdentalappaac82a65UserPoolId"
               }
             }
         },
@@ -68,7 +68,7 @@
                         "",
                         [
                           {
-                            "Ref": "authawsdentale726916bUserPoolId"
+                            "Ref": "authdentalappaac82a65UserPoolId"
                           },
                           "-adminGroupRole"
                         ]
@@ -85,7 +85,7 @@
                             },
                             "Action": "sts:AssumeRoleWithWebIdentity",
                             "Condition": {
-                              "StringEquals": {"cognito-identity.amazonaws.com:aud": {"Ref":"authawsdentale726916bIdentityPoolId"}},
+                              "StringEquals": {"cognito-identity.amazonaws.com:aud": {"Ref":"authdentalappaac82a65IdentityPoolId"}},
                               "ForAnyValue:StringLike": {"cognito-identity.amazonaws.com:amr": "authenticated"}
                             }
                         }
@@ -109,7 +109,7 @@
               },
               
               "UserPoolId" : {
-                "Ref": "authawsdentale726916bUserPoolId"
+                "Ref": "authdentalappaac82a65UserPoolId"
               }
             }
         },
@@ -122,7 +122,7 @@
                         "",
                         [
                           {
-                            "Ref": "authawsdentale726916bUserPoolId"
+                            "Ref": "authdentalappaac82a65UserPoolId"
                           },
                           "-usersGroupRole"
                         ]
@@ -139,7 +139,7 @@
                             },
                             "Action": "sts:AssumeRoleWithWebIdentity",
                             "Condition": {
-                              "StringEquals": {"cognito-identity.amazonaws.com:aud": {"Ref":"authawsdentale726916bIdentityPoolId"}},
+                              "StringEquals": {"cognito-identity.amazonaws.com:aud": {"Ref":"authdentalappaac82a65IdentityPoolId"}},
                               "ForAnyValue:StringLike": {"cognito-identity.amazonaws.com:amr": "authenticated"}
                             }
                         }
@@ -165,7 +165,7 @@
                                 "",
                                 [
 
-                                  "awsdentale726916b",
+                                  "dentalappaac82a65",
                                   "-ExecutionRole-",
                                   {
                                     "Ref": "env"
@@ -326,16 +326,16 @@
                     "Ref": "UnauthRoleArn"
                 },
                 "identityPoolId": {
-                    "Ref": "authawsdentale726916bIdentityPoolId"
+                    "Ref": "authdentalappaac82a65IdentityPoolId"
                 },
                 "userPoolId": {
-                    "Ref": "authawsdentale726916bUserPoolId"
+                    "Ref": "authdentalappaac82a65UserPoolId"
                 },
                 "appClientIDWeb": {
-                    "Ref": "authawsdentale726916bAppClientIDWeb"
+                    "Ref": "authdentalappaac82a65AppClientIDWeb"
                 },
                 "appClientID": {
-                    "Ref": "authawsdentale726916bAppClientID"
+                    "Ref": "authdentalappaac82a65AppClientID"
                 },
                 "region": {
                     "Ref": "AWS::Region"

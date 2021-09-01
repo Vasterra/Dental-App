@@ -12,7 +12,7 @@
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "awsdentale726916b",
+          "resourceName": "dentalappaac82a65",
           "attributes": [
             "UserPoolId",
             "AppClientIDWeb",
@@ -21,6 +21,9 @@
           ]
         }
       ]
+    },
+    "dentalappaac82a65": {
+      "dependsOn": []
     }
   },
   "api": {
@@ -242,14 +245,14 @@
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "awsdentale726916b",
+          "resourceName": "dentalappaac82a65",
           "attributes": [
             "UserPoolId"
           ]
         },
         {
           "category": "function",
-          "resourceName": "AdminQueries8afa39f9",
+          "resourceName": "AdminQueriesf3162edc",
           "attributes": [
             "Arn",
             "Name"
@@ -347,6 +350,20 @@
         {
           "category": "auth",
           "resourceName": "awsdentale726916b",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ]
+    },
+    "AdminQueriesf3162edc": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "dentalappaac82a65",
           "attributes": [
             "UserPoolId"
           ]
