@@ -14,23 +14,23 @@
         },
         
         
-          "authawsdentale726916bUserPoolId": {
+          "authapidentald3023043UserPoolId": {
             "Type": "String",
-            "Default": "authawsdentale726916bUserPoolId"
+            "Default": "authapidentald3023043UserPoolId"
           },
         
           
           
         
-          "functionAdminQueries8afa39f9Arn": {
+          "functionAdminQueries99b5bd34Arn": {
             "Type": "String",
-            "Default": "functionAdminQueries8afa39f9Arn"
+            "Default": "functionAdminQueries99b5bd34Arn"
           },
         
           
-          "functionAdminQueries8afa39f9Name": {
+          "functionAdminQueries99b5bd34Name": {
             "Type": "String",
-            "Default": "functionAdminQueries8afa39f9Name"
+            "Default": "functionAdminQueries99b5bd34Name"
           }
         
           
@@ -176,7 +176,7 @@
                                 ":lambda:path/2015-03-31/functions/",
                                 {
                                     
-                                    "Ref": "functionAdminQueries8afa39f9Arn"
+                                    "Ref": "functionAdminQueries99b5bd34Arn"
                                 },
                                 "/invocations"
                               ]
@@ -217,7 +217,7 @@
                                   ":userpool/",
                                   {
                                                   
-                                    "Ref": "authawsdentale726916bUserPoolId"
+                                    "Ref": "authapidentald3023043UserPoolId"
                                   }
 
                                 ]
@@ -268,7 +268,7 @@
         "Properties": {
             "FunctionName": 
                 {
-                  "Ref": "functionAdminQueries8afa39f9Name"
+                  "Ref": "functionAdminQueries99b5bd34Name"
                 },
                 
                 "Action": "lambda:InvokeFunction",
