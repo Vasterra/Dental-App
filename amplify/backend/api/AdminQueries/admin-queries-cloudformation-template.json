@@ -14,23 +14,23 @@
         },
         
         
-          "authdentalappaac82a65UserPoolId": {
+          "authdentalappdce07dcbUserPoolId": {
             "Type": "String",
-            "Default": "authdentalappaac82a65UserPoolId"
+            "Default": "authdentalappdce07dcbUserPoolId"
           },
         
           
           
         
-          "functionAdminQueriesf3162edcArn": {
+          "functionAdminQueriesf6476e2cArn": {
             "Type": "String",
-            "Default": "functionAdminQueriesf3162edcArn"
+            "Default": "functionAdminQueriesf6476e2cArn"
           },
         
           
-          "functionAdminQueriesf3162edcName": {
+          "functionAdminQueriesf6476e2cName": {
             "Type": "String",
-            "Default": "functionAdminQueriesf3162edcName"
+            "Default": "functionAdminQueriesf6476e2cName"
           }
         
           
@@ -176,7 +176,7 @@
                                 ":lambda:path/2015-03-31/functions/",
                                 {
                                     
-                                    "Ref": "functionAdminQueriesf3162edcArn"
+                                    "Ref": "functionAdminQueriesf6476e2cArn"
                                 },
                                 "/invocations"
                               ]
@@ -217,7 +217,7 @@
                                   ":userpool/",
                                   {
                                                   
-                                    "Ref": "authdentalappaac82a65UserPoolId"
+                                    "Ref": "authdentalappdce07dcbUserPoolId"
                                   }
 
                                 ]
@@ -268,7 +268,7 @@
         "Properties": {
             "FunctionName": 
                 {
-                  "Ref": "functionAdminQueriesf3162edcName"
+                  "Ref": "functionAdminQueriesf6476e2cName"
                 },
                 
                 "Action": "lambda:InvokeFunction",
