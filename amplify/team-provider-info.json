@@ -1,24 +1,48 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-dentalapp-dev-111054-authRole",
-      "UnauthRoleArn": "arn:aws:iam::207817270204:role/amplify-dentalapp-dev-111054-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::207817270204:role/amplify-dentalapp-dev-111054-authRole",
-      "Region": "eu-central-1",
-      "DeploymentBucketName": "amplify-dentalapp-dev-111054-deployment",
-      "UnauthRoleName": "amplify-dentalapp-dev-111054-unauthRole",
-      "StackName": "amplify-dentalapp-dev-111054",
-      "StackId": "arn:aws:cloudformation:eu-central-1:207817270204:stack/amplify-dentalapp-dev-111054/23ef1470-0afc-11ec-b8ed-065733e75ba4",
-      "AmplifyAppId": "d396yjml6fga3l"
+      "AuthRoleName": "amplify-apidental-dev-140827-authRole",
+      "UnauthRoleArn": "arn:aws:iam::207817270204:role/amplify-apidental-dev-140827-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::207817270204:role/amplify-apidental-dev-140827-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-apidental-dev-140827-deployment",
+      "UnauthRoleName": "amplify-apidental-dev-140827-unauthRole",
+      "StackName": "amplify-apidental-dev-140827",
+      "StackId": "arn:aws:cloudformation:eu-west-1:207817270204:stack/amplify-apidental-dev-140827/f0c9ef20-0b14-11ec-a12d-0654ed3e5771",
+      "AmplifyAppId": "d1s2oxtfyh58ht"
     },
     "categories": {
       "auth": {
-        "dentalappdce07dcb": {}
+        "apidentald3023043": {}
       },
       "function": {
-        "AdminQueriesf6476e2c": {
-          "deploymentBucketName": "amplify-dentalapp-dev-111054-deployment",
-          "s3Key": "amplify-builds/AdminQueriesf6476e2c-5873782f706431486a4a-build.zip"
+        "AdminQueries99b5bd34": {
+          "deploymentBucketName": "amplify-apidental-dev-140827-deployment",
+          "s3Key": "amplify-builds/AdminQueries99b5bd34-5873782f706431486a4a-build.zip"
+        }
+      }
+    }
+  },
+  "admin": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-apidental-admin-141242-authRole",
+      "UnauthRoleArn": "arn:aws:iam::207817270204:role/amplify-apidental-admin-141242-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::207817270204:role/amplify-apidental-admin-141242-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-apidental-admin-141242-deployment",
+      "UnauthRoleName": "amplify-apidental-admin-141242-unauthRole",
+      "StackName": "amplify-apidental-admin-141242",
+      "StackId": "arn:aws:cloudformation:eu-west-1:207817270204:stack/amplify-apidental-admin-141242/879e73d0-0b15-11ec-a00c-0a45ab70fc63",
+      "AmplifyAppId": "d1s2oxtfyh58ht"
+    },
+    "categories": {
+      "auth": {
+        "apidentald3023043": {}
+      },
+      "function": {
+        "AdminQueries99b5bd34": {
+          "deploymentBucketName": "amplify-apidental-admin-141242-deployment",
+          "s3Key": "amplify-builds/AdminQueries99b5bd34-5873782f706431486a4a-build.zip"
         }
       }
     }

@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "dentalappdce07dcb_identitypool_dce07dcb",
+    "identityPoolName": "apidentald3023043_identitypool_d3023043",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "dentaldce07dcb",
-    "userPoolName": "dentalappdce07dcb_userpool_dce07dcb",
+    "resourceNameTruncated": "apidend3023043",
+    "userPoolName": "apidentald3023043_userpool_d3023043",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -31,10 +31,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "dentaldce07dcb_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "apidend3023043_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "dce07dcb",
-    "resourceName": "dentalappdce07dcb",
+    "sharedId": "d3023043",
+    "resourceName": "apidentald3023043",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [

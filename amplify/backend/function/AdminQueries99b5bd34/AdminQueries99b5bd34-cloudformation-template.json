@@ -5,9 +5,9 @@
     "env": {
       "Type": "String"
     },
-    "authdentalappdce07dcbUserPoolId": {
+    "authapidentald3023043UserPoolId": {
       "Type": "String",
-      "Default": "authdentalappdce07dcbUserPoolId"
+      "Default": "authapidentald3023043UserPoolId"
     },
     "deploymentBucketName": {
       "Type": "String"
@@ -38,12 +38,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "AdminQueriesf6476e2c",
+            "AdminQueries99b5bd34",
             {
               "Fn::Join": [
                 "",
                 [
-                  "AdminQueriesf6476e2c",
+                  "AdminQueries99b5bd34",
                   "-",
                   {
                     "Ref": "env"
@@ -60,7 +60,7 @@
             },
             "GROUP": "admin",
             "USERPOOL": {
-              "Ref": "authdentalappdce07dcbUserPoolId"
+              "Ref": "authapidentald3023043UserPoolId"
             }
           }
         },
@@ -88,12 +88,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "AdminQueriesf6476e2cLambdaRole",
+            "AdminQueries99b5bd34LambdaRole",
             {
               "Fn::Join": [
                 "",
                 [
-                  "AdminQueriesf6476e2cLambdaRole",
+                  "AdminQueries99b5bd34LambdaRole",
                   "-",
                   {
                     "Ref": "env"
@@ -189,7 +189,7 @@
                     },
                     ":userpool/",
                     {
-                      "Ref": "authdentalappdce07dcbUserPoolId"
+                      "Ref": "authapidentald3023043UserPoolId"
                     }
                   ]
                 ]
