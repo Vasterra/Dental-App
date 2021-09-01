@@ -9,11 +9,16 @@ import Gallery from 'src/components/Gallery/Gallery';
 import Services from 'src/components/Gallery/Services';
 import { getDentist, listImages, listServiceForDentals } from 'src/graphql/queries';
 import { createImage, updateImage } from 'src/graphql/mutations';
-import Snackbar from 'src/components/Snackbar';
+import { Snackbar } from '@material-ui/core';
 import { CircularProgress } from '@material-ui/core';
 import Error from 'next/error';
 import { WrapperFlex } from 'src/styles/Main.module';
 import { GetServerSideProps } from 'next';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 const GalleryPage = ({ dentist }: any) => {
   const router = useRouter();
@@ -47,6 +52,9 @@ const GalleryPage = ({ dentist }: any) => {
   const [searchValue, setSearchValue]: any = useState();
   const [showServicesPanel, setShowServicesPanel] = useState<boolean>(true);
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity] = useState('');
 
   useEffect(() => {
     if (router.query.slug !== undefined) {
@@ -91,8 +99,11 @@ const GalleryPage = ({ dentist }: any) => {
     });
   };
 
-  const handleCloseSnackbar = () => {
-    setOpenSnackBar(false);
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   const getListImages = async () => {
@@ -118,6 +129,10 @@ const GalleryPage = ({ dentist }: any) => {
   };
 
   const saveCrop = (value: any, anchor: any) => {
+    console.log(anchor);
+    setMessageSnackbar('Save crop successfully!');
+    setSeverity('success');
+    setOpenSnackbar(true);
     if (anchor === 'left') {
       setFileLeft(value);
       setCheckFilesLeft(true);
@@ -457,9 +472,7 @@ const GalleryPage = ({ dentist }: any) => {
           <>
             {imagesData.length === 0 && !showUloadGallery &&
             <div className='flex-align-center'>
-              <p className='index-leftmenu-text'>Doctor {fullName} has not yet uploaded any of their works, be sure to
-                check
-                soon</p>
+              <p className='index-leftmenu-text'>Dr {fullName} has not uploaded any of their work yet, please check back later.</p>
             </div>}
             {// @ts-ignore
               imagesData.length > 0 &&
@@ -614,13 +627,14 @@ const GalleryPage = ({ dentist }: any) => {
           </>
           }
         </div>
-        <Snackbar
-          messageSnackBar={messageSnackBar}
-          statusSnackBar={statusSnackBar}
-          openSnackBar={openSnackBar}
-          handleCloseSnackbar={handleCloseSnackbar}
-        />
       </Layout>}
+      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar}
+          // @ts-ignore
+               severity={severity}>
+          {messageSnackbar}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
