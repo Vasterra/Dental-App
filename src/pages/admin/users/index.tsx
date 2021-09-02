@@ -175,6 +175,7 @@ const AdminUsers = () => {
     };
     const { NextToken, ...rest } = await API.get(apiName, path, myInit);
     try {
+      console.log(rest);
       void await listUsersGroupCancelDental(rest.Users);
     } catch (error: any) {
       console.error('There as an Error', error);
@@ -186,7 +187,7 @@ const AdminUsers = () => {
     const path = '/listUsers';
     const myInit = {
       queryStringParameters: {
-        groupname: 'Admins'
+        groupname: 'Admin'
       },
       headers: {
         'Content-Type': 'application/json',
@@ -208,8 +209,8 @@ const AdminUsers = () => {
               hasPaidPlan: false,
               suspend: false
             };
-            const dentFind = listDentists.find((val: { id: string; }) => val.id === item.Username)
-            item.Username === dentFind.id ? arr2.gdcNumber = dentFind.gdcNumber : '';
+            const dentFind = listDentists.find((val: { id: string; }) => val.id === item.Attributes[0].Value)
+            item.Attributes[0].Value === dentFind.id ? arr2.gdcNumber = dentFind.gdcNumber : '';
             item.Attributes.forEach((val: any) => {
               val.Name === 'email' ? arr2.email = val.Value : '';
               val.Name === 'custom:postCode' ? arr2.postCode = val.Value : '';
@@ -263,7 +264,7 @@ const AdminUsers = () => {
     const myInit = {
       body: {
         groupname: groupName,
-        username: accountToDelete.Username
+        username: accountToDelete.Attributes[0].Value
       },
       headers: {
         'Content-Type': 'application/json',
@@ -276,7 +277,7 @@ const AdminUsers = () => {
         query: updateDentist,
         variables: {
           input: {
-            id: accountToDelete.Username,
+            id: accountToDelete.Attributes[0].Value,
             isDisabled: false
           }
         },
@@ -290,7 +291,7 @@ const AdminUsers = () => {
         query: updateDentist,
         variables: {
           input: {
-            id: accountToDelete.Username,
+            id: accountToDelete.Attributes[0].Value,
             isDisabled: true
           }
         },
@@ -308,7 +309,7 @@ const AdminUsers = () => {
     const myInit = {
       body: {
         groupname: group,
-        username: accountToDelete.Username
+        username: accountToDelete.Attributes[0].Value
       },
       headers: {
         'Content-Type': 'application/json',
@@ -323,7 +324,7 @@ const AdminUsers = () => {
     const path = '/disableUser';
     const myInit = {
       body: {
-        username: accountToDelete.Username
+        username: accountToDelete.Attributes[0].Value
       },
       headers: {
         'Content-Type': 'application/json',
@@ -339,7 +340,7 @@ const AdminUsers = () => {
     const path = '/enableUser';
     const myInit = {
       body: {
-        username: accountToDelete.Username
+        username: accountToDelete.Attributes[0].Value
       },
       headers: {
         'Content-Type': 'application/json',
@@ -354,7 +355,7 @@ const AdminUsers = () => {
     if (deleteAccount.toUpperCase() === 'DELETE') {
       handleClose('delete');
       await ApiManager.DELETE_DENTIST(accountToDelete);
-      await ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.Username);
+      await ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.Attributes[0].Value);
       await addUserToGroup();
     }
   };

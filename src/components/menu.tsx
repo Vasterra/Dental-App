@@ -201,6 +201,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
 
   const getCurrentAuthenticatedUser = async () => {
     await Auth.currentAuthenticatedUser().then(result => {
+      console.log(result);
       void getListDentists(result);
     });
   };
