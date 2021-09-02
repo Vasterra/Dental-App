@@ -1,19 +1,25 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-dentalapp-dev-174542-authRole",
-      "UnauthRoleArn": "arn:aws:iam::828149670277:role/amplify-dentalapp-dev-174542-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::828149670277:role/amplify-dentalapp-dev-174542-authRole",
+      "AuthRoleName": "amplify-dentalapp-dev-180254-authRole",
+      "UnauthRoleArn": "arn:aws:iam::828149670277:role/amplify-dentalapp-dev-180254-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::828149670277:role/amplify-dentalapp-dev-180254-authRole",
       "Region": "eu-west-1",
-      "DeploymentBucketName": "amplify-dentalapp-dev-174542-deployment",
-      "UnauthRoleName": "amplify-dentalapp-dev-174542-unauthRole",
-      "StackName": "amplify-dentalapp-dev-174542",
-      "StackId": "arn:aws:cloudformation:eu-west-1:828149670277:stack/amplify-dentalapp-dev-174542/749ca5d0-0bfc-11ec-a444-0a5fbe806e2d",
-      "AmplifyAppId": "d29ace132804tu"
+      "DeploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
+      "UnauthRoleName": "amplify-dentalapp-dev-180254-unauthRole",
+      "StackName": "amplify-dentalapp-dev-180254",
+      "StackId": "arn:aws:cloudformation:eu-west-1:828149670277:stack/amplify-dentalapp-dev-180254/dbf136e0-0bfe-11ec-aec8-0a50c0caa43b",
+      "AmplifyAppId": "d1x2glchgshk0s"
     },
     "categories": {
       "auth": {
-        "dentalappf6751d20": {}
+        "dentalapp6f9bf30a": {}
+      },
+      "function": {
+        "AdminQueriesf4bd56b7": {
+          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
+          "s3Key": "amplify-builds/AdminQueriesf4bd56b7-58696c35474b53363548-build.zip"
+        }
       }
     }
   }

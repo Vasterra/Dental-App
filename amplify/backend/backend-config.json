@@ -1,46 +1,6 @@
 {
-  "api": {
-    "dentalapp": {
-      "service": "AppSync",
-      "providerPlugin": "awscloudformation",
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "API_KEY",
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 365,
-              "description": ""
-            }
-          },
-          "additionalAuthenticationProviders": []
-        }
-      }
-    },
-    "AdminQueries": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "dentalappf6751d20",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "AdminQueries639b438f",
-          "attributes": [
-            "Arn",
-            "Name"
-          ]
-        }
-      ]
-    }
-  },
   "auth": {
-    "dentalappf6751d20": {
+    "dentalapp6f9bf30a": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -63,21 +23,60 @@
       }
     }
   },
+  "api": {
+    "dentalapp": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authdentalapp6f9bf30a"
+            }
+          },
+          "additionalAuthenticationProviders": []
+        }
+      }
+    },
+    "AdminQueries": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "dentalapp6f9bf30a",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "AdminQueriesf4bd56b7",
+          "attributes": [
+            "Arn",
+            "Name"
+          ]
+        }
+      ]
+    }
+  },
   "storage": {
-    "s32e344309": {
+    "s332747918": {
       "service": "S3",
       "providerPlugin": "awscloudformation"
     }
   },
   "function": {
-    "AdminQueries639b438f": {
+    "AdminQueriesf4bd56b7": {
       "service": "Lambda",
       "providerPlugin": "awscloudformation",
       "build": true,
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "dentalappf6751d20",
+          "resourceName": "dentalapp6f9bf30a",
           "attributes": [
             "UserPoolId"
           ]
