@@ -72,7 +72,7 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
       const currentUser = await Auth.currentAuthenticatedUser();
       this.setState({ currentUser });
       this.setState({ signedInUser: true });
-      if (!this.state.currentUser.username === this.state.currentDentist.id) {
+      if (!this.state.currentUser.attributes.sub === this.state.currentDentist.id) {
         return router.push(`{/dentist/account/'${this.state.currentDentist.id}`);
       }
     } catch (err: any) {
@@ -116,9 +116,10 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
 
   render() {
     if (!this.state.signedInUser) return null;
+    console.log(this.state.currentUser);
     return (
       <>
-        {this.state.currentUser && this.state.currentUser.username === this.props.currentDentist.id &&
+        {this.state.currentUser && this.state.currentUser.attributes.sub === this.props.currentDentist.id &&
           <>
             <div className='mobile-header'>
               <Header/>
@@ -142,25 +143,25 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
                   </div>
               </div>
               <Menu>
-                <Link href={`../../dentist/profile/${this.state.currentUser.username}`}>
+                <Link href={`../../dentist/profile/${this.state.currentUser.attributes.sub}`}>
                   <li className={`leftmenu-list + ${this.props.active === 'activeProfile' ? 'active' : ''}`}>
                     <img className='leftmenu-link-image' src='../../images/user.svg' alt='link image' />
                     <a className='leftmenu-link'>Profile</a>
                   </li>
                 </Link>
-                <Link href={`../../dentist/gallery/${this.state.currentUser.username}`}>
+                <Link href={`../../dentist/gallery/${this.state.currentUser.attributes.sub}`}>
                   <li className={`leftmenu-list + ${this.props.active === 'activeGallery' ? 'active' : ''}`}>
                     <img className='leftmenu-link-image' src='../../images/gallery.svg' alt='link image' />
                     <a className='leftmenu-link'>Gallery</a>
                   </li>
                 </Link>
-                <Link href={`../../dentist/account/${this.state.currentUser.username}`}>
+                <Link href={`../../dentist/account/${this.state.currentUser.attributes.sub}`}>
                   <li className={`leftmenu-list + ${this.props.active === 'activeAccount' ? 'active' : ''}`}>
                     <img className='leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
                     <a className='leftmenu-link'>Account</a>
                   </li>
                 </Link>
-                <Link href={`../../dentist/payment/${this.state.currentUser.username}`}>
+                <Link href={`../../dentist/payment/${this.state.currentUser.attributes.sub}`}>
                 <li className={`leftmenu-list + ${this.props.active === 'activePayment' ? 'active' : ''}`}>
                     <img className='leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
                     <a className='leftmenu-link'>Payment</a>

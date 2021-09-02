@@ -11,7 +11,7 @@ import { getDentist } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
 
 const Search = ({ dentistsData, listServiceForDentals }: any) => {
-
+  console.log(dentistsData);
   const [currentDentist, setCurrentDentist] = useState();
   const [dentists, setDentists]: any = useState(dentistsData);
   const [oldDentists, setOldDentists]: any = useState(dentistsData);
@@ -186,7 +186,7 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
   };
 
   return (
-    <Layout title='Search page' >
+    <Layout title='Search page'>
       <Header />
       <section className='container page'>
         <div className='index-box-to-box'>

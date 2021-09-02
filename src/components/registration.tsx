@@ -103,7 +103,7 @@ const Registration = ({}) => {
     onSubmit: async (values: any) => {
       try {
         const { user }: any = await Auth.signUp({
-          username: values.email,
+          username: values.username,
           password: values.password,
           attributes: {
             email: values.email,
@@ -125,7 +125,7 @@ const Registration = ({}) => {
     try {
       setValues({ ...values, user: null });
       setValues({ ...values, loader: true });
-      await Auth.confirmSignUp(values.email, values.code);
+      await Auth.confirmSignUp(values.username, values.code);
       setMessageSnackbar('The Register successfully!');
       setSeverity('success');
       setOpenSnackbar(true);

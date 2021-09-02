@@ -296,7 +296,6 @@ export const listAdminSettingsSubscribers = /* GraphQL */ `
         freeAppearVerified
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }

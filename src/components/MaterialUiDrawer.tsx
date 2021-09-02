@@ -148,7 +148,7 @@ export default function TemporaryDrawer({currentUser}) {
 
     setState({ ...state, [anchor]: open });
   };
-
+  console.log(currentUser);
   const list = (anchor: Anchor) => (
     <div
       className={clsx(classes.list, {
@@ -170,32 +170,32 @@ export default function TemporaryDrawer({currentUser}) {
                   </Link>
                 </p>
               </div>
-              <Menu className='_leftmenu-nav-menu'>
-                <Link href={`../../dentist/profile/${currentUser.username}`}>
+              {currentUser.attributes && <Menu className='_leftmenu-nav-menu'>
+                <Link href={`../../dentist/profile/${currentUser.attributes.sub}`}>
                   <li className="_leftmenu-list">
                     <img className='_leftmenu-link-image' src='../../images/user.svg' alt='link image' />
                     <a className='_leftmenu-link'>Profile</a>
                   </li>
                 </Link>
-                <Link href={`../../dentist/gallery/${currentUser.username}`}>
+                <Link href={`../../dentist/gallery/${currentUser.attributes.sub}`}>
                   <li className="_leftmenu-list">
                     <img className='_leftmenu-link-image' src='../../images/gallery.svg' alt='link image' />
                     <a className='_leftmenu-link'>Gallery</a>
                   </li>
                 </Link>
-                <Link href={`../../dentist/account/${currentUser.username}`}>
+                <Link href={`../../dentist/account/${currentUser.attributes.sub}`}>
                   <li className="_leftmenu-list">
                     <img className='_leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
                     <a className='_leftmenu-link'>Account</a>
                   </li>
                 </Link>
-                <Link href={`../../dentist/payment/${currentUser.username}`}>
+                <Link href={`../../dentist/payment/${currentUser.attributes.sub}`}>
                   <li className="_leftmenu-list">
                     <img className='_leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
                     <a className='_leftmenu-link'>Payment</a>
                   </li>
                 </Link>
-              </Menu>
+              </Menu> }
             </div>
             <div style={{ minWidth: '333px' }}/>
           </LeftMenuWrapper>

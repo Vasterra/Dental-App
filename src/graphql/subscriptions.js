@@ -383,7 +383,6 @@ export const onCreateAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -403,7 +402,6 @@ export const onUpdateAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -423,7 +421,6 @@ export const onDeleteAdminSettingsSubscriber = /* GraphQL */ `
       freeAppearVerified
       createdAt
       updatedAt
-      owner
     }
   }
 `;
