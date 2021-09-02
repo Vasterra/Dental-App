@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "awsdentalaf8453ea": {}
+      },
+      "function": {
+        "AdminQueries60c21fd8": {
+          "deploymentBucketName": "amplify-awsdental-dev-161336-deployment",
+          "s3Key": "amplify-builds/AdminQueries60c21fd8-58696c35474b53363548-build.zip"
+        }
       }
     }
   }

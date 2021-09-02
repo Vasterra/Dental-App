@@ -1,6 +1,6 @@
 {
     "identityPoolName": "awsdentalaf8453ea_identitypool_af8453ea",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "awsdenaf8453ea",
     "userPoolName": "awsdentalaf8453ea_userpool_af8453ea",
     "autoVerifiedAttributes": [
