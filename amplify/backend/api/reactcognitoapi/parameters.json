@@ -1,10 +1,10 @@
 {
-  "AppSyncApiName": "apidental",
+  "AppSyncApiName": "reactcognitoapi",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
   "AuthCognitoUserPoolId": {
     "Fn::GetAtt": [
-      "authapidentald3023043",
+      "authreactcognitoapi4ebbeb2b4ebbeb2b",
       "Outputs.UserPoolId"
     ]
   }

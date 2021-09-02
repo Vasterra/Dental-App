@@ -1,9 +1,56 @@
 {
+  "function": {
+    "reactcognitoapi4ebbeb2b4ebbeb2bPostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "AdminQueries663f5bee": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "reactcognitoapi4ebbeb2b4ebbeb2b",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ]
+    }
+  },
   "auth": {
-    "apidentald3023043": {
+    "userPoolGroups": {
+      "service": "Cognito-UserPool-Groups",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "reactcognitoapi4ebbeb2b4ebbeb2b",
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ]
+        }
+      ]
+    },
+    "reactcognitoapi4ebbeb2b4ebbeb2b": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "reactcognitoapi4ebbeb2b4ebbeb2bPostConfirmation",
+          "triggerProvider": "Cognito",
+          "attributes": [
+            "Arn",
+            "Name"
+          ]
+        }
+      ],
       "customAuth": false,
       "frontendAuthConfig": {
         "loginMechanism": [
@@ -24,21 +71,6 @@
     }
   },
   "api": {
-    "apidental": {
-      "service": "AppSync",
-      "providerPlugin": "awscloudformation",
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authapidentald3023043"
-            }
-          },
-          "additionalAuthenticationProviders": []
-        }
-      }
-    },
     "AdminQueries": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
@@ -46,40 +78,39 @@
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "apidentald3023043",
+          "resourceName": "reactcognitoapi4ebbeb2b4ebbeb2b",
           "attributes": [
             "UserPoolId"
           ]
         },
         {
           "category": "function",
-          "resourceName": "AdminQueries99b5bd34",
+          "resourceName": "AdminQueries663f5bee",
           "attributes": [
             "Arn",
             "Name"
           ]
         }
       ]
-    }
-  },
-  "function": {
-    "AdminQueries99b5bd34": {
-      "service": "Lambda",
+    },
+    "reactcognitoapi": {
+      "service": "AppSync",
       "providerPlugin": "awscloudformation",
-      "build": true,
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "apidentald3023043",
-          "attributes": [
-            "UserPoolId"
-          ]
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authreactcognitoapi4ebbeb2b4ebbeb2b"
+            }
+          },
+          "additionalAuthenticationProviders": []
         }
-      ]
+      }
     }
   },
   "storage": {
-    "s361db5a90": {
+    "y": {
       "service": "S3",
       "providerPlugin": "awscloudformation"
     }

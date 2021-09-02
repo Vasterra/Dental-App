@@ -5,9 +5,9 @@
     "env": {
       "Type": "String"
     },
-    "authapidentald3023043UserPoolId": {
+    "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId": {
       "Type": "String",
-      "Default": "authapidentald3023043UserPoolId"
+      "Default": "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId"
     },
     "deploymentBucketName": {
       "Type": "String"
@@ -38,12 +38,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "AdminQueries99b5bd34",
+            "AdminQueries663f5bee",
             {
               "Fn::Join": [
                 "",
                 [
-                  "AdminQueries99b5bd34",
+                  "AdminQueries663f5bee",
                   "-",
                   {
                     "Ref": "env"
@@ -58,9 +58,9 @@
             "ENV": {
               "Ref": "env"
             },
-            "GROUP": "admin",
+            "GROUP": "Admin",
             "USERPOOL": {
-              "Ref": "authapidentald3023043UserPoolId"
+              "Ref": "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId"
             }
           }
         },
@@ -88,12 +88,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "AdminQueries99b5bd34LambdaRole",
+            "AdminQueries663f5beeLambdaRole",
             {
               "Fn::Join": [
                 "",
                 [
-                  "AdminQueries99b5bd34LambdaRole",
+                  "AdminQueries663f5beeLambdaRole",
                   "-",
                   {
                     "Ref": "env"
@@ -189,7 +189,7 @@
                     },
                     ":userpool/",
                     {
-                      "Ref": "authapidentald3023043UserPoolId"
+                      "Ref": "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId"
                     }
                   ]
                 ]

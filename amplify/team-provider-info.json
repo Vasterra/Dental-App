@@ -1,49 +1,29 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-apidental-dev-140827-authRole",
-      "UnauthRoleArn": "arn:aws:iam::207817270204:role/amplify-apidental-dev-140827-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::207817270204:role/amplify-apidental-dev-140827-authRole",
+      "AuthRoleName": "amplify-reactcognitoapi-dev-93100-authRole",
+      "UnauthRoleArn": "arn:aws:iam::207817270204:role/amplify-reactcognitoapi-dev-93100-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::207817270204:role/amplify-reactcognitoapi-dev-93100-authRole",
       "Region": "eu-west-1",
-      "DeploymentBucketName": "amplify-apidental-dev-140827-deployment",
-      "UnauthRoleName": "amplify-apidental-dev-140827-unauthRole",
-      "StackName": "amplify-apidental-dev-140827",
-      "StackId": "arn:aws:cloudformation:eu-west-1:207817270204:stack/amplify-apidental-dev-140827/f0c9ef20-0b14-11ec-a12d-0654ed3e5771",
-      "AmplifyAppId": "d1s2oxtfyh58ht"
+      "DeploymentBucketName": "amplify-reactcognitoapi-dev-93100-deployment",
+      "UnauthRoleName": "amplify-reactcognitoapi-dev-93100-unauthRole",
+      "StackName": "amplify-reactcognitoapi-dev-93100",
+      "StackId": "arn:aws:cloudformation:eu-west-1:207817270204:stack/amplify-reactcognitoapi-dev-93100/59de14d0-0bb7-11ec-9b21-0a397a0898a1",
+      "AmplifyAppId": "d205w1ht7qqo3t"
     },
     "categories": {
-      "auth": {
-        "apidentald3023043": {}
-      },
       "function": {
-        "AdminQueries99b5bd34": {
-          "deploymentBucketName": "amplify-apidental-dev-140827-deployment",
-          "s3Key": "amplify-builds/AdminQueries99b5bd34-5873782f706431486a4a-build.zip"
+        "reactcognitoapi4ebbeb2b4ebbeb2bPostConfirmation": {
+          "deploymentBucketName": "amplify-reactcognitoapi-dev-93100-deployment",
+          "s3Key": "amplify-builds/reactcognitoapi4ebbeb2b4ebbeb2bPostConfirmation-657a327055546263576b-build.zip"
+        },
+        "AdminQueries663f5bee": {
+          "deploymentBucketName": "amplify-reactcognitoapi-dev-93100-deployment",
+          "s3Key": "amplify-builds/AdminQueries663f5bee-72417334417a41336d7a-build.zip"
         }
-      }
-    }
-  },
-  "admin": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-apidental-admin-141242-authRole",
-      "UnauthRoleArn": "arn:aws:iam::207817270204:role/amplify-apidental-admin-141242-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::207817270204:role/amplify-apidental-admin-141242-authRole",
-      "Region": "eu-west-1",
-      "DeploymentBucketName": "amplify-apidental-admin-141242-deployment",
-      "UnauthRoleName": "amplify-apidental-admin-141242-unauthRole",
-      "StackName": "amplify-apidental-admin-141242",
-      "StackId": "arn:aws:cloudformation:eu-west-1:207817270204:stack/amplify-apidental-admin-141242/879e73d0-0b15-11ec-a00c-0a45ab70fc63",
-      "AmplifyAppId": "d1s2oxtfyh58ht"
-    },
-    "categories": {
-      "auth": {
-        "apidentald3023043": {}
       },
-      "function": {
-        "AdminQueries99b5bd34": {
-          "deploymentBucketName": "amplify-apidental-admin-141242-deployment",
-          "s3Key": "amplify-builds/AdminQueries99b5bd34-5873782f706431486a4a-build.zip"
-        }
+      "auth": {
+        "reactcognitoapi4ebbeb2b4ebbeb2b": {}
       }
     }
   }
