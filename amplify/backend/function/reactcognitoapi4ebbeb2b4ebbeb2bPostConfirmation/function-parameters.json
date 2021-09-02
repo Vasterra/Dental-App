@@ -1,0 +1,17 @@
+{
+  "trigger": true,
+  "modules": [
+    "custom"
+  ],
+  "parentResource": "reactcognitoapi4ebbeb2b4ebbeb2b",
+  "functionName": "reactcognitoapi4ebbeb2b4ebbeb2bPostConfirmation",
+  "resourceName": "reactcognitoapi4ebbeb2b4ebbeb2bPostConfirmation",
+  "parentStack": "auth",
+  "triggerEnvs": [],
+  "triggerDir": "C:\\Users\\alexo\\AppData\\Roaming\\npm\\node_modules\\@aws-amplify\\cli\\node_modules\\amplify-category-auth\\provider-utils\\awscloudformation\\triggers\\PostConfirmation",
+  "triggerTemplate": "PostConfirmation.json.ejs",
+  "triggerEventPath": "PostConfirmation.event.json",
+  "roleName": "reactcognitoapi4ebbeb2b4ebbeb2bPostConfirmation",
+  "skipEdit": true,
+  "enableCors": false
+}
