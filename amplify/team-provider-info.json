@@ -1,29 +1,19 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-reactcognitoapi-dev-93100-authRole",
-      "UnauthRoleArn": "arn:aws:iam::207817270204:role/amplify-reactcognitoapi-dev-93100-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::207817270204:role/amplify-reactcognitoapi-dev-93100-authRole",
-      "Region": "eu-west-1",
-      "DeploymentBucketName": "amplify-reactcognitoapi-dev-93100-deployment",
-      "UnauthRoleName": "amplify-reactcognitoapi-dev-93100-unauthRole",
-      "StackName": "amplify-reactcognitoapi-dev-93100",
-      "StackId": "arn:aws:cloudformation:eu-west-1:207817270204:stack/amplify-reactcognitoapi-dev-93100/59de14d0-0bb7-11ec-9b21-0a397a0898a1",
-      "AmplifyAppId": "d205w1ht7qqo3t"
+      "AuthRoleName": "amplify-awsdental-dev-161336-authRole",
+      "UnauthRoleArn": "arn:aws:iam::828149670277:role/amplify-awsdental-dev-161336-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::828149670277:role/amplify-awsdental-dev-161336-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-awsdental-dev-161336-deployment",
+      "UnauthRoleName": "amplify-awsdental-dev-161336-unauthRole",
+      "StackName": "amplify-awsdental-dev-161336",
+      "StackId": "arn:aws:cloudformation:us-east-1:828149670277:stack/amplify-awsdental-dev-161336/972f46f0-0bef-11ec-8fc9-127635505527",
+      "AmplifyAppId": "d190tr86btf4yk"
     },
     "categories": {
-      "function": {
-        "reactcognitoapi4ebbeb2b4ebbeb2bPostConfirmation": {
-          "deploymentBucketName": "amplify-reactcognitoapi-dev-93100-deployment",
-          "s3Key": "amplify-builds/reactcognitoapi4ebbeb2b4ebbeb2bPostConfirmation-55626537422f72666c63-build.zip"
-        },
-        "AdminQueries663f5bee": {
-          "deploymentBucketName": "amplify-reactcognitoapi-dev-93100-deployment",
-          "s3Key": "amplify-builds/AdminQueries663f5bee-58696c35474b53363548-build.zip"
-        }
-      },
       "auth": {
-        "reactcognitoapi4ebbeb2b4ebbeb2b": {}
+        "awsdentalaf8453ea": {}
       }
     }
   }
