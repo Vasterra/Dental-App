@@ -472,7 +472,7 @@ const AdminUsers = () => {
                   <UserViewProfileBlock>
                     <img src='../../../images/user.svg' />
                     <UserViewProfileLink target='_blank'
-                                         href={`https://main.d1x2glchgshk0s.amplifyapp.com/dentist/person/${item.Username}`}>View
+                                         href={`https://main.d1x2glchgshk0s.amplifyapp.com/dentist/person/${item.Attributes[0].Value}`}>View
                       Profile</UserViewProfileLink>
                   </UserViewProfileBlock>
                   <UserViewProfileBlock>
