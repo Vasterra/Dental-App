@@ -16,9 +16,9 @@
         "dentalapp6f9bf30a": {}
       },
       "function": {
-        "AdminQueries59fc7fd4": {
+        "AdminQueries196efb04": {
           "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/AdminQueries59fc7fd4-2b505077786265394d71-build.zip"
+          "s3Key": "amplify-builds/AdminQueries196efb04-2b505077786265394d71-build.zip"
         }
       }
     }
