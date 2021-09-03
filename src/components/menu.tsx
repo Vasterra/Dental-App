@@ -190,6 +190,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
   const [dentist, setDentist] = useState<any>();
   const [open, setOpen] = React.useState(false);
   const [currentAvatar, setCurrentAvatar] = useState('');
+  const [isCurrentAvatar, setIsCurrentAvatar] = useState<boolean>(false);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
@@ -234,6 +235,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
   const downloadAvatar = (currentDentist: any) => {
     void ApiManager.downloadAvatar(currentDentist).then(signedFiles => {
       setCurrentAvatar(signedFiles);
+      setIsCurrentAvatar(true);
     });
   };
 
@@ -274,7 +276,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
     }
     setOpenSnackbar(false);
   };
-
+  console.log(isCurrentAvatar);
   return (
     <>
       <div className='leftmenu'>
@@ -316,7 +318,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
             </a>
           </p>
           <div className='leftmenu-user-information'>
-            {currentAvatar && <>
+            {currentAvatar && isCurrentAvatar && <>
               <MenuAvatar src={currentAvatar} alt='user image' />
               <MenuAvatar__DownloadLabel>
                 <CloudDownloadIcon />
@@ -324,7 +326,7 @@ const Login: React.FunctionComponent<Props> = ({ active }) => {
               </MenuAvatar__DownloadLabel>
             </>
             }
-            {!currentAvatar && <>
+            {!currentAvatar && isCurrentAvatar && <>
               <MenuAvatar src='../../../images/empty_avatar.png' alt='user image' />
               <MenuAvatar__DownloadLabel>
                 <CloudDownloadIcon />
