@@ -5,9 +5,9 @@
     "env": {
       "Type": "String"
     },
-    "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId": {
+    "authdentalapp6f9bf30aUserPoolId": {
       "Type": "String",
-      "Default": "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId"
+      "Default": "authdentalapp6f9bf30aUserPoolId"
     },
     "deploymentBucketName": {
       "Type": "String"
@@ -38,12 +38,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "AdminQueries663f5bee",
+            "AdminQueries196efb04",
             {
               "Fn::Join": [
                 "",
                 [
-                  "AdminQueries663f5bee",
+                  "AdminQueries196efb04",
                   "-",
                   {
                     "Ref": "env"
@@ -58,9 +58,9 @@
             "ENV": {
               "Ref": "env"
             },
-            "GROUP": "Admin",
+            "GROUP": "Admins",
             "USERPOOL": {
-              "Ref": "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId"
+              "Ref": "authdentalapp6f9bf30aUserPoolId"
             }
           }
         },
@@ -88,12 +88,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "AdminQueries663f5beeLambdaRole",
+            "AdminQueries196efb04LambdaRole",
             {
               "Fn::Join": [
                 "",
                 [
-                  "AdminQueries663f5beeLambdaRole",
+                  "AdminQueries196efb04LambdaRole",
                   "-",
                   {
                     "Ref": "env"
@@ -189,7 +189,7 @@
                     },
                     ":userpool/",
                     {
-                      "Ref": "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId"
+                      "Ref": "authdentalapp6f9bf30aUserPoolId"
                     }
                   ]
                 ]

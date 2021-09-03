@@ -129,6 +129,13 @@ const Location: React.FunctionComponent<Props> = ({
       setLoaderButtonSubmit(false);
       return false;
     }
+    if (currentDentist.locations.items.length === Number(adminSettingSubscriber.paidMaxLocations)) {
+      setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.paidMaxLocations} locations.`);
+      setSeverity('warning');
+      setOpenSnackbar(true);
+      setLoaderButtonSubmit(false);
+      return false;
+    }
 
     try {
       await API.graphql({

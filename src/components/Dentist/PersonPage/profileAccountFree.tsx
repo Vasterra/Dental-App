@@ -3,6 +3,19 @@ import React, { useEffect, useState } from 'react';
 import GalleryPerson from 'src/components/Gallery/GalleryPerson';
 import { WrapperFlex } from 'src/styles/Main.module';
 import ApiManager from '../../../services/ApiManager';
+import QRCode from 'qrcode';
+import { IAdminSettingsSubscribers } from '../../../types/types';
+import styled from 'styled-components';
+
+export const QrCodeWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  canvas {
+    margin-bottom: 10px;
+  }
+`;
 
 type Props = {
   currentDentist: any,
@@ -10,8 +23,8 @@ type Props = {
   services: any,
   images: any,
   oldIMages: any,
-  setImages: Function,
-  downloadImages: Function,
+  setImages: any,
+  downloadImages: any,
 }
 
 const ProfileAccountFree: React.FunctionComponent<Props> = ({
@@ -23,15 +36,23 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
     setImages,
     downloadImages
   }) => {
-  const [location, setLocation]: any = useState(''); //qr
-  const [adminSettingSubscriber, setAdminSettingSubscriber]: any = useState();
-  const [notFound, setNotFound] = useState(false);
+  const [adminSettingSubscriber, setAdminSettingSubscriber] = useState<IAdminSettingsSubscribers | any>();
+  const [notFound, setNotFound] = useState<boolean>(false);
 
   useEffect(() => {
-    setLocation(window.location.href);
+    const canvas: any = document.getElementById('canvas');
+    void QRCode.toCanvas(canvas, window.location.href);
     void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
 
   }, []);
+
+  const downloadQRCode = () => {
+    const canvas: any = document.getElementById('canvas');
+    const link: any = document.getElementById('link');
+    link.setAttribute('download', 'QrCode.png');
+    link.setAttribute('href', canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+    link.click();
+  }
 
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null);
@@ -116,9 +137,11 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
                     })
                   }
                 </div>
-                {/*<div style={{marginTop: '10px'}}>*/}
-                {/*  <QRCode value={location} size={100}/>*/}
-                {/*</div>*/}
+                <QrCodeWrapper>
+                  <canvas id='canvas'/>
+                  <a id="link"></a>
+                  <button className='button-green-search qrDownload' onClick={downloadQRCode}>Download QRCode</button>
+                </QrCodeWrapper>
               </div>
             </div>
           </div>
