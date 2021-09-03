@@ -161,12 +161,12 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
                     <a className='leftmenu-link'>Account</a>
                   </li>
                 </Link>
-                <Link href={`../../payment`}>
+                {/* <Link href={`../../payment`}>
                   <li className={`leftmenu-list + ${this.props.active === 'activePayment' ? 'active' : ''}`}>
                     <img className='leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
                     <a className='leftmenu-link'>Payment</a>
                   </li>
-                </Link>
+                </Link> */}
                 <li className='leftmenu-list logout'>
                   <img className='leftmenu-link-image' src='../../images/left-arrow.svg' alt='link image' />
                   <a className='leftmenu-link' href='/login' onClick={this.signOut}>Logout</a>
