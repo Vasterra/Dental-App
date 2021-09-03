@@ -32,7 +32,7 @@ const awsmobile = {
             "region": "eu-west-1"
         }
     ],
-    "aws_user_files_s3_bucket": "dentalappb7a494f535184c2297f16ca723fc23d2180254-dev",
+    "aws_user_files_s3_bucket": "dentalappa96d899392f047399e3b2994b40025aa180254-dev",
     "aws_user_files_s3_bucket_region": "eu-west-1"
 };
 
