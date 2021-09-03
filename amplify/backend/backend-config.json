@@ -53,7 +53,7 @@
         },
         {
           "category": "function",
-          "resourceName": "AdminQueriesf4bd56b7",
+          "resourceName": "AdminQueries196efb04",
           "attributes": [
             "Arn",
             "Name"
@@ -63,13 +63,13 @@
     }
   },
   "storage": {
-    "s332747918": {
+    "s3695d7575": {
       "service": "S3",
       "providerPlugin": "awscloudformation"
     }
   },
   "function": {
-    "AdminQueriesf4bd56b7": {
+    "AdminQueries196efb04": {
       "service": "Lambda",
       "providerPlugin": "awscloudformation",
       "build": true,
