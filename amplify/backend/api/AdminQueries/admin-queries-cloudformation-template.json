@@ -14,23 +14,23 @@
         },
         
         
-          "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId": {
+          "authdentalapp6f9bf30aUserPoolId": {
             "Type": "String",
-            "Default": "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId"
+            "Default": "authdentalapp6f9bf30aUserPoolId"
           },
         
           
           
         
-          "functionAdminQueries663f5beeArn": {
+          "functionAdminQueriesf4bd56b7Arn": {
             "Type": "String",
-            "Default": "functionAdminQueries663f5beeArn"
+            "Default": "functionAdminQueriesf4bd56b7Arn"
           },
         
           
-          "functionAdminQueries663f5beeName": {
+          "functionAdminQueriesf4bd56b7Name": {
             "Type": "String",
-            "Default": "functionAdminQueries663f5beeName"
+            "Default": "functionAdminQueriesf4bd56b7Name"
           }
         
           
@@ -176,7 +176,7 @@
                                 ":lambda:path/2015-03-31/functions/",
                                 {
                                     
-                                    "Ref": "functionAdminQueries663f5beeArn"
+                                    "Ref": "functionAdminQueriesf4bd56b7Arn"
                                 },
                                 "/invocations"
                               ]
@@ -217,7 +217,7 @@
                                   ":userpool/",
                                   {
                                                   
-                                    "Ref": "authreactcognitoapi4ebbeb2b4ebbeb2bUserPoolId"
+                                    "Ref": "authdentalapp6f9bf30aUserPoolId"
                                   }
 
                                 ]
@@ -268,7 +268,7 @@
         "Properties": {
             "FunctionName": 
                 {
-                  "Ref": "functionAdminQueries663f5beeName"
+                  "Ref": "functionAdminQueriesf4bd56b7Name"
                 },
                 
                 "Action": "lambda:InvokeFunction",

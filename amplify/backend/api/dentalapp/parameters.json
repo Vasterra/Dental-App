@@ -1,10 +1,10 @@
 {
-  "AppSyncApiName": "reactcognitoapi",
+  "AppSyncApiName": "dentalapp",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
   "AuthCognitoUserPoolId": {
     "Fn::GetAtt": [
-      "authreactcognitoapi4ebbeb2b4ebbeb2b",
+      "authdentalapp6f9bf30a",
       "Outputs.UserPoolId"
     ]
   }
