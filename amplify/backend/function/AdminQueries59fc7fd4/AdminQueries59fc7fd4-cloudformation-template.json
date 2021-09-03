@@ -38,12 +38,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "AdminQueriesf4bd56b7",
+            "AdminQueries59fc7fd4",
             {
               "Fn::Join": [
                 "",
                 [
-                  "AdminQueriesf4bd56b7",
+                  "AdminQueries59fc7fd4",
                   "-",
                   {
                     "Ref": "env"
@@ -58,7 +58,7 @@
             "ENV": {
               "Ref": "env"
             },
-            "GROUP": "admin",
+            "GROUP": "Admin",
             "USERPOOL": {
               "Ref": "authdentalapp6f9bf30aUserPoolId"
             }
@@ -88,12 +88,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "AdminQueriesf4bd56b7LambdaRole",
+            "AdminQueries59fc7fd4LambdaRole",
             {
               "Fn::Join": [
                 "",
                 [
-                  "AdminQueriesf4bd56b7LambdaRole",
+                  "AdminQueries59fc7fd4LambdaRole",
                   "-",
                   {
                     "Ref": "env"

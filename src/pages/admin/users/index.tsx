@@ -175,7 +175,6 @@ const AdminUsers = () => {
     };
     const { NextToken, ...rest } = await API.get(apiName, path, myInit);
     try {
-      console.log(rest);
       void await listUsersGroupCancelDental(rest.Users);
     } catch (error: any) {
       console.error('There as an Error', error);
