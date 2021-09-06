@@ -11,7 +11,7 @@ const Payment = () => {
         <div className="profile-box-form">
             <div className="form-info-block">
                 <div>
-                  <p className="form-login-title green px20">Billing Information</p>
+                  <p className="form-login-title green px20">Billing Information - Purchase subscription</p>
                   <p className="form-login-subtitle gray px12 mb-6px"></p>
                 </div>
             </div>
