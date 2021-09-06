@@ -6,6 +6,7 @@ import Router from 'next/router';
 import { useFormik } from 'formik';
 import { Alert } from '@material-ui/lab';
 import { AuthInputError, AuthInputWrapper } from 'src/styles/Auth.module';
+import ValidateCard from './checkCard';
 
 interface State {
   username: string;
@@ -16,7 +17,7 @@ interface State {
   weight: string;
   weightRange: string;
   showPassword: boolean;
-  user: null;
+  user: any;
 
   loader: boolean;
   loaderButtonSubmit: boolean;
@@ -40,6 +41,7 @@ const Registration = ({}) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
   const [severity, setSeverity] = useState('');
+  const [nextStep, setNextStep] = useState(false);
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -85,6 +87,25 @@ const Registration = ({}) => {
     return errors;
   };
 
+  const SubmitForm = async (values: any)=>{
+    try {
+      const { user }: any = await Auth.signUp({
+        username: values.email,
+        password: values.password,
+        attributes: {
+          email: values.email,
+          name: values.username,
+          'custom:gdcNumber': values.gdcNumber
+        }
+      });
+      setValues({ ...values, user });
+    } catch (error: any) {
+      setMessageSnackbar('An error occured during registration, please check your information and try again!');
+      setSeverity('warning');
+      setOpenSnackbar(true);
+    }
+  }
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -101,22 +122,8 @@ const Registration = ({}) => {
     },
     validate,
     onSubmit: async (values: any) => {
-      try {
-        const { user }: any = await Auth.signUp({
-          username: values.email,
-          password: values.password,
-          attributes: {
-            email: values.email,
-            name: values.username,
-            'custom:gdcNumber': values.gdcNumber
-          }
-        });
-        setValues({ ...values, user });
-      } catch (error: any) {
-        setMessageSnackbar('An error occured during registration, please check your information and try again!');
-        setSeverity('warning');
-        setOpenSnackbar(true);
-      }
+      setValues({ ...values });
+      setNextStep(true)
     }
   });
 
@@ -138,9 +145,16 @@ const Registration = ({}) => {
     }
   }
 
+  const onCancel = (): void=>{
+    setNextStep(false)
+  } 
+
   return (
     <div className='main bg-singup main-box'>
-      {!values.loader && <div className='form-login'>
+      {nextStep && 
+        <ValidateCard username={values.username} onSubmit={ async ()=>{ await SubmitForm(values) }} onCancel={onCancel}/>
+      }
+      {!nextStep && !values.loader && <div className='form-login'>
         <p className='form-login-title green'>Sign Up</p>
         <p className='form-login-subtitle gray'>Create An Account with FYD
         </p>
@@ -211,7 +225,7 @@ const Registration = ({}) => {
             {formik.errors.password ? <AuthInputError>{formik.errors.password}</AuthInputError> : null}
           </AuthInputWrapper>
           <p className='form-login-buttons' style={{ marginTop: '30px' }}>
-            <button type='submit' className='button-green'>Sign Up</button>
+            <button type='submit' className='button-green'>Next</button>
           </p>
         </form>
         }
@@ -234,7 +248,7 @@ const Registration = ({}) => {
       <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar}
           // @ts-ignore
-               severity={severity}>
+          severity={severity}>
           {messageSnackbar}
         </Alert>
       </Snackbar>
