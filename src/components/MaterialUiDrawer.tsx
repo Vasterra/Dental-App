@@ -99,7 +99,7 @@ const Menu = styled('ul')`{
       color: #fff;
       /*margin-bottom: 23px;*/
       margin-left: -46px;
-      transition: all .3s linear;
+      transition: all 0s linear;
       z-index: 1;
 
       &:hover {
