@@ -364,7 +364,6 @@ img {
 }
 
 .leftmenu-link:hover {
-    background: var(--color-white);
     color: var(--color-green);
 }
 
