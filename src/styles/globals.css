@@ -1158,7 +1158,6 @@ select.arrows {
     padding: 0;
     object-fit: contain;
     width: 100%;
-    border: solid 1px #095c5c;
 }
 
 .fill-mobile {
