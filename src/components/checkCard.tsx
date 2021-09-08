@@ -127,7 +127,7 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
       // error.message = 'Username not equal on register username'
       // setError(error);
       // elements?.getElement("card")!.focus();
-      // return
+      return
     }
  
     if (!stripe || !elements) {
@@ -155,34 +155,24 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
     if (payload.error) {
       setError(payload.error as any);
     } else {
-       //next step
-      onSubmit()
       setPaymentMethod(payload.paymentMethod as any);
+      onSubmit()
     }
 
   };
 
   const reset = () => {
-    setError(null);
-    setProcessing(false);
-    setPaymentMethod(null);
-    setBillingDetails({
-      name: ""
-    });
+    // setError(null);
+    // setProcessing(false);
+    // setPaymentMethod(null);
+    // setBillingDetails({
+    //   name: ""
+    // });
+      //next step
+    onSubmit()
   };
 
-  return paymentMethod ? (
-    <div className="Result">
-      <div className="ResultTitle" role="alert">
-        Payment successful
-      </div>
-      <div className="ResultMessage">
-        Thanks for trying Stripe Elements. No money was charged, but we
-        generated a PaymentMethod: {paymentMethod.id}
-      </div>
-      <ResetButton onClick={reset} />
-    </div>
-  ) : (
+  return (
     <form className="Form" onSubmit={handleSubmit}>
       <fieldset className="FormGroup">
         <Field
