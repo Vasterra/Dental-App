@@ -54,18 +54,15 @@ class GoogleMapReactComponent extends React.Component<Props & GeolocatedProps> {
           // @ts-ignore
           lat={centerMe.lat}
           lng={centerMe.lng}
-          text={'Me'}
+          text={'Me'}s
         />
         {this.props.dentists !== undefined ? this.props.dentists.map((dent: any, key: any): any => {
-          const { lat, lng, email, address } = dent;
           return <Marker
             // @ts-ignore
-            lat={lat}
-            lng={lng}
+            lat={dent.lat}
+            lng={dent.lng}
             key={key}
             dent={dent}
-            text={email}
-            address={address}
             selected={dent === this.props.currentDentist}
           />;
         }) : <></>
