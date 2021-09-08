@@ -11,7 +11,6 @@ import { getDentist } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
 
 const Search = ({ dentistsData, listServiceForDentals }: any) => {
-  console.log(dentistsData);
   const [currentDentist, setCurrentDentist] = useState();
   const [dentists, setDentists]: any = useState(dentistsData);
   const [oldDentists, setOldDentists]: any = useState(dentistsData);
@@ -150,9 +149,10 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
 
   const findCoordinatesDentists = (coordinate: any, distance: number, dentists: []) => {
     let distanceDent: any[] = [];
-    if (!dentists) return {};
+    let sortDentist = dentists.filter((item: any) => item.hasPaidPlan === true).concat(dentists.filter((item: any) => item.hasPaidPlan !== true))
+    if (!sortDentist) return {};
 
-    dentists.map((dent: { lng: any; lat: any; }) => {
+    sortDentist.map((dent: { lng: any; lat: any; }) => {
       const a = { 'Longitude': coordinate?.lng, 'Latitude': coordinate?.lat };
       const b = { 'Longitude': dent.lng, 'Latitude': dent.lat };
       const distanceCur = (111.111 *

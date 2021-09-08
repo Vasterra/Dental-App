@@ -2212,7 +2212,7 @@ input:disabled:-ms-input-placeholder {
     top: -140px;
     left: 17px;
     z-index: 1;
-    /*width: 139px;*/
+    width: 235px;
     /*height: 139px;*/
     padding: 15px;
     opacity: 0.8;

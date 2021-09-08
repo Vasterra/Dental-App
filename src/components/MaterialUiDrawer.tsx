@@ -148,7 +148,7 @@ export default function TemporaryDrawer({currentUser}) {
 
     setState({ ...state, [anchor]: open });
   };
-  console.log(currentUser);
+
   const list = (anchor: Anchor) => (
     <div
       className={clsx(classes.list, {
