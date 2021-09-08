@@ -152,7 +152,18 @@ const Registration = ({}) => {
   return (
     <div className='main bg-singup main-box'>
       {nextStep && 
-        <ValidateCard username={values.username} onSubmit={ async ()=>{ await SubmitForm(values) }} onCancel={onCancel}/>
+        <ValidateCard username={values.username} onSubmit={ async ()=>{ 
+          try {
+            await SubmitForm(values)
+            onCancel()
+          } catch (error: any) {
+            setMessageSnackbar('error');
+            setSeverity('warning');
+            setOpenSnackbar(true);
+            // onCancel()
+          } 
+        }} 
+        onCancel={onCancel}/>
       }
       {!nextStep && !values.loader && <div className='form-login'>
         <p className='form-login-title green'>Sign Up</p>
