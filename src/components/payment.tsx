@@ -6,6 +6,10 @@ import {
   useElements,
   useStripe
 } from "@stripe/react-stripe-js";
+import CachedRoundedIcon from '@material-ui/icons/CachedRounded';
+import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded';
+import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -65,15 +69,13 @@ const Field = ({
 );
 
 const SubmitButton = ({ processing, error, children, disabled }: any) => (
-  <div className="col-12 col-xl-6 mx-auto mt-3">
-    <button
-      className={`btn btn-success ${error ? "btn btn btn-danger" : ""}`}
-      type="submit"
-      disabled={processing || disabled}
-    >
-      {processing ? "Processing..." : children}
-    </button>
-  </div>
+  <button
+    className={`btn btn-success ${error ? "btn btn btn-danger" : ""}`}
+    type="submit"
+    disabled={processing || disabled}
+  >
+    {processing ? "Processing..." : children}
+  </button>
 );
 
 const ErrorMessage = ({ children }: any) => (
@@ -107,12 +109,15 @@ const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<any>(null);
+  const [couponField, showCouponField] = useState<boolean>(false);
+  const [couponValue, setCouponValue] = useState<string>('');
+  const [cuponStatus, setCuponStatus] = useState<'success' | 'error' | null>(null);
+  const [checking, proccessCheckingCupon] = useState<boolean>(false);
   const [cardComplete, setCardComplete] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<any>(null);
   const [billingDetails, setBillingDetails] = useState({
     email: "",
-    phone: "",
     name: ""
   });
 
@@ -155,10 +160,43 @@ const CheckoutForm = () => {
     setPaymentMethod(null);
     setBillingDetails({
       email: "",
-      phone: "",
       name: ""
     });
   };
+
+  const handleCheckCoupon = ()=>{
+    if(couponValue.length < 1){
+      return
+    }
+    proccessCheckingCupon(true)
+    if(couponValue === 'vasterra'){
+      setTimeout(()=>{
+        proccessCheckingCupon(false)
+        setCuponStatus('success')
+      }, 3000)
+    }else{
+      setTimeout(()=>{
+        proccessCheckingCupon(false)
+        setCuponStatus('error')
+      }, 3000)
+    }
+  }
+
+  const handleCouponChange = (e: any)=>{
+    setCouponValue(e.target.value)
+    if(couponValue.length <= 1){
+      setCuponStatus(null)
+    }
+  }
+  const handleCouponKeydown = (e: any)=>{
+    console.log(e.key)
+    if (e.key === 'Enter') {
+      handleCheckCoupon()
+    }
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      setCuponStatus(null)
+    }
+  }
 
   return paymentMethod ? (
     <div className="Result">
@@ -198,18 +236,6 @@ const CheckoutForm = () => {
             setBillingDetails({ ...billingDetails, email: e.target.value });
           }}
         />
-        <Field
-          label="Phone"
-          id="phone"
-          type="tel"
-          placeholder="(941) 555-0123"
-          required
-          autoComplete="tel"
-          value={billingDetails.phone}
-          onChange={(e: any) => {
-            setBillingDetails({ ...billingDetails, phone: e.target.value });
-          }}
-        />
       </fieldset>
       <fieldset className="FormGroup">
         <CardField
@@ -220,9 +246,40 @@ const CheckoutForm = () => {
         />
       </fieldset>
       {error && <ErrorMessage>{error.message as any}</ErrorMessage>}
-      <SubmitButton processing={processing} error={error} disabled={!stripe}>
-        Pay $25
-      </SubmitButton>
+      <div className="col-12 col-xl-6 mx-auto mt-3" style={{display: 'flex', justifyContent: 'space-between'}}>
+        <SubmitButton processing={processing} error={error} disabled={(!stripe || checking)}>
+          Pay
+        </SubmitButton>
+          { couponField ?
+           <div id="coupon_input_container">
+              <input 
+                type="text" 
+                id="coupon_input" 
+                disabled={checking}
+                value={couponValue} 
+                autoComplete="Coupon"
+                placeholder={'Coupon'}
+                onChange={handleCouponChange}
+                onKeyDown={handleCouponKeydown}
+              />
+              <div style={{cursor: 'pointer'}}>
+                {!cuponStatus && !checking && <CachedRoundedIcon fontSize={'medium'} color='inherit' style={{ margin: '0 5px 0 5px' }} onClick={handleCheckCoupon}/>}
+                {!cuponStatus && checking && <CircularProgress disableShrink size={20} style={{ margin: '0 5px 0 5px' }}/>}
+                {cuponStatus === 'success'  && <DoneAllRoundedIcon fontSize={'medium'} color='secondary' style={{ margin: '0 5px 0 5px' }}/>}
+                {cuponStatus === 'error'  && <ErrorRoundedIcon fontSize={'medium'} color='error' style={{ margin: '0 5px 0 5px' }}/>}
+              </div>
+          </div>
+          : 
+          <button
+            className={`btn btn-success ${error ? "btn btn btn-danger" : ""}`}
+            type="submit"
+            onClick={()=>showCouponField(true)}
+          >
+            Add promotion code
+          </button>
+        }
+      </div>
+      
     </form>
   );
 };

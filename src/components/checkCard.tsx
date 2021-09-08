@@ -123,11 +123,11 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
     console.log(username, billingDetails.name)
    
     if(username !== billingDetails.name){
-      const error: any = {}
-      error.message = 'Email not equal on register email'
-      setError(error);
-      elements?.getElement("card")!.focus();
-      return
+      // const error: any = {}
+      // error.message = 'Username not equal on register username'
+      // setError(error);
+      // elements?.getElement("card")!.focus();
+      // return
     }
  
     if (!stripe || !elements) {
@@ -240,7 +240,7 @@ const ValidateCard = ({ username, onSubmit, onCancel }: { username: string, onSu
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert onClose={()=>{hideSnackbar(true)}}
-          severity={'info'}>
+          severity={'warning'}>
           {'To combat fraud, we will verify your card by completing a transaction'}
         </Alert>
       </Snackbar>
