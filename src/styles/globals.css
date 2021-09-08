@@ -3151,6 +3151,53 @@ label {
     cursor: pointer;
 }
 
+#coupon_input_container {
+    /* position: relative; */
+    margin:0 5px 0 20px;
+    /* direction: rtl; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 200px;
+}
+#coupon_input {
+    /* height:100%;
+    margin:0;
+    padding-right: 30px;
+    width: 100%; */
+
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+#coupon_input:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+}
+#coupon_input_img {
+    position:absolute;
+    bottom:6px;
+    right:5px;
+    width:24px;
+    height:24px;
+}
+
 /* PaymentPage styles --------- end -------------*/
 
 
