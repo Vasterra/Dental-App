@@ -15,14 +15,16 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
   const [statusSnackBar, setStatusSnackBar]: any = useState();
   const [openSnackBar, setOpenSnackBar]: any = useState();
   const [currentCover, setCurrentCover]: any = useState();
+  const [currentWatermark, setCurrentWatermark] = useState<any>();
   const [currentCoverImg, setCurrentCoverImg]: any = useState();
   const [isCurrentCover, setIsCurrentCover]: any = useState(false);
 
   useEffect(() => {
     downloadCover();
+    downloadWatermark();
   }, []);
 
-  const addImage = async (e: any) => {
+  const addCover = async (e: any) => {
     // setCurrentCoverImg(null);
     console.log(e);
     e.preventDefault();
@@ -69,7 +71,14 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
     });
   };
 
-  const addWatermark = (e: any) => {
+  const downloadWatermark = async () => {
+    await ApiManager.downloadWatermark(currentDentist).then(signedFiles => {
+      console.log(signedFiles);
+      setCurrentWatermark(signedFiles[0]);
+    });
+  };
+
+  const addWatermark = async (e: any) => {
     // setCurrentCoverImg(null);
     e.preventDefault();
     let files;
@@ -81,32 +90,55 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
 
     const reader = new FileReader();
     reader.onload = () => {
-      setWatermarkImg(reader.result as any);
-      addWaterMark(reader.result);
-      setIsCurrentCover(false);
+      setCurrentWatermark(reader.result as any);
+      // addWaterMark(reader.result);
+      // setIsCurrentCover(false);
     };
     reader.readAsDataURL(files[0]);
+    // void ApiManager.CREATE_WATERMARK(files[0], currentDentist.id)
+    await uploadWatermark(files);
+  };
+
+  const uploadWatermark = async (files: any[]) => {
+    try {
+      await Storage.put(`watermark/${currentDentist.id}/watermark`, files[0] ? files[0] : files, {
+        contentType: 'image/png'
+      }).then(() => {
+        setMessageSnackBar('Success Upload!');
+        setStatusSnackBar('success');
+        setOpenSnackBar(true);
+      })
+        .catch((error: any) => {
+          setMessageSnackBar(error);
+          setStatusSnackBar('error');
+          setOpenSnackBar(true);
+        });
+    } catch (error: any) {
+      setMessageSnackBar(error);
+      setStatusSnackBar('error');
+      setOpenSnackBar(true);
+    }
   };
 
   const handleCloseSnackbar = () => {
     setOpenSnackBar(false);
   };
 
-  const addWaterMark = (e: string | ArrayBuffer | null) => {
-    watermark([currentCover, e])
-    .blob(watermark.image.upperRight())
-    .then((img: any) => {
-      uploadCover(img);
-    });
-
-    watermark([currentCover, e])
-    .image(watermark.image.upperRight())
-    .then((img: any) => {
-      setCurrentCover(null);
-      setCurrentCoverImg(img);
-      document.getElementById('exp')!.appendChild(img);
-    });
-  };
+  // const addWaterMark = (e: string | ArrayBuffer | null) => {
+  //   watermark([currentCover, e])
+  //   .blob(watermark.image.upperRight())
+  //   .then((img: any) => {
+  //     setCurrentWatermark(reader.result as any);
+  //   });
+  //
+  //   watermark([currentCover, e])
+  //   .image(watermark.image.upperRight())
+  //   .then((img: any) => {
+  //     setCurrentCover(null);
+  //     setCurrentCoverImg(img);
+  //     document.getElementById('exp')!.appendChild(img);
+  //   });
+  // };
 
   return (
     <>
@@ -123,7 +155,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
             <label className='button-green-file'>Upload Cover</label>
             <input type='file' className='input-file' name='watermark' onChange={(e) => {
               if (currentDentist.hasPaidPlan) {
-                void addImage(e);
+                void addCover(e);
               } else {
                 return false;
               }
@@ -140,45 +172,45 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
                       }
                     }}
             >
-              Delete Cover
+              Clear Cover
             </button>
           </>}
         </p> }
       </div>
-      <div>
-        <p className='form-profile-label'>
-          <label className='form-profile-label'>Watermark</label>
-        </p>
-        <p className='profile-photo-box'>
-          {watermarkImg && <img className='image' src={watermarkImg} alt='' />}
-        </p>
-        <p className='row-content'>
-          {isCurrentCover && <>
-            <label className='button-green-file'>Upload Watermark</label>
-            <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={(e) => {
-              if (currentDentist.hasPaidPlan) {
-                void addWatermark(e);
-              } else {
-                return false;
-              }
-            }} />
-          </>}
-          {currentCoverImg && watermarkImg && <>
-            <button className='button-green'
-                    onClick={() => {
-                      if (currentDentist.hasPaidPlan) {
-                        setCurrentCover(null);
-                        setWatermarkImg(null);
-                      } else {
-                        return false;
-                      }
-                    }}
-            >
-              Clear watermark
-            </button>
-          </>}
-        </p>
-      </div>
+      {/*<div>*/}
+      {/*  <p className='form-profile-label'>*/}
+      {/*    <label className='form-profile-label'>Watermark</label>*/}
+      {/*  </p>*/}
+      {/*  <p className='profile-photo-box'>*/}
+      {/*    {currentWatermark && <img className='image' src={currentWatermark} alt='' />}*/}
+      {/*  </p>*/}
+      {/*  <p className='row-content'>*/}
+      {/*    {!currentWatermark && <>*/}
+      {/*      <label className='button-green-file'>Upload Watermark</label>*/}
+      {/*      <input type='file' className='input-file' name='cover_image' id='cover_image' onChange={(e) => {*/}
+      {/*        if (currentDentist.hasPaidPlan) {*/}
+      {/*          void addWatermark(e);*/}
+      {/*        } else {*/}
+      {/*          return false;*/}
+      {/*        }*/}
+      {/*      }} />*/}
+      {/*    </>}*/}
+      {/*    {currentWatermark && <>*/}
+      {/*      <button className='button-green'*/}
+      {/*              onClick={() => {*/}
+      {/*                if (currentDentist.hasPaidPlan) {*/}
+      {/*                  // setCurrentCover(null);*/}
+      {/*                  setCurrentWatermark(null);*/}
+      {/*                } else {*/}
+      {/*                  return false;*/}
+      {/*                }*/}
+      {/*              }}*/}
+      {/*      >*/}
+      {/*        Clear watermark*/}
+      {/*      </button>*/}
+      {/*    </>}*/}
+      {/*  </p>*/}
+      {/*</div>*/}
       <Snackbar
         messageSnackBar={messageSnackBar}
         statusSnackBar={statusSnackBar}

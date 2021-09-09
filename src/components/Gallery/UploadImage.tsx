@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 // @ts-ignore
   import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
+import watermark from '../../utils/watermark/builded';
 
 type Props = {
   saveCrop: any
-  desabledButtonFiles: any
+  disabledButtonFiles: any
   anchor: any
   updateImg: any
   updateImgData: any
@@ -15,7 +16,7 @@ type Props = {
 const UploadImage: React.FunctionComponent<Props> = ({
      saveCrop,
      anchor,
-     desabledButtonFiles,
+     disabledButtonFiles,
      updateImg,
      updateImgData,
      nameUpdateImg
@@ -56,7 +57,7 @@ const UploadImage: React.FunctionComponent<Props> = ({
     setImage(null);
     setCompletedCrop(null);
     setCropData(false)
-    desabledButtonFiles(anchor);
+    disabledButtonFiles(anchor);
   };
 
   const getCropData = (file: { name: any; }[]) => {
@@ -69,12 +70,11 @@ const UploadImage: React.FunctionComponent<Props> = ({
           const b: any = blob;
           b.lastModifiedDate = new Date();
           b.name = nameUpdateImg ? nameUpdateImg : file[0].name;
+          console.log(blob);
           saveCrop(blob, anchor);
           setCropData(true)
-          // setCropData(cropper.getCroppedCanvas().toDataURL());
         }, 'image/jpeg', 1);
       }
-      // saveCrop(cropper.getCroppedCanvas(), anchor);
     }
   };
 

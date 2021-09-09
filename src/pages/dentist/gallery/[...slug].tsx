@@ -15,6 +15,8 @@ import Error from 'next/error';
 import { WrapperFlex } from 'src/styles/Main.module';
 import { GetServerSideProps } from 'next';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import watermark from '../../../utils/watermark/builded';
+import WaterMarkUpload from '../../../components/Gallery/WaterMark'
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -50,6 +52,7 @@ const GalleryPage = ({ dentist }: any) => {
   const [openSnackBar, setOpenSnackBar]: any = useState();
   const [updateImgEvent, setUpdateImgEvent]: any = useState();
   const [searchValue, setSearchValue]: any = useState();
+  const [currentWatermark, setCurrentWatermark] = useState<any>();
   const [showServicesPanel, setShowServicesPanel] = useState<boolean>(true);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -64,6 +67,7 @@ const GalleryPage = ({ dentist }: any) => {
       authListener();
       getListImages();
       getListServiceForDentals();
+      downloadWatermark();
 
     }
   }, [router]);
@@ -86,7 +90,13 @@ const GalleryPage = ({ dentist }: any) => {
       setSignedInUser(true);
     } catch (e: any) {
       void await Router.push('/login');
-    }
+      }
+  };
+
+  const downloadWatermark = async () => {
+    await ApiManager.downloadWatermark(currentDentist).then(signedFiles => {
+      setCurrentWatermark(signedFiles[0]);
+    });
   };
 
   const downloadAvatar = async (currentDentist: any) => {
@@ -106,7 +116,7 @@ const GalleryPage = ({ dentist }: any) => {
     setOpenSnackbar(false);
   };
 
-  const getListImages = async () => {
+  const   getListImages = async () => {
     try {
       const { data }: any = await API.graphql({
         query: listImages,
@@ -129,16 +139,30 @@ const GalleryPage = ({ dentist }: any) => {
   };
 
   const saveCrop = (value: any, anchor: any) => {
-    console.log(anchor);
     setMessageSnackbar('Save crop successfully!');
     setSeverity('success');
     setOpenSnackbar(true);
+
+    const reader = new FileReader();
+
     if (anchor === 'left') {
-      setFileLeft(value);
-      setCheckFilesLeft(true);
+      reader.onload = () => {
+        if (currentWatermark) {
+          addWaterMark(reader.result as any, setFileLeft, value)
+        }
+        setFileLeft(value);
+        setCheckFilesLeft(true);
+      };
+      reader.readAsDataURL(value);
     } else {
-      setFileRight(value);
-      setCheckFilesRight(true);
+      reader.onload = () => {
+        if (currentWatermark) {
+          addWaterMark(reader.result as any, setFileRight, value)
+        }
+        setFileRight(value);
+        setCheckFilesRight(true);
+      };
+      reader.readAsDataURL(value);
     }
   };
 
@@ -146,7 +170,7 @@ const GalleryPage = ({ dentist }: any) => {
     setService(value);
   };
 
-  const desabledButtonFiles = (anchor: any) => {
+  const disabledButtonFiles = (anchor: any) => {
     if (anchor === 'left') {
       setCheckFilesLeft(false);
     } else {
@@ -276,7 +300,8 @@ const GalleryPage = ({ dentist }: any) => {
       try {
         Storage.put('images/' + currentDentist.id + '/' + uuid + '/' + file.name, file, {
           contentType: 'image/png'
-        }).then(() => {
+        }).then((result) => {
+          console.log('result', result);
           handlerShowGallery();
           getListImages();
           setMessageSnackBar('Success Upload!');
@@ -294,6 +319,17 @@ const GalleryPage = ({ dentist }: any) => {
         setOpenSnackBar(true);
       }
     });
+  };
+
+  const addWaterMark = (e: string | ArrayBuffer | null, setWatermark: (arg0: any) => void, image: any) => {
+    watermark([e, currentWatermark])
+      .blob(watermark.image.upperRight(0.5))
+      .then((img: any) => {
+        img.lastModifiedDate = image.lastModifiedDate
+        img.name = image.name
+        setWatermark(img);
+        console.log(img);
+      });
   };
 
   const downloadImages = async () => {
@@ -372,10 +408,10 @@ const GalleryPage = ({ dentist }: any) => {
     setUpdateImgEvent(true);
     setShowServicesPanel(false);
     setUpdateImg(val);
-    setTitleBefore(val[1].titleBefore);
-    setTagsBefore(val[1].tagsBefore);
-    setTitleAfter(val[1].titleAfter);
-    setTagsAfter(val[1].tagsAfter);
+    setTitleBefore(val[1].titleBefore ? val[1].titleBefore : '');
+    setTagsBefore(val[1].tagsBefore ? val[1].tagsBefore : '');
+    setTitleAfter(val[1].titleAfter ? val[1].titleAfter : '');
+    setTagsAfter(val[1].tagsAfter ? val[1].tagsAfter : '');
     setService(val[1].service);
     setUpdateService(val[1].service);
   };
@@ -425,6 +461,11 @@ const GalleryPage = ({ dentist }: any) => {
     setImagesData(allImages);
   };
 
+  const handlerWaterMarkImage = (file: any) => {
+    setCurrentWatermark(file)
+    console.log(file);
+  }
+
   const fullName = currentDentist && `${currentDentist.firstName ? currentDentist.firstName : ''} ${currentDentist.lastName ? currentDentist.lastName : ''}`;
 
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
@@ -467,7 +508,6 @@ const GalleryPage = ({ dentist }: any) => {
             </select>
           </div>}
           {!imagesData && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
-
           {Array.isArray(imagesData) &&
           <>
             {imagesData.length === 0 && !showUloadGallery &&
@@ -485,6 +525,7 @@ const GalleryPage = ({ dentist }: any) => {
                       <Gallery
                         // @ts-ignore
                         imagesData={val}
+                        currentWatermark={currentWatermark}
                         editGallery={editGallery}
                         downloadImages={downloadImages}
                       />
@@ -493,9 +534,7 @@ const GalleryPage = ({ dentist }: any) => {
                 })}
               </div>
             }
-          </>
-          }
-
+          </>}
           {showUloadGallery && <>
             <div className='row-gallery'>
               <div className='profile-box-form cut-block'>
@@ -508,7 +547,7 @@ const GalleryPage = ({ dentist }: any) => {
                 <div className='profile-block-box'>
                   <UploadImage
                     saveCrop={saveCrop}
-                    desabledButtonFiles={desabledButtonFiles}
+                    disabledButtonFiles={disabledButtonFiles}
                     anchor='left'
                     updateImg={updateImg && updateImg[0].original}
                     updateImgData={updateImg && updateImg[0]}
@@ -521,7 +560,7 @@ const GalleryPage = ({ dentist }: any) => {
                              type='text'
                              name='title'
                              id='title'
-                             value={titleBefore}
+                             value={titleBefore ? titleBefore : ''}
                              placeholder='Image Title'
                              onChange={(e) => setTitleBefore(e.target.value)}
                       />
@@ -552,7 +591,7 @@ const GalleryPage = ({ dentist }: any) => {
                 <div className='profile-block-box'>
                   <UploadImage
                     saveCrop={saveCrop}
-                    desabledButtonFiles={desabledButtonFiles}
+                    disabledButtonFiles={disabledButtonFiles}
                     anchor='rigth'
                     updateImg={updateImg && updateImg[1].original}
                     updateImgData={updateImg && updateImg[1]}
@@ -584,6 +623,18 @@ const GalleryPage = ({ dentist }: any) => {
                       />
                     </p>
                   </div>
+                </div>
+              </div>
+              <div className='profile-box-form cut-block'>
+                <div className='form-info-block one-block'>
+                  <div>
+                    <p className='form-login-title green px20'>Upload WaterMark Image</p>
+                    <p className='form-login-subtitle gray px12 mb-6px'>Add and edit your images</p>
+                  </div>
+                </div>
+                <div className='profile-block-box'>
+                  <WaterMarkUpload handlerWaterMarkImage={handlerWaterMarkImage}/>
+                  <div className='image' id='exp' />
                 </div>
               </div>
             </div>
