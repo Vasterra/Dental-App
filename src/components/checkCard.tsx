@@ -144,7 +144,7 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
     });
       const chargeResponse = await response.json();
       console.log(chargeResponse)
-      if(chargeResponse.error.message){
+      if(chargeResponse?.error?.message){
         setMessageSnackbar(chargeResponse.error.message)
         setSeverity('error')
         setOpenSnackbar(true)
@@ -169,7 +169,7 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
         body: `charge=${chargeId}`
     });
       const res =  await response.json();
-      if(res.error.message){
+      if(res?.error?.message){
         setMessageSnackbar(res.error.message)
         setSeverity('error')
         setOpenSnackbar(true)
