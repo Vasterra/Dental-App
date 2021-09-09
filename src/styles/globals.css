@@ -1816,6 +1816,7 @@ input:disabled:-ms-input-placeholder {
     position: absolute;
     right: 18px;
     top: 17px;
+    width: 80px;
     font-family: PT Sans;
     font-size: 12px;
     font-weight: normal;
