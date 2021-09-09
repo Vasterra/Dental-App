@@ -10,7 +10,7 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
-  reactcognitoapi:
+  dentalapp:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js

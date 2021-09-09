@@ -99,7 +99,7 @@ const Menu = styled('ul')`{
       color: #fff;
       /*margin-bottom: 23px;*/
       margin-left: -46px;
-      transition: all .3s linear;
+      transition: all 0s linear;
       z-index: 1;
 
       &:hover {
@@ -148,7 +148,7 @@ export default function TemporaryDrawer({currentUser}) {
 
     setState({ ...state, [anchor]: open });
   };
-  console.log(currentUser);
+
   const list = (anchor: Anchor) => (
     <div
       className={clsx(classes.list, {
@@ -189,12 +189,12 @@ export default function TemporaryDrawer({currentUser}) {
                     <a className='_leftmenu-link'>Account</a>
                   </li>
                 </Link>
-                <Link href={`../../dentist/payment/${currentUser.attributes.sub}`}>
+                {/* <Link href={`../../payment`}>
                   <li className="_leftmenu-list">
                     <img className='_leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
                     <a className='_leftmenu-link'>Payment</a>
                   </li>
-                </Link>
+                </Link> */}
               </Menu> }
             </div>
             <div style={{ minWidth: '333px' }}/>

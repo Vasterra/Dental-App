@@ -52,27 +52,27 @@ const DownloadDropzone: React.FunctionComponent<Props> = ({deleteImage, getImage
           {downloadMessage}
         </Alert>
       </Snackbar>
-      <style jsx>{`
-        .search-button {
-          width: 100%;
-          cursor: pointer;
-          background: #fff;
-          height: 47px;
-          border-radius: 30px;
-          border: 1px solid #0d9da6;
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          padding: 0 20px;
-          color: #000;
-        }
+      {/*<style jsx>{`*/}
+      {/*  .search-button {*/}
+      {/*    width: 100%;*/}
+      {/*    cursor: pointer;*/}
+      {/*    background: #fff;*/}
+      {/*    height: 47px;*/}
+      {/*    border-radius: 30px;*/}
+      {/*    border: 1px solid #0d9da6;*/}
+      {/*    display: flex;*/}
+      {/*    flex-direction: row;*/}
+      {/*    justify-content: center;*/}
+      {/*    align-items: center;*/}
+      {/*    padding: 0 20px;*/}
+      {/*    color: #000;*/}
+      {/*  }*/}
 
-        .search-button:hover {
-          background: #0d9da6;
-          color: #fff;
-        }
-      `}</style>
+      {/*  .search-button:hover {*/}
+      {/*    background: #0d9da6;*/}
+      {/*    color: #fff;*/}
+      {/*  }*/}
+      {/*`}</style>*/}
     </>
   )
 }

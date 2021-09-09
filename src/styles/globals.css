@@ -364,7 +364,6 @@ img {
 }
 
 .leftmenu-link:hover {
-    background: var(--color-white);
     color: var(--color-green);
 }
 
@@ -1158,7 +1157,6 @@ select.arrows {
     padding: 0;
     object-fit: contain;
     width: 100%;
-    border: solid 1px #095c5c;
 }
 
 .fill-mobile {
@@ -2214,7 +2212,7 @@ input:disabled:-ms-input-placeholder {
     top: -140px;
     left: 17px;
     z-index: 1;
-    /*width: 139px;*/
+    width: 235px;
     /*height: 139px;*/
     padding: 15px;
     opacity: 0.8;
@@ -3015,5 +3013,191 @@ input:disabled:-ms-input-placeholder {
         font-size: 11px
     }
 }
+
+/* PaymentPage styles --------- start -------------*/
+
+fieldset.FormGroup {
+    border: none;
+}
+
+.AppWrapper {
+    width: 25vw !important;
+}
+@media(max-width:1280px){
+    .AppWrapper {
+        width: 50vw !important;
+    }
+}
+@media(max-width:768px){
+    .AppWrapper {
+        width: 90vw !important;
+    }
+}
+.AppWrapper {
+    margin: 0;
+    font-family: sans-serif, Verdana;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+@media (min-width: 1200px) {
+    .col-xl-6 {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+}
+@media (min-width: 1200px) {
+    .col-xl-8 {
+        flex: 0 0 auto;
+        width: 66.66666667%;
+    }
+}
+
+    .col-12 {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+.mx-auto {
+    margin-right: auto!important;
+    margin-left: auto!important;
+}
+.mt-3 {
+    margin-top: 1rem!important;
+}
+label {
+    display: inline-block;
+}
+.form-label {
+    margin-bottom: .5rem;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.AppWrapper>  button, .AppWrapper> input, .AppWrapper> optgroup, .AppWrapper> select, .AppWrapper> textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+.btn-danger{
+    color: #fff;
+    background-color: #ac0303;
+    border-color: #970707;
+    padding: 10px 20px;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+}
+.btn-danger:hover {
+    color: #fff;
+    background-color: #8b0000;
+    border-color: #740505;
+}
+.btn-success {
+    color: #fff;
+    background-color: #198754;
+    border-color: #198754;
+    padding: 10px 20px;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+}
+.btn-success:hover {
+    color: #fff;
+    background-color: #157347;
+    border-color: #146c43;
+}
+.btn {
+
+}
+.AppWrapper> button, .AppWrapper>select {
+    text-transform: none;
+}
+.form-control:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+}
+.btn-check:active+.btn-success, .btn-check:checked+.btn-success, .btn-success.active, .btn-success:active, .show>.btn-success.dropdown-toggle {
+    color: #fff;
+    background-color: #146c43;
+    border-color: #13653f;
+}
+.btn-check:active+.btn-success:focus, .btn-check:checked+.btn-success:focus, .btn-success.active:focus, .btn-success:active:focus, .show>.btn-success.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.25rem rgb(60 153 110 / 50%);
+}
+.AppWrapper [type=button]:not(:disabled),.AppWrapper [type=reset]:not(:disabled), .AppWrapper [type=submit]:not(:disabled),.AppWrapper button:not(:disabled) {
+    cursor: pointer;
+}
+
+#coupon_input_container {
+    /* position: relative; */
+    margin:0 5px 0 20px;
+    /* direction: rtl; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 200px;
+}
+#coupon_input {
+    /* height:100%;
+    margin:0;
+    padding-right: 30px;
+    width: 100%; */
+
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+#coupon_input:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+}
+#coupon_input_img {
+    position:absolute;
+    bottom:6px;
+    right:5px;
+    width:24px;
+    height:24px;
+}
+
+/* PaymentPage styles --------- end -------------*/
 
 

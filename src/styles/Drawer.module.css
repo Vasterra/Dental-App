@@ -23,7 +23,7 @@
 }
 
 .drawerMenu a:hover {
-    color: #FFFFFF;
+    /* color: #FFFFFF; */
     background: #037179 0 0 no-repeat padding-box;
 }
 
