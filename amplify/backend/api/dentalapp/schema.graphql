@@ -53,6 +53,32 @@ type ServiceForDental
   name: String!
 }
 
+type PremiumFeatures
+@model
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  name: String!
+}
+
+type Watermark
+@model
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  dentistId: ID!
+  lastModifiedDate: String!
+  name: String!
+  size: Int
+  type:String!
+}
+
+type PremiumInformation
+@model
+@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+  id: ID!
+  price: String!
+  termsAndConditions: String!
+}
+
 type Image
 @model
 @key(name: "byDentist", fields: ["dentistId", "titleBefore", "tagsBefore", "titleAfter", "tagsAfter", "service", "nameBefore", "nameAfter"])

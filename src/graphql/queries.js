@@ -209,6 +209,107 @@ export const listServiceForDentals = /* GraphQL */ `
     }
   }
 `;
+export const getPremiumFeatures = /* GraphQL */ `
+  query GetPremiumFeatures($id: ID!) {
+    getPremiumFeatures(id: $id) {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listPremiumFeatures = /* GraphQL */ `
+  query ListPremiumFeatures(
+    $filter: ModelPremiumFeaturesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPremiumFeatures(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getWatermark = /* GraphQL */ `
+  query GetWatermark($id: ID!) {
+    getWatermark(id: $id) {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listWatermarks = /* GraphQL */ `
+  query ListWatermarks(
+    $filter: ModelWatermarkFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listWatermarks(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        dentistId
+        lastModifiedDate
+        name
+        size
+        type
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getPremiumInformation = /* GraphQL */ `
+  query GetPremiumInformation($id: ID!) {
+    getPremiumInformation(id: $id) {
+      id
+      price
+      termsAndConditions
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listPremiumInformations = /* GraphQL */ `
+  query ListPremiumInformations(
+    $filter: ModelPremiumInformationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPremiumInformations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        price
+        termsAndConditions
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
 export const getImage = /* GraphQL */ `
   query GetImage($id: ID!) {
     getImage(id: $id) {

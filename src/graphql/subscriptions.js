@@ -313,6 +313,120 @@ export const onDeleteServiceForDental = /* GraphQL */ `
     }
   }
 `;
+export const onCreatePremiumFeatures = /* GraphQL */ `
+  subscription OnCreatePremiumFeatures {
+    onCreatePremiumFeatures {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdatePremiumFeatures = /* GraphQL */ `
+  subscription OnUpdatePremiumFeatures {
+    onUpdatePremiumFeatures {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeletePremiumFeatures = /* GraphQL */ `
+  subscription OnDeletePremiumFeatures {
+    onDeletePremiumFeatures {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateWatermark = /* GraphQL */ `
+  subscription OnCreateWatermark {
+    onCreateWatermark {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateWatermark = /* GraphQL */ `
+  subscription OnUpdateWatermark {
+    onUpdateWatermark {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteWatermark = /* GraphQL */ `
+  subscription OnDeleteWatermark {
+    onDeleteWatermark {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreatePremiumInformation = /* GraphQL */ `
+  subscription OnCreatePremiumInformation {
+    onCreatePremiumInformation {
+      id
+      price
+      termsAndConditions
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdatePremiumInformation = /* GraphQL */ `
+  subscription OnUpdatePremiumInformation {
+    onUpdatePremiumInformation {
+      id
+      price
+      termsAndConditions
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeletePremiumInformation = /* GraphQL */ `
+  subscription OnDeletePremiumInformation {
+    onDeletePremiumInformation {
+      id
+      price
+      termsAndConditions
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const onCreateImage = /* GraphQL */ `
   subscription OnCreateImage {
     onCreateImage {

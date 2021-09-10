@@ -1,13 +1,19 @@
 import { API, Auth, Hub, Storage } from 'aws-amplify';
 import Router from 'next/router';
-import { createClosedAccount, deleteDentist, updateAdminSettingsSubscriber, updateDentist } from '../graphql/mutations';
+import {
+  createClosedAccount, createPremiumFeatures,
+  createPremiumInformation,
+  deleteDentist,
+  updateAdminSettingsSubscriber,
+  updateDentist, updatePremiumFeatures, updatePremiumInformation
+} from '../graphql/mutations';
 import {
   getAdminSettingsSubscriber,
-  getDentist,
+  getDentist, getPremiumFeatures, getPremiumInformation,
   listClosedAccounts,
   listClosedSubscriptions,
   listDentists,
-  listImages,
+  listImages, listPremiumFeatures,
   listServiceForDentals
 } from '../graphql/queries';
 import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql/lib-esm/types';
@@ -202,6 +208,100 @@ class ApiManager {
         },
         authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  public static GET_PREMIUM_INFORMATION = async () => {
+    try {
+      const {data}: any = await API.graphql({
+        query: getPremiumInformation,
+        variables: {
+          id: '1'
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+      return data.getPremiumInformation;
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  public static SET_PREMIUM_INFORMATION = async (value: any) => {
+    try {
+      const {data}: any = await API.graphql({
+        query: updatePremiumInformation,
+        variables: {
+          input: {
+            id: '1',
+            value
+          }
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+      return data.updatePremiumInformation;
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  public static CREATE_PREMIUM_FEATURES = async (name: any) => {
+    try {
+      await API.graphql({
+        query: createPremiumFeatures,
+        variables: {
+          input: {
+            name: name
+          }
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  public static GET_PREMIUM_FEATURES = async (id: any) => {
+    try {
+      const {data}: any = await API.graphql({
+        query: getPremiumFeatures,
+        variables: {
+          id
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+      return data.getPremiumFeatures;
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  public static GET_LIST_PREMIUM_FEATURES = async () => {
+    try {
+      const { data }: any = await API.graphql({
+        query: listPremiumFeatures,
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+      console.log(data);
+      return data.listPremiumFeatures.items;
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  public static SET_PREMIUM_FEATURES = async (value: any) => {
+    try {
+      const {data}: any = await API.graphql({
+        query: updatePremiumFeatures,
+        variables: {
+          input: {
+            value
+          }
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+      return data.updatePremiumFeatures;
     } catch (e: any) {
       console.log(e);
     }
