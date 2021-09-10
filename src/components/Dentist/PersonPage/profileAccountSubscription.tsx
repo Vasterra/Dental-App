@@ -11,7 +11,7 @@ import styled from 'styled-components';
 export const QrCodeWrapper = styled('div')`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   margin-top: 10px;
   canvas {
     margin-bottom: 10px;
@@ -176,8 +176,9 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
               <>
                 {images.length === 0 &&
                 <div className='flex-align-center'>
-                  <p
-                    className='index-leftmenu-text'>{!notFound ? `Doctor ${fullName} has not yet uploaded any of his works, be sure to check soon` : 'Not Found'}</p>
+                  <p className='index-leftmenu-text'>
+                    {!notFound ? `Dr ${fullName} has not uploaded any of their work yet, please check back later.`  : 'Not Found'}
+                  </p>
                 </div>}
                 {// @ts-ignore
                   images.length > 0 && <GalleryPerson images={images} />
