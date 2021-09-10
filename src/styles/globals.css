@@ -306,6 +306,7 @@ img {
     height: 100vh;
     background-color: #095c5c;
     position: fixed;
+    z-index: 1000;
 }
 
 .link-actve {
