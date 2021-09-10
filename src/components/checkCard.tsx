@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
+import React, { useState, useEffect } from "react";
+import { loadStripe, StripeCardElement } from "@stripe/stripe-js";
 import {
   CardElement,
   Elements,
@@ -9,6 +9,8 @@ import {
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+
+const SECRET_KEY_STRIPE_API = 'sk_test_51J15W0B5Yj7B7VjGDu05x2LI3AdPT5NeDvIFbAlfG37ZNreEAX8wHFY2f4ZzBrW9r9oeu0Qnpi3b2v4kWS99Z3o900Yu4TyZ4I'
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -39,7 +41,7 @@ const CardField = ({ onChange }: any) => (
     <CardElement options={CARD_OPTIONS as any} onChange={onChange} />
   </div>
 );
-
+// const api = API.endpoint()
 const Field = ({
   label,
   id,
@@ -108,6 +110,16 @@ const ResetButton = ({ onClick }: any) => (
 );
 
 const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSubmit: ()=>{}, onCancel: ()=> void}) => {
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity] = useState<'warning' | 'error' | 'success' | 'info'>();
+
+  useEffect(()=>{
+    setMessageSnackbar('To combat fraud, we will verify your card by completing a transaction')
+    setSeverity('warning')
+    setOpenSnackbar(true)
+  },[])
+
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<any>(null);
@@ -118,25 +130,85 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
     name: ""
   });
 
+  const stripeTokenHandler = async(token: any)=>{
+    const amount = 2000
+    const currency = 'GBP'
+    try {
+      const response = await fetch('https://api.stripe.com/v1/charges', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': `Bearer  ${SECRET_KEY_STRIPE_API}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }),
+        body: `amount=${amount}&currency=${currency}&source=${token.id}`
+    });
+      const chargeResponse = await response.json();
+      console.log(chargeResponse)
+      if(chargeResponse?.error?.message){
+        setMessageSnackbar(chargeResponse.error.message)
+        setSeverity('error')
+        setOpenSnackbar(true)
+        return null
+      }
+      return chargeResponse.id
+    } catch (exp: any) {
+      setMessageSnackbar(exp.message)
+      setSeverity('error')
+      setOpenSnackbar(true)
+    }
+  }
+
+  const stripeRefunder = async(chargeId: string)=>{
+    try {
+      const response = await fetch('https://api.stripe.com/v1/refunds', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': `Bearer  ${SECRET_KEY_STRIPE_API}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }),
+        body: `charge=${chargeId}`
+    });
+      const res =  await response.json();
+      if(res?.error?.message){
+        setMessageSnackbar(res.error.message)
+        setSeverity('error')
+        setOpenSnackbar(true)
+        return null
+      }
+      return res
+    } catch (exp: any) {
+      setMessageSnackbar(exp.message)
+      setSeverity('error')
+      setOpenSnackbar(true)
+    }
+  }
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    console.log(username, billingDetails.name)
-   
+ 
     if(username !== billingDetails.name){
-      // const error: any = {}
-      // error.message = 'Username not equal on register username'
-      // setError(error);
-      // elements?.getElement("card")!.focus();
+      setMessageSnackbar(`The cardholder's name must match the user's name!`)
+      setSeverity('error')
+      setOpenSnackbar(true)
       return
     }
  
     if (!stripe || !elements) {
-      
+      setMessageSnackbar('Stripe Error...')
+      setSeverity('error')
+      setOpenSnackbar(true)
       return;
     }
 
+    const cardElement = elements.getElement(CardElement) as StripeCardElement;
+    // use stripe.createToken to get a unique token for the card
+    const { error: cardError, token } = await stripe.createToken(cardElement);
+ 
     if (error) {
-      elements.getElement("card")!.focus();
+      elements!.getElement("card")!.focus();
+      setMessageSnackbar('Stripe Error...')
+      setSeverity('error')
+      setOpenSnackbar(true)
       return;
     }
 
@@ -156,20 +228,26 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
       setError(payload.error as any);
     } else {
       setPaymentMethod(payload.paymentMethod as any);
-      onSubmit()
+      if (!cardError) {
+        try {
+          const chargeId = await stripeTokenHandler(token)
+          if(!chargeId) return
+          const refund = await stripeRefunder(chargeId);
+          if(refund){
+            onSubmit()
+          } 
+        } catch (exp) {
+          setMessageSnackbar('Stripe Card Error...')
+          setSeverity('error')
+          setOpenSnackbar(true)
+        }
+      }else{  
+        setMessageSnackbar('Stripe Card Error...')
+        setSeverity('error')
+        setOpenSnackbar(true)
+        return
+      }
     }
-
-  };
-
-  const reset = () => {
-    // setError(null);
-    // setProcessing(false);
-    // setPaymentMethod(null);
-    // setBillingDetails({
-    //   name: ""
-    // });
-      //next step
-    onSubmit()
   };
 
   return (
@@ -200,6 +278,17 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
       <SubmitButton processing={processing} error={error} disabled={!stripe} onCancel={onCancel}>
         Submit
       </SubmitButton>
+      <Snackbar 
+        open={openSnackbar} 
+        autoHideDuration={5000} 
+        onClose={()=>{setOpenSnackbar(false)}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={()=>{setOpenSnackbar(false)}}
+          severity={severity}>
+          {messageSnackbar}
+        </Alert>
+      </Snackbar>
     </form>
   );
 };
@@ -214,26 +303,15 @@ const ELEMENTS_OPTIONS = {
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
+const pk_key = 'pk_test_51J15W0B5Yj7B7VjGcyWF6fMvy3UkvUUS5l6YJ3LQqLGFGZgK7UwNyVHLMMVi2HgDweAsAUxkhuukQBjWlTshTPmu00NmYIp1nd'
+const stripePromise = loadStripe(pk_key);
 
 const ValidateCard = ({ username, onSubmit, onCancel }: { username: string, onSubmit: ()=>{}, onCancel: ()=> void }) => {
-  const [snackbar, hideSnackbar] = useState(false)
   return (
     <div className="AppWrapper col-12 col-xl-8 mx-auto">
       <Elements stripe={stripePromise} options={ELEMENTS_OPTIONS}>
         <CheckoutForm username={username} onSubmit={onSubmit} onCancel={onCancel}/>
       </Elements>
-      <Snackbar 
-        open={!snackbar} 
-        autoHideDuration={5000} 
-        onClose={()=>{hideSnackbar(true)}}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={()=>{hideSnackbar(true)}}
-          severity={'warning'}>
-          {'To combat fraud, we will verify your card by completing a transaction'}
-        </Alert>
-      </Snackbar>
     </div>
   );
 };
