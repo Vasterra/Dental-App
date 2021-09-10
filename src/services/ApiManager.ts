@@ -3,7 +3,7 @@ import Router from 'next/router';
 import {
   createClosedAccount, createPremiumFeatures,
   createPremiumInformation,
-  deleteDentist,
+  deleteDentist, deletePremiumFeatures,
   updateAdminSettingsSubscriber,
   updateDentist, updatePremiumFeatures, updatePremiumInformation
 } from '../graphql/mutations';
@@ -228,14 +228,15 @@ class ApiManager {
     }
   };
 
-  public static SET_PREMIUM_INFORMATION = async (value: any) => {
+  public static UPDATE_PREMIUM_INFORMATION = async (value: any) => {
+    console.log(value);
     try {
       const {data}: any = await API.graphql({
         query: updatePremiumInformation,
         variables: {
           input: {
             id: '1',
-            value
+            ...value
           }
         },
         authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
@@ -290,18 +291,34 @@ class ApiManager {
     }
   };
 
-  public static SET_PREMIUM_FEATURES = async (value: any) => {
+  public static UPDATE_PREMIUM_FEATURES = async (name: any) => {
     try {
       const {data}: any = await API.graphql({
         query: updatePremiumFeatures,
         variables: {
           input: {
-            value
+            name
           }
         },
         authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
       return data.updatePremiumFeatures;
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  public static DELETE_PREMIUM_FEATURES = async (id: any) => {
+    try {
+      await API.graphql({
+        query: deletePremiumFeatures,
+        variables: {
+          input: {
+            id
+          }
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
     } catch (e: any) {
       console.log(e);
     }

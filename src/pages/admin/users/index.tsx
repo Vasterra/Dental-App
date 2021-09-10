@@ -258,47 +258,51 @@ const AdminUsers = () => {
   };
 
   async function addUserToGroup() {
-    const apiName = 'AdminQueries';
-    const path = '/addUserToGroup';
-    const myInit = {
-      body: {
-        groupname: groupName,
-        username: accountToDelete.Attributes[0].Value
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+    try {
+      const apiName = 'AdminQueries';
+      const path = '/addUserToGroup';
+      const myInit = {
+        body: {
+          groupname: groupName,
+          username: accountToDelete.email
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+        }
+      };
+      await API.post(apiName, path, myInit);
+      if (groupName === 'Dentists') {
+        await API.graphql({
+          query: updateDentist,
+          variables: {
+            input: {
+              id: accountToDelete.email,
+              isDisabled: false
+            }
+          },
+          // @ts-ignore
+          authMode: 'AWS_IAM'
+        });
+        await removeUserFromGroup('CancelDental');
+        await enableUser();
+      } else {
+        await API.graphql({
+          query: updateDentist,
+          variables: {
+            input: {
+              id: accountToDelete.email,
+              isDisabled: true
+            }
+          },
+          // @ts-ignore
+          authMode: 'AWS_IAM'
+        });
+        await removeUserFromGroup('Dentists');
+        await disableUser();
       }
-    };
-    await API.post(apiName, path, myInit);
-    if (groupName === 'Dentists') {
-      await API.graphql({
-        query: updateDentist,
-        variables: {
-          input: {
-            id: accountToDelete.Attributes[0].Value,
-            isDisabled: false
-          }
-        },
-        // @ts-ignore
-        authMode: 'AWS_IAM'
-      });
-      await removeUserFromGroup('CancelDental');
-      await enableUser();
-    } else {
-      await API.graphql({
-        query: updateDentist,
-        variables: {
-          input: {
-            id: accountToDelete.Attributes[0].Value,
-            isDisabled: true
-          }
-        },
-        // @ts-ignore
-        authMode: 'AWS_IAM'
-      });
-      await removeUserFromGroup('Dentists');
-      await disableUser();
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -308,7 +312,7 @@ const AdminUsers = () => {
     const myInit = {
       body: {
         groupname: group,
-        username: accountToDelete.Attributes[0].Value
+        username: accountToDelete.email
       },
       headers: {
         'Content-Type': 'application/json',
@@ -323,7 +327,7 @@ const AdminUsers = () => {
     const path = '/disableUser';
     const myInit = {
       body: {
-        username: accountToDelete.Attributes[0].Value
+        username: accountToDelete.email
       },
       headers: {
         'Content-Type': 'application/json',
@@ -339,7 +343,7 @@ const AdminUsers = () => {
     const path = '/enableUser';
     const myInit = {
       body: {
-        username: accountToDelete.Attributes[0].Value
+        username: accountToDelete.email
       },
       headers: {
         'Content-Type': 'application/json',
@@ -354,7 +358,7 @@ const AdminUsers = () => {
     if (deleteAccount.toUpperCase() === 'DELETE') {
       handleClose('delete');
       await ApiManager.DELETE_DENTIST(accountToDelete);
-      await ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.Attributes[0].Value);
+      await ApiManager.CREATE_CLOSED_ACCOUNT(accountToDelete.email);
       await addUserToGroup();
     }
   };

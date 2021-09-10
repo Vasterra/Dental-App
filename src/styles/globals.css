@@ -968,6 +968,11 @@ select.arrows {
   margin-bottom: 6px;
 }
 
+.mb-16px {
+  margin-bottom: 16px;
+}
+
+
 .mt-30 {
   margin-top: 30px;
 }

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ApiManager from '../../services/ApiManager';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import Close from '@material-ui/icons/Close';
+import { Snackbar } from '@material-ui/core';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -8,10 +10,11 @@ function Alert(props: AlertProps) {
 
 
 const Information = () => {
-
   const [premiumInformation, setPremiumInformation] = useState<any>()
   const [premiumFeatures, setPremiumFeatures] = useState<any>()
   const [featureValue, setFeatureValue] = useState<any>()
+  const [priceValue, setPriceValue] = useState<any>()
+  const [termsAndConditions, setTermsAndConditions] = useState<any>()
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
@@ -35,31 +38,52 @@ const Information = () => {
     })
   };
 
-  const savePremiumFeatures = async() => {
+  const savePremiumInformation = () => {
     const values = {
-
+      price: priceValue,
+      termsAndConditions: termsAndConditions
     }
-    await ApiManager.SET_PREMIUM_FEATURES(values)
-  }
-
-  const savePremiumInformation = async() => {
-    const values = {
-
+    try {
+      void ApiManager.UPDATE_PREMIUM_INFORMATION(values).then(() => {
+        setMessageSnackbar(`Update!`);
+        setSeverity('success');
+        setOpenSnackbar(true);
+        void getListPremiumFeatures();
+      })
+    } catch (error) {
+      setMessageSnackbar('Fail Update!');
+      setSeverity('warning');
+      setOpenSnackbar(true);
     }
-    await ApiManager.SET_PREMIUM_INFORMATION(values)
-  }
-
-  const handleFeatures = (e: any, key: any) => {
-    setFeatureValue(e[key])
-    console.log(e);
-    console.log(featureValue);
   }
 
   const createPremiumFeature = () => {
-    void ApiManager.CREATE_PREMIUM_FEATURES(featureValue);
+    void ApiManager.CREATE_PREMIUM_FEATURES(featureValue).then(() => {
+      void getListPremiumFeatures();
+    })
   }
 
+  const deletePremiumFeature = (id: any ) => {
+    try {
+        void ApiManager.DELETE_PREMIUM_FEATURES(id).then(() => {
+          setMessageSnackbar(`Feature deleted!`);
+          setSeverity('success');
+          setOpenSnackbar(true);
+          void getListPremiumFeatures();
+        })
+    } catch (error) {
+      setMessageSnackbar('Failed to delete feature');
+      setSeverity('warning');
+      setOpenSnackbar(true);
+    }
+  };
 
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   return (
     <div className="profile-box-form">
@@ -72,26 +96,27 @@ const Information = () => {
       <div className="box-2-box">
         <div className="profile-block-box">
           <div>
-            <div className='profile-block-box'>
+            <div className='profile-block-box mb-16px'>
               <div>
-                <label className='form-profile-label'>Add Service</label>
+                <label className='form-profile-label'>Add Premium Features</label>
                 <input className='form-profile-input'
                        type='text'
                        name='add_service'
                        id='add_service'
                        value={featureValue}
                        onChange={(e: any) => setFeatureValue(e.target.value)}
-                       placeholder='Service Name Here' />
+                       placeholder='Premium Features Name Here' />
               </div>
               <p className='row-content'>
-                <button className='button-green' onClick={createPremiumFeature}>Add service</button>
+                <button className='button-green' onClick={createPremiumFeature}>Add Premium Features</button>
               </p>
             </div>
             {premiumFeatures && premiumFeatures.map((item: any, key: any) => {
               return (
                 <p key={key}>
-                  <input className="form-profile-input" type="text" name="" id=""
-                         value={item.name} onChange={(e) => handleFeatures(e.target.value, key)} placeholder="Verification Checkmark" />
+                  <input className="form-profile-input form-profile-input-feature" type="text" disabled
+                         value={item.name} />
+                  <Close className='form-login-input-close' onClick={() => deletePremiumFeature(item.id)} />
                 </p>
               )}
             )}
@@ -105,7 +130,7 @@ const Information = () => {
             <p>
               {premiumInformation &&
                 <input className="form-profile-input" type="text" name="" id=""
-                                            value={premiumInformation.price} placeholder="xx" />
+                                            value={priceValue ? priceValue : premiumInformation.price} onChange={(e: any) => setPriceValue(e.target.value)} />
               }
             </p>
           </div>
@@ -115,7 +140,7 @@ const Information = () => {
             </p>
             <p>
               {premiumInformation && <input className="form-profile-input" type="text" name="" id=""
-                                            value={premiumInformation.termsAndConditions} placeholder="Web Link" />
+                                            value={termsAndConditions ? termsAndConditions : premiumInformation.termsAndConditions} onChange={(e: any) => setTermsAndConditions(e.target.value)}  />
               }
             </p>
           </div>
@@ -124,7 +149,13 @@ const Information = () => {
           </p>
         </div>
       </div>
-
+      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar}
+          // @ts-ignore
+               severity={severity}>
+          {messageSnackbar}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
