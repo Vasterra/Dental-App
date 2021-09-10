@@ -2277,6 +2277,7 @@ input:disabled:-ms-input-placeholder {
 
 .index-leftmenu {
     min-width: 333px;
+    max-width: 340px;
     background: #f6f6f6;
     align-self: stretch;
     padding: 0 20px 20px;

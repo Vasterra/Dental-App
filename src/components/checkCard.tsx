@@ -9,6 +9,7 @@ import {
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import FacebookCircularProgress from './loader'
 
 const SECRET_KEY_STRIPE_API = 'sk_test_51J15W0B5Yj7B7VjGDu05x2LI3AdPT5NeDvIFbAlfG37ZNreEAX8wHFY2f4ZzBrW9r9oeu0Qnpi3b2v4kWS99Z3o900Yu4TyZ4I'
 
@@ -72,12 +73,18 @@ const Field = ({
 const SubmitButton = ({ processing, error, children, disabled, onCancel }: any) => (
   <div className="col-12 col-xl-6 mx-auto mt-3" style={{display: 'flex', justifyContent: 'space-between'}}>
     <KeyboardBackspaceIcon fontSize={'large'} color='primary' style={{cursor: 'pointer' }} onClick={(e: any)=>{e.preventDefault(), onCancel()}}/>
-    <button
+    {/* <button
       className={`btn btn-success ${error ? "btn btn btn-danger" : ""}`}
       type="submit"
       disabled={processing || disabled}
     >
-      {processing ? "Processing..." : children}
+      {!processing ? <FacebookCircularProgress/> : children}
+    </button> */}
+    <button 
+      type='submit' 
+      disabled={processing || disabled} 
+      className='button-green'>
+        {processing ? <FacebookCircularProgress /> : children}
     </button>
   </div>
 );
@@ -222,8 +229,6 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
       billing_details: billingDetails
     });
 
-    setProcessing(false);
-
     if (payload.error) {
       setError(payload.error as any);
     } else {
@@ -231,7 +236,6 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
       if (!cardError) {
         try {
           const chargeId = await stripeTokenHandler(token)
-          if(!chargeId) return
           const refund = await stripeRefunder(chargeId);
           if(refund){
             onSubmit()
@@ -240,11 +244,14 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
           setMessageSnackbar('Stripe Card Error...')
           setSeverity('error')
           setOpenSnackbar(true)
+        }finally{
+          setProcessing(false);
         }
       }else{  
         setMessageSnackbar('Stripe Card Error...')
         setSeverity('error')
         setOpenSnackbar(true)
+        setProcessing(false);
         return
       }
     }
