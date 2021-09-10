@@ -18,7 +18,7 @@
       "function": {
         "AdminQueries196efb04": {
           "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/AdminQueries196efb04-633433494f35584c7732-build.zip"
+          "s3Key": "amplify-builds/AdminQueries196efb04-4437344442626e413261-build.zip"
         },
         "createSubscriptionStripe": {
           "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
