@@ -132,7 +132,7 @@ const Registration = ({}) => {
     try {
       setValues({ ...values, user: null });
       setValues({ ...values, loader: true });
-      await Auth.confirmSignUp(values.username, values.code);
+      await Auth.confirmSignUp(values.email, values.code);
       setMessageSnackbar('The Register successfully!');
       setSeverity('success');
       setOpenSnackbar(true);
