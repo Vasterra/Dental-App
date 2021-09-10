@@ -2,7 +2,7 @@ import { API, Auth, Hub, Storage } from 'aws-amplify';
 import Router from 'next/router';
 import {
   createClosedAccount,
-  createClosedSubscription,
+  createClosedSubscription, createWatermark,
   deleteDentist,
   deleteService,
   updateDentist
@@ -217,6 +217,18 @@ class ApiManager {
     }
   }
 
+  public static async downloadWatermark(currentDentist: any) {
+    if (currentDentist === null) return;
+    try {
+      const files = await Storage.list(`watermark/${currentDentist.id}`);
+      let signedFiles = files.map((f: { key: string; }) => Storage.get(f.key));
+      signedFiles = await Promise.all(signedFiles);
+      return signedFiles;
+    } catch (error: any) {
+      console.log('Error download Avatar file: ', error);
+    }
+  }
+
   public static async deleteDentist(currentDentist: any) {
     try {
       if (currentDentist === null) return;
@@ -225,6 +237,28 @@ class ApiManager {
         variables: {
           input: {
             id: currentDentist.id
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public static async CREATE_WATERMARK(watermark: any, dentist: any) {
+    try {
+      if (watermark === null) return;
+      await API.graphql({
+        query: createWatermark,
+        variables: {
+          input: {
+            dentistId: dentist.id,
+            lastModifiedDate: watermark.lastModifiedDate,
+            name: watermark.name,
+            size: watermark.size,
+            type: watermark.type
           }
         },
         // @ts-ignore

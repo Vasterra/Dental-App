@@ -90,7 +90,7 @@ const Services: React.FunctionComponent<Props> = ({
       }
     } else {
       if ( currentDentist.services.items.length === Number(adminSettingSubscriber.paidMaxServices)) {
-        setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.freeMaxServices} services.`);
+        setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.paidMaxServices} services.`);
         setSeverity('warning');
         setOpenSnackbar(true);
         return false;

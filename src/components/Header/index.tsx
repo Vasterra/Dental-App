@@ -67,7 +67,7 @@ class Header extends React.Component {
             <div>
             {!this.state.signedInUser && (
             <div style={{ alignItems: 'center', display: 'flex' }}>
-              {this.state.signedInUser && <a href={`../../dentist/account/'${this.state.currentUser.username}`}>
+              {this.state.signedInUser && <a href={`#`}>
                 <div className='user-logo-circle'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='16px' viewBox='0 0 19 16' width='19px' fill='#707070'>
                     <path d='M0 0h24v24H0V0z' fill='none' />
@@ -86,7 +86,7 @@ class Header extends React.Component {
           )}
           {this.state.signedInUser && (
             <div style={{ alignItems: 'center', display: 'flex' }}>
-              <a href={`../../dentist/account/${this.state.currentUser.username}`}>
+              <a href={`../../dentist/account/${this.state.currentUser.attributes.sub}`}>
                 <div className='user-logo-circle'>
                   <svg xmlns='http://www.w3.org/2000/svg' height='16px' viewBox='0 0 19 16' width='19px' fill='#707070'>
                     <path d='M0 0h24v24H0V0z' fill='none' />

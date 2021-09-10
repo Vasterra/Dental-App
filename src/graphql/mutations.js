@@ -349,6 +349,60 @@ export const deleteServiceForDental = /* GraphQL */ `
     }
   }
 `;
+export const createWatermark = /* GraphQL */ `
+  mutation CreateWatermark(
+    $input: CreateWatermarkInput!
+    $condition: ModelWatermarkConditionInput
+  ) {
+    createWatermark(input: $input, condition: $condition) {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateWatermark = /* GraphQL */ `
+  mutation UpdateWatermark(
+    $input: UpdateWatermarkInput!
+    $condition: ModelWatermarkConditionInput
+  ) {
+    updateWatermark(input: $input, condition: $condition) {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteWatermark = /* GraphQL */ `
+  mutation DeleteWatermark(
+    $input: DeleteWatermarkInput!
+    $condition: ModelWatermarkConditionInput
+  ) {
+    deleteWatermark(input: $input, condition: $condition) {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const createImage = /* GraphQL */ `
   mutation CreateImage(
     $input: CreateImageInput!

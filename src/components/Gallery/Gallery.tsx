@@ -9,6 +9,7 @@ import ImageGallery from 'react-image-gallery';
 const Gallery: React.FunctionComponent = ({
     imagesData,
     downloadImages,
+    currentWatermark,
     editGallery
   }: any) => {
 
@@ -55,7 +56,8 @@ const Gallery: React.FunctionComponent = ({
         showBullets={true}
         onSlide={onClickBullets}
       />
-      <p className='gallery-image-watermark'>Watermark</p>
+      {/*<p className='gallery-image-watermark'>Watermark</p>*/}
+      {/*<img className='gallery-image-watermark' src={currentWatermark} alt='edit'/>*/}
       <div className='gallery-image-description'>
         <p className='gallery-image-title'>{title}</p>
         <p className='gallery-image-text'>{tags}</p>

@@ -313,6 +313,51 @@ export const onDeleteServiceForDental = /* GraphQL */ `
     }
   }
 `;
+export const onCreateWatermark = /* GraphQL */ `
+  subscription OnCreateWatermark {
+    onCreateWatermark {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateWatermark = /* GraphQL */ `
+  subscription OnUpdateWatermark {
+    onUpdateWatermark {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteWatermark = /* GraphQL */ `
+  subscription OnDeleteWatermark {
+    onDeleteWatermark {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const onCreateImage = /* GraphQL */ `
   subscription OnCreateImage {
     onCreateImage {

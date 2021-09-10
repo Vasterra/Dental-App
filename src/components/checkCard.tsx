@@ -1,15 +1,17 @@
-import React, { useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
+import React, { useState, useEffect } from "react";
+import { loadStripe, StripeCardElement } from "@stripe/stripe-js";
 import {
   CardElement,
   Elements,
   useElements,
   useStripe
 } from "@stripe/react-stripe-js";
-import CachedRoundedIcon from '@material-ui/icons/CachedRounded';
-import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded';
-import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import FacebookCircularProgress from './loader'
+
+const SECRET_KEY_STRIPE_API = 'sk_test_51J15W0B5Yj7B7VjGDu05x2LI3AdPT5NeDvIFbAlfG37ZNreEAX8wHFY2f4ZzBrW9r9oeu0Qnpi3b2v4kWS99Z3o900Yu4TyZ4I'
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -40,7 +42,7 @@ const CardField = ({ onChange }: any) => (
     <CardElement options={CARD_OPTIONS as any} onChange={onChange} />
   </div>
 );
-
+// const api = API.endpoint()
 const Field = ({
   label,
   id,
@@ -68,14 +70,23 @@ const Field = ({
   </div>
 );
 
-const SubmitButton = ({ processing, error, children, disabled }: any) => (
-  <button
-    className={`btn btn-success ${error ? "btn btn btn-danger" : ""}`}
-    type="submit"
-    disabled={processing || disabled}
-  >
-    {processing ? "Processing..." : children}
-  </button>
+const SubmitButton = ({ processing, error, children, disabled, onCancel }: any) => (
+  <div className="col-12 col-xl-6 mx-auto mt-3" style={{display: 'flex', justifyContent: 'space-between'}}>
+    <KeyboardBackspaceIcon fontSize={'large'} color='primary' style={{cursor: 'pointer' }} onClick={(e: any)=>{e.preventDefault(), onCancel()}}/>
+    {/* <button
+      className={`btn btn-success ${error ? "btn btn btn-danger" : ""}`}
+      type="submit"
+      disabled={processing || disabled}
+    >
+      {!processing ? <FacebookCircularProgress/> : children}
+    </button> */}
+    <button 
+      type='submit' 
+      disabled={processing || disabled} 
+      className='button-green'>
+        {processing ? <FacebookCircularProgress /> : children}
+    </button>
+  </div>
 );
 
 const ErrorMessage = ({ children }: any) => (
@@ -105,33 +116,106 @@ const ResetButton = ({ onClick }: any) => (
   </button>
 );
 
-const CheckoutForm = () => {
+const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSubmit: ()=>{}, onCancel: ()=> void}) => {
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity] = useState<'warning' | 'error' | 'success' | 'info'>();
+
+  useEffect(()=>{
+    setMessageSnackbar('To combat fraud, we will verify your card by completing a transaction')
+    setSeverity('warning')
+    setOpenSnackbar(true)
+  },[])
+
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<any>(null);
-  const [couponField, showCouponField] = useState<boolean>(false);
-  const [couponValue, setCouponValue] = useState<string>('');
-  const [cuponStatus, setCuponStatus] = useState<'success' | 'error' | null>(null);
-  const [checking, proccessCheckingCupon] = useState<boolean>(false);
   const [cardComplete, setCardComplete] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<any>(null);
   const [billingDetails, setBillingDetails] = useState({
-    email: "",
     name: ""
   });
 
+  const stripeTokenHandler = async(token: any)=>{
+    const amount = 2000
+    const currency = 'GBP'
+    try {
+      const response = await fetch('https://api.stripe.com/v1/charges', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': `Bearer  ${SECRET_KEY_STRIPE_API}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }),
+        body: `amount=${amount}&currency=${currency}&source=${token.id}`
+    });
+      const chargeResponse = await response.json();
+      console.log(chargeResponse)
+      if(chargeResponse?.error?.message){
+        setMessageSnackbar(chargeResponse.error.message)
+        setSeverity('error')
+        setOpenSnackbar(true)
+        return null
+      }
+      return chargeResponse.id
+    } catch (exp: any) {
+      setMessageSnackbar(exp.message)
+      setSeverity('error')
+      setOpenSnackbar(true)
+    }
+  }
+
+  const stripeRefunder = async(chargeId: string)=>{
+    try {
+      const response = await fetch('https://api.stripe.com/v1/refunds', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': `Bearer  ${SECRET_KEY_STRIPE_API}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }),
+        body: `charge=${chargeId}`
+    });
+      const res =  await response.json();
+      if(res?.error?.message){
+        setMessageSnackbar(res.error.message)
+        setSeverity('error')
+        setOpenSnackbar(true)
+        return null
+      }
+      return res
+    } catch (exp: any) {
+      setMessageSnackbar(exp.message)
+      setSeverity('error')
+      setOpenSnackbar(true)
+    }
+  }
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
+ 
+    if(username !== billingDetails.name){
+      setMessageSnackbar(`The cardholder's name must match the user's name!`)
+      setSeverity('error')
+      setOpenSnackbar(true)
+      return
+    }
+ 
     if (!stripe || !elements) {
-      // Stripe.js has not loaded yet. Make sure to disable
-      // form submission until Stripe.js has loaded.
+      setMessageSnackbar('Stripe Error...')
+      setSeverity('error')
+      setOpenSnackbar(true)
       return;
     }
 
+    const cardElement = elements.getElement(CardElement) as StripeCardElement;
+    // use stripe.createToken to get a unique token for the card
+    const { error: cardError, token } = await stripe.createToken(cardElement);
+ 
     if (error) {
-      elements.getElement("card")!.focus();
+      elements!.getElement("card")!.focus();
+      setMessageSnackbar('Stripe Error...')
+      setSeverity('error')
+      setOpenSnackbar(true)
       return;
     }
 
@@ -145,71 +229,35 @@ const CheckoutForm = () => {
       billing_details: billingDetails
     });
 
-    setProcessing(false);
-
     if (payload.error) {
       setError(payload.error as any);
     } else {
       setPaymentMethod(payload.paymentMethod as any);
+      if (!cardError) {
+        try {
+          const chargeId = await stripeTokenHandler(token)
+          const refund = await stripeRefunder(chargeId);
+          if(refund){
+            onSubmit()
+          } 
+        } catch (exp) {
+          setMessageSnackbar('Stripe Card Error...')
+          setSeverity('error')
+          setOpenSnackbar(true)
+        }finally{
+          setProcessing(false);
+        }
+      }else{  
+        setMessageSnackbar('Stripe Card Error...')
+        setSeverity('error')
+        setOpenSnackbar(true)
+        setProcessing(false);
+        return
+      }
     }
   };
 
-  const reset = () => {
-    setError(null);
-    setProcessing(false);
-    setPaymentMethod(null);
-    setBillingDetails({
-      email: "",
-      name: ""
-    });
-  };
-
-  const handleCheckCoupon = ()=>{
-    if(couponValue.length < 1){
-      return
-    }
-    proccessCheckingCupon(true)
-    if(couponValue === 'vasterra'){
-      setTimeout(()=>{
-        proccessCheckingCupon(false)
-        setCuponStatus('success')
-      }, 3000)
-    }else{
-      setTimeout(()=>{
-        proccessCheckingCupon(false)
-        setCuponStatus('error')
-      }, 3000)
-    }
-  }
-
-  const handleCouponChange = (e: any)=>{
-    setCouponValue(e.target.value)
-    if(couponValue.length <= 1){
-      setCuponStatus(null)
-    }
-  }
-  const handleCouponKeydown = (e: any)=>{
-    console.log(e.key)
-    if (e.key === 'Enter') {
-      handleCheckCoupon()
-    }
-    if (e.key === 'Backspace' || e.key === 'Delete') {
-      setCuponStatus(null)
-    }
-  }
-
-  return paymentMethod ? (
-    <div className="Result">
-      <div className="ResultTitle" role="alert">
-        Payment successful
-      </div>
-      <div className="ResultMessage">
-        Thanks for trying Stripe Elements. No money was charged, but we
-        generated a PaymentMethod: {paymentMethod.id}
-      </div>
-      <ResetButton onClick={reset} />
-    </div>
-  ) : (
+  return (
     <form className="Form" onSubmit={handleSubmit}>
       <fieldset className="FormGroup">
         <Field
@@ -224,18 +272,6 @@ const CheckoutForm = () => {
             setBillingDetails({ ...billingDetails, name: e.target.value });
           }}
         />
-        <Field
-          label="Email"
-          id="email"
-          type="email"
-          placeholder="janedoe@gmail.com"
-          required
-          autoComplete="email"
-          value={billingDetails.email}
-          onChange={(e: any) => {
-            setBillingDetails({ ...billingDetails, email: e.target.value });
-          }}
-        />
       </fieldset>
       <fieldset className="FormGroup">
         <CardField
@@ -246,40 +282,20 @@ const CheckoutForm = () => {
         />
       </fieldset>
       {error && <ErrorMessage>{error.message as any}</ErrorMessage>}
-      <div className="col-12 col-xl-6 mx-auto mt-3" style={{display: 'flex', justifyContent: 'space-between'}}>
-        <SubmitButton processing={processing} error={error} disabled={(!stripe || checking)}>
-          Pay
-        </SubmitButton>
-          { couponField ?
-           <div id="coupon_input_container">
-              <input 
-                type="text" 
-                id="coupon_input" 
-                disabled={checking}
-                value={couponValue} 
-                autoComplete="Coupon"
-                placeholder={'Coupon'}
-                onChange={handleCouponChange}
-                onKeyDown={handleCouponKeydown}
-              />
-              <div style={{cursor: 'pointer'}}>
-                {!cuponStatus && !checking && <CachedRoundedIcon fontSize={'medium'} color='inherit' style={{ margin: '0 5px 0 5px' }} onClick={handleCheckCoupon}/>}
-                {!cuponStatus && checking && <CircularProgress disableShrink size={20} style={{ margin: '0 5px 0 5px' }}/>}
-                {cuponStatus === 'success'  && <DoneAllRoundedIcon fontSize={'medium'} color='secondary' style={{ margin: '0 5px 0 5px' }}/>}
-                {cuponStatus === 'error'  && <ErrorRoundedIcon fontSize={'medium'} color='error' style={{ margin: '0 5px 0 5px' }}/>}
-              </div>
-          </div>
-          : 
-          <button
-            className={`btn btn-success ${error ? "btn btn btn-danger" : ""}`}
-            type="submit"
-            onClick={()=>showCouponField(true)}
-          >
-            Add promotion code
-          </button>
-        }
-      </div>
-      
+      <SubmitButton processing={processing} error={error} disabled={!stripe} onCancel={onCancel}>
+        Submit
+      </SubmitButton>
+      <Snackbar 
+        open={openSnackbar} 
+        autoHideDuration={5000} 
+        onClose={()=>{setOpenSnackbar(false)}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={()=>{setOpenSnackbar(false)}}
+          severity={severity}>
+          {messageSnackbar}
+        </Alert>
+      </Snackbar>
     </form>
   );
 };
@@ -294,16 +310,17 @@ const ELEMENTS_OPTIONS = {
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
+const pk_key = 'pk_test_51J15W0B5Yj7B7VjGcyWF6fMvy3UkvUUS5l6YJ3LQqLGFGZgK7UwNyVHLMMVi2HgDweAsAUxkhuukQBjWlTshTPmu00NmYIp1nd'
+const stripePromise = loadStripe(pk_key);
 
-const App = () => {
+const ValidateCard = ({ username, onSubmit, onCancel }: { username: string, onSubmit: ()=>{}, onCancel: ()=> void }) => {
   return (
     <div className="AppWrapper col-12 col-xl-8 mx-auto">
       <Elements stripe={stripePromise} options={ELEMENTS_OPTIONS}>
-        <CheckoutForm />
+        <CheckoutForm username={username} onSubmit={onSubmit} onCancel={onCancel}/>
       </Elements>
     </div>
   );
 };
 
-export default App;
+export default ValidateCard;
