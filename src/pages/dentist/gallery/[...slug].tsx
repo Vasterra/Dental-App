@@ -304,7 +304,7 @@ const GalleryPage = ({ dentist }: any) => {
           console.log('result', result);
           handlerShowGallery();
           getListImages();
-          setMessageSnackBar('Success Upload!');
+          setMessageSnackBar('Successful upload!');
           setStatusSnackBar('success');
           setOpenSnackBar(true);
         })
