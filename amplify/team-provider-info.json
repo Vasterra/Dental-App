@@ -26,7 +26,7 @@
         },
         "createCustomerStripe": {
           "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/createCustomerStripe-7146627a54766a2b366b-build.zip"
+          "s3Key": "amplify-builds/createCustomerStripe-6b577876697156317374-build.zip"
         },
         "retrieveSubscriptionStripe": {
           "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
@@ -43,6 +43,14 @@
         "createChargesStripe": {
           "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
           "s3Key": "amplify-builds/createChargesStripe-374c632b594e534a7053-build.zip"
+        },
+        "createPaymentMethod": {
+          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
+          "s3Key": "amplify-builds/createPaymentMethod-45555674374a532f582f-build.zip"
+        },
+        "couponRetrieveStripe": {
+          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
+          "s3Key": "amplify-builds/couponRetrieveStripe-5457694a654f6c38325a-build.zip"
         }
       }
     }
