@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/items",
+      "lambdaFunction": "couponRetrieveStripe",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/items"
+    }
+  ],
+  "resourceName": "couponRetrieveStripe",
+  "apiName": "couponRetrieveStripe",
+  "functionArns": [
+    {
+      "lambdaFunction": "couponRetrieveStripe"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-dentalapp-dev-180254-authRole",
+    "unAuthRoleName": "amplify-dentalapp-dev-180254-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "couponRetrieveStripe",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}

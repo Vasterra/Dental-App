@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/items",
+      "lambdaFunction": "createPaymentMethod",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/items"
+    }
+  ],
+  "resourceName": "createPaymentMethod",
+  "apiName": "createPaymentMethod",
+  "functionArns": [
+    {
+      "lambdaFunction": "createPaymentMethod"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-dentalapp-dev-180254-authRole",
+    "unAuthRoleName": "amplify-dentalapp-dev-180254-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "createPaymentMethod",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
