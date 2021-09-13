@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   CardElement,
@@ -10,6 +10,10 @@ import CachedRoundedIcon from '@material-ui/icons/CachedRounded';
 import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded';
 import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import ApiManager from '../services/ApiManager';
+import { getPremiumInformation } from '../graphql/queries';
+import { Auth } from 'aws-amplify';
+import Router from 'next/router';
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -120,6 +124,21 @@ const CheckoutForm = () => {
     email: "",
     name: ""
   });
+  const [premiumInformation, setPremiumInformation] = useState<any>()
+
+  useEffect(() => {
+    if (document.referrer) {
+      const url = new URL(document.referrer)
+      localStorage.setItem('site', url.host);
+    }
+    void getPremiumInformation();
+  }, [])
+
+  const getPremiumInformation = async () => {
+    await ApiManager.GET_PREMIUM_INFORMATION().then((result: any) => {
+      setPremiumInformation(result)
+    })
+  }
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -245,10 +264,11 @@ const CheckoutForm = () => {
           }}
         />
       </fieldset>
+
       {error && <ErrorMessage>{error.message as any}</ErrorMessage>}
       <div className="col-12 col-xl-6 mx-auto mt-3" style={{display: 'flex', justifyContent: 'space-between'}}>
         <SubmitButton processing={processing} error={error} disabled={(!stripe || checking)}>
-          Pay
+          Pay {premiumInformation && premiumInformation.price}$
         </SubmitButton>
           { couponField ?
            <div id="coupon_input_container">

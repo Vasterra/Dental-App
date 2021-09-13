@@ -101,7 +101,7 @@ const Profile = ({ dentist }: any) => {
     }
     setOpenSnackbar(false);
   };
-  console.log(signedInUser);
+
   return (
     <>
       {currentDentist && signedInUser &&

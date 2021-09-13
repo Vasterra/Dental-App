@@ -116,7 +116,7 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
 
   render() {
     if (!this.state.signedInUser) return null;
-    console.log(this.state.currentUser);
+
     return (
       <>
         {this.state.currentUser && this.state.currentUser.attributes.sub === this.props.currentDentist.id &&
