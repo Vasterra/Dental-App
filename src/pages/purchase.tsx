@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import PaymentContent from 'src/components/payment';
+import { Auth } from 'aws-amplify';
+import Router from 'next/router';
 
 const Payment = () => {
-  return (
+
+  const [signedInUser, setSignedInUser] = useState(false);
+
+  useEffect(() => {
+    void authListener()
+  }, [])
+
+  const authListener = async () => {
+    try {
+      await Auth.currentAuthenticatedUser();
+      setSignedInUser(true);
+    } catch (e: any) {
+      void await Router.push('/login');
+    }
+  };
+
+  return signedInUser &&  (
     <section className="container-vh">
       <Header />
       <div className="main-profile bg-white biling" style={{marginTop: '73px', minHeight: 'unset', maxHeight: 'unset'}}>

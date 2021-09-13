@@ -175,6 +175,11 @@ const Login = () => {
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
+
+      const url: any = localStorage.getItem('site')
+      if (url.host === 'www.spotify.com') {
+        return await Router.replace('/payment');
+      }
       await Router.replace('/');
     });
   }
@@ -192,6 +197,8 @@ const Login = () => {
       {!values.resetPassword && <div className='form-login'>
         <p className='form-login-title green'>Login</p>
         <p className='form-login-subtitle gray'>Current FYD users</p>
+
+        <a href="http://localhost:3000/purchase">dsgdsfdsfgdsf</a>
         <form onSubmit={formikAuth.handleSubmit}>
           <AuthInputWrapper>
             <p className='form-login-input'>
