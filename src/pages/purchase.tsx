@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import PaymentContent from 'src/components/payment';
-import { Auth } from 'aws-amplify';
+import { Auth, withSSRContext } from 'aws-amplify';
 import Router from 'next/router';
+import { GetServerSideProps } from 'next';
+import { getDentist } from '../graphql/queries';
 
-const Payment = () => {
+const Payment = ({dentist}) => {
 
   const [signedInUser, setSignedInUser] = useState(false);
 
@@ -34,13 +36,36 @@ const Payment = () => {
                 </div>
             </div>
             <div className="box-to-box " style={{marginTop: '-20px', marginBottom: '10%'}}>
-              <PaymentContent/>
+              <PaymentContent dentist={dentist}/>
             </div>
         </div>
       </div>
       <Footer/>
     </section>
   );
+};
+
+// @ts-ignore
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { API } = withSSRContext(context);
+  let dentistData;
+  try {
+    if (context.params.slug[0] === null) return;
+    dentistData = await API.graphql({
+      query: getDentist,
+      variables: {
+        id: context.params.slug[0]
+      },
+      authMode: 'AWS_IAM'
+    });
+  } catch (e: any) {
+    console.log(e);
+  }
+  return {
+    props: {
+      dentist: dentistData ? dentistData.data.getDentist : null
+    }
+  };
 };
 
 export default Payment;

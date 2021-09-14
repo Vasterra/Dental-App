@@ -116,6 +116,20 @@
           ]
         }
       ]
+    },
+    "retrieveCoupon": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "retrieveCoupon",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
     }
   },
   "storage": {
@@ -165,6 +179,16 @@
       "service": "Lambda"
     },
     "createRefundsStripe": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "retrieveCouponStripe": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "retrieveCoupon": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
