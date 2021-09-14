@@ -59,9 +59,11 @@ export default CardDentistComponent;
 const ImageWrapper = styled('div')`
   display: flex;
   flex-direction: column;
+  -webkit-box-align: center;
   align-items: center;
-  background: #FFFFFF 0% 0% no-repeat padding-box;
+  background: 0% 0% no-repeat padding-box padding-box rgb(255, 255, 255);
   border-radius: 10px;
+  height: 200px;
 
   @media (max-width: 630px) {
     width: 100%;
@@ -70,14 +72,16 @@ const ImageWrapper = styled('div')`
 
 const DentistImage = styled('img')`
   display: block;
-  width: 100%;
+  min-width: 100%;
   height: 200px;
+  object-fit: cover;
 `;
 
 const DentistImageBlockEmpty = styled('img')`
   display: block;
   /* background-color: #0d9da6; */
-  width: 100%;
+  min-width: 100%;
   height: 200px;
+  object-fit: cover;
 `;
 
