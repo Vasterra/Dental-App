@@ -4,6 +4,7 @@ import GalleryPerson from 'src/components/Gallery/GalleryPerson';
 import { WrapperFlex } from 'src/styles/Main.module';
 import ApiManager from '../../../services/ApiManager';
 import QRCode from 'qrcode';
+import { Link } from '@material-ui/core';
 import { IAdminSettingsSubscribers } from '../../../types/types';
 import styled from 'styled-components';
 
@@ -63,37 +64,19 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
 
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null);
-    if (e.target.value === 'All Service') return downloadImages();
-
-    let newListImages: any[] = [];
-    let filterImages: any[] = [];
-    oldIMages.forEach((slider: any) => {
-      if (slider[0].service === []) {
-        slider[0].service.forEach((service: string) => {
-          if (service === e.target.value) {
-            filterImages.push(slider);
-          }
-        });
-      }
-      return filterImages;
-    });
-
-    filterImages.forEach((arr: any) => {
-      if (arr.length !== 0) {
-        newListImages.push(arr);
-      }
-    });
-
-    if (newListImages.length === 0) {
-      setNotFound(true);
-    } else {
-      setNotFound(true);
+    if (e.target.value === 'All Service') {
+      console.log(e.target.value, 'All Service')
+      return downloadImages();
+    }else{
+      const filterImages = oldIMages.filter((slider: any)=>{
+        const target = slider[0].service as string
+        const stringToArray = target.substring(1, target.length-1).split(', ')
+        return stringToArray.includes(e.target.value)
+      });
+      setImages(filterImages);
     }
-
-    setTimeout(() => {
-      setImages(newListImages);
-    }, 1000);
   };
+
   const fullName = firstName + ' ' + lastName;
 
   const getAdminSettingSubscriber = () => {
@@ -137,7 +120,12 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
                 <p>
                   <span><strong>Phone: </strong>{currentDentist.phone}</span><br />
                   <span><strong>Email: </strong>{currentDentist.email}</span><br />
-                  <span> <strong>Website: </strong>{currentDentist.website}</span>
+                  <span> 
+                    <strong>Website: </strong>
+                    <Link href={`../../redirect?website=${currentDentist.website}`} target='_blank'>
+                      {currentDentist.website}
+                    </Link>
+                  </span>
                 </p>
                 <p>Locations</p>
                 <div className='flex-wrapper'>

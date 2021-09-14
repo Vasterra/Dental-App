@@ -24,6 +24,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
          placeholder={placeholder}
          onChange={props.handleChange}
          onBlur={props.handleBlur}
+         maxLength={props?.maxLength}
          value={setValue === null ? setValue = '' : setValue}
       />
     </p>

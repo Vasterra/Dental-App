@@ -56,34 +56,31 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
 
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null);
-    if (e.target.value === 'All Service') return downloadImages();
-
-    let newListImages: any[] = [];
-    let filterImages: any[] = [];
-    oldIMages.forEach((slider: any) => {
-      if (slider[0].service === []) {
-        slider[0].service.forEach((service: string) => {
-          if (service === e.target.value) {
+    if (e.target.value === 'All Service') {
+      downloadImages();
+    }else{
+      let newListImages: any[] = [];
+      let filterImages: any[] = [];
+      oldIMages.forEach((slider: any) => {
+        const c: any[] = slider[0].service.replace(/[\])}[{(]/g, '').split(', ');
+        c.forEach((item: any) => {
+          if (item === e.target.value) {
             filterImages.push(slider);
           }
-        });
+        })
+        return filterImages;
+      });
+      filterImages.forEach((arr: any) => {
+        if (arr.length !== 0) {
+          newListImages.push(arr);
+        }
+      });
+      if(!newListImages.length){
+        setNotFound(true)
+        return;
       }
-      return filterImages;
-    });
-    filterImages.forEach((arr: any) => {
-      if (arr.length !== 0) {
-        newListImages.push(arr);
-      }
-    });
-
-    if (newListImages.length === 0) {
-      setNotFound(true);
-    } else {
-      setNotFound(true);
-    }
-    setTimeout(() => {
       setImages(newListImages);
-    }, 1000);
+    }
   };
 
   const fullName = `${currentDentist.firstName ? currentDentist.firstName : ''} ${currentDentist.lastName ? currentDentist.lastName : ''}`;

@@ -10,10 +10,12 @@ import {
 import {
   getAdminSettingsSubscriber,
   getDentist,
+  getPremiumInformation,
   listDentists,
-  listImages,
+  listImages, listPremiumFeatures,
   listServiceForDentals
 } from '../graphql/queries';
+import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql';
 
 class ApiManager {
 
@@ -35,6 +37,7 @@ class ApiManager {
   public static async SIGN_OUT() {
     try {
       await Auth.signOut();
+      console.log('logouted')
       await Router.push('/login');
     } catch (error: any) {
       console.log('error signing out: ', error);
@@ -325,6 +328,39 @@ class ApiManager {
       console.log(e);
     }
   };
+
+  // PREMIUM_FEATURES
+
+  public static GET_LIST_PREMIUM_FEATURES = async () => {
+    try {
+      const { data }: any = await API.graphql({
+        query: listPremiumFeatures,
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+      console.log(data);
+      return data.listPremiumFeatures.items;
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  // PREMIUM_INFORMATION
+
+  public static GET_PREMIUM_INFORMATION = async () => {
+    try {
+      const {data}: any = await API.graphql({
+        query: getPremiumInformation,
+        variables: {
+          id: '1'
+        },
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+      });
+      return data.getPremiumInformation;
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
 }
 
 export default ApiManager;

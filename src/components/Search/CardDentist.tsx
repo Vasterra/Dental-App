@@ -34,21 +34,21 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({ dentist, setCurr
 
   return (
     <div className='index-gallery-image-box' onClick={() => setCurrentDentist(dentist)}>
-      <ImageWrapper>
-        {images && <DentistImage src={images} alt='image' />}
-        {!images && <DentistImageBlockEmpty src={'../../../images/empty_avatar.png'} />}
-      </ImageWrapper>
-      {/*<p className="index-gallery-image-watermark"></p>*/}
-      {adminSettingSubscriber && dentist.hasPaidPlan && adminSettingSubscriber.paidAppearVerified ?
-      <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
-      {adminSettingSubscriber && !dentist.hasPaidPlan && adminSettingSubscriber.freeAppearVerified ?
-        <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
       <Link href={`../../dentist/person/${dentist.id}`} target='_blank'>
-        <div className='index-gallery-image-description'>
-          <p className='index-gallery-image-title'>{'Dr. ' + fullName}</p>
-          <p className='index-gallery-image-text'>{dentist.email}</p>
-          <p className='index-gallery-image-text'>{dentist.qualifications}</p>
-        </div>
+        <ImageWrapper>
+          {images && <DentistImage src={images} alt='image' />}
+          {!images && <DentistImageBlockEmpty src={'../../../images/empty_avatar.png'} />}
+        </ImageWrapper>
+        {/*<p className="index-gallery-image-watermark"></p>*/}
+        {adminSettingSubscriber && dentist.hasPaidPlan && adminSettingSubscriber.paidAppearVerified ?
+        <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
+        {adminSettingSubscriber && !dentist.hasPaidPlan && adminSettingSubscriber.freeAppearVerified ?
+          <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
+          <div className='index-gallery-image-description'>
+            <p className='index-gallery-image-title'>{'Dr. ' + fullName}</p>
+            {/* <p className='index-gallery-image-text'>{dentist.email}</p> */}
+            <p className='index-gallery-image-text'>{dentist.qualifications}</p>
+          </div>
       </Link>
     </div>
   );
@@ -59,9 +59,11 @@ export default CardDentistComponent;
 const ImageWrapper = styled('div')`
   display: flex;
   flex-direction: column;
+  -webkit-box-align: center;
   align-items: center;
-  background: #FFFFFF 0% 0% no-repeat padding-box;
+  background: 0% 0% no-repeat padding-box padding-box rgb(255, 255, 255);
   border-radius: 10px;
+  height: 200px;
 
   @media (max-width: 630px) {
     width: 100%;
@@ -70,14 +72,16 @@ const ImageWrapper = styled('div')`
 
 const DentistImage = styled('img')`
   display: block;
-  width: 100%;
+  min-width: 100%;
   height: 200px;
+  object-fit: cover;
 `;
 
 const DentistImageBlockEmpty = styled('img')`
   display: block;
   /* background-color: #0d9da6; */
-  width: 100%;
+  min-width: 100%;
   height: 200px;
+  object-fit: cover;
 `;
 

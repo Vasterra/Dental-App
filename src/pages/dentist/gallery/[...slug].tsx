@@ -116,7 +116,7 @@ const GalleryPage = ({ dentist }: any) => {
     setOpenSnackbar(false);
   };
 
-  const   getListImages = async () => {
+  const getListImages = async () => {
     try {
       const { data }: any = await API.graphql({
         query: listImages,
@@ -304,7 +304,7 @@ const GalleryPage = ({ dentist }: any) => {
           console.log('result', result);
           handlerShowGallery();
           getListImages();
-          setMessageSnackBar('Success Upload!');
+          setMessageSnackBar('Successful upload!');
           setStatusSnackBar('success');
           setOpenSnackBar(true);
         })
@@ -420,26 +420,25 @@ const GalleryPage = ({ dentist }: any) => {
     setImagesData(null);
     if (e.target.value === 'All Service') {
       getListImages();
-    }
-
-    let newListImages: any[] = [];
-    let filterImages: any[] = [];
-    oldIMages.forEach((slider: any) => {
-      const c: any[] = slider[0].service.replace(/[\])}[{(]/g, '').split(', ');
-      c.forEach((item: any) => {
-        if (item === e.target.value) {
-          filterImages.push(slider);
+    }else{
+      let newListImages: any[] = [];
+      let filterImages: any[] = [];
+      oldIMages.forEach((slider: any) => {
+        const c: any[] = slider[0].service.replace(/[\])}[{(]/g, '').split(', ');
+        c.forEach((item: any) => {
+          if (item === e.target.value) {
+            filterImages.push(slider);
+          }
+        })
+        return filterImages;
+      });
+      filterImages.forEach((arr: any) => {
+        if (arr.length !== 0) {
+          newListImages.push(arr);
         }
-      })
-      return filterImages;
-    });
-
-    filterImages.forEach((arr: any) => {
-      if (arr.length !== 0) {
-        newListImages.push(arr);
-      }
-    });
-    setImagesData(newListImages);
+      });
+      setImagesData(newListImages);
+    }
   };
 
   const searchImagesByTitle = async (e: any) => {
