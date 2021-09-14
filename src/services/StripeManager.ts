@@ -102,12 +102,11 @@ class StripeManager {
   public static async retrieveCoupon(coupon: string) {
       try {
         const apiName = 'retrieveCoupon'
-        const apiEndpoint = '/items'
+        const apiEndpoint = '/retrieveCoupon-dev/coupon'
 
         const myInit = {
            headers: {
-               "Access-Control-Allow-Origin": "*",
-               "Access-Control-Allow-Headers": "*"
+             'Content-Type': 'application/json',
            },
           body: {
             coupon: coupon
