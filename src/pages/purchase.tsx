@@ -7,7 +7,7 @@ import Router from 'next/router';
 import { GetServerSideProps } from 'next';
 import { getDentist } from '../graphql/queries';
 
-const Payment = ({dentist}) => {
+const Payment = ({dentist}: any) => {
 
   const [signedInUser, setSignedInUser] = useState(false);
 

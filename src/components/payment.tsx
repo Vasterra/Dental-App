@@ -385,7 +385,7 @@ const ELEMENTS_OPTIONS = {
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
 
-const App = ({dentist}) => {
+const App = ({dentist} : any) => {
   return (
     <div className="AppWrapper col-12 col-xl-8 mx-auto">
       <Elements stripe={stripePromise} options={ELEMENTS_OPTIONS}>
