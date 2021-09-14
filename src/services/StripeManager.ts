@@ -115,15 +115,6 @@ class StripeManager {
         };
 
         return await API.post(apiName, apiEndpoint, myInit)
-        // const request = await fetch('https://0jdk69ht3k.execute-api.eu-west-1.amazonaws.com/dev/', {
-        //   method: 'POST',
-        //   headers: {"Content-Type":"application/json"},
-        //   mode: "cors",
-        //   body: JSON.stringify({
-        //     coupon: coupon
-        //   }),
-        // });
-        // return await request.json() as IStripeSubscription;
       } catch (error) {
         console.log(error);
       }
