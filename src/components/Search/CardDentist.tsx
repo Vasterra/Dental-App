@@ -34,21 +34,21 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({ dentist, setCurr
 
   return (
     <div className='index-gallery-image-box' onClick={() => setCurrentDentist(dentist)}>
-      <ImageWrapper>
-        {images && <DentistImage src={images} alt='image' />}
-        {!images && <DentistImageBlockEmpty src={'../../../images/empty_avatar.png'} />}
-      </ImageWrapper>
-      {/*<p className="index-gallery-image-watermark"></p>*/}
-      {adminSettingSubscriber && dentist.hasPaidPlan && adminSettingSubscriber.paidAppearVerified ?
-      <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
-      {adminSettingSubscriber && !dentist.hasPaidPlan && adminSettingSubscriber.freeAppearVerified ?
-        <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
       <Link href={`../../dentist/person/${dentist.id}`} target='_blank'>
-        <div className='index-gallery-image-description'>
-          <p className='index-gallery-image-title'>{'Dr. ' + fullName}</p>
-          <p className='index-gallery-image-text'>{dentist.email}</p>
-          <p className='index-gallery-image-text'>{dentist.qualifications}</p>
-        </div>
+        <ImageWrapper>
+          {images && <DentistImage src={images} alt='image' />}
+          {!images && <DentistImageBlockEmpty src={'../../../images/empty_avatar.png'} />}
+        </ImageWrapper>
+        {/*<p className="index-gallery-image-watermark"></p>*/}
+        {adminSettingSubscriber && dentist.hasPaidPlan && adminSettingSubscriber.paidAppearVerified ?
+        <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
+        {adminSettingSubscriber && !dentist.hasPaidPlan && adminSettingSubscriber.freeAppearVerified ?
+          <img className='index-gallery-image-watermark-img-1' src='../images/check_circle.svg' alt='check' /> : <></>}
+          <div className='index-gallery-image-description'>
+            <p className='index-gallery-image-title'>{'Dr. ' + fullName}</p>
+            {/* <p className='index-gallery-image-text'>{dentist.email}</p> */}
+            <p className='index-gallery-image-text'>{dentist.qualifications}</p>
+          </div>
       </Link>
     </div>
   );

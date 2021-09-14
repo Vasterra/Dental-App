@@ -2075,7 +2075,7 @@ input:disabled:-ms-input-placeholder {
     height: 24px;
 }
 
-.index-gallery-image-box:hover .index-gallery-image-description {
+.index-gallery-image-box:hover {
     background: #095c5c;
 }
 

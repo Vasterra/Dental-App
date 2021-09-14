@@ -34,8 +34,8 @@ class Header extends React.Component {
     }
   }
 
-  signOut() {
-    void ApiManager.SIGN_OUT();
+  async signOut() {
+    await ApiManager.SIGN_OUT();
   }
 
   menuToggler = ()=>{
