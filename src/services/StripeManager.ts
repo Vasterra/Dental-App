@@ -1,6 +1,6 @@
-import {Auth} from "aws-amplify";
-import {IStripeCustomer} from "../interfaces/IStripeCustomer";
-import {IStripeSubscription} from "../interfaces/IStripeSubscription";
+import { API, Auth } from 'aws-amplify';
+import { IStripeCustomer } from '../interfaces/IStripeCustomer';
+import { IStripeSubscription } from '../interfaces/IStripeSubscription';
 
 class StripeManager {
   public static async createCustomer(dentist: any) {
@@ -101,14 +101,28 @@ class StripeManager {
 
   public static async retrieveCoupon(coupon: string) {
       try {
-        const request = await fetch('https://erzclvfla5.execute-api.eu-west-1.amazonaws.com/dev/couponRetrieveStripe', {
-          method: 'POST',
-          headers: {"Content-Type":"application/json"},
-          mode: "cors",
-          body: JSON.stringify({
+        const apiName = 'retrieveCoupon'
+        const apiEndpoint = '/items'
+
+        const myInit = {
+           headers: {
+               "Access-Control-Allow-Origin": "*",
+               "Access-Control-Allow-Headers": "*"
+           },
+          body: {
             coupon: coupon
-          }),
-        });
+          }
+        };
+
+        return await API.post(apiName, apiEndpoint, myInit)
+        // const request = await fetch('https://0jdk69ht3k.execute-api.eu-west-1.amazonaws.com/dev/', {
+        //   method: 'POST',
+        //   headers: {"Content-Type":"application/json"},
+        //   mode: "cors",
+        //   body: JSON.stringify({
+        //     coupon: coupon
+        //   }),
+        // });
         // return await request.json() as IStripeSubscription;
       } catch (error) {
         console.log(error);

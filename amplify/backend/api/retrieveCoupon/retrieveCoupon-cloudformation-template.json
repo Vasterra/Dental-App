@@ -8,15 +8,15 @@
         },
     
     
-          "functioncreateSubscriptionStripeName": {
+          "functionretrieveCouponName": {
             "Type": "String",
-            "Default": "functioncreateSubscriptionStripeName"
+            "Default": "functionretrieveCouponName"
           },
 
           
-          "functioncreateSubscriptionStripeArn": {
+          "functionretrieveCouponArn": {
             "Type": "String",
-            "Default": "functioncreateSubscriptionStripeArn"
+            "Default": "functionretrieveCouponArn"
           }
 
           
@@ -37,16 +37,16 @@
         
         
         
-      "createSubscription": {
+      "retrieveCoupon": {
         "Type": "AWS::ApiGateway::RestApi",
         "Properties": {
           "Description": "",
-          "Name": "createSubscription",
+          "Name": "retrieveCoupon",
           "Body": {
             "swagger": "2.0",
             "info": {
               "version": "2018-05-24T17:52:00Z",
-              "title": "createSubscription"
+              "title": "retrieveCoupon"
             },
             "host": {
                 "Fn::Join": [
@@ -168,7 +168,7 @@
                             
                             {
 
-                                "Ref": "functioncreateSubscriptionStripeArn"
+                                "Ref": "functionretrieveCouponArn"
                             },
                             
                             "/invocations"
@@ -267,7 +267,7 @@
                           
                           {
 
-                            "Ref": "functioncreateSubscriptionStripeArn"
+                            "Ref": "functionretrieveCouponArn"
                           },
                           
                           "/invocations"
@@ -324,12 +324,12 @@
       
         
 
-        "functioncreateSubscriptionStripePermissioncreateSubscription": {
+        "functionretrieveCouponPermissionretrieveCoupon": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
                 "FunctionName": 
                     {
-                        "Ref":  "functioncreateSubscriptionStripeName"
+                        "Ref":  "functionretrieveCouponName"
                     },
                     
                     "Action": "lambda:InvokeFunction",
@@ -348,7 +348,7 @@
                             },
                             ":",
                             {
-                                "Ref": "createSubscription"
+                                "Ref": "retrieveCoupon"
                             },
                             "/*/*/*"
                         ]
@@ -359,7 +359,7 @@
         
         
 
-      "DeploymentAPIGWcreateSubscription": {
+      "DeploymentAPIGWretrieveCoupon": {
         "Type": "AWS::ApiGateway::Deployment",
         "Properties": {
           "Description": "The Development stage deployment of your API.",
@@ -373,7 +373,7 @@
             ]
           },
           "RestApiId": {
-            "Ref": "createSubscription"
+            "Ref": "retrieveCoupon"
           }
         }
       }
@@ -381,15 +381,15 @@
     "Outputs": {
         "RootUrl": {
             "Description": "Root URL of the API gateway",
-            "Value": {"Fn::Join": ["", ["https://", {"Ref": "createSubscription"}, ".execute-api.", {"Ref": "AWS::Region"}, ".amazonaws.com/", {"Fn::If": ["ShouldNotCreateEnvResources","Prod", {"Ref": "env"} ]}]]}
+            "Value": {"Fn::Join": ["", ["https://", {"Ref": "retrieveCoupon"}, ".execute-api.", {"Ref": "AWS::Region"}, ".amazonaws.com/", {"Fn::If": ["ShouldNotCreateEnvResources","Prod", {"Ref": "env"} ]}]]}
         },
         "ApiName": {
           "Description": "API Friendly name",
-          "Value": "createSubscription"
+          "Value": "retrieveCoupon"
         },
         "ApiId": {
           "Description": "API ID (prefix of API URL)",
-          "Value": {"Ref": "createSubscription"}
+          "Value": {"Ref": "retrieveCoupon"}
         }
     }
   }

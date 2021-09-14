@@ -2,18 +2,18 @@
   "paths": [
     {
       "name": "/items",
-      "lambdaFunction": "createSubscriptionStripe",
+      "lambdaFunction": "retrieveCoupon",
       "privacy": {
         "open": true
       },
       "policyResourceName": "/items"
     }
   ],
-  "resourceName": "createSubscription",
-  "apiName": "createSubscription",
+  "resourceName": "retrieveCoupon",
+  "apiName": "retrieveCoupon",
   "functionArns": [
     {
-      "lambdaFunction": "createSubscriptionStripe"
+      "lambdaFunction": "retrieveCoupon"
     }
   ],
   "privacy": {
@@ -25,7 +25,7 @@
   "dependsOn": [
     {
       "category": "function",
-      "resourceName": "createSubscriptionStripe",
+      "resourceName": "retrieveCoupon",
       "attributes": [
         "Name",
         "Arn"

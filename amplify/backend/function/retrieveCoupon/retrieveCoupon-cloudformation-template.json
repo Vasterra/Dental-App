@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "createPaymentMethod",
+            "retrieveCoupon",
             {
               "Fn::Join": [
                 "",
                 [
-                  "createPaymentMethod",
+                  "retrieveCoupon",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "dentalappLambdaRole432eecbc",
+            "dentalappLambdaRole6ce73831",
             {
               "Fn::Join": [
                 "",
                 [
-                  "dentalappLambdaRole432eecbc",
+                  "dentalappLambdaRole6ce73831",
                   "-",
                   {
                     "Ref": "env"
