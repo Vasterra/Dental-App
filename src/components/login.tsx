@@ -175,6 +175,11 @@ const Login = () => {
         // @ts-ignore
         authMode: 'AWS_IAM'
       });
+
+      const url: any = localStorage.getItem('site')
+      if (url.host === 'steveh131.sg-host.com') {
+        return await Router.replace('/payment');
+      }
       await Router.replace('/');
     });
   }

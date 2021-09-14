@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
-  CardElement,
+  CardElement, CardNumberElement,
   Elements,
   useElements,
   useStripe
-} from "@stripe/react-stripe-js";
+} from '@stripe/react-stripe-js';
 import CachedRoundedIcon from '@material-ui/icons/CachedRounded';
 import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded';
 import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import ApiManager from '../services/ApiManager';
+import { getPremiumInformation } from '../graphql/queries';
+import { API, Auth } from 'aws-amplify';
+import Router from 'next/router';
+import StripeManager from '../services/StripeManager';
+import { updateDentist } from '../graphql/mutations';
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -105,7 +111,7 @@ const ResetButton = ({ onClick }: any) => (
   </button>
 );
 
-const CheckoutForm = () => {
+const CheckoutForm = ({dentist}: any) => {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<any>(null);
@@ -120,6 +126,21 @@ const CheckoutForm = () => {
     email: "",
     name: ""
   });
+  const [premiumInformation, setPremiumInformation] = useState<any>()
+
+  useEffect(() => {
+    if (document.referrer) {
+      const url = new URL(document.referrer)
+      localStorage.setItem('site', url.host);
+    }
+    void getPremiumInformation();
+  }, [])
+
+  const getPremiumInformation = async () => {
+    await ApiManager.GET_PREMIUM_INFORMATION().then((result: any) => {
+      setPremiumInformation(result)
+    })
+  }
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -139,11 +160,25 @@ const CheckoutForm = () => {
       setProcessing(true);
     }
 
-    const payload = await stripe.createPaymentMethod({
+    const payload: any = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(CardElement) as any,
       billing_details: billingDetails
     });
+
+    if (error || !payload.paymentMethod) {
+      throw Error(error?.message || 'Something is not right...');
+    }
+
+    const customer = await StripeManager.getStripeCustomerID(dentist);
+
+    if (!customer) {
+      throw Error('Could not identify customer');
+    }
+
+    const paymentID = paymentMethod.id;
+    const data = await StripeManager.createSubscription(customer, paymentID);
+    console.log(data);
 
     setProcessing(false);
 
@@ -164,12 +199,66 @@ const CheckoutForm = () => {
     });
   };
 
-  const handleCheckCoupon = ()=>{
+  const handleSubmitPayment = async () => {
+    if (!stripe || !elements) {
+      return;
+    }
+    try {
+      const {error, paymentMethod} = await stripe.createPaymentMethod({
+        type: 'card',
+        card: elements.getElement(CardNumberElement) as any,
+        billing_details: {
+          name: 'card'
+        },
+      });
+      if (error || !paymentMethod) {
+        throw Error(error?.message || 'Something is not right...');
+      }
+
+      const customer = await StripeManager.getStripeCustomerID(dentist);
+
+      if (!customer) {
+        throw Error('Could not identify customer');
+      }
+
+      const paymentID = paymentMethod.id;
+      const data = await StripeManager.createSubscription(customer, paymentID);
+      console.log(data);
+      // try {
+      //   await API.graphql({
+      //     query: updateDentist,
+      //     variables: {
+      //       input: {
+      //         ...initialValues,
+      //         customerID: customer,
+      //         paymentMethodID,
+      //         hasPaidPlan: true,
+      //         subscriptionID: subscription.id,
+      //       }
+      //     },
+      //     // @ts-ignore
+      //     authMode: 'AWS_IAM'
+      //   })
+      // } catch (err: any) {
+      // }
+    } catch (error: any) {
+      console.log(error.message)
+    }
+  };
+
+
+  const handleCheckCoupon = async () =>{
     if(couponValue.length < 1){
       return
     }
     proccessCheckingCupon(true)
-    if(couponValue === 'vasterra'){
+
+    const coupon = await StripeManager.retrieveCoupon('j0LMx6ld');
+
+    console.log(coupon);
+
+    if(couponValue === 'STAYSAFE'){
+
       setTimeout(()=>{
         proccessCheckingCupon(false)
         setCuponStatus('success')
@@ -248,7 +337,7 @@ const CheckoutForm = () => {
       {error && <ErrorMessage>{error.message as any}</ErrorMessage>}
       <div className="col-12 col-xl-6 mx-auto mt-3" style={{display: 'flex', justifyContent: 'space-between'}}>
         <SubmitButton processing={processing} error={error} disabled={(!stripe || checking)}>
-          Pay
+          Pay £{premiumInformation && premiumInformation.price}
         </SubmitButton>
           { couponField ?
            <div id="coupon_input_container">
@@ -296,11 +385,11 @@ const ELEMENTS_OPTIONS = {
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
 
-const App = () => {
+const App = ({dentist} : any) => {
   return (
     <div className="AppWrapper col-12 col-xl-8 mx-auto">
       <Elements stripe={stripePromise} options={ELEMENTS_OPTIONS}>
-        <CheckoutForm />
+        <CheckoutForm dentist={dentist}/>
       </Elements>
     </div>
   );

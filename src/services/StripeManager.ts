@@ -1,6 +1,6 @@
-import {Auth} from "aws-amplify";
-import {IStripeCustomer} from "../interfaces/IStripeCustomer";
-import {IStripeSubscription} from "../interfaces/IStripeSubscription";
+import { API, Auth } from 'aws-amplify';
+import { IStripeCustomer } from '../interfaces/IStripeCustomer';
+import { IStripeSubscription } from '../interfaces/IStripeSubscription';
 
 class StripeManager {
   public static async createCustomer(dentist: any) {
@@ -11,7 +11,7 @@ class StripeManager {
       if (!email || !id) {
         throw Error('Email or username not found.');
       }
-      const request = await fetch('https://7jgeup4ehe.execute-api.eu-west-1.amazonaws.com/dev/createCustomer', {
+      const request = await fetch('https://zg3a9iraq4.execute-api.eu-west-1.amazonaws.com/dev/createCustomer', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
@@ -45,7 +45,7 @@ class StripeManager {
   }
 
   public static async createSubscription(customerID: string, paymentMethodID: string) {
-    const request = await fetch('https://xg92m8wtpa.execute-api.eu-west-1.amazonaws.com/dev/createSubscription', {
+    const request = await fetch('https://ix6z48vs8l.execute-api.eu-west-1.amazonaws.com/dev/createSubscription', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
@@ -98,6 +98,27 @@ class StripeManager {
     });
     return await request.json() as IStripeSubscription;
   }
+
+  public static async retrieveCoupon(coupon: string) {
+      try {
+        const apiName = 'retrieveCoupon'
+        const apiEndpoint = '/items'
+
+        const myInit = {
+           headers: {
+               "Access-Control-Allow-Origin": "*",
+               "Access-Control-Allow-Headers": "*"
+           },
+          body: {
+            coupon: coupon
+          }
+        };
+
+        return await API.post(apiName, apiEndpoint, myInit)
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
   public static async getListSubscriptions(customerID: string) {
     const request = await fetch('https://evzvxzj1sf.execute-api.eu-west-1.amazonaws.com/dev/getListSubscriptions', {
