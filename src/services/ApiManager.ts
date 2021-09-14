@@ -37,6 +37,7 @@ class ApiManager {
   public static async SIGN_OUT() {
     try {
       await Auth.signOut();
+      console.log('logouted')
       await Router.push('/login');
     } catch (error: any) {
       console.log('error signing out: ', error);

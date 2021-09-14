@@ -49,7 +49,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
       await Storage.put(`cover/${currentDentist.id}/cover`, files[0] ? files[0] : files, {
         contentType: 'image/png'
       }).then(() => {
-        setMessageSnackBar('Success Upload!');
+        setMessageSnackBar('Successful upload!');
         setStatusSnackBar('success');
         setOpenSnackBar(true);
       })
@@ -104,7 +104,7 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
       await Storage.put(`watermark/${currentDentist.id}/watermark`, files[0] ? files[0] : files, {
         contentType: 'image/png'
       }).then(() => {
-        setMessageSnackBar('Success Upload!');
+        setMessageSnackBar('Successful upload!');
         setStatusSnackBar('success');
         setOpenSnackBar(true);
       })

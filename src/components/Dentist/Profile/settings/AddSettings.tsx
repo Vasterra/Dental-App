@@ -188,7 +188,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                       name='qualifications'
                       placeholder=''
                       setValue={props.values.qualifications}
-                      props={props}
+                      props={{...props, maxLength: '80'}}
                     />
                   </div>
                   <div>

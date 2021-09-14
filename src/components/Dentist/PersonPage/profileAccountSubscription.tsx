@@ -4,6 +4,7 @@ import GalleryPerson from 'src/components/Gallery/GalleryPerson';
 import { WrapperFlex } from 'src/styles/Main.module';
 import ApiManager from '../../../services/ApiManager';
 import QRCode from 'qrcode';
+import { Link } from '@material-ui/core';
 import { IAdminSettingsSubscribers } from '../../../types/types';
 import styled from 'styled-components';
 
@@ -137,7 +138,12 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
                 <p>
                   <span><strong>Phone: </strong>{currentDentist.phone}</span><br />
                   <span><strong>Email: </strong>{currentDentist.email}</span><br />
-                  <span> <strong>Website: </strong>{currentDentist.website}</span>
+                  <span> 
+                    <strong>Website: </strong>
+                    <Link href={`../../redirect?website=${currentDentist.website}`} target='_blank'>
+                      {currentDentist.website}
+                    </Link>
+                  </span>
                 </p>
                 <p>Locations</p>
                 <div className='flex-wrapper'>
