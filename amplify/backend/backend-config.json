@@ -103,20 +103,6 @@
         }
       ]
     },
-    "createPaymentMethod": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "createPaymentMethod",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
-    },
     "createCustomerStripe": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
@@ -124,20 +110,6 @@
         {
           "category": "function",
           "resourceName": "createCustomerStripe",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
-    },
-    "couponRetrieveStripe": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "couponRetrieveStripe",
           "attributes": [
             "Name",
             "Arn"
@@ -193,16 +165,6 @@
       "service": "Lambda"
     },
     "createRefundsStripe": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "createPaymentMethod": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "couponRetrieveStripe": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"

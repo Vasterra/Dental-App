@@ -43,14 +43,6 @@
         "createChargesStripe": {
           "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
           "s3Key": "amplify-builds/createChargesStripe-374c632b594e534a7053-build.zip"
-        },
-        "createPaymentMethod": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/createPaymentMethod-45555674374a532f582f-build.zip"
-        },
-        "couponRetrieveStripe": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/couponRetrieveStripe-5457694a654f6c38325a-build.zip"
         }
       }
     }
