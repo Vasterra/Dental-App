@@ -165,7 +165,7 @@ const CheckoutForm = ({dentist}: any) => {
       card: elements.getElement(CardElement) as any,
       billing_details: billingDetails
     });
-
+    console.log('payload', payload);
     if (error || !payload.paymentMethod) {
       console.log(error?.message || 'Something is not right...');
     }
@@ -176,8 +176,9 @@ const CheckoutForm = ({dentist}: any) => {
       console.log('Could not identify customer');
     }
 
-    const paymentID = paymentMethod.id;
-    const data = await StripeManager.createSubscription(customer, paymentID);
+    const paymentID = payload.paymentMethod.id;
+    const price = 'price_1J8KMZB5Yj7B7VjGNsnVaCeA'
+      const data = await StripeManager.createSubscription(customer.id, paymentID, price);
     console.log(data);
 
     setProcessing(false);

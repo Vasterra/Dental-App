@@ -1,7 +1,7 @@
 const Stripe = require('stripe');
 const stripe = new Stripe(
   'sk_test_51J15W0B5Yj7B7VjGDu05x2LI3AdPT5NeDvIFbAlfG37ZNreEAX8wHFY2f4ZzBrW9r9oeu0Qnpi3b2v4kWS99Z3o900Yu4TyZ4I' ||
-    '',
+  '',
   {
     apiVersion: '2020-03-02'
   }
@@ -13,9 +13,9 @@ exports.handler = async (event, context, callback) => {
     return;
   }
   const body = JSON.parse(event.body);
-  const { paymentMethodID, customerID, plan, coupon } = body;
+  const { paymentMethodID, customerID, price } = body;
 
-  if (!paymentMethodID || !customerID) {
+  if (!paymentMethodID || !customerID || !price) {
     callback(null, {
       statusCode: 400,
       body: 'Missing payment method or customer'
@@ -38,12 +38,9 @@ exports.handler = async (event, context, callback) => {
       customer: customerID,
       items: [
         {
-          plan: plan
+          price: price
         }
       ],
-      coupon: coupon ? coupon : '',
-      payment_behavior: 'default_incomplete',
-      expand: ['latest_invoice.payment_intent']
     });
     callback(null, {
       statusCode: 200,
@@ -57,6 +54,7 @@ exports.handler = async (event, context, callback) => {
       })
     });
   } catch (error) {
-    callback({ error: { message: error.message } });
+    console.log(error);
+    callback(error);
   }
 };

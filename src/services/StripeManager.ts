@@ -5,25 +5,35 @@ class StripeManager {
 
   public static async createCustomer(dentist: any) {
     try {
-      const {email, id}: any = dentist
-      if (!email || !id) {
+      const {email, firstName}: any = dentist
+      if (!email || !firstName) {
         throw Error('Email or username not found.');
       }
-
-      const apiName = 'createCustomerStripe'
-      const apiEndpoint = '/createCustomerStripe'
-
-      const myInit = {
+      const request: any = await fetch('https://520q135djd.execute-api.eu-west-1.amazonaws.com/dev/createCustomerStripe-dev', {
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           email,
-          username: id,
+          username: firstName,
         }),
-      };
-      const request = await API.post(apiName, apiEndpoint, myInit)
-      return request;
+      });
+      return await request.json();
+      // const apiName = 'createCustomerStripe'
+      // const apiEndpoint = '/createCustomerStripe'
+      //
+      // const myInit = {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     email,
+      //     username: id,
+      //   }),
+      // };
+      // const request = await API.post(apiName, apiEndpoint, myInit)
+      // return request;
     } catch (error) {
       console.log(error);
     }
@@ -42,25 +52,23 @@ class StripeManager {
     return customerID;
   }
 
-  public static async createSubscription(customerID: string, paymentMethodID: string) {
+  public static async createSubscription(customerID: string, paymentMethodID: string, price: string) {
     try {
-      if (!customerID || !paymentMethodID) {
+      if (!customerID || !paymentMethodID || !price) {
         throw Error('Email or username not found.');
       }
 
-      const apiName = 'createSubscriptionStripe'
-      const apiEndpoint = '/createSubscriptionStripe'
-
-      const myInit = {
+      const request: any = await fetch('https://biucjonez5.execute-api.eu-west-1.amazonaws.com/dev/createSubscriptionStripe-dev', {
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
+          price,
           customerID,
           paymentMethodID,
         }),
-      };
-      const request = await API.post(apiName, apiEndpoint, myInit)
+      });
       const subscription = await request.json() as IStripeSubscription;
       if (subscription.status !== 'active') {
         throw Error('Unable to upgrade. Please try again');
