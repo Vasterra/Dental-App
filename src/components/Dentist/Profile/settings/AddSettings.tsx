@@ -111,7 +111,6 @@ const AddSettings: React.FunctionComponent<Props> = ({
                 'email': data.email
               });
               setUserName(data.firstName);
-              console.log(data);
               try {
                 await API.graphql({
                   query: updateDentist,
@@ -205,11 +204,14 @@ const AddSettings: React.FunctionComponent<Props> = ({
                       <FacebookCircularProgress /> : 'Confirm'}</button>
                   </p>}
                 </div>
-                {adminSettingSubscriber && !currentDentist.hasPaidPlan && <div className='profile-block-box'>
-                  <div
-                    className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidWebsiteAddress : adminSettingSubscriber.freeWebsiteAddress ? '' : 'disabled'}>
+                <div className='profile-block-box'>
+                  {adminSettingSubscriber && !currentDentist.hasPaidPlan &&
+                  <div>
+                    <div className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidWebsiteAddress : adminSettingSubscriber.freeWebsiteAddress ? '' : 'disabled'}>
                     <p className='form-profile-label'>
                       <label className='form-profile-label' htmlFor='website'>Website Address - Premium</label>
+                    </p>
+                    <p>
                       <input className='form-profile-input'
                              type='text'
                              name='website'
@@ -220,10 +222,11 @@ const AddSettings: React.FunctionComponent<Props> = ({
                       />
                     </p>
                   </div>
-                  <div
-                    className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidPhoneNumber : adminSettingSubscriber.freePhoneNumber ? '' : 'disabled'}>
+                    <div className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidPhoneNumber : adminSettingSubscriber.freePhoneNumber ? '' : 'disabled'}>
                     <p className='form-profile-label'>
                       <label className='form-profile-label' htmlFor='phone'>Phone - Premium</label>
+                    </p>
+                    <p>
                       <input className='form-profile-input'
                              type='text'
                              name='phone'
@@ -234,36 +237,37 @@ const AddSettings: React.FunctionComponent<Props> = ({
                       />
                     </p>
                   </div>
-                  <div>
-                    <DentistProfileInput
-                      title='Address'
-                      name='address'
-                      placeholder='London'
-                      setValue={props.values.address}
+                    </div>}
+                   {currentDentist.hasPaidPlan &&
+                   <div>
+                     <DentistProfileInput
+                      title='Website Address'
+                      name='website'
+                      placeholder='dental.co.uk'
+                      setValue={props.values.website}
                       props={props}
                     />
-                  </div>
-                </div>}
-                {currentDentist.hasPaidPlan && <div className='profile-block-box'>
+                    <DentistProfileInput
+                      title='Phone'
+                      name='phone'
+                      placeholder='0203 123 4567'
+                      setValue={props.values.phone}
+                      props={props}
+                    />
+                    <p className='form-login-buttons'>
+                      <button className='button-green' type='submit'>{loaderButtonSubmit ?
+                        <FacebookCircularProgress /> : 'Confirm'}</button>
+                    </p>
+                   </div>}
+
                   <DentistProfileInput
-                    title='Website Address'
-                    name='website'
-                    placeholder='dental.co.uk'
-                    setValue={props.values.website}
+                    title='Address'
+                    name='address'
+                    placeholder='Address/Town/Post Code'
+                    setValue={props.values.address}
                     props={props}
                   />
-                  <DentistProfileInput
-                    title='Phone'
-                    name='phone'
-                    placeholder='0203 123 4567'
-                    setValue={props.values.phone}
-                    props={props}
-                  />
-                  <p className='form-login-buttons'>
-                    <button className='button-green' type='submit'>{loaderButtonSubmit ?
-                      <FacebookCircularProgress /> : 'Confirm'}</button>
-                  </p>
-                </div>}
+                </div>
               </div>
             </form>
           )}
