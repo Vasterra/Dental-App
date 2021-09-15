@@ -47,6 +47,10 @@
         "retrieveCoupon": {
           "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
           "s3Key": "amplify-builds/retrieveCoupon-574b5737586739667654-build.zip"
+        },
+        "getListCoupons": {
+          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
+          "s3Key": "amplify-builds/getListCoupons-7874623539472f38684f-build.zip"
         }
       }
     }

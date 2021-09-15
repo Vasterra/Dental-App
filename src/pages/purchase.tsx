@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import PaymentContent from 'src/components/payment';
-import { Auth, withSSRContext } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 import Router from 'next/router';
-import { GetServerSideProps } from 'next';
-import { getDentist } from '../graphql/queries';
+import ApiManager from '../services/ApiManager';
 
-const Payment = ({dentist}: any) => {
+const Payment = () => {
 
-  const [signedInUser, setSignedInUser] = useState(false);
+  const [signedInUser, setSignedInUser]  = useState(false);
+  const [userDb, setUserBd] = useState(false);
 
   useEffect(() => {
     void authListener()
@@ -17,7 +17,10 @@ const Payment = ({dentist}: any) => {
 
   const authListener = async () => {
     try {
-      await Auth.currentAuthenticatedUser();
+      const user_cognito = await Auth.currentAuthenticatedUser();
+      const user_bd: any = await ApiManager.GET_DENTIST(user_cognito.attributes.sub);
+      console.log(user_bd);
+      setUserBd(user_bd.data.getDentist)
       setSignedInUser(true);
     } catch (e: any) {
       void await Router.push('/login');
@@ -36,36 +39,13 @@ const Payment = ({dentist}: any) => {
                 </div>
             </div>
             <div className="box-to-box " style={{marginTop: '-20px', marginBottom: '10%'}}>
-              <PaymentContent dentist={dentist}/>
+              <PaymentContent dentist={userDb}/>
             </div>
         </div>
       </div>
       <Footer/>
     </section>
   );
-};
-
-// @ts-ignore
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const { API } = withSSRContext(context);
-  let dentistData;
-  try {
-    if (context.params.slug[0] === null) return;
-    dentistData = await API.graphql({
-      query: getDentist,
-      variables: {
-        id: context.params.slug[0]
-      },
-      authMode: 'AWS_IAM'
-    });
-  } catch (e: any) {
-    console.log(e);
-  }
-  return {
-    props: {
-      dentist: dentistData ? dentistData.data.getDentist : null
-    }
-  };
 };
 
 export default Payment;
