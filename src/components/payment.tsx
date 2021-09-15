@@ -167,13 +167,13 @@ const CheckoutForm = ({dentist}: any) => {
     });
 
     if (error || !payload.paymentMethod) {
-      throw Error(error?.message || 'Something is not right...');
+      console.log(error?.message || 'Something is not right...');
     }
 
     const customer = await StripeManager.getStripeCustomerID(dentist);
 
     if (!customer) {
-      throw Error('Could not identify customer');
+      console.log('Could not identify customer');
     }
 
     const paymentID = paymentMethod.id;
@@ -199,75 +199,79 @@ const CheckoutForm = ({dentist}: any) => {
     });
   };
 
-  const handleSubmitPayment = async () => {
-    if (!stripe || !elements) {
-      return;
-    }
-    try {
-      const {error, paymentMethod} = await stripe.createPaymentMethod({
-        type: 'card',
-        card: elements.getElement(CardNumberElement) as any,
-        billing_details: {
-          name: 'card'
-        },
-      });
-      if (error || !paymentMethod) {
-        throw Error(error?.message || 'Something is not right...');
-      }
+  // const handleSubmitPayment = async () => {
+  //   if (!stripe || !elements) {
+  //     return;
+  //   }
+  //   try {
+  //     const {error, paymentMethod} = await stripe.createPaymentMethod({
+  //       type: 'card',
+  //       card: elements.getElement(CardNumberElement) as any,
+  //       billing_details: {
+  //         name: 'card'
+  //       },
+  //     });
+  //     if (error || !paymentMethod) {
+  //       throw Error(error?.message || 'Something is not right...');
+  //     }
+  //
+  //     const customer = await StripeManager.getStripeCustomerID(dentist);
+  //
+  //     if (!customer) {
+  //       throw Error('Could not identify customer');
+  //     }
+  //
+  //     const paymentID = paymentMethod.id;
+  //     const data = await StripeManager.createSubscription(customer, paymentID);
+  //     console.log(data);
+  //     // try {
+  //     //   await API.graphql({
+  //     //     query: updateDentist,
+  //     //     variables: {
+  //     //       input: {
+  //     //         ...initialValues,
+  //     //         customerID: customer,
+  //     //         paymentMethodID,
+  //     //         hasPaidPlan: true,
+  //     //         subscriptionID: subscription.id,
+  //     //       }
+  //     //     },
+  //     //     // @ts-ignore
+  //     //     authMode: 'AWS_IAM'
+  //     //   })
+  //     // } catch (err: any) {
+  //     // }
+  //   } catch (error: any) {
+  //     console.log(error.message)
+  //   }
+  // };
 
-      const customer = await StripeManager.getStripeCustomerID(dentist);
-
-      if (!customer) {
-        throw Error('Could not identify customer');
-      }
-
-      const paymentID = paymentMethod.id;
-      const data = await StripeManager.createSubscription(customer, paymentID);
-      console.log(data);
-      // try {
-      //   await API.graphql({
-      //     query: updateDentist,
-      //     variables: {
-      //       input: {
-      //         ...initialValues,
-      //         customerID: customer,
-      //         paymentMethodID,
-      //         hasPaidPlan: true,
-      //         subscriptionID: subscription.id,
-      //       }
-      //     },
-      //     // @ts-ignore
-      //     authMode: 'AWS_IAM'
-      //   })
-      // } catch (err: any) {
-      // }
-    } catch (error: any) {
-      console.log(error.message)
-    }
-  };
-
-
-  const handleCheckCoupon = async () =>{
-    if(couponValue.length < 1){
+  const handleCheckCoupon = async () => {
+    if (couponValue.length < 1) {
       return
     }
     proccessCheckingCupon(true)
 
-    const coupon = await StripeManager.retrieveCoupon('j0LMx6ld');
-
-    console.log(coupon);
-
-    if(couponValue === 'STAYSAFE'){
-
-      setTimeout(()=>{
-        proccessCheckingCupon(false)
-        setCuponStatus('success')
-      }, 3000)
-    }else{
-      setTimeout(()=>{
-        proccessCheckingCupon(false)
-        setCuponStatus('error')
-      }, 3000)
+    const coupons  = await StripeManager.listCoupons();
+    let calculationPrice = null;
+    if (coupons.length < 1) {
+      coupons.forEach((item: any) => {
+        if (item.name === couponValue) {
+          setTimeout(() => {
+            calculationPrice = (premiumInformation.price * item.percent_off) / 100
+            setPremiumInformation({
+              price: calculationPrice
+            })
+            proccessCheckingCupon(false)
+            setCuponStatus('success')
+          })
+        } else {
+          setTimeout(() => {
+            proccessCheckingCupon(false)
+            setCuponStatus('error')
+          })
+        }
+      })
     }
   }
 

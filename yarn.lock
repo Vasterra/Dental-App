@@ -8653,7 +8653,7 @@
   "resolved" "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-2.0.1.tgz"
   "version" "2.0.1"
 
-"stripe@^8.157.0":
+"stripe@^8.174.0":
   "integrity" "sha512-UFU5TuYH7XwUmSllUIcIKhhsvvhhjw9D6ZwVdfB74wU4VOOaWBiQqszkw6chaEFpdulUmbcAH5eZltV3HwOi7g=="
   "resolved" "https://registry.npmjs.org/stripe/-/stripe-8.174.0.tgz"
   "version" "8.174.0"

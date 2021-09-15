@@ -56,7 +56,7 @@ const BillingInformation: React.FunctionComponent<Props> = ({currentDentist}) =>
       }
 
       const paymentID = paymentMethod.id;
-      const {subscription, hasPaidPlan, paymentMethodID} = await StripeManager.createSubscription(customer, paymentID);
+      const {subscription, hasPaidPlan, paymentMethodID}: any = await StripeManager.createSubscription(customer, paymentID);
       try {
         await API.graphql({
           query: updateDentist,
