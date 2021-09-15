@@ -56,6 +56,7 @@ type Props = {
   adminSettingSubscriber: any,
   setMessageSnackbar: any,
   setOpenSnackbar: any,
+  handleChangeAddress: any,
   setSeverity: any,
 }
 
@@ -65,6 +66,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
    setMessageSnackbar,
    setOpenSnackbar,
    setSeverity,
+   handleChangeAddress,
    setUserName
   }) => {
 
@@ -99,8 +101,9 @@ const AddSettings: React.FunctionComponent<Props> = ({
         {currentDentist &&
         <Formik
           onSubmit={async (data: any) => {
+            console.log('data', data.address.length);
             setLoaderButtonSubmit(true);
-            await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
+            await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address.length === 0 ? 'Cambridge' : data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
             .then(response => response.json())
             .then(async (result) => {
               data.lng = result.results[0].geometry.location.lng;
@@ -111,6 +114,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                 'email': data.email
               });
               setUserName(data.firstName);
+              handleChangeAddress(data.address)
               try {
                 await API.graphql({
                   query: updateDentist,
@@ -259,7 +263,6 @@ const AddSettings: React.FunctionComponent<Props> = ({
                         <FacebookCircularProgress /> : 'Confirm'}</button>
                     </p>
                    </div>}
-
                   <DentistProfileInput
                     title='Address'
                     name='address'

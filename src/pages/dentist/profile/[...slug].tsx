@@ -20,12 +20,13 @@ function Alert(props: AlertProps) {
 const Profile = ({ dentist }: any) => {
   const router = useRouter();
 
-  const [currentDentist, setCurrentDentist] = useState(dentist);
+  const [currentDentist, setCurrentDentist] = useState<any>(dentist);
   const [currentAvatar, setCurrentAvatar] = useState('');
   const [signedInUser, setSignedInUser] = useState(false);
   const [route, setRoute] = useState('');
   const [adminSettingSubscriber, setAdminSettingSubscriber] = useState();
   const [userName, setUserName] = useState();
+  const [changeAddress, setChangeAddress] = useState<any>(null);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
@@ -62,6 +63,10 @@ const Profile = ({ dentist }: any) => {
         setCurrentAvatar(signedFiles);
       }
     });
+  };
+
+  const handleChangeAddress = (value: any) => {
+    setChangeAddress(value)
   };
 
   const uploadAvatar = async (files: any) => {
@@ -113,12 +118,14 @@ const Profile = ({ dentist }: any) => {
                        setMessageSnackbar={setMessageSnackbar}
                        setOpenSnackbar={setOpenSnackbar}
                        setSeverity={setSeverity}
+                       handleChangeAddress={handleChangeAddress}
           />
           <Location route={route}
                     adminSettingSubscriber={adminSettingSubscriber}
                     setMessageSnackbar={setMessageSnackbar}
                     setOpenSnackbar={setOpenSnackbar}
                     setSeverity={setSeverity}
+                    changeAddress={changeAddress}
           />
           <Services route={route}
                     adminSettingSubscriber={adminSettingSubscriber}
