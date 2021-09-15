@@ -110,16 +110,23 @@ class StripeManager {
 
   public static async listCoupons() {
       try {
-        const apiName = 'getListCoupons'
-        const apiEndpoint = '/getListCoupons'
-
-        const myInit = {
-           headers: {
-             'Content-Type': 'application/json',
-           },
-        };
-        const coupons = await API.post(apiName, apiEndpoint, myInit)
-        return coupons.coupons.data
+        const request: any = await fetch('https://wglfi0jeq3.execute-api.eu-west-1.amazonaws.com/dev/getListCoupons-dev', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+        });
+        return await request.json();
+        // const apiName = 'getListCoupons'
+        // const apiEndpoint = '/getListCoupons'
+        //
+        // const myInit = {
+        //    headers: {
+        //      'Content-Type': 'application/json',
+        //    },
+        // };
+        // const coupons = await API.post(apiName, apiEndpoint, myInit)
+        // return coupons.coupons.data
       } catch (error) {
         console.log(error);
       }

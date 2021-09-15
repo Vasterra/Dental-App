@@ -252,15 +252,16 @@ const CheckoutForm = ({dentist}: any) => {
     }
     proccessCheckingCupon(true)
 
-    const coupons  = await StripeManager.listCoupons();
+    const {coupons}  = await StripeManager.listCoupons();
     let calculationPrice = null;
-    if (coupons.length < 1) {
-      coupons.forEach((item: any) => {
+
+    if (coupons !== undefined) {
+      coupons.data.forEach((item: any) => {
         if (item.name === couponValue) {
           setTimeout(() => {
             calculationPrice = (premiumInformation.price * item.percent_off) / 100
             setPremiumInformation({
-              price: calculationPrice
+              price: calculationPrice.toFixed(2)
             })
             proccessCheckingCupon(false)
             setCuponStatus('success')

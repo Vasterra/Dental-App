@@ -210,8 +210,6 @@ const AddSettings: React.FunctionComponent<Props> = ({
                     className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidWebsiteAddress : adminSettingSubscriber.freeWebsiteAddress ? '' : 'disabled'}>
                     <p className='form-profile-label'>
                       <label className='form-profile-label' htmlFor='website'>Website Address - Premium</label>
-                    </p>
-                    <p>
                       <input className='form-profile-input'
                              type='text'
                              name='website'
@@ -226,8 +224,6 @@ const AddSettings: React.FunctionComponent<Props> = ({
                     className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidPhoneNumber : adminSettingSubscriber.freePhoneNumber ? '' : 'disabled'}>
                     <p className='form-profile-label'>
                       <label className='form-profile-label' htmlFor='phone'>Phone - Premium</label>
-                    </p>
-                    <p>
                       <input className='form-profile-input'
                              type='text'
                              name='phone'
@@ -237,6 +233,15 @@ const AddSettings: React.FunctionComponent<Props> = ({
                              disabled={currentDentist.hasPaidPlan ? !adminSettingSubscriber.paidPhoneNumber : !adminSettingSubscriber.freePhoneNumber}
                       />
                     </p>
+                  </div>
+                  <div>
+                    <DentistProfileInput
+                      title='Address'
+                      name='address'
+                      placeholder='London'
+                      setValue={props.values.address}
+                      props={props}
+                    />
                   </div>
                 </div>}
                 {currentDentist.hasPaidPlan && <div className='profile-block-box'>
@@ -252,13 +257,6 @@ const AddSettings: React.FunctionComponent<Props> = ({
                     name='phone'
                     placeholder='0203 123 4567'
                     setValue={props.values.phone}
-                    props={props}
-                  />
-                  <DentistProfileInput
-                    title='Address'
-                    name='address'
-                    placeholder='London'
-                    setValue={props.values.address}
                     props={props}
                   />
                   <p className='form-login-buttons'>
