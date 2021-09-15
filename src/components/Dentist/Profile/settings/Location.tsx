@@ -336,7 +336,7 @@ const Location: React.FunctionComponent<Props> = ({
                     <FormLoginInput>
                       <input
                         type='text'
-                        value={`${el.city} ${el.address} ${el.postCode}`}
+                        value={`${el.address} ${el.city} ${el.postCode}`}
                       />
                       <IconUpdate src='../../../images/edit.svg' alt='edit'
                                   onClick={() => setUpdateDateLocation(el)} />
@@ -354,21 +354,13 @@ const Location: React.FunctionComponent<Props> = ({
               <p className='form-profile-label'>
                 <label className='form-profile-label'>Locations</label>
               </p>
-              {
-                adminSettingSubscriber && currentDentist.locations.items.map((el: any, key: any) => {
-                  if (key < Number(currentDentist.hasPaidPlan ? adminSettingSubscriber.paidMaxLocations : adminSettingSubscriber.freeMaxLocations)) {
-                    return (
-                      <FormLoginInput>
-                        <input
-                          type='text'
-                          disabled={!currentDentist.hasPaidPla}
-                          value={`${el.city} ${el.address} ${el.postCode}`}
-                        />
-                      </FormLoginInput>
-                    );
-                  }
-                })
-              }
+                <FormLoginInput>
+                  <input
+                    type='text'
+                    disabled={!currentDentist.hasPaidPla}
+                    value={`${currentDentist.address}`}
+                  />
+                </FormLoginInput>
             </div>
           </div>}
         </div>
