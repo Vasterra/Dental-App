@@ -161,6 +161,12 @@ class Drawer extends Component<{ currentAvatar: string, active: string, currentD
                     <a className='leftmenu-link'>Account</a>
                   </li>
                 </Link>
+                <Link href={`../../dentist/person/${this.state.currentUser.attributes.sub}`}>
+                  <li className={`leftmenu-list + ${this.props.active === 'activePerson' ? 'active' : ''}`}>
+                    <img className='leftmenu-link-image' src='../../images/person_black_24dp.svg' alt='link image' />
+                    <a className='leftmenu-link'>View My Profile</a>
+                  </li>
+                </Link>
                 {/* <Link href={`../../payment`}>
                   <li className={`leftmenu-list + ${this.props.active === 'activePayment' ? 'active' : ''}`}>
                     <img className='leftmenu-link-image' src='../../images/more_vert.svg' alt='link image' />
