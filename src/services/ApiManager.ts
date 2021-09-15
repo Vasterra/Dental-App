@@ -132,8 +132,7 @@ class ApiManager {
         variables: {
           id: id
         },
-        // @ts-ignore
-        authMode: 'AWS_IAM'
+        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
     } catch (e: any) {
       console.log(e);

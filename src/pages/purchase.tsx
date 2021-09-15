@@ -4,10 +4,12 @@ import Header from 'src/components/Header';
 import PaymentContent from 'src/components/payment';
 import { Auth } from 'aws-amplify';
 import Router from 'next/router';
+import ApiManager from '../services/ApiManager';
 
 const Payment = () => {
 
-  const [signedInUser, setSignedInUser] = useState(false);
+  const [signedInUser, setSignedInUser]  = useState(false);
+  const [userDb, setUserBd] = useState(false);
 
   useEffect(() => {
     void authListener()
@@ -15,7 +17,10 @@ const Payment = () => {
 
   const authListener = async () => {
     try {
-      await Auth.currentAuthenticatedUser();
+      const user_cognito = await Auth.currentAuthenticatedUser();
+      const user_bd: any = await ApiManager.GET_DENTIST(user_cognito.attributes.sub);
+      console.log(user_bd);
+      setUserBd(user_bd.data.getDentist)
       setSignedInUser(true);
     } catch (e: any) {
       void await Router.push('/login');
@@ -34,7 +39,7 @@ const Payment = () => {
                 </div>
             </div>
             <div className="box-to-box " style={{marginTop: '-20px', marginBottom: '10%'}}>
-              <PaymentContent/>
+              <PaymentContent dentist={userDb}/>
             </div>
         </div>
       </div>
