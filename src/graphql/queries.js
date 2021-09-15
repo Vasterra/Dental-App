@@ -2,469 +2,475 @@
 // this is an auto generated file. This will be overwritten
 
 export const getDentist = /* GraphQL */ `
-    query GetDentist($id: ID!) {
-        getDentist(id: $id) {
-            id
-            firstName
-            lastName
-            phone
-            qualifications
-            bio
-            website
-            gdcNumber
-            address
-            city
-            street
-            postIndex
-            email
-            lat
-            lng
-            registered
-            isDisabled
-            hasPaidPlan
-            services {
-                items {
-                    id
-                    dentistId
-                    name
-                    createdAt
-                    updatedAt
-                    owner
-                }
-                nextToken
-            }
-            locations {
-                items {
-                    id
-                    dentistId
-                    city
-                    address
-                    postCode
-                    createdAt
-                    updatedAt
-                    owner
-                }
-                nextToken
-            }
-            images {
-                items {
-                    id
-                    dentistId
-                    titleBefore
-                    tagsBefore
-                    titleAfter
-                    tagsAfter
-                    service
-                    nameBefore
-                    nameAfter
-                    createdAt
-                    updatedAt
-                    owner
-                }
-                nextToken
-            }
-            createdAt
-            updatedAt
+  query GetDentist($id: ID!) {
+    getDentist(id: $id) {
+      id
+      firstName
+      lastName
+      phone
+      qualifications
+      bio
+      website
+      gdcNumber
+      address
+      city
+      street
+      postIndex
+      email
+      lat
+      lng
+      registered
+      isDisabled
+      customerID
+      paymentMethodID
+      subscriptionID
+      hasPaidPlan
+      services {
+        items {
+          id
+          dentistId
+          name
+          createdAt
+          updatedAt
+          owner
         }
+        nextToken
+      }
+      locations {
+        items {
+          id
+          dentistId
+          city
+          address
+          postCode
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      images {
+        items {
+          id
+          dentistId
+          titleBefore
+          tagsBefore
+          titleAfter
+          tagsAfter
+          service
+          nameBefore
+          nameAfter
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
+  }
 `;
 export const listDentists = /* GraphQL */ `
-    query ListDentists(
-        $filter: ModelDentistFilterInput
-        $limit: Int
-        $nextToken: String
-    ) {
-        listDentists(filter: $filter, limit: $limit, nextToken: $nextToken) {
-            items {
-                id
-                firstName
-                lastName
-                phone
-                qualifications
-                bio
-                website
-                gdcNumber
-                address
-                city
-                street
-                postIndex
-                email
-                lat
-                lng
-                registered
-                isDisabled
-                hasPaidPlan
-                services {
-                    nextToken
-                }
-                locations {
-                    nextToken
-                }
-                images {
-                    nextToken
-                }
-                createdAt
-                updatedAt
-            }
-            nextToken
+  query ListDentists(
+    $filter: ModelDentistFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listDentists(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        firstName
+        lastName
+        phone
+        qualifications
+        bio
+        website
+        gdcNumber
+        address
+        city
+        street
+        postIndex
+        email
+        lat
+        lng
+        registered
+        isDisabled
+        customerID
+        paymentMethodID
+        subscriptionID
+        hasPaidPlan
+        services {
+          nextToken
         }
+        locations {
+          nextToken
+        }
+        images {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
     }
+  }
 `;
 export const getService = /* GraphQL */ `
-    query GetService($id: ID!) {
-        getService(id: $id) {
-            id
-            dentistId
-            name
-            createdAt
-            updatedAt
-            owner
-        }
+  query GetService($id: ID!) {
+    getService(id: $id) {
+      id
+      dentistId
+      name
+      createdAt
+      updatedAt
+      owner
     }
+  }
 `;
 export const listServices = /* GraphQL */ `
-    query ListServices(
-        $filter: ModelServiceFilterInput
-        $limit: Int
-        $nextToken: String
-    ) {
-        listServices(filter: $filter, limit: $limit, nextToken: $nextToken) {
-            items {
-                id
-                dentistId
-                name
-                createdAt
-                updatedAt
-                owner
-            }
-            nextToken
-        }
+  query ListServices(
+    $filter: ModelServiceFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listServices(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        dentistId
+        name
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
     }
+  }
 `;
 export const getLocation = /* GraphQL */ `
-    query GetLocation($id: ID!) {
-        getLocation(id: $id) {
-            id
-            dentistId
-            city
-            address
-            postCode
-            createdAt
-            updatedAt
-            owner
-        }
+  query GetLocation($id: ID!) {
+    getLocation(id: $id) {
+      id
+      dentistId
+      city
+      address
+      postCode
+      createdAt
+      updatedAt
+      owner
     }
+  }
 `;
 export const listLocations = /* GraphQL */ `
-    query ListLocations(
-        $filter: ModelLocationFilterInput
-        $limit: Int
-        $nextToken: String
-    ) {
-        listLocations(filter: $filter, limit: $limit, nextToken: $nextToken) {
-            items {
-                id
-                dentistId
-                city
-                address
-                postCode
-                createdAt
-                updatedAt
-                owner
-            }
-            nextToken
-        }
+  query ListLocations(
+    $filter: ModelLocationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listLocations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        dentistId
+        city
+        address
+        postCode
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
     }
+  }
 `;
 export const getServiceForDental = /* GraphQL */ `
-    query GetServiceForDental($id: ID!) {
-        getServiceForDental(id: $id) {
-            id
-            name
-            createdAt
-            updatedAt
-            owner
-        }
+  query GetServiceForDental($id: ID!) {
+    getServiceForDental(id: $id) {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
     }
+  }
 `;
 export const listServiceForDentals = /* GraphQL */ `
-    query ListServiceForDentals(
-        $filter: ModelServiceForDentalFilterInput
-        $limit: Int
-        $nextToken: String
+  query ListServiceForDentals(
+    $filter: ModelServiceForDentalFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listServiceForDentals(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
     ) {
-        listServiceForDentals(
-            filter: $filter
-            limit: $limit
-            nextToken: $nextToken
-        ) {
-            items {
-                id
-                name
-                createdAt
-                updatedAt
-                owner
-            }
-            nextToken
-        }
+      items {
+        id
+        name
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
     }
+  }
 `;
 export const getPremiumFeatures = /* GraphQL */ `
-    query GetPremiumFeatures($id: ID!) {
-        getPremiumFeatures(id: $id) {
-            id
-            name
-            createdAt
-            updatedAt
-            owner
-        }
+  query GetPremiumFeatures($id: ID!) {
+    getPremiumFeatures(id: $id) {
+      id
+      name
+      createdAt
+      updatedAt
+      owner
     }
+  }
 `;
 export const listPremiumFeatures = /* GraphQL */ `
-    query ListPremiumFeatures(
-        $filter: ModelPremiumFeaturesFilterInput
-        $limit: Int
-        $nextToken: String
-    ) {
-        listPremiumFeatures(filter: $filter, limit: $limit, nextToken: $nextToken) {
-            items {
-                id
-                name
-                createdAt
-                updatedAt
-                owner
-            }
-            nextToken
-        }
+  query ListPremiumFeatures(
+    $filter: ModelPremiumFeaturesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPremiumFeatures(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
     }
+  }
 `;
 export const getWatermark = /* GraphQL */ `
-    query GetWatermark($id: ID!) {
-        getWatermark(id: $id) {
-            id
-            dentistId
-            lastModifiedDate
-            name
-            size
-            type
-            createdAt
-            updatedAt
-            owner
-        }
+  query GetWatermark($id: ID!) {
+    getWatermark(id: $id) {
+      id
+      dentistId
+      lastModifiedDate
+      name
+      size
+      type
+      createdAt
+      updatedAt
+      owner
     }
+  }
 `;
 export const listWatermarks = /* GraphQL */ `
-    query ListWatermarks(
-        $filter: ModelWatermarkFilterInput
-        $limit: Int
-        $nextToken: String
-    ) {
-        listWatermarks(filter: $filter, limit: $limit, nextToken: $nextToken) {
-            items {
-                id
-                dentistId
-                lastModifiedDate
-                name
-                size
-                type
-                createdAt
-                updatedAt
-                owner
-            }
-            nextToken
-        }
+  query ListWatermarks(
+    $filter: ModelWatermarkFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listWatermarks(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        dentistId
+        lastModifiedDate
+        name
+        size
+        type
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
     }
+  }
 `;
 export const getPremiumInformation = /* GraphQL */ `
-    query GetPremiumInformation($id: ID!) {
-        getPremiumInformation(id: $id) {
-            id
-            price
-            termsAndConditions
-            createdAt
-            updatedAt
-            owner
-        }
+  query GetPremiumInformation($id: ID!) {
+    getPremiumInformation(id: $id) {
+      id
+      price
+      termsAndConditions
+      createdAt
+      updatedAt
+      owner
     }
+  }
 `;
 export const listPremiumInformations = /* GraphQL */ `
-    query ListPremiumInformations(
-        $filter: ModelPremiumInformationFilterInput
-        $limit: Int
-        $nextToken: String
+  query ListPremiumInformations(
+    $filter: ModelPremiumInformationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPremiumInformations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
     ) {
-        listPremiumInformations(
-            filter: $filter
-            limit: $limit
-            nextToken: $nextToken
-        ) {
-            items {
-                id
-                price
-                termsAndConditions
-                createdAt
-                updatedAt
-                owner
-            }
-            nextToken
-        }
+      items {
+        id
+        price
+        termsAndConditions
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
     }
+  }
 `;
 export const getImage = /* GraphQL */ `
-    query GetImage($id: ID!) {
-        getImage(id: $id) {
-            id
-            dentistId
-            titleBefore
-            tagsBefore
-            titleAfter
-            tagsAfter
-            service
-            nameBefore
-            nameAfter
-            createdAt
-            updatedAt
-            owner
-        }
+  query GetImage($id: ID!) {
+    getImage(id: $id) {
+      id
+      dentistId
+      titleBefore
+      tagsBefore
+      titleAfter
+      tagsAfter
+      service
+      nameBefore
+      nameAfter
+      createdAt
+      updatedAt
+      owner
     }
+  }
 `;
 export const listImages = /* GraphQL */ `
-    query ListImages(
-        $filter: ModelImageFilterInput
-        $limit: Int
-        $nextToken: String
-    ) {
-        listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
-            items {
-                id
-                dentistId
-                titleBefore
-                tagsBefore
-                titleAfter
-                tagsAfter
-                service
-                nameBefore
-                nameAfter
-                createdAt
-                updatedAt
-                owner
-            }
-            nextToken
-        }
+  query ListImages(
+    $filter: ModelImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        dentistId
+        titleBefore
+        tagsBefore
+        titleAfter
+        tagsAfter
+        service
+        nameBefore
+        nameAfter
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
     }
+  }
 `;
 export const getAdminSettingsSubscriber = /* GraphQL */ `
-    query GetAdminSettingsSubscriber($id: ID!) {
-        getAdminSettingsSubscriber(id: $id) {
-            id
-            paidMaxLocations
-            paidMaxServices
-            paidWebsiteAddress
-            paidPhoneNumber
-            paidAppearVerified
-            freeMaxLocations
-            freeMaxServices
-            freeWebsiteAddress
-            freePhoneNumber
-            freeAppearVerified
-            createdAt
-            updatedAt
-        }
+  query GetAdminSettingsSubscriber($id: ID!) {
+    getAdminSettingsSubscriber(id: $id) {
+      id
+      paidMaxLocations
+      paidMaxServices
+      paidWebsiteAddress
+      paidPhoneNumber
+      paidAppearVerified
+      freeMaxLocations
+      freeMaxServices
+      freeWebsiteAddress
+      freePhoneNumber
+      freeAppearVerified
+      createdAt
+      updatedAt
     }
+  }
 `;
 export const listAdminSettingsSubscribers = /* GraphQL */ `
-    query ListAdminSettingsSubscribers(
-        $filter: ModelAdminSettingsSubscriberFilterInput
-        $limit: Int
-        $nextToken: String
+  query ListAdminSettingsSubscribers(
+    $filter: ModelAdminSettingsSubscriberFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAdminSettingsSubscribers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
     ) {
-        listAdminSettingsSubscribers(
-            filter: $filter
-            limit: $limit
-            nextToken: $nextToken
-        ) {
-            items {
-                id
-                paidMaxLocations
-                paidMaxServices
-                paidWebsiteAddress
-                paidPhoneNumber
-                paidAppearVerified
-                freeMaxLocations
-                freeMaxServices
-                freeWebsiteAddress
-                freePhoneNumber
-                freeAppearVerified
-                createdAt
-                updatedAt
-            }
-            nextToken
-        }
+      items {
+        id
+        paidMaxLocations
+        paidMaxServices
+        paidWebsiteAddress
+        paidPhoneNumber
+        paidAppearVerified
+        freeMaxLocations
+        freeMaxServices
+        freeWebsiteAddress
+        freePhoneNumber
+        freeAppearVerified
+        createdAt
+        updatedAt
+      }
+      nextToken
     }
+  }
 `;
 export const getClosedAccount = /* GraphQL */ `
-    query GetClosedAccount($id: ID!) {
-        getClosedAccount(id: $id) {
-            id
-            dentistId
-            closedAccount
-            createdAt
-            updatedAt
-            owner
-        }
+  query GetClosedAccount($id: ID!) {
+    getClosedAccount(id: $id) {
+      id
+      dentistId
+      closedAccount
+      createdAt
+      updatedAt
+      owner
     }
+  }
 `;
 export const listClosedAccounts = /* GraphQL */ `
-    query ListClosedAccounts(
-        $filter: ModelclosedAccountFilterInput
-        $limit: Int
-        $nextToken: String
-    ) {
-        listClosedAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
-            items {
-                id
-                dentistId
-                closedAccount
-                createdAt
-                updatedAt
-                owner
-            }
-            nextToken
-        }
+  query ListClosedAccounts(
+    $filter: ModelclosedAccountFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listClosedAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        dentistId
+        closedAccount
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
     }
+  }
 `;
 export const getClosedSubscription = /* GraphQL */ `
-    query GetClosedSubscription($id: ID!) {
-        getClosedSubscription(id: $id) {
-            id
-            dentistId
-            closedSubscription
-            createdAt
-            updatedAt
-            owner
-        }
+  query GetClosedSubscription($id: ID!) {
+    getClosedSubscription(id: $id) {
+      id
+      dentistId
+      closedSubscription
+      createdAt
+      updatedAt
+      owner
     }
+  }
 `;
 export const listClosedSubscriptions = /* GraphQL */ `
-    query ListClosedSubscriptions(
-        $filter: ModelclosedSubscriptionFilterInput
-        $limit: Int
-        $nextToken: String
+  query ListClosedSubscriptions(
+    $filter: ModelclosedSubscriptionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listClosedSubscriptions(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
     ) {
-        listClosedSubscriptions(
-            filter: $filter
-            limit: $limit
-            nextToken: $nextToken
-        ) {
-            items {
-                id
-                dentistId
-                closedSubscription
-                createdAt
-                updatedAt
-                owner
-            }
-            nextToken
-        }
+      items {
+        id
+        dentistId
+        closedSubscription
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
     }
+  }
 `;

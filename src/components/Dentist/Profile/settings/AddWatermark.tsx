@@ -142,12 +142,14 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
 
   return (
     <>
-      <div className='mt-30'>
+      <div>
         <p className='form-profile-label'>
           <label className='form-profile-label'>Cover</label>
         </p>
         <p className='profile-photo-box'>
-          {currentCover ? <img className='image' src={currentCover} alt='' /> :
+          {currentCover ? 
+            <img className='image' src={currentCover} alt='' /> 
+            :
             <div className='image' id='exp' />}
         </p>
         { currentDentist.hasPaidPlan && <p className='row-content'>

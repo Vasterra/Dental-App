@@ -122,7 +122,7 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
                   <span><strong>Email: </strong>{currentDentist.email}</span><br />
                   <span> 
                     <strong>Website: </strong>
-                    <Link href={`../../redirect?website=${currentDentist.website}`} target='_blank'>
+                    <Link href={`../../dentist/redirect/${currentDentist.website}`} target='_blank'>
                       {currentDentist.website}
                     </Link>
                   </span>

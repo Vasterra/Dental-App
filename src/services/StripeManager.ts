@@ -1,40 +1,48 @@
 import { API, Auth } from 'aws-amplify';
-import { IStripeCustomer } from '../interfaces/IStripeCustomer';
 import { IStripeSubscription } from '../interfaces/IStripeSubscription';
 
 class StripeManager {
+
   public static async createCustomer(dentist: any) {
     try {
-      // Retrieve email and username of the currently logged in user.
-      // getUserFromDB() is *your* implemention of getting user info from the DB
-      const {email, id}: any = dentist
-      if (!email || !id) {
+      const {email, firstName}: any = dentist
+      if (!email || !firstName) {
         throw Error('Email or username not found.');
       }
-      const request = await fetch('https://zg3a9iraq4.execute-api.eu-west-1.amazonaws.com/dev/createCustomer', {
+      const request: any = await fetch('https://520q135djd.execute-api.eu-west-1.amazonaws.com/dev/createCustomerStripe-dev', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           email,
-          username: id,
+          username: firstName,
         }),
       });
-      const customer = (await request.json()) as IStripeCustomer;
-      // Update your user in DB to store the customerID
-      // updateUserInDB() is *your* implementation of updating a user in the DB
-      return customer;
-    } catch (error: any) {
-      console.log('Failed to create customer');
+      return await request.json();
+      // const apiName = 'createCustomerStripe'
+      // const apiEndpoint = '/createCustomerStripe'
+      //
+      // const myInit = {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     email,
+      //     username: id,
+      //   }),
+      // };
+      // const request = await API.post(apiName, apiEndpoint, myInit)
+      // return request;
+    } catch (error) {
       console.log(error);
-      return null;
     }
   }
 
   public static async getStripeCustomerID(dentist: any) {
     // Retrieve the current customerID from the currently logged in user
     // getUserFromDB() is *your* implemention of getting user info from the DB
+    console.log(dentist);
     const {customerID}: any = dentist;
     if (!customerID) {
       const customer = await this.createCustomer(dentist);
@@ -44,32 +52,41 @@ class StripeManager {
     return customerID;
   }
 
-  public static async createSubscription(customerID: string, paymentMethodID: string) {
-    const request = await fetch('https://ix6z48vs8l.execute-api.eu-west-1.amazonaws.com/dev/createSubscription', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        customerID,
+  public static async createSubscription(customerID: string, paymentMethodID: string, price: string) {
+    try {
+      if (!customerID || !paymentMethodID || !price) {
+        throw Error('Email or username not found.');
+      }
+
+      const request: any = await fetch('https://biucjonez5.execute-api.eu-west-1.amazonaws.com/dev/createSubscriptionStripe-dev', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          price,
+          customerID,
+          paymentMethodID,
+        }),
+      });
+      const subscription = await request.json() as IStripeSubscription;
+      if (subscription.status !== 'active') {
+        throw Error('Unable to upgrade. Please try again');
+      }
+      if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
+        throw Error('You credit card was declined. Please try again with another card.');
+      }
+      // Update your user in DB to store the subscriptionID and enable paid plan
+      // updateUserInDB() is *your* implementation of updating a user in the DB
+      return {
+        // @ts-ignore
         paymentMethodID,
-      }),
-    });
-    const subscription = await request.json() as IStripeSubscription;
-    if (subscription.status !== 'active') {
-      throw Error('Unable to upgrade. Please try again');
+        hasPaidPlan: true,
+        subscription,
+      };
+    } catch (error) {
+      console.log(error);
     }
-    if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
-      throw Error('You credit card was declined. Please try again with another card.');
-    }
-    // Update your user in DB to store the subscriptionID and enable paid plan
-    // updateUserInDB() is *your* implementation of updating a user in the DB
-    return {
-      // @ts-ignore
-      paymentMethodID,
-      hasPaidPlan: true,
-      subscription,
-    };
   }
 
   public static async handleSubscription(subscriptionID: string, end: boolean) {
@@ -99,21 +116,25 @@ class StripeManager {
     return await request.json() as IStripeSubscription;
   }
 
-  public static async retrieveCoupon(coupon: string) {
+  public static async listCoupons() {
       try {
-        const apiName = 'retrieveCoupon'
-        const apiEndpoint = '/retrieveCoupon-dev/coupon'
-
-        const myInit = {
-           headers: {
-             'Content-Type': 'application/json',
-           },
-          body: {
-            coupon: coupon
-          }
-        };
-
-        return await API.post(apiName, apiEndpoint, myInit)
+        const request: any = await fetch('https://wglfi0jeq3.execute-api.eu-west-1.amazonaws.com/dev/getListCoupons-dev', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+        });
+        return await request.json();
+        // const apiName = 'getListCoupons'
+        // const apiEndpoint = '/getListCoupons'
+        //
+        // const myInit = {
+        //    headers: {
+        //      'Content-Type': 'application/json',
+        //    },
+        // };
+        // const coupons = await API.post(apiName, apiEndpoint, myInit)
+        // return coupons.coupons.data
       } catch (error) {
         console.log(error);
       }

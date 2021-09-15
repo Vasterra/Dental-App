@@ -47,7 +47,12 @@ const CardDentistComponent: React.FunctionComponent<Props> = ({ dentist, setCurr
           <div className='index-gallery-image-description'>
             <p className='index-gallery-image-title'>{'Dr. ' + fullName}</p>
             {/* <p className='index-gallery-image-text'>{dentist.email}</p> */}
-            <p className='index-gallery-image-text'>{dentist.qualifications}</p>
+            <p className='index-gallery-image-text'>
+              {dentist.qualifications.length >= 80 ?
+                dentist.qualifications.substring(0,80) + '...' : 
+                dentist.qualifications
+              }
+            </p>
           </div>
       </Link>
     </div>
