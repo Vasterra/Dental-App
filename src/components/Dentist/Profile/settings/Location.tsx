@@ -217,16 +217,6 @@ const Location: React.FunctionComponent<Props> = ({
                     }) => (
                     <form onSubmit={handleSubmit} style={{ width: '100%' }}>
                       <p className='row-content'>
-                        <span className='input-span'>Town/City</span>
-                        <input className='form-profile-input'
-                               name='city'
-                               placeholder='Cambridge'
-                               onChange={handleChange}
-                               onBlur={handleBlur}
-                               value={values.city === null ? values.city = '' : values.city}
-                        />
-                      </p>
-                      <p className='row-content'>
                         <span className='input-span'>Address</span>
                         <input className='form-profile-input'
                                name='address'
@@ -234,6 +224,16 @@ const Location: React.FunctionComponent<Props> = ({
                                onChange={handleChange}
                                onBlur={handleBlur}
                                value={values.address === null ? values.address = '' : values.address}
+                        />
+                      </p>
+                      <p className='row-content'>
+                        <span className='input-span'>Town/City</span>
+                        <input className='form-profile-input'
+                               name='city'
+                               placeholder='Cambridge'
+                               onChange={handleChange}
+                               onBlur={handleBlur}
+                               value={values.city === null ? values.city = '' : values.city}
                         />
                       </p>
                       <p className='row-content'>
