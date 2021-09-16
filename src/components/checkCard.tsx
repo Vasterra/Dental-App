@@ -140,17 +140,24 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
   const stripeTokenHandler = async(token: any)=>{
     const amount = 2000
     const currency = 'GBP'
+    const tokenId = token.id
+    const lambdaUrl = 'https://e7s00eoc0l.execute-api.eu-west-1.amazonaws.com/dev/createChargesStripe-dev'
+    const lambdaKey = 'mJ5fEJy7Lj2rW7nORsuoN7J1nPc4QRh02lFwJTSX'
+    const bodyParams = {
+        "price": amount,
+        "currency": currency,
+        "token": tokenId
+    }
     try {
-      const response = await fetch('https://api.stripe.com/v1/charges', {
+      const response = await fetch(lambdaUrl, {
         method: 'POST',
         headers: new Headers({
-            'Authorization': `Bearer  ${SECRET_KEY_STRIPE_API}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
+          'x-api-key': lambdaKey
         }),
-        body: `amount=${amount}&currency=${currency}&source=${token.id}`
-    });
+        body: JSON.stringify(bodyParams)
+        });
       const chargeResponse = await response.json();
-      console.log(chargeResponse)
+      console.log('chargeResponse', chargeResponse)
       if(chargeResponse?.error?.message){
         setMessageSnackbar(chargeResponse.error.message)
         setSeverity('error')
@@ -166,16 +173,21 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
   }
 
   const stripeRefunder = async(chargeId: string)=>{
+    const lambdaUrl = 'https://a3h4ezkt39.execute-api.eu-west-1.amazonaws.com/dev/createRefundsStripe-dev'
+    const lambdaKey = 'mJ5fEJy7Lj2rW7nORsuoN7J1nPc4QRh02lFwJTSX'
+    const bodyParams = {
+      "chargeId": chargeId,
+    }
     try {
-      const response = await fetch('https://api.stripe.com/v1/refunds', {
+      const response = await fetch(lambdaUrl, {
         method: 'POST',
         headers: new Headers({
-            'Authorization': `Bearer  ${SECRET_KEY_STRIPE_API}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
+          'x-api-key': lambdaKey,
         }),
-        body: `charge=${chargeId}`
+        body: JSON.stringify(bodyParams)
     });
       const res =  await response.json();
+      console.log('refundResponse', res)
       if(res?.error?.message){
         setMessageSnackbar(res.error.message)
         setSeverity('error')

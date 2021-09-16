@@ -103,6 +103,34 @@
         }
       ]
     },
+    "retrieveCoupon": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "retrieveCoupon",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    },
+    "getListCoupons": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "getListCoupons",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    },
     "createCustomerStripe": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
@@ -117,13 +145,13 @@
         }
       ]
     },
-    "retrieveCoupon": {
+    "createSubscriptionStripe": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "retrieveCoupon",
+          "resourceName": "createSubscriptionStripe",
           "attributes": [
             "Name",
             "Arn"
@@ -183,12 +211,12 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "retrieveCouponStripe": {
+    "retrieveCoupon": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "retrieveCoupon": {
+    "getListCoupons": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"

@@ -56,6 +56,7 @@ type Props = {
   adminSettingSubscriber: any,
   setMessageSnackbar: any,
   setOpenSnackbar: any,
+  handleChangeAddress: any,
   setSeverity: any,
 }
 
@@ -65,6 +66,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
    setMessageSnackbar,
    setOpenSnackbar,
    setSeverity,
+   handleChangeAddress,
    setUserName
   }) => {
 
@@ -99,8 +101,9 @@ const AddSettings: React.FunctionComponent<Props> = ({
         {currentDentist &&
         <Formik
           onSubmit={async (data: any) => {
+            console.log('data', data.address.length);
             setLoaderButtonSubmit(true);
-            await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
+            await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address.length === 0 ? 'Cambridge' : data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
             .then(response => response.json())
             .then(async (result) => {
               data.lng = result.results[0].geometry.location.lng;
@@ -111,7 +114,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                 'email': data.email
               });
               setUserName(data.firstName);
-              console.log(data);
+              handleChangeAddress(data.address)
               try {
                 await API.graphql({
                   query: updateDentist,
@@ -205,9 +208,10 @@ const AddSettings: React.FunctionComponent<Props> = ({
                       <FacebookCircularProgress /> : 'Confirm'}</button>
                   </p>}
                 </div>
-                {adminSettingSubscriber && !currentDentist.hasPaidPlan && <div className='profile-block-box'>
-                  <div
-                    className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidWebsiteAddress : adminSettingSubscriber.freeWebsiteAddress ? '' : 'disabled'}>
+                <div className='profile-block-box'>
+                  {adminSettingSubscriber && !currentDentist.hasPaidPlan &&
+                  <div>
+                    <div className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidWebsiteAddress : adminSettingSubscriber.freeWebsiteAddress ? '' : 'disabled'}>
                     <p className='form-profile-label'>
                       <label className='form-profile-label' htmlFor='website'>Website Address - Premium</label>
                     </p>
@@ -222,8 +226,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                       />
                     </p>
                   </div>
-                  <div
-                    className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidPhoneNumber : adminSettingSubscriber.freePhoneNumber ? '' : 'disabled'}>
+                    <div className={currentDentist.hasPaidPlan ? adminSettingSubscriber.paidPhoneNumber : adminSettingSubscriber.freePhoneNumber ? '' : 'disabled'}>
                     <p className='form-profile-label'>
                       <label className='form-profile-label' htmlFor='phone'>Phone - Premium</label>
                     </p>
@@ -238,34 +241,39 @@ const AddSettings: React.FunctionComponent<Props> = ({
                       />
                     </p>
                   </div>
-                </div>}
-                {currentDentist.hasPaidPlan && <div className='profile-block-box'>
-                  <DentistProfileInput
-                    title='Website Address'
-                    name='website'
-                    placeholder='dental.co.uk'
-                    setValue={props.values.website}
-                    props={props}
-                  />
-                  <DentistProfileInput
-                    title='Phone'
-                    name='phone'
-                    placeholder='0203 123 4567'
-                    setValue={props.values.phone}
-                    props={props}
-                  />
+                    </div>}
+                   {currentDentist.hasPaidPlan &&
+                   <div>
+                     <DentistProfileInput
+                      title='Website Address'
+                      name='website'
+                      placeholder='dental.co.uk'
+                      setValue={props.values.website}
+                      props={props}
+                    />
+                    <DentistProfileInput
+                      title='Phone'
+                      name='phone'
+                      placeholder='0203 123 4567'
+                      setValue={props.values.phone}
+                      props={props}
+                    />
+
+                   </div>}
                   <DentistProfileInput
                     title='Address'
                     name='address'
-                    placeholder='London'
+                    placeholder='Address/Town/Post Code'
                     setValue={props.values.address}
                     props={props}
                   />
-                  <p className='form-login-buttons'>
-                    <button className='button-green' type='submit'>{loaderButtonSubmit ?
-                      <FacebookCircularProgress /> : 'Confirm'}</button>
-                  </p>
-                </div>}
+                  {currentDentist.hasPaidPlan &&
+                    <p className='form-login-buttons'>
+                      <button className='button-green' type='submit'>{loaderButtonSubmit ?
+                        <FacebookCircularProgress /> : 'Confirm'}</button>
+                    </p>
+                  }
+                </div>
               </div>
             </form>
           )}

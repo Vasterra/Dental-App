@@ -70,6 +70,7 @@ type Props = {
   setOpenSnackbar: any,
   setMessageSnackbar: any,
   setSeverity: any,
+  changeAddress: any,
 }
 
 const Location: React.FunctionComponent<Props> = ({
@@ -77,6 +78,7 @@ const Location: React.FunctionComponent<Props> = ({
                                                     adminSettingSubscriber,
                                                     setOpenSnackbar,
                                                     setMessageSnackbar,
+                                                    changeAddress,
                                                     setSeverity
                                                   }) => {
 
@@ -217,16 +219,6 @@ const Location: React.FunctionComponent<Props> = ({
                     }) => (
                     <form onSubmit={handleSubmit} style={{ width: '100%' }}>
                       <p className='row-content'>
-                        <span className='input-span'>Town/City</span>
-                        <input className='form-profile-input'
-                               name='city'
-                               placeholder='Cambridge'
-                               onChange={handleChange}
-                               onBlur={handleBlur}
-                               value={values.city === null ? values.city = '' : values.city}
-                        />
-                      </p>
-                      <p className='row-content'>
                         <span className='input-span'>Address</span>
                         <input className='form-profile-input'
                                name='address'
@@ -234,6 +226,16 @@ const Location: React.FunctionComponent<Props> = ({
                                onChange={handleChange}
                                onBlur={handleBlur}
                                value={values.address === null ? values.address = '' : values.address}
+                        />
+                      </p>
+                      <p className='row-content'>
+                        <span className='input-span'>Town/City</span>
+                        <input className='form-profile-input'
+                               name='city'
+                               placeholder='Cambridge'
+                               onChange={handleChange}
+                               onBlur={handleBlur}
+                               value={values.city === null ? values.city = '' : values.city}
                         />
                       </p>
                       <p className='row-content'>
@@ -332,11 +334,12 @@ const Location: React.FunctionComponent<Props> = ({
                   <label className='form-profile-label'>Additional Locations</label>
                 </p>
                 {currentDentist && currentDentist.locations.items.map((el: any, key: any) => {
+                  const address = `${el.address} ${el.city} ${el.postCode}`
                   return (
                     <FormLoginInput>
                       <input
                         type='text'
-                        value={`${el.city} ${el.address} ${el.postCode}`}
+                        value={address === null ? '' : address}
                       />
                       <IconUpdate src='../../../images/edit.svg' alt='edit'
                                   onClick={() => setUpdateDateLocation(el)} />
@@ -354,21 +357,13 @@ const Location: React.FunctionComponent<Props> = ({
               <p className='form-profile-label'>
                 <label className='form-profile-label'>Locations</label>
               </p>
-              {
-                adminSettingSubscriber && currentDentist.locations.items.map((el: any, key: any) => {
-                  if (key < Number(currentDentist.hasPaidPlan ? adminSettingSubscriber.paidMaxLocations : adminSettingSubscriber.freeMaxLocations)) {
-                    return (
-                      <FormLoginInput>
-                        <input
-                          type='text'
-                          disabled={!currentDentist.hasPaidPla}
-                          value={`${el.city} ${el.address} ${el.postCode}`}
-                        />
-                      </FormLoginInput>
-                    );
-                  }
-                })
-              }
+                <FormLoginInput>
+                  <input
+                    type='text'
+                    disabled={!currentDentist.hasPaidPla}
+                    value={`${changeAddress !== null ? changeAddress : currentDentist.address}`}
+                  />
+                </FormLoginInput>
             </div>
           </div>}
         </div>
