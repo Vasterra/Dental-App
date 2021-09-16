@@ -666,7 +666,7 @@ const GalleryPage = ({ dentist }: any) => {
                                 updateService={updateService} />}
                       {/*<img className='gallery-select-arrow' src='../../../public/images/down-select.png'*/}
                       {/*     alt='select' />*/}
-                      <p className='checkbox' style={{marginBottom: 20}}>
+                      <p className='checkbox'>
                         <input type='checkbox' name='delete' id='delete'
                                checked={check}
                                onChange={checkHandler} />
