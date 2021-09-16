@@ -254,10 +254,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                       setValue={props.values.phone}
                       props={props}
                     />
-                    <p className='form-login-buttons'>
-                      <button className='button-green' type='submit'>{loaderButtonSubmit ?
-                        <FacebookCircularProgress /> : 'Confirm'}</button>
-                    </p>
+
                    </div>}
 
                   <DentistProfileInput
@@ -267,6 +264,12 @@ const AddSettings: React.FunctionComponent<Props> = ({
                     setValue={props.values.address}
                     props={props}
                   />
+                  {currentDentist.hasPaidPlan &&
+                    <p className='form-login-buttons'>
+                      <button className='button-green' type='submit'>{loaderButtonSubmit ?
+                        <FacebookCircularProgress /> : 'Confirm'}</button>
+                    </p>
+                  }
                 </div>
               </div>
             </form>
