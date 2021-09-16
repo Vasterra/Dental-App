@@ -25,6 +25,7 @@ type Props = {
   services: any,
   images: any,
   oldIMages: any,
+  adminSettingSubscriber: any,
   currentCover: any,
   setImages: Function,
   downloadImages: Function,
@@ -32,6 +33,7 @@ type Props = {
 
 const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
     currentCover,
+    adminSettingSubscriber,
     currentDentist,
     oldIMages,
     images,
@@ -40,7 +42,6 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
     setImages,
     downloadImages
   }) => {
-  const [adminSettingSubscriber, setAdminSettingSubscriber] = useState<IAdminSettingsSubscribers | any>();
   const [notFound, setNotFound] = useState(false);
 
 
@@ -48,7 +49,6 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
   useEffect(() => {
     const canvas: any = document.getElementById('canvas');
     void QRCode.toCanvas(canvas, window.location.href);
-    void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
   }, []);
 
   const downloadQRCode = () => {
@@ -65,7 +65,6 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null);
     if (e.target.value === 'All Service') {
-      console.log(e.target.value, 'All Service')
       return downloadImages();
     }else{
       const filterImages = oldIMages.filter((slider: any)=>{
@@ -78,11 +77,6 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
   };
 
   const fullName = firstName + ' ' + lastName;
-
-  const getAdminSettingSubscriber = () => {
-    return ApiManager.GET_ADMIN_SETTINGS_SUBSCRIBER();
-  };
-
   return (
     <>
       {!currentDentist && <WrapperFlex><CircularProgress size={120} /></WrapperFlex>}
@@ -118,14 +112,18 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
                 </p>
                 <p>Contact </p>
                 <p>
-                  <span><strong>Phone: </strong>{currentDentist.phone}</span><br />
+                  { adminSettingSubscriber && adminSettingSubscriber.paidPhoneNumber && <><span><strong>Phone: </strong>{currentDentist.phone}</span><br /></> }
                   <span><strong>Email: </strong>{currentDentist.email}</span><br />
-                  <span> 
-                    <strong>Website: </strong>
-                    <Link href={`../../dentist/redirect/${currentDentist.website}`} target='_blank'>
-                      {currentDentist.website}
-                    </Link>
-                  </span>
+                  { adminSettingSubscriber && adminSettingSubscriber.paidWebsiteAddress &&
+                    <>
+                      <span>
+                        <strong>Website: </strong>
+                        <Link href={`../../dentist/redirect/${currentDentist.website}`} target='_blank'>
+                          {currentDentist.website}
+                        </Link>
+                      </span>
+                    </>
+                  }
                 </p>
                 <p>Locations</p>
                 <div className='flex-wrapper'>

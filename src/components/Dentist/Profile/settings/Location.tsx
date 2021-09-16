@@ -124,14 +124,14 @@ const Location: React.FunctionComponent<Props> = ({
 
   const handleSubmit = async (data: any, form: any) => {
     setLoaderButtonSubmit(true);
-    if (currentDentist.locations.items.length === Number(adminSettingSubscriber.freeMaxLocations)) {
+    if (currentDentist.locations.items.length >= Number(adminSettingSubscriber.freeMaxLocations)) {
       setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxLocations} locations.`);
       setSeverity('warning');
       setOpenSnackbar(true);
       setLoaderButtonSubmit(false);
       return false;
     }
-    if (currentDentist.locations.items.length === Number(adminSettingSubscriber.paidMaxLocations)) {
+    if (currentDentist.locations.items.length >= Number(adminSettingSubscriber.paidMaxLocations)) {
       setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.paidMaxLocations} locations.`);
       setSeverity('warning');
       setOpenSnackbar(true);

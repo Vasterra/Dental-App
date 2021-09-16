@@ -1,4 +1,4 @@
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Link } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import GalleryPerson from 'src/components/Gallery/GalleryPerson';
 import { WrapperFlex } from 'src/styles/Main.module';
@@ -25,10 +25,12 @@ type Props = {
   oldIMages: any,
   setImages: any,
   downloadImages: any,
+  adminSettingSubscriber: any,
 }
 
 const ProfileAccountFree: React.FunctionComponent<Props> = ({
     currentDentist,
+    adminSettingSubscriber,
     oldIMages,
     images,
     currentAvatar,
@@ -36,14 +38,11 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
     setImages,
     downloadImages
   }) => {
-  const [adminSettingSubscriber, setAdminSettingSubscriber] = useState<IAdminSettingsSubscribers | any>();
   const [notFound, setNotFound] = useState<boolean>(false);
 
   useEffect(() => {
     const canvas: any = document.getElementById('canvas');
     void QRCode.toCanvas(canvas, window.location.href);
-    void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
-
   }, []);
 
   const downloadQRCode = () => {
@@ -84,9 +83,6 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
   };
 
   const fullName = `${currentDentist.firstName ? currentDentist.firstName : ''} ${currentDentist.lastName ? currentDentist.lastName : ''}`;
-  const getAdminSettingSubscriber = () => {
-    return ApiManager.GET_ADMIN_SETTINGS_SUBSCRIBER();
-  };
 
   return (
     <>
@@ -122,7 +118,18 @@ const ProfileAccountFree: React.FunctionComponent<Props> = ({
                 </p>
                 <p>Contact </p>
                 <p>
-                  <span><strong>Email: </strong>{currentDentist.email}</span>
+                  { adminSettingSubscriber && adminSettingSubscriber.freePhoneNumber && <><span><strong>Phone: </strong>{currentDentist.phone}</span><br /></> }
+                  <span><strong>Email: </strong>{currentDentist.email}</span><br />
+                  { adminSettingSubscriber && adminSettingSubscriber.freeWebsiteAddress &&
+                  <>
+                      <span>
+                        <strong>Website: </strong>
+                        <Link href={`../../dentist/redirect/${currentDentist.website}`} target='_blank'>
+                          {currentDentist.website}
+                        </Link>
+                      </span>
+                  </>
+                  }
                 </p>
                 <p>Locations</p>
                 <div className='flex-wrapper'>

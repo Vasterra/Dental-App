@@ -73,8 +73,7 @@ const Profile = ({ dentist }: any) => {
     files.preventDefault();
     try {
       const file = files.target.files[0];
-      const filename = file.name.split('.');
-      await Storage.put('avatars/' + currentDentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
+      await Storage.put('avatars/' + currentDentist.id + '/' + 'avatar.jpg', file, {
         level: 'public',
         contentType: 'image/png'
       }).then(async (result: any) => {

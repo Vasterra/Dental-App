@@ -56,32 +56,36 @@ class StripeManager {
     console.log(price);
     try {
       if (!customerID || !paymentMethodID || !price) {
-        throw Error('Email or username not found.');
+        return {
+          messageError: 'customerID or paymentMethodID or price not found.'
+        };
       }
 
-      const request: any = await fetch('https://biucjonez5.execute-api.eu-west-1.amazonaws.com/dev/createSubscriptionStripe-dev', {
+      const request: any = await fetch('https://ddt7utsns7.execute-api.eu-west-1.amazonaws.com/dev/createSubscriptionStripe-dev', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          price,
-          customerID,
-          paymentMethodID,
+          body: JSON.stringify({
+            price,
+            customerID,
+            paymentMethodID,
         }),
       });
       const subscription = await request.json() as IStripeSubscription;
-      console.log(subscription);
-      // if (subscription.status !== 'active') {
-      //   throw Error('Unable to upgrade. Please try again');
-      // }
-      // if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
-      //   throw Error('You credit card was declined. Please try again with another card.');
-      // }
-      // Update your user in DB to store the subscriptionID and enable paid plan
-      // updateUserInDB() is *your* implementation of updating a user in the DB
+      console.log('subscription',subscription );
+      if (subscription.status !== 'active') {
+        return {
+          messageError: 'Unable to upgrade. Please try again'
+        };
+      }
+      if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
+        return {
+          messageError: 'You credit card was declined. Please try again with another card.'
+        };
+      }
+
       return {
-        // @ts-ignore
         paymentMethodID,
         hasPaidPlan: true,
         subscription,
