@@ -71,7 +71,6 @@ const Services: React.FunctionComponent<Props> = ({
   };
 
   const addService = async () => {
-    console.log(adminSettingSubscriber);
     const filterService: boolean[] = [];
     if (serviceName && currentDentist) {
       currentDentist.services.items.map((item: any) => {
@@ -80,16 +79,15 @@ const Services: React.FunctionComponent<Props> = ({
         }
       });
     }
-
     if (!currentDentist.hasPaidPlan) {
-      if (currentDentist.services.items.length === Number(adminSettingSubscriber.freeMaxServices)) {
+      if (currentDentist.services.items.length >= Number(adminSettingSubscriber.freeMaxServices)) {
         setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxServices} services.`);
         setSeverity('warning');
         setOpenSnackbar(true);
         return false;
       }
     } else {
-      if ( currentDentist.services.items.length === Number(adminSettingSubscriber.paidMaxServices)) {
+      if ( currentDentist.services.items.length >= Number(adminSettingSubscriber.paidMaxServices)) {
         setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.paidMaxServices} services.`);
         setSeverity('warning');
         setOpenSnackbar(true);
