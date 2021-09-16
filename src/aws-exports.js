@@ -37,6 +37,31 @@ const awsmobile = {
             "name": "createRefundsStripe",
             "endpoint": "https://qyzna8thpl.execute-api.eu-west-1.amazonaws.com/dev",
             "region": "eu-west-1"
+        },
+        {
+            "name": "createSubscription",
+            "endpoint": "https://ix6z48vs8l.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
+        },
+        {
+            "name": "retrieveCoupon",
+            "endpoint": "https://33acnypbic.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
+        },
+        {
+            "name": "getListCoupons",
+            "endpoint": "https://f4nt0ls9z9.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
+        },
+        {
+            "name": "createCustomerStripe",
+            "endpoint": "https://zg3a9iraq4.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
+        },
+        {
+            "name": "createSubscriptionStripe",
+            "endpoint": "https://rfh7o5gxj8.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
         }
     ],
     "aws_user_files_s3_bucket": "dentalappa96d899392f047399e3b2994b40025aa180254-dev",

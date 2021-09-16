@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "createCustomerStripe",
+            "getListCoupons",
             {
               "Fn::Join": [
                 "",
                 [
-                  "createCustomerStripe",
+                  "getListCoupons",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "dentalappLambdaRole8a0a9f43",
+            "dentalappLambdaRoled2cc4241",
             {
               "Fn::Join": [
                 "",
                 [
-                  "dentalappLambdaRole8a0a9f43",
+                  "dentalappLambdaRoled2cc4241",
                   "-",
                   {
                     "Ref": "env"
