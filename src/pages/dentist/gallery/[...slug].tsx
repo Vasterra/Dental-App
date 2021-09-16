@@ -46,18 +46,15 @@ const GalleryPage = ({ dentist }: any) => {
   const [check, setCheck]: any = useState();
   const [checkFilesLeft, setCheckFilesLeft]: any = useState();
   const [checkFilesRight, setCheckFilesRight]: any = useState();
-  const [messageSnackBar, setMessageSnackBar]: any = useState();
-  const [statusSnackBar, setStatusSnackBar]: any = useState();
   const [showUloadGallery, setShowUloadGallery]: any = useState();
-  const [openSnackBar, setOpenSnackBar]: any = useState();
   const [updateImgEvent, setUpdateImgEvent]: any = useState();
   const [searchValue, setSearchValue]: any = useState();
   const [currentWatermark, setCurrentWatermark] = useState<any>();
   const [showServicesPanel, setShowServicesPanel] = useState<boolean>(true);
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [messageSnackbar, setMessageSnackbar] = useState('');
-  const [severity, setSeverity] = useState('');
+  const [openSnackBar, setOpenSnackBar]: any = useState();
+  const [messageSnackBar, setMessageSnackBar]: any = useState();
+  const [statusSnackBar, setStatusSnackBar]: any = useState();
 
   useEffect(() => {
     if (router.query.slug !== undefined) {
@@ -113,7 +110,7 @@ const GalleryPage = ({ dentist }: any) => {
     if (reason === 'clickaway') {
       return;
     }
-    setOpenSnackbar(false);
+    setOpenSnackBar(false);
   };
 
   const getListImages = async () => {
@@ -139,9 +136,9 @@ const GalleryPage = ({ dentist }: any) => {
   };
 
   const saveCrop = (value: any, anchor: any) => {
-    setMessageSnackbar('Save crop successfully!');
-    setSeverity('success');
-    setOpenSnackbar(true);
+    setMessageSnackBar('Save crop successfully!');
+    setStatusSnackBar('success');
+    setOpenSnackBar(true);
 
     const reader = new FileReader();
 
@@ -179,6 +176,14 @@ const GalleryPage = ({ dentist }: any) => {
   };
 
   const checkHandler = ({ target }: any) => {
+    if(!checkFilesLeft || !checkFilesRight || !titleBefore || !tagsBefore || !titleAfter ||
+      !tagsAfter){
+      setOpenSnackBar(true);
+      setMessageSnackBar('Please complete all fields in order to upload!');
+      setStatusSnackBar('error');
+      setCheck(false)
+      return 
+    }
     setCheck(target.checked);
   };
 
@@ -471,6 +476,17 @@ const GalleryPage = ({ dentist }: any) => {
 
   return (
     <>
+       <Snackbar 
+        open={openSnackBar} 
+        autoHideDuration={3000} 
+        onClose={()=>{setOpenSnackBar(false)}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={()=>{setOpenSnackBar(false)}}
+          severity={statusSnackBar as any}>
+          {messageSnackBar}
+        </Alert>
+      </Snackbar>
       {signedInUser &&
       <Layout title='Gallery' active={'activeGallery'} currentAvatar={currentAvatar} currentDentist={currentDentist}>
         <div className='main-profile bg-white '>
@@ -650,8 +666,9 @@ const GalleryPage = ({ dentist }: any) => {
                                 updateService={updateService} />}
                       {/*<img className='gallery-select-arrow' src='../../../public/images/down-select.png'*/}
                       {/*     alt='select' />*/}
-                      <p className='checkbox'>
+                      <p className='checkbox' style={{marginBotton: 20}}>
                         <input type='checkbox' name='delete' id='delete'
+                               checked={check}
                                onChange={checkHandler} />
                         <span className='gallery-checkbox-text'>I confirm I have full rights for the use and publication of these images.</span>
                       </p>
@@ -678,13 +695,6 @@ const GalleryPage = ({ dentist }: any) => {
           }
         </div>
       </Layout>}
-      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar}
-          // @ts-ignore
-               severity={severity}>
-          {messageSnackbar}
-        </Alert>
-      </Snackbar>
     </>
   );
 };
