@@ -172,12 +172,13 @@ const CheckoutForm = ({dentist}: any) => {
     if (cardComplete) {
       setProcessing(true);
     }
-
+    console.log(elements.getElement(CardElement));
       const payload: any = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(CardElement) as any,
       billing_details: billingDetails
     });
+
     console.log('payload', payload);
     if (error || !payload.paymentMethod) {
       console.log(error?.message || 'Something is not right...');
@@ -186,13 +187,12 @@ const CheckoutForm = ({dentist}: any) => {
     const customer = await StripeManager.getStripeCustomerID(dentist);
 
     if (!customer) {
-      console.log('Could not identify customer');
+      throw Error('Could not identify customer');
     }
-    console.log(customer);
+    console.log('customer', customer);
     const paymentID = payload.paymentMethod.id;
-    const customerID = dentist.customerID ? dentist.customerID : customer.id;
-    const price = 'price_1J8KMZB5Yj7B7VjGNsnVaCeA';
-    const subscription: any = await StripeManager.createSubscription(customerID, paymentID, price);
+    const price = 'price_1J8KMZB5Yj7B7VjGNsnVaCeA'
+    const subscription: any = await StripeManager.createSubscription(customer.id, paymentID, price);
     console.log('subscription', subscription);
     // try {s
     //   await API.graphql({

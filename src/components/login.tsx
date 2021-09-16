@@ -177,8 +177,8 @@ const Login = () => {
       });
 
       const url: any = localStorage.getItem('site')
-      if (url.host === 'steveh131.sg-host.com') {
-        return await Router.replace('/payment');
+      if (url.host === 'dev.d1x2glchgshk0s.amplifyapp.com/purchase') {
+        return await Router.replace('/purchase');
       }
       await Router.replace('/');
     });

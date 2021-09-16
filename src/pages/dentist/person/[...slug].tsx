@@ -16,6 +16,7 @@ import Footer from '../../../components/Footer';
 const Person = ({ dentistData }: any) => {
   const router = useRouter();
 
+  const [adminSettingSubscriber, setAdminSettingSubscriber] = useState();
   const [currentDentist, setCurrentDentist]: any = useState(dentistData);
   const [currentAvatar, setCurrentAvatar] = useState('');
   const [signedInUser, setSignedInUser]: any = useState();
@@ -35,7 +36,7 @@ const Person = ({ dentistData }: any) => {
       authListener();
       getListImages();
       getListServiceForDentals();
-
+      void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
     }
   }, [router]);
 
@@ -165,6 +166,10 @@ const Person = ({ dentistData }: any) => {
     });
   };
 
+  const getAdminSettingSubscriber = () => {
+    return ApiManager.GET_ADMIN_SETTINGS_SUBSCRIBER();
+  };
+
   if (currentDentist.isDisabled) return <WrapperFlex>
     <div>{useriIsNotAuth}</div>
   </WrapperFlex>;
@@ -175,6 +180,7 @@ const Person = ({ dentistData }: any) => {
       <Header />
       {currentDentist && !currentDentist.hasPaidPlan && <ProfileAccountFree
         currentDentist={currentDentist}
+        adminSettingSubscriber={adminSettingSubscriber}
         images={images}
         oldIMages={oldIMages}
         services={services}
@@ -184,6 +190,7 @@ const Person = ({ dentistData }: any) => {
       />}
       {currentDentist && currentDentist.hasPaidPlan && <ProfileAccountSubscription
         currentDentist={currentDentist}
+        adminSettingSubscriber={adminSettingSubscriber}
         images={images}
         currentCover={currentCover}
         oldIMages={oldIMages}
