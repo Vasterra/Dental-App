@@ -127,6 +127,19 @@ const CheckoutForm = ({dentist}: any) => {
     name: ""
   });
   const [premiumInformation, setPremiumInformation] = useState<any>()
+  const initialValues = {
+    id: dentist.id,
+    firstName: dentist.firstName,
+    lastName: dentist.lastName,
+    bio: dentist.bio,
+    email: dentist.email,
+    website: dentist.website,
+    city: dentist.city,
+    street: dentist.street,
+    postIndex: dentist.postIndex,
+    phone: dentist.phone,
+    qualifications: dentist.qualifications
+  }
 
   useEffect(() => {
     if (document.referrer) {
@@ -160,7 +173,7 @@ const CheckoutForm = ({dentist}: any) => {
       setProcessing(true);
     }
 
-    const payload: any = await stripe.createPaymentMethod({
+      const payload: any = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(CardElement) as any,
       billing_details: billingDetails
@@ -175,11 +188,29 @@ const CheckoutForm = ({dentist}: any) => {
     if (!customer) {
       console.log('Could not identify customer');
     }
-
+    console.log(customer);
     const paymentID = payload.paymentMethod.id;
-    const price = 'price_1J8KMZB5Yj7B7VjGNsnVaCeA'
-      const data = await StripeManager.createSubscription(customer.id, paymentID, price);
-    console.log(data);
+    const customerID = dentist.customerID ? dentist.customerID : customer.id;
+    const price = 'price_1J8KMZB5Yj7B7VjGNsnVaCeA';
+    const subscription: any = await StripeManager.createSubscription(customerID, paymentID, price);
+    console.log('subscription', subscription);
+    // try {s
+    //   await API.graphql({
+    //     query: updateDentist,
+    //     variables: {
+    //       input: {
+    //         ...initialValues,
+    //         customerID: customer.id,
+    //         paymentMethodID: paymentMethodID,
+    //         hasPaidPlan: hasPaidPlan,
+    //         subscriptionID: subscription.id,
+    //       }
+    //     },
+    //     // @ts-ignore
+    //     authMode: 'AWS_IAM'
+    //   })
+    // } catch (err: any) {
+    // }
 
     setProcessing(false);
 

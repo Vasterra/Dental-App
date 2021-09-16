@@ -42,17 +42,18 @@ class StripeManager {
   public static async getStripeCustomerID(dentist: any) {
     // Retrieve the current customerID from the currently logged in user
     // getUserFromDB() is *your* implemention of getting user info from the DB
-    console.log(dentist);
     const {customerID}: any = dentist;
     if (!customerID) {
       const customer = await this.createCustomer(dentist);
-      console.log(customer)
       return customer;
     }
     return customerID;
   }
 
   public static async createSubscription(customerID: string, paymentMethodID: string, price: string) {
+    console.log(customerID);
+    console.log(paymentMethodID);
+    console.log(price);
     try {
       if (!customerID || !paymentMethodID || !price) {
         throw Error('Email or username not found.');
@@ -70,12 +71,13 @@ class StripeManager {
         }),
       });
       const subscription = await request.json() as IStripeSubscription;
-      if (subscription.status !== 'active') {
-        throw Error('Unable to upgrade. Please try again');
-      }
-      if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
-        throw Error('You credit card was declined. Please try again with another card.');
-      }
+      console.log(subscription);
+      // if (subscription.status !== 'active') {
+      //   throw Error('Unable to upgrade. Please try again');
+      // }
+      // if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
+      //   throw Error('You credit card was declined. Please try again with another card.');
+      // }
       // Update your user in DB to store the subscriptionID and enable paid plan
       // updateUserInDB() is *your* implementation of updating a user in the DB
       return {

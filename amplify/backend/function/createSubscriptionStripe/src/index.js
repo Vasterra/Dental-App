@@ -48,13 +48,13 @@ exports.handler = async (event, context, callback) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*'
       },
-      body: JSON.stringify({
-        subscriptionId: subscription.id,
-        clientSecret: subscription.latest_invoice.payment_intent.client_secret
-      })
+      body: JSON.stringify(subscription)
     });
-  } catch (error) {
-    console.log(error);
-    callback(error);
+  } catch (err) {
+    console.log("error posting to appsync: ", err)
+    return {
+      statusCode: 500,
+      body: JSON.stringify(err),
+    }
   }
 };
