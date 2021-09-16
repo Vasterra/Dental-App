@@ -1,8 +1,7 @@
 import React from 'react';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import { Theme, useTheme } from '@material-ui/core/styles';
+import Select from "react-select";
+import styled from 'styled-components'
+
 
 type Props = {
   services: any,
@@ -10,59 +9,59 @@ type Props = {
   saveService: Function,
 }
 
-function getStyles(name: string, personName: string[], theme: Theme) {
-  return {
-    color: 'black',
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium
-  };
-}
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
-    }
-  }
-};
+const SelectBox = styled.div``
 
 const Services: React.FunctionComponent<Props> = ({ saveService, services }) => {
-  const [service, setService] = React.useState<string[]>([]);
-  const theme = useTheme();
-  const handleChange = (e: any) => {
-    setService(e.target.value as string[]);
-    saveService(e.target.value);
+  const opts = services.map((item: any)=>{
+    return {
+      value: item.name, label: item.name
+    }
+  })
+  const styles = {
+
+    menu: (provided: any, state: any) => ({
+      ...provided,
+      width: state.selectProps.width,
+      color: state.selectProps.menuColor,
+    }),
+
+    option: (provided: any, state: any) => ({
+      ...provided,
+      color: state.isSelected ? 'red' : 'black',
+    }),
+
+    control: (styles: any) => ({ ...styles, backgroundColor: 'white', minWidth: 220, maxWidth: 400 }),
+
+    singleValue: (provided: any, state: any) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = 'opacity 300ms';
+  
+      return { ...provided, opacity, transition };
+    },
+
+    multiValue: (styles: any) => {
+      return {
+        ...styles,
+        backgroundColor: "papayawhip",
+      };
+    }
   };
-  return (
-    <Select
-      multiple
-      displayEmpty
-      value={service}
-      onChange={handleChange}
-      input={<Input />}
-      renderValue={(selected) => {
-        if ((selected as string[]).length === 0) {
-          return <em>Select from your services</em>;
-        }
-        return (selected as string[]).join(', ');
-      }}
-      MenuProps={MenuProps}
-    >
-      <MenuItem disabled value=''>
-        <div style={{ color: 'black' }}>Select from your services</div>
-      </MenuItem>
-      {services.map((name: any) => (
-        <MenuItem key={name.id} value={name.name} style={getStyles(name, service, theme)}>
-          {name.name}
-        </MenuItem>
-      ))}
-    </Select>
-  );
+  const handleChange = (selectedOpts: any) => {
+    const opts = selectedOpts.map((item: any)=>item.value).join(', ')
+    saveService(opts);
+  };
+  return(
+    <SelectBox>
+      <Select
+        styles={styles}
+        closeMenuOnSelect={false}
+        isMulti
+        options={opts}
+        defaultValue={opts[0]}
+        onChange={handleChange}
+      />
+    </SelectBox>
+  )
 };
 
 export default Services;

@@ -184,7 +184,6 @@ img {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    margin: 20px 0;
 }
 
 .row {
@@ -2294,15 +2293,14 @@ input:disabled:-ms-input-placeholder {
     width: 100%;
     margin-top: 7px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(247px, 1fr));
+    grid-template-columns: repeat(auto-fill,minmax(333px,1fr));
     grid-gap: 20px;
 }
 
 .index-dentist-gallery-image-box {
     justify-self: center;
     position: relative;
-    width: 247px;
-    height: 247px;
+    width: 331px;
 }
 
 .index-dentist-gallery-image-watermark {
@@ -2408,6 +2406,7 @@ input:disabled:-ms-input-placeholder {
     display: block;
     width: 100%;
     max-height: 191px;
+    min-height: 191px;
 }
 
 .index-leftmenu-text {
@@ -2514,6 +2513,10 @@ input:disabled:-ms-input-placeholder {
 
     .space-between {
         flex-wrap: wrap;
+    }
+
+    .gallery-checkbox-text {
+        margin-top: 20px;
     }
 }
 
@@ -2703,6 +2706,10 @@ input:disabled:-ms-input-placeholder {
 
     .fill-mobile {
         display: block;
+    }
+
+    .gallery-checkbox-text {
+        margin-top: 20px;
     }
 }
 
