@@ -19,6 +19,30 @@
         "AdminQueries414eca1d": {
           "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
           "s3Key": "amplify-builds/AdminQueries414eca1d-37515339317650476d71-build.zip"
+        },
+        "getListCouponsStripe": {
+          "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
+          "s3Key": "amplify-builds/getListCouponsStripe-536354662b4d51747939-build.zip"
+        },
+        "retrieveCouponStripe": {
+          "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
+          "s3Key": "amplify-builds/retrieveCouponStripe-39543279334e716b7358-build.zip"
+        },
+        "createRefundsStripe": {
+          "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
+          "s3Key": "amplify-builds/createRefundsStripe-476130364b4676564368-build.zip"
+        },
+        "createChargesStripe": {
+          "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
+          "s3Key": "amplify-builds/createChargesStripe-374c632b594e534a7053-build.zip"
+        },
+        "createCustomerStripe": {
+          "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
+          "s3Key": "amplify-builds/createCustomerStripe-7573647a6b4147324579-build.zip"
+        },
+        "createSubscriptionStripe": {
+          "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
+          "s3Key": "amplify-builds/createSubscriptionStripe-6947722b41655a463379-build.zip"
         }
       }
     }
