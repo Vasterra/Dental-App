@@ -12,7 +12,7 @@ import {
   getDentist,
   getPremiumInformation,
   listDentists,
-  listImages, listPremiumFeatures,
+  listImages, listPremiumFeaturess,
   listServiceForDentals
 } from '../graphql/queries';
 import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql';
@@ -333,11 +333,11 @@ class ApiManager {
   public static GET_LIST_PREMIUM_FEATURES = async () => {
     try {
       const { data }: any = await API.graphql({
-        query: listPremiumFeatures,
+        query: listPremiumFeaturess,
         authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
       console.log(data);
-      return data.listPremiumFeatures.items;
+      return data.listPremiumFeaturess.items;
     } catch (e: any) {
       console.log(e);
     }
