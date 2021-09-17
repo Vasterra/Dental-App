@@ -1,57 +1,19 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-dentalapp-dev-180254-authRole",
-      "UnauthRoleArn": "arn:aws:iam::828149670277:role/amplify-dentalapp-dev-180254-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::828149670277:role/amplify-dentalapp-dev-180254-authRole",
+      "AuthRoleName": "amplify-apidentalapp-dev-185021-authRole",
+      "UnauthRoleArn": "arn:aws:iam::828149670277:role/amplify-apidentalapp-dev-185021-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::828149670277:role/amplify-apidentalapp-dev-185021-authRole",
       "Region": "eu-west-1",
-      "DeploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-      "UnauthRoleName": "amplify-dentalapp-dev-180254-unauthRole",
-      "StackName": "amplify-dentalapp-dev-180254",
-      "StackId": "arn:aws:cloudformation:eu-west-1:828149670277:stack/amplify-dentalapp-dev-180254/dbf136e0-0bfe-11ec-aec8-0a50c0caa43b",
-      "AmplifyAppId": "d1x2glchgshk0s"
+      "DeploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
+      "UnauthRoleName": "amplify-apidentalapp-dev-185021-unauthRole",
+      "StackName": "amplify-apidentalapp-dev-185021",
+      "StackId": "arn:aws:cloudformation:eu-west-1:828149670277:stack/amplify-apidentalapp-dev-185021/f9ac1930-17ce-11ec-ad32-06b3b8c7c4a9",
+      "AmplifyAppId": "d2qap6yh626x1j"
     },
     "categories": {
       "auth": {
-        "dentalapp6f9bf30a": {}
-      },
-      "function": {
-        "AdminQueries196efb04": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/AdminQueries196efb04-4437344442626e413261-build.zip"
-        },
-        "createSubscriptionStripe": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/createSubscriptionStripe-6947722b41655a463379-build.zip"
-        },
-        "createCustomerStripe": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/createCustomerStripe-7573647a6b4147324579-build.zip"
-        },
-        "retrieveSubscriptionStripe": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/retrieveSubscriptionStripe-462b6d4157544c326c69-build.zip"
-        },
-        "getListSubscriptionsStripe": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/getListSubscriptionsStripe-6a5a734f626278513170-build.zip"
-        },
-        "createRefundsStripe": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/createRefundsStripe-476130364b4676564368-build.zip"
-        },
-        "createChargesStripe": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/createChargesStripe-374c632b594e534a7053-build.zip"
-        },
-        "retrieveCoupon": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/retrieveCoupon-574b5737586739667654-build.zip"
-        },
-        "getListCoupons": {
-          "deploymentBucketName": "amplify-dentalapp-dev-180254-deployment",
-          "s3Key": "amplify-builds/getListCoupons-7874623539472f38684f-build.zip"
-        }
+        "apidentalappe04d8269": {}
       }
     }
   }
