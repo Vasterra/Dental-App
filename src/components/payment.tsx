@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
-  CardElement, CardNumberElement,
+  CardCvcElement,
+  CardElement, CardExpiryElement, CardNumberElement,
   Elements,
   useElements,
   useStripe
@@ -11,11 +12,7 @@ import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded';
 import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ApiManager from '../services/ApiManager';
-import { getPremiumInformation } from '../graphql/queries';
-import { API, Auth } from 'aws-amplify';
-import Router from 'next/router';
 import StripeManager from '../services/StripeManager';
-import { updateDentist } from '../graphql/mutations';
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -48,15 +45,15 @@ const CardField = ({ onChange }: any) => (
 );
 
 const Field = ({
-  label,
-  id,
-  type,
-  placeholder,
-  required,
-  autoComplete,
-  value,
-  onChange
-}: any) => (
+                 label,
+                 id,
+                 type,
+                 placeholder,
+                 required,
+                 autoComplete,
+                 value,
+                 onChange
+               }: any) => (
   <div className="col-12 col-xl-6 mt-3 mx-auto">
     <label htmlFor={id} className="form-label">
       {label}
@@ -173,7 +170,7 @@ const CheckoutForm = ({dentist}: any) => {
       setProcessing(true);
     }
     console.log(elements.getElement(CardElement));
-      const payload: any = await stripe.createPaymentMethod({
+    const payload: any = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(CardElement) as any,
       billing_details: billingDetails
@@ -189,10 +186,7 @@ const CheckoutForm = ({dentist}: any) => {
     if (!customer) {
       throw Error('Could not identify customer');
     }
-    console.log('customer', customer);
-    const paymentID = payload.paymentMethod.id;
-    const price = 'price_1J8KMZB5Yj7B7VjGNsnVaCeA'
-    const subscription: any = await StripeManager.createSubscription(customer.id, paymentID, price);
+    const subscription: any = await StripeManager.createSubscription(customer.id, payload.paymentMethod.id, premiumInformation && Number(Math.ceil(premiumInformation.price)));
     console.log('subscription', subscription);
     // try {s
     //   await API.graphql({
@@ -214,11 +208,11 @@ const CheckoutForm = ({dentist}: any) => {
 
     setProcessing(false);
 
-    if (payload.error) {
-      setError(payload.error as any);
-    } else {
-      setPaymentMethod(payload.paymentMethod as any);
-    }
+    // if (payload.error) {
+    //   setError(payload.error as any);
+    // } else {
+    //   setPaymentMethod(payload.paymentMethod as any);
+    // }
   };
 
   const reset = () => {
@@ -376,26 +370,26 @@ const CheckoutForm = ({dentist}: any) => {
         <SubmitButton processing={processing} error={error} disabled={(!stripe || checking)}>
           Pay £{premiumInformation && premiumInformation.price}
         </SubmitButton>
-          { couponField ?
-           <div id="coupon_input_container">
-              <input 
-                type="text" 
-                id="coupon_input" 
-                disabled={checking}
-                value={couponValue} 
-                autoComplete="Coupon"
-                placeholder={'Coupon'}
-                onChange={handleCouponChange}
-                onKeyDown={handleCouponKeydown}
-              />
-              <div style={{cursor: 'pointer'}}>
-                {!cuponStatus && !checking && <CachedRoundedIcon fontSize={'medium'} color='inherit' style={{ margin: '0 5px 0 5px' }} onClick={handleCheckCoupon}/>}
-                {!cuponStatus && checking && <CircularProgress disableShrink size={20} style={{ margin: '0 5px 0 5px' }}/>}
-                {cuponStatus === 'success'  && <DoneAllRoundedIcon fontSize={'medium'} color='secondary' style={{ margin: '0 5px 0 5px' }}/>}
-                {cuponStatus === 'error'  && <ErrorRoundedIcon fontSize={'medium'} color='error' style={{ margin: '0 5px 0 5px' }}/>}
-              </div>
+        { couponField ?
+          <div id="coupon_input_container">
+            <input
+              type="text"
+              id="coupon_input"
+              disabled={checking}
+              value={couponValue}
+              autoComplete="Coupon"
+              placeholder={'Coupon'}
+              onChange={handleCouponChange}
+              onKeyDown={handleCouponKeydown}
+            />
+            <div style={{cursor: 'pointer'}}>
+              {!cuponStatus && !checking && <CachedRoundedIcon fontSize={'medium'} color='inherit' style={{ margin: '0 5px 0 5px' }} onClick={handleCheckCoupon}/>}
+              {!cuponStatus && checking && <CircularProgress disableShrink size={20} style={{ margin: '0 5px 0 5px' }}/>}
+              {cuponStatus === 'success'  && <DoneAllRoundedIcon fontSize={'medium'} color='secondary' style={{ margin: '0 5px 0 5px' }}/>}
+              {cuponStatus === 'error'  && <ErrorRoundedIcon fontSize={'medium'} color='error' style={{ margin: '0 5px 0 5px' }}/>}
+            </div>
           </div>
-          : 
+          :
           <button
             className={`btn btn-success ${error ? "btn btn btn-danger" : ""}`}
             type="submit"
@@ -405,7 +399,7 @@ const CheckoutForm = ({dentist}: any) => {
           </button>
         }
       </div>
-      
+
     </form>
   );
 };

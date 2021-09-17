@@ -9,7 +9,7 @@ class StripeManager {
       if (!email || !firstName) {
         throw Error('Email or username not found.');
       }
-      const request: any = await fetch('https://520q135djd.execute-api.eu-west-1.amazonaws.com/dev/createCustomerStripe-dev', {
+        const request: any = await fetch('https://sbcy4f4rw8.execute-api.eu-west-1.amazonaws.com/dev/createCustomerStripe-dev', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
@@ -50,24 +50,21 @@ class StripeManager {
     return customerID;
   }
 
-  public static async createSubscription(customerID: string, paymentMethodID: string, price: string) {
-    console.log(customerID);
-    console.log(paymentMethodID);
-    console.log(price);
+  public static async createSubscription(customerID: string, paymentMethodID: string, amount: string) {
     try {
-      if (!customerID || !paymentMethodID || !price) {
+      if (!customerID || !paymentMethodID) {
         return {
           messageError: 'customerID or paymentMethodID or price not found.'
         };
       }
 
-      const request: any = await fetch('https://ddt7utsns7.execute-api.eu-west-1.amazonaws.com/dev/createSubscriptionStripe-dev', {
+      const request: any = await fetch('https://k78nuhamxh.execute-api.eu-west-1.amazonaws.com/dev/createSubscriptionStripe-dev', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
         },
           body: JSON.stringify({
-            price,
+            amount,
             customerID,
             paymentMethodID,
         }),
