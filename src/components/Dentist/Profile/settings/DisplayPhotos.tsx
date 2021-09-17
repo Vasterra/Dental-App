@@ -1,5 +1,4 @@
 import React from "react";
-import {Auth, Storage} from "aws-amplify";
 import AddWatermark from "./AddWatermark";
 import Router from 'next/router';
 

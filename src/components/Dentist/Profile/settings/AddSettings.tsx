@@ -56,6 +56,7 @@ type Props = {
   adminSettingSubscriber: any,
   setMessageSnackbar: any,
   setOpenSnackbar: any,
+  handleChangeAddress: any,
   setSeverity: any,
 }
 
@@ -65,6 +66,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
    setMessageSnackbar,
    setOpenSnackbar,
    setSeverity,
+   handleChangeAddress,
    setUserName
   }) => {
 
@@ -99,8 +101,9 @@ const AddSettings: React.FunctionComponent<Props> = ({
         {currentDentist &&
         <Formik
           onSubmit={async (data: any) => {
+            console.log('data', data.address.length);
             setLoaderButtonSubmit(true);
-            await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
+            await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address.length === 0 ? 'Cambridge' : data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
             .then(response => response.json())
             .then(async (result) => {
               data.lng = result.results[0].geometry.location.lng;
@@ -111,6 +114,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                 'email': data.email
               });
               setUserName(data.firstName);
+              handleChangeAddress(data.address)
               try {
                 await API.graphql({
                   query: updateDentist,
@@ -218,7 +222,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                              id='website'
                              value={props.values.website}
                              placeholder='dental.co.uk'
-                             disabled={currentDentist.hasPaidPlan ? !adminSettingSubscriber.paidWebsiteAddress : !adminSettingSubscriber.freeWebsiteAddress}
+                             disabled={!!currentDentist.hasPaidPlan}
                       />
                     </p>
                   </div>
@@ -233,7 +237,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                              id='phone'
                              value={props.values.phone}
                              placeholder='0203 123 4567'
-                             disabled={currentDentist.hasPaidPlan ? !adminSettingSubscriber.paidPhoneNumber : !adminSettingSubscriber.freePhoneNumber}
+                             disabled={!!currentDentist.hasPaidPlan}
                       />
                     </p>
                   </div>
@@ -254,12 +258,8 @@ const AddSettings: React.FunctionComponent<Props> = ({
                       setValue={props.values.phone}
                       props={props}
                     />
-                    <p className='form-login-buttons'>
-                      <button className='button-green' type='submit'>{loaderButtonSubmit ?
-                        <FacebookCircularProgress /> : 'Confirm'}</button>
-                    </p>
-                   </div>}
 
+                   </div>}
                   <DentistProfileInput
                     title='Address'
                     name='address'
@@ -267,6 +267,12 @@ const AddSettings: React.FunctionComponent<Props> = ({
                     setValue={props.values.address}
                     props={props}
                   />
+                  {currentDentist.hasPaidPlan &&
+                    <p className='form-login-buttons'>
+                      <button className='button-green' type='submit'>{loaderButtonSubmit ?
+                        <FacebookCircularProgress /> : 'Confirm'}</button>
+                    </p>
+                  }
                 </div>
               </div>
             </form>

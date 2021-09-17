@@ -9,7 +9,7 @@ class StripeManager {
       if (!email || !firstName) {
         throw Error('Email or username not found.');
       }
-      const request: any = await fetch('https://520q135djd.execute-api.eu-west-1.amazonaws.com/dev/createCustomerStripe-dev', {
+        const request: any = await fetch('https://sbcy4f4rw8.execute-api.eu-west-1.amazonaws.com/dev/createCustomerStripe-dev', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
@@ -42,44 +42,47 @@ class StripeManager {
   public static async getStripeCustomerID(dentist: any) {
     // Retrieve the current customerID from the currently logged in user
     // getUserFromDB() is *your* implemention of getting user info from the DB
-    console.log(dentist);
     const {customerID}: any = dentist;
     if (!customerID) {
       const customer = await this.createCustomer(dentist);
-      console.log(customer)
       return customer;
     }
     return customerID;
   }
 
-  public static async createSubscription(customerID: string, paymentMethodID: string, price: string) {
+  public static async createSubscription(customerID: string, paymentMethodID: string, amount: string) {
     try {
-      if (!customerID || !paymentMethodID || !price) {
-        throw Error('Email or username not found.');
+      if (!customerID || !paymentMethodID) {
+        return {
+          messageError: 'customerID or paymentMethodID or price not found.'
+        };
       }
 
-      const request: any = await fetch('https://biucjonez5.execute-api.eu-west-1.amazonaws.com/dev/createSubscriptionStripe-dev', {
+      const request: any = await fetch('https://k78nuhamxh.execute-api.eu-west-1.amazonaws.com/dev/createSubscriptionStripe-dev', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          price,
-          customerID,
-          paymentMethodID,
+          body: JSON.stringify({
+            amount,
+            customerID,
+            paymentMethodID,
         }),
       });
       const subscription = await request.json() as IStripeSubscription;
+      console.log('subscription',subscription );
       if (subscription.status !== 'active') {
-        throw Error('Unable to upgrade. Please try again');
+        return {
+          messageError: 'Unable to upgrade. Please try again'
+        };
       }
       if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
-        throw Error('You credit card was declined. Please try again with another card.');
+        return {
+          messageError: 'You credit card was declined. Please try again with another card.'
+        };
       }
-      // Update your user in DB to store the subscriptionID and enable paid plan
-      // updateUserInDB() is *your* implementation of updating a user in the DB
+
       return {
-        // @ts-ignore
         paymentMethodID,
         hasPaidPlan: true,
         subscription,

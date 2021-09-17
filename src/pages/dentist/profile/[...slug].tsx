@@ -20,12 +20,13 @@ function Alert(props: AlertProps) {
 const Profile = ({ dentist }: any) => {
   const router = useRouter();
 
-  const [currentDentist, setCurrentDentist] = useState(dentist);
+  const [currentDentist, setCurrentDentist] = useState<any>(dentist);
   const [currentAvatar, setCurrentAvatar] = useState('');
   const [signedInUser, setSignedInUser] = useState(false);
   const [route, setRoute] = useState('');
   const [adminSettingSubscriber, setAdminSettingSubscriber] = useState();
   const [userName, setUserName] = useState();
+  const [changeAddress, setChangeAddress] = useState<any>(null);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
@@ -64,12 +65,15 @@ const Profile = ({ dentist }: any) => {
     });
   };
 
+  const handleChangeAddress = (value: any) => {
+    setChangeAddress(value)
+  };
+
   const uploadAvatar = async (files: any) => {
     files.preventDefault();
     try {
       const file = files.target.files[0];
-      const filename = file.name.split('.');
-      await Storage.put('avatars/' + currentDentist.id + '/' + 'avatar.' + filename[filename.length - 1], file, {
+      await Storage.put('avatars/' + currentDentist.id + '/' + 'avatar.jpg', file, {
         level: 'public',
         contentType: 'image/png'
       }).then(async (result: any) => {
@@ -113,12 +117,14 @@ const Profile = ({ dentist }: any) => {
                        setMessageSnackbar={setMessageSnackbar}
                        setOpenSnackbar={setOpenSnackbar}
                        setSeverity={setSeverity}
+                       handleChangeAddress={handleChangeAddress}
           />
           <Location route={route}
                     adminSettingSubscriber={adminSettingSubscriber}
                     setMessageSnackbar={setMessageSnackbar}
                     setOpenSnackbar={setOpenSnackbar}
                     setSeverity={setSeverity}
+                    changeAddress={changeAddress}
           />
           <Services route={route}
                     adminSettingSubscriber={adminSettingSubscriber}

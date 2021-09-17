@@ -70,6 +70,7 @@ type Props = {
   setOpenSnackbar: any,
   setMessageSnackbar: any,
   setSeverity: any,
+  changeAddress: any,
 }
 
 const Location: React.FunctionComponent<Props> = ({
@@ -77,6 +78,7 @@ const Location: React.FunctionComponent<Props> = ({
                                                     adminSettingSubscriber,
                                                     setOpenSnackbar,
                                                     setMessageSnackbar,
+                                                    changeAddress,
                                                     setSeverity
                                                   }) => {
 
@@ -122,14 +124,14 @@ const Location: React.FunctionComponent<Props> = ({
 
   const handleSubmit = async (data: any, form: any) => {
     setLoaderButtonSubmit(true);
-    if (currentDentist.locations.items.length === Number(adminSettingSubscriber.freeMaxLocations)) {
+    if (currentDentist.locations.items.length >= Number(adminSettingSubscriber.freeMaxLocations)) {
       setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxLocations} locations.`);
       setSeverity('warning');
       setOpenSnackbar(true);
       setLoaderButtonSubmit(false);
       return false;
     }
-    if (currentDentist.locations.items.length === Number(adminSettingSubscriber.paidMaxLocations)) {
+    if (currentDentist.locations.items.length >= Number(adminSettingSubscriber.paidMaxLocations)) {
       setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.paidMaxLocations} locations.`);
       setSeverity('warning');
       setOpenSnackbar(true);
@@ -332,11 +334,12 @@ const Location: React.FunctionComponent<Props> = ({
                   <label className='form-profile-label'>Additional Locations</label>
                 </p>
                 {currentDentist && currentDentist.locations.items.map((el: any, key: any) => {
+                  const address = `${el.address} ${el.city} ${el.postCode}`
                   return (
                     <FormLoginInput>
                       <input
                         type='text'
-                        value={`${el.address} ${el.city} ${el.postCode}`}
+                        value={address === null ? '' : address}
                       />
                       <IconUpdate src='../../../images/edit.svg' alt='edit'
                                   onClick={() => setUpdateDateLocation(el)} />
@@ -358,7 +361,7 @@ const Location: React.FunctionComponent<Props> = ({
                   <input
                     type='text'
                     disabled={!currentDentist.hasPaidPla}
-                    value={`${currentDentist.address}`}
+                    value={`${changeAddress !== null ? changeAddress : currentDentist.address}`}
                   />
                 </FormLoginInput>
             </div>
