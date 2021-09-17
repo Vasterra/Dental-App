@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "apidentalappe04d8269": {}
+      },
+      "function": {
+        "AdminQueries414eca1d": {
+          "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
+          "s3Key": "amplify-builds/AdminQueries414eca1d-37515339317650476d71-build.zip"
+        }
       }
     }
   }
