@@ -3,11 +3,17 @@
 
 const awsmobile = {
     "aws_project_region": "eu-west-1",
-    "aws_cognito_identity_pool_id": "eu-west-1:cb0b1918-9815-4214-bb1c-8b4e87c7f60d",
+    "aws_appsync_graphqlEndpoint": "https://qjwzyreda5gt7bgkjte4dd4guy.appsync-api.eu-west-1.amazonaws.com/graphql",
+    "aws_appsync_region": "eu-west-1",
+    "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",
+    "aws_cognito_identity_pool_id": "eu-west-1:7601c6b6-815e-4d2e-a444-1b436a0edd76",
     "aws_cognito_region": "eu-west-1",
-    "aws_user_pools_id": "eu-west-1_6f6hDXRq1",
-    "aws_user_pools_web_client_id": "4580bhttrtplodk5d3410p4jd8",
+    "aws_user_pools_id": "eu-west-1_A4OSijYmx",
+    "aws_user_pools_web_client_id": "5vvinfkf5odpcepsk4anlafo1l",
     "oauth": {},
+    "aws_cognito_login_mechanisms": [
+        "EMAIL"
+    ],
     "aws_cognito_signup_attributes": [
         "EMAIL"
     ],
@@ -19,56 +25,8 @@ const awsmobile = {
         "passwordPolicyMinLength": 8,
         "passwordPolicyCharacters": []
     },
-    "aws_appsync_graphqlEndpoint": "https://aouwsdfp2ffgdo4iykhnpn5ol4.appsync-api.eu-west-1.amazonaws.com/graphql",
-    "aws_appsync_region": "eu-west-1",
-    "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",
-    "aws_cloud_logic_custom": [
-        {
-            "name": "AdminQueries",
-            "endpoint": "https://7u0r9wkiw4.execute-api.eu-west-1.amazonaws.com/dev",
-            "region": "eu-west-1"
-        },
-        {
-            "name": "createChargesStripe",
-            "endpoint": "https://6e50ivjxe5.execute-api.eu-west-1.amazonaws.com/dev",
-            "region": "eu-west-1"
-        },
-        {
-            "name": "createRefundsStripe",
-            "endpoint": "https://qyzna8thpl.execute-api.eu-west-1.amazonaws.com/dev",
-            "region": "eu-west-1"
-        },
-        {
-            "name": "createSubscription",
-            "endpoint": "https://ix6z48vs8l.execute-api.eu-west-1.amazonaws.com/dev",
-            "region": "eu-west-1"
-        },
-        {
-            "name": "retrieveCoupon",
-            "endpoint": "https://33acnypbic.execute-api.eu-west-1.amazonaws.com/dev",
-            "region": "eu-west-1"
-        },
-        {
-            "name": "getListCoupons",
-            "endpoint": "https://f4nt0ls9z9.execute-api.eu-west-1.amazonaws.com/dev",
-            "region": "eu-west-1"
-        },
-        {
-            "name": "createCustomerStripe",
-            "endpoint": "https://zg3a9iraq4.execute-api.eu-west-1.amazonaws.com/dev",
-            "region": "eu-west-1"
-        },
-        {
-            "name": "createSubscriptionStripe",
-            "endpoint": "https://rfh7o5gxj8.execute-api.eu-west-1.amazonaws.com/dev",
-            "region": "eu-west-1"
-        }
-    ],
-    "aws_user_files_s3_bucket": "dentalappa96d899392f047399e3b2994b40025aa180254-dev",
-    "aws_user_files_s3_bucket_region": "eu-west-1",
-    "aws_cognito_login_mechanism": [
-        "PREFERRED_USERNAME"
-    ]
+    "aws_user_files_s3_bucket": "apidentalapp144c9e5836ff40878c8dda1a9249b54a185021-dev",
+    "aws_user_files_s3_bucket_region": "eu-west-1"
 };
 
 
