@@ -90,7 +90,7 @@ const Registration = ({}) => {
   const SubmitForm = async (values: any)=>{
     try {
       const { user }: any = await Auth.signUp({
-        username: values.username,
+        username: values.username.split(' ')[1],
         password: values.password,
         attributes: {
           email: values.email,
@@ -152,21 +152,21 @@ const Registration = ({}) => {
 
   return (
     <div className='main bg-singup main-box'>
-      {/*{nextStep && */}
-      {/*  <ValidateCard username={values.username} onSubmit={ async ()=>{ */}
-      {/*    try {*/}
-      {/*      await SubmitForm(values)*/}
-      {/*      onCancel()*/}
-      {/*    } catch (error: any) {*/}
-      {/*      setMessageSnackbar('error');*/}
-      {/*      setSeverity('warning');*/}
-      {/*      setOpenSnackbar(true);*/}
-      {/*      // onCancel()*/}
-      {/*    } */}
-      {/*  }} */}
-      {/*  onCancel={onCancel}/>*/}
-      {/*}*/}
-      {/*{!nextStep && !values.loader && */}
+      {nextStep &&
+        <ValidateCard username={values.username} onSubmit={ async ()=>{
+          try {
+            await SubmitForm(values)
+            onCancel()
+          } catch (error: any) {
+            setMessageSnackbar('error');
+            setSeverity('warning');
+            setOpenSnackbar(true);
+            // onCancel()
+          }
+        }}
+        onCancel={onCancel}/>
+      }
+      {!nextStep && !values.loader &&
       <div className='form-login'>
         <p className='form-login-title green'>Sign Up</p>
         <p className='form-login-subtitle gray'>Create An Account with FYD
@@ -257,7 +257,7 @@ const Registration = ({}) => {
         </form>
         }
       </div>
-      {/*}*/}
+      }
       <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar}
           // @ts-ignore

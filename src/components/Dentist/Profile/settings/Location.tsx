@@ -333,8 +333,9 @@ const Location: React.FunctionComponent<Props> = ({
                 <p className='form-profile-label'>
                   <label className='form-profile-label'>Additional Locations</label>
                 </p>
-                {currentDentist && currentDentist.locations.items.map((el: any, key: any) => {
-                  const address = `${el.address} ${el.city} ${el.postCode}`
+                {currentDentist && currentDentist.locations.items.map((el: any) => {
+                  const location = `${el.address} ${el.city} ${el.postCode}`
+                  const address = location === null ? '' : location
                   return (
                     <FormLoginInput>
                       <input
@@ -357,13 +358,13 @@ const Location: React.FunctionComponent<Props> = ({
               <p className='form-profile-label'>
                 <label className='form-profile-label'>Locations</label>
               </p>
-                <FormLoginInput>
-                  <input
-                    type='text'
-                    disabled={!currentDentist.hasPaidPla}
-                    value={`${changeAddress !== null ? changeAddress : currentDentist.address}`}
-                  />
-                </FormLoginInput>
+              <FormLoginInput>
+                <input
+                  type='text'
+                  disabled={!currentDentist.hasPaidPlan}
+                  value={`${changeAddress !== null ? changeAddress : currentDentist.address}`}
+                />
+              </FormLoginInput>
             </div>
           </div>}
         </div>
