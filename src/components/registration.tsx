@@ -90,7 +90,7 @@ const Registration = ({}) => {
   const SubmitForm = async (values: any)=>{
     try {
       const { user }: any = await Auth.signUp({
-        username: values.username,
+        username: values.username.split(' ')[1],
         password: values.password,
         attributes: {
           email: values.email,
