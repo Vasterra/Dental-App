@@ -121,9 +121,10 @@ const Registration = ({}) => {
       loaderButtonSubmit: false
     },
     validate,
-    onSubmit: (values: any) => {
+    onSubmit: async (values: any) => {
       setValues({ ...values });
       setNextStep(true)
+      await SubmitForm(values)
     }
   });
 
@@ -132,7 +133,7 @@ const Registration = ({}) => {
     try {
       setValues({ ...values, user: null });
       setValues({ ...values, loader: true });
-      await Auth.confirmSignUp(values.email, values.code);
+      await Auth.confirmSignUp(values.username, values.code);
       setMessageSnackbar('The Register successfully!');
       setSeverity('success');
       setOpenSnackbar(true);
@@ -151,21 +152,22 @@ const Registration = ({}) => {
 
   return (
     <div className='main bg-singup main-box'>
-      {nextStep && 
-        <ValidateCard username={values.username} onSubmit={ async ()=>{ 
-          try {
-            await SubmitForm(values)
-            onCancel()
-          } catch (error: any) {
-            setMessageSnackbar('error');
-            setSeverity('warning');
-            setOpenSnackbar(true);
-            // onCancel()
-          } 
-        }} 
-        onCancel={onCancel}/>
-      }
-      {!nextStep && !values.loader && <div className='form-login'>
+      {/*{nextStep && */}
+      {/*  <ValidateCard username={values.username} onSubmit={ async ()=>{ */}
+      {/*    try {*/}
+      {/*      await SubmitForm(values)*/}
+      {/*      onCancel()*/}
+      {/*    } catch (error: any) {*/}
+      {/*      setMessageSnackbar('error');*/}
+      {/*      setSeverity('warning');*/}
+      {/*      setOpenSnackbar(true);*/}
+      {/*      // onCancel()*/}
+      {/*    } */}
+      {/*  }} */}
+      {/*  onCancel={onCancel}/>*/}
+      {/*}*/}
+      {/*{!nextStep && !values.loader && */}
+      <div className='form-login'>
         <p className='form-login-title green'>Sign Up</p>
         <p className='form-login-subtitle gray'>Create An Account with FYD
         </p>
@@ -255,7 +257,7 @@ const Registration = ({}) => {
         </form>
         }
       </div>
-      }
+      {/*}*/}
       <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar}
           // @ts-ignore
