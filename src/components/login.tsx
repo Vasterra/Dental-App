@@ -176,7 +176,7 @@ const Login = () => {
       });
 
       const url: any = localStorage.getItem('site')
-      if (url.host === 'dev.d1x2glchgshk0s.amplifyapp.com/purchase') {
+      if (url.host === 'dev.d2qap6yh626x1j.amplifyapp.com/purchase') {
         return await Router.replace('/purchase');
       }
       await Router.replace('/');
