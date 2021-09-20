@@ -32,7 +32,6 @@ export const getDentist = /* GraphQL */ `
           name
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -45,7 +44,6 @@ export const getDentist = /* GraphQL */ `
           postCode
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -62,7 +60,6 @@ export const getDentist = /* GraphQL */ `
           nameAfter
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -124,7 +121,6 @@ export const getService = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -141,7 +137,6 @@ export const listServices = /* GraphQL */ `
         name
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -157,7 +152,6 @@ export const getLocation = /* GraphQL */ `
       postCode
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -176,7 +170,6 @@ export const listLocations = /* GraphQL */ `
         postCode
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -189,7 +182,6 @@ export const getServiceForDental = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -209,7 +201,6 @@ export const listServiceForDentals = /* GraphQL */ `
         name
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -222,23 +213,25 @@ export const getPremiumFeatures = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
-export const listPremiumFeatures = /* GraphQL */ `
-  query ListPremiumFeatures(
+export const listPremiumFeaturess = /* GraphQL */ `
+  query ListPremiumFeaturess(
     $filter: ModelPremiumFeaturesFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPremiumFeatures(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listPremiumFeaturess(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
       items {
         id
         name
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -255,7 +248,6 @@ export const getWatermark = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -275,7 +267,6 @@ export const listWatermarks = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -289,7 +280,6 @@ export const getPremiumInformation = /* GraphQL */ `
       termsAndConditions
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -310,7 +300,6 @@ export const listPremiumInformations = /* GraphQL */ `
         termsAndConditions
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -330,7 +319,6 @@ export const getImage = /* GraphQL */ `
       nameAfter
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -353,7 +341,6 @@ export const listImages = /* GraphQL */ `
         nameAfter
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -416,7 +403,6 @@ export const getClosedAccount = /* GraphQL */ `
       closedAccount
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -433,7 +419,6 @@ export const listClosedAccounts = /* GraphQL */ `
         closedAccount
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -447,7 +432,6 @@ export const getClosedSubscription = /* GraphQL */ `
       closedSubscription
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -468,7 +452,6 @@ export const listClosedSubscriptions = /* GraphQL */ `
         closedSubscription
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }

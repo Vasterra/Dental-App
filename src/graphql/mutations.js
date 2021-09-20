@@ -35,7 +35,6 @@ export const createDentist = /* GraphQL */ `
           name
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -48,7 +47,6 @@ export const createDentist = /* GraphQL */ `
           postCode
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -65,7 +63,6 @@ export const createDentist = /* GraphQL */ `
           nameAfter
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -108,7 +105,6 @@ export const updateDentist = /* GraphQL */ `
           name
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -121,7 +117,6 @@ export const updateDentist = /* GraphQL */ `
           postCode
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -138,7 +133,6 @@ export const updateDentist = /* GraphQL */ `
           nameAfter
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -181,7 +175,6 @@ export const deleteDentist = /* GraphQL */ `
           name
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -194,7 +187,6 @@ export const deleteDentist = /* GraphQL */ `
           postCode
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -211,7 +203,6 @@ export const deleteDentist = /* GraphQL */ `
           nameAfter
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -231,7 +222,6 @@ export const createService = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -246,7 +236,6 @@ export const updateService = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -261,7 +250,6 @@ export const deleteService = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -278,7 +266,6 @@ export const createLocation = /* GraphQL */ `
       postCode
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -295,7 +282,6 @@ export const updateLocation = /* GraphQL */ `
       postCode
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -312,7 +298,6 @@ export const deleteLocation = /* GraphQL */ `
       postCode
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -326,7 +311,6 @@ export const createServiceForDental = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -340,7 +324,6 @@ export const updateServiceForDental = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -354,7 +337,6 @@ export const deleteServiceForDental = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -368,7 +350,6 @@ export const createPremiumFeatures = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -382,7 +363,6 @@ export const updatePremiumFeatures = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -396,7 +376,6 @@ export const deletePremiumFeatures = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -414,7 +393,6 @@ export const createWatermark = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -432,7 +410,6 @@ export const updateWatermark = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -450,7 +427,6 @@ export const deleteWatermark = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -465,7 +441,6 @@ export const createPremiumInformation = /* GraphQL */ `
       termsAndConditions
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -480,7 +455,6 @@ export const updatePremiumInformation = /* GraphQL */ `
       termsAndConditions
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -495,7 +469,6 @@ export const deletePremiumInformation = /* GraphQL */ `
       termsAndConditions
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -516,7 +489,6 @@ export const createImage = /* GraphQL */ `
       nameAfter
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -537,7 +509,6 @@ export const updateImage = /* GraphQL */ `
       nameAfter
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -558,7 +529,6 @@ export const deleteImage = /* GraphQL */ `
       nameAfter
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -639,7 +609,6 @@ export const createClosedAccount = /* GraphQL */ `
       closedAccount
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -654,7 +623,6 @@ export const updateClosedAccount = /* GraphQL */ `
       closedAccount
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -669,7 +637,6 @@ export const deleteClosedAccount = /* GraphQL */ `
       closedAccount
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -684,7 +651,6 @@ export const createClosedSubscription = /* GraphQL */ `
       closedSubscription
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -699,7 +665,6 @@ export const updateClosedSubscription = /* GraphQL */ `
       closedSubscription
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -714,7 +679,6 @@ export const deleteClosedSubscription = /* GraphQL */ `
       closedSubscription
       createdAt
       updatedAt
-      owner
     }
   }
 `;

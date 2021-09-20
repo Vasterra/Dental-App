@@ -1,19 +1,19 @@
 {
   "paths": [
     {
-      "name": "/createCustomerStripe",
-      "lambdaFunction": "createCustomerStripe",
+      "name": "/getListCouponsStripe",
+      "lambdaFunction": "getListCouponsStripe",
       "privacy": {
         "open": true
       },
-      "policyResourceName": "/createCustomerStripe"
+      "policyResourceName": "/getListCouponsStripe"
     }
   ],
-  "resourceName": "createCustomerStripe",
-  "apiName": "createCustomerStripe",
+  "resourceName": "getListCouponsStripe",
+  "apiName": "getListCouponsStripe",
   "functionArns": [
     {
-      "lambdaFunction": "createCustomerStripe"
+      "lambdaFunction": "getListCouponsStripe"
     }
   ],
   "privacy": {
@@ -25,7 +25,7 @@
   "dependsOn": [
     {
       "category": "function",
-      "resourceName": "createCustomerStripe",
+      "resourceName": "getListCouponsStripe",
       "attributes": [
         "Name",
         "Arn"

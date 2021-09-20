@@ -14,23 +14,23 @@
         },
         
         
-          "authdentalapp6f9bf30aUserPoolId": {
+          "authapidentalappe04d8269UserPoolId": {
             "Type": "String",
-            "Default": "authdentalapp6f9bf30aUserPoolId"
+            "Default": "authapidentalappe04d8269UserPoolId"
           },
         
           
           
         
-          "functionAdminQueries196efb04Arn": {
+          "functionAdminQueries414eca1dArn": {
             "Type": "String",
-            "Default": "functionAdminQueries196efb04Arn"
+            "Default": "functionAdminQueries414eca1dArn"
           },
         
           
-          "functionAdminQueries196efb04Name": {
+          "functionAdminQueries414eca1dName": {
             "Type": "String",
-            "Default": "functionAdminQueries196efb04Name"
+            "Default": "functionAdminQueries414eca1dName"
           }
         
           
@@ -176,7 +176,7 @@
                                 ":lambda:path/2015-03-31/functions/",
                                 {
                                     
-                                    "Ref": "functionAdminQueries196efb04Arn"
+                                    "Ref": "functionAdminQueries414eca1dArn"
                                 },
                                 "/invocations"
                               ]
@@ -217,7 +217,7 @@
                                   ":userpool/",
                                   {
                                                   
-                                    "Ref": "authdentalapp6f9bf30aUserPoolId"
+                                    "Ref": "authapidentalappe04d8269UserPoolId"
                                   }
 
                                 ]
@@ -268,7 +268,7 @@
         "Properties": {
             "FunctionName": 
                 {
-                  "Ref": "functionAdminQueries196efb04Name"
+                  "Ref": "functionAdminQueries414eca1dName"
                 },
                 
                 "Action": "lambda:InvokeFunction",

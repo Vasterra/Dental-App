@@ -82,7 +82,7 @@
             ],
             "paths": {
               
-              "/items": {
+              "/createChargesStripe": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -181,7 +181,7 @@
                   }
                 }
               },
-              "/items/{proxy+}": {
+              "/createChargesStripe/{proxy+}": {
                 "options": {
                   "consumes": [
                     "application/json"

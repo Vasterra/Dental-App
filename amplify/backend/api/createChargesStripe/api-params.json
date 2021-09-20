@@ -1,12 +1,12 @@
 {
   "paths": [
     {
-      "name": "/items",
+      "name": "/createChargesStripe",
       "lambdaFunction": "createChargesStripe",
       "privacy": {
         "open": true
       },
-      "policyResourceName": "/items"
+      "policyResourceName": "/createChargesStripe"
     }
   ],
   "resourceName": "createChargesStripe",
@@ -19,8 +19,8 @@
   "privacy": {
     "auth": 0,
     "unauth": 0,
-    "authRoleName": "amplify-dentalapp-dev-180254-authRole",
-    "unAuthRoleName": "amplify-dentalapp-dev-180254-unauthRole"
+    "authRoleName": "amplify-apidentalapp-dev-185021-authRole",
+    "unAuthRoleName": "amplify-apidentalapp-dev-185021-unauthRole"
   },
   "dependsOn": [
     {

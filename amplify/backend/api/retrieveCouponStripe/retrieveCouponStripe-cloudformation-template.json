@@ -8,15 +8,15 @@
         },
     
     
-          "functioncreateRefundsStripeName": {
+          "functionretrieveCouponStripeName": {
             "Type": "String",
-            "Default": "functioncreateRefundsStripeName"
+            "Default": "functionretrieveCouponStripeName"
           },
 
           
-          "functioncreateRefundsStripeArn": {
+          "functionretrieveCouponStripeArn": {
             "Type": "String",
-            "Default": "functioncreateRefundsStripeArn"
+            "Default": "functionretrieveCouponStripeArn"
           }
 
           
@@ -37,16 +37,16 @@
         
         
         
-      "createRefundsStripe": {
+      "retrieveCouponStripe": {
         "Type": "AWS::ApiGateway::RestApi",
         "Properties": {
           "Description": "",
-          "Name": "createRefundsStripe",
+          "Name": "retrieveCouponStripe",
           "Body": {
             "swagger": "2.0",
             "info": {
               "version": "2018-05-24T17:52:00Z",
-              "title": "createRefundsStripe"
+              "title": "retrieveCouponStripe"
             },
             "host": {
                 "Fn::Join": [
@@ -82,7 +82,7 @@
             ],
             "paths": {
               
-              "/createRefundsStripe": {
+              "/retrieveCouponStripe": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -168,7 +168,7 @@
                             
                             {
 
-                                "Ref": "functioncreateRefundsStripeArn"
+                                "Ref": "functionretrieveCouponStripeArn"
                             },
                             
                             "/invocations"
@@ -181,7 +181,7 @@
                   }
                 }
               },
-              "/createRefundsStripe/{proxy+}": {
+              "/retrieveCouponStripe/{proxy+}": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -267,7 +267,7 @@
                           
                           {
 
-                            "Ref": "functioncreateRefundsStripeArn"
+                            "Ref": "functionretrieveCouponStripeArn"
                           },
                           
                           "/invocations"
@@ -324,12 +324,12 @@
       
         
 
-        "functioncreateRefundsStripePermissioncreateRefundsStripe": {
+        "functionretrieveCouponStripePermissionretrieveCouponStripe": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
                 "FunctionName": 
                     {
-                        "Ref":  "functioncreateRefundsStripeName"
+                        "Ref":  "functionretrieveCouponStripeName"
                     },
                     
                     "Action": "lambda:InvokeFunction",
@@ -348,7 +348,7 @@
                             },
                             ":",
                             {
-                                "Ref": "createRefundsStripe"
+                                "Ref": "retrieveCouponStripe"
                             },
                             "/*/*/*"
                         ]
@@ -359,7 +359,7 @@
         
         
 
-      "DeploymentAPIGWcreateRefundsStripe": {
+      "DeploymentAPIGWretrieveCouponStripe": {
         "Type": "AWS::ApiGateway::Deployment",
         "Properties": {
           "Description": "The Development stage deployment of your API.",
@@ -373,7 +373,7 @@
             ]
           },
           "RestApiId": {
-            "Ref": "createRefundsStripe"
+            "Ref": "retrieveCouponStripe"
           }
         }
       }
@@ -381,15 +381,15 @@
     "Outputs": {
         "RootUrl": {
             "Description": "Root URL of the API gateway",
-            "Value": {"Fn::Join": ["", ["https://", {"Ref": "createRefundsStripe"}, ".execute-api.", {"Ref": "AWS::Region"}, ".amazonaws.com/", {"Fn::If": ["ShouldNotCreateEnvResources","Prod", {"Ref": "env"} ]}]]}
+            "Value": {"Fn::Join": ["", ["https://", {"Ref": "retrieveCouponStripe"}, ".execute-api.", {"Ref": "AWS::Region"}, ".amazonaws.com/", {"Fn::If": ["ShouldNotCreateEnvResources","Prod", {"Ref": "env"} ]}]]}
         },
         "ApiName": {
           "Description": "API Friendly name",
-          "Value": "createRefundsStripe"
+          "Value": "retrieveCouponStripe"
         },
         "ApiId": {
           "Description": "API ID (prefix of API URL)",
-          "Value": {"Ref": "createRefundsStripe"}
+          "Value": {"Ref": "retrieveCouponStripe"}
         }
     }
   }

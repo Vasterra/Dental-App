@@ -5,6 +5,7 @@ import Header from 'src/components/Header';
 import Services from 'src/components/Search/Services';
 import CardDentistComponent from 'src/components/Search/CardDentist';
 import GoogleMapReactComponent from 'src/components/Search/GoogleMapReact';
+import {ICurrentDentist} from 'src/interfaces/ICurrentDentist'
 import Footer from 'src/components/Footer';
 import { switcher } from 'src/utils/switcher';
 import { getDentist } from 'src/graphql/queries';
@@ -148,8 +149,13 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
   };
 
   const findCoordinatesDentists = (coordinate: any, distance: number, dentists: []) => {
-    let distanceDent: any[] = [];
-    let sortDentist = dentists.filter((item: any) => item.hasPaidPlan === true).concat(dentists.filter((item: any) => item.hasPaidPlan !== true))
+    const distanceDent: any[]  = [];
+
+    if (dentists === null) {
+      return console.log('Dentist not found')
+    }
+    
+    const sortDentist = dentists.filter((item: any) => item.hasPaidPlan === true).concat(dentists.filter((item: any) => item.hasPaidPlan !== true))
     if (!sortDentist) return {};
 
     sortDentist.map((dent: { lng: any; lat: any; }) => {
@@ -163,7 +169,8 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
             + Math.sin(a.Latitude * (Math.PI / 180))
             * Math.sin(b.Latitude * (Math.PI / 180)))));
       if (distanceCur < distance) {
-        distanceDent.push(dent);
+        const dentist: any = dent
+        distanceDent.push(dentist);
       }
     });
     return distanceDent;

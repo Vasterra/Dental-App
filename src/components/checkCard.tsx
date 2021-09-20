@@ -141,7 +141,7 @@ const CheckoutForm = ({ username, onSubmit, onCancel }: { username: string, onSu
     const amount = 2000
     const currency = 'GBP'
     const tokenId = token.id
-    const lambdaUrl = 'https://e7s00eoc0l.execute-api.eu-west-1.amazonaws.com/dev/createChargesStripe-dev'
+    const lambdaUrl = 'https://e7s00eoc0l.execute-api.eu-west-1.amazonaws.com/dev/createChargesStripe'
     const lambdaKey = 'mJ5fEJy7Lj2rW7nORsuoN7J1nPc4QRh02lFwJTSX'
     const bodyParams = {
         "price": amount,
