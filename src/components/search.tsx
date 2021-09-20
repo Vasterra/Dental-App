@@ -148,8 +148,13 @@ const Search = ({ dentistsData, listServiceForDentals }: any) => {
   };
 
   const findCoordinatesDentists = (coordinate: any, distance: number, dentists: []) => {
-    let distanceDent: any[] = [];
-    let sortDentist = dentists.filter((item: any) => item.hasPaidPlan === true).concat(dentists.filter((item: any) => item.hasPaidPlan !== true))
+    const distanceDent: []  = [];
+
+    if (dentists === null) {
+      return console.log('Dentist not found')
+    }
+    
+    const sortDentist = dentists.filter((item: any) => item.hasPaidPlan === true).concat(dentists.filter((item: any) => item.hasPaidPlan !== true))
     if (!sortDentist) return {};
 
     sortDentist.map((dent: { lng: any; lat: any; }) => {

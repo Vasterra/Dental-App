@@ -90,7 +90,7 @@ const Registration = ({}) => {
   const SubmitForm = async (values: any)=>{
     try {
       const { user }: any = await Auth.signUp({
-        username: values.email,
+        username: values.username,
         password: values.password,
         attributes: {
           email: values.email,
@@ -121,7 +121,7 @@ const Registration = ({}) => {
       loaderButtonSubmit: false
     },
     validate,
-    onSubmit: async (values: any) => {
+    onSubmit: (values: any) => {
       setValues({ ...values });
       setNextStep(true)
     }
