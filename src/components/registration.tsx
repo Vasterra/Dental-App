@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import { Alert } from '@material-ui/lab';
 import { AuthInputError, AuthInputWrapper } from 'src/styles/Auth.module';
 import ValidateCard from './checkCard';
+import { v4 as uuidv4 } from 'uuid';
 
 interface State {
   username: string;
@@ -42,6 +43,7 @@ const Registration = ({}) => {
   const [messageSnackbar, setMessageSnackbar] = useState('');
   const [severity, setSeverity] = useState('');
   const [nextStep, setNextStep] = useState(false);
+  const [uniqUuid, setUniqUuid] = useState(uuidv4());
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -90,7 +92,7 @@ const Registration = ({}) => {
   const SubmitForm = async (values: any)=>{
     try {
       const { user }: any = await Auth.signUp({
-        username: values.username.split(' ')[1],
+        username: uniqUuid,
         password: values.password,
         attributes: {
           email: values.email,
@@ -121,10 +123,9 @@ const Registration = ({}) => {
       loaderButtonSubmit: false
     },
     validate,
-    onSubmit: async (values: any) => {
+    onSubmit: (values: any) => {
       setValues({ ...values });
       setNextStep(true)
-      await SubmitForm(values)
     }
   });
 
@@ -133,7 +134,7 @@ const Registration = ({}) => {
     try {
       setValues({ ...values, user: null });
       setValues({ ...values, loader: true });
-      await Auth.confirmSignUp(values.username, values.code);
+      await Auth.confirmSignUp(uniqUuid, values.code);
       setMessageSnackbar('The Register successfully!');
       setSeverity('success');
       setOpenSnackbar(true);
