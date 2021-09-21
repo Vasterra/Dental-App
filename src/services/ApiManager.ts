@@ -2,7 +2,6 @@ import { API, Auth, Hub, Storage } from 'aws-amplify';
 import Router from 'next/router';
 import {
   createClosedAccount, createPremiumFeatures,
-  createPremiumInformation,
   deleteDentist, deletePremiumFeatures,
   updateAdminSettingsSubscriber,
   updateDentist, updatePremiumFeatures, updatePremiumInformation
@@ -229,7 +228,6 @@ class ApiManager {
   };
 
   public static UPDATE_PREMIUM_INFORMATION = async (value: any) => {
-    console.log(value);
     try {
       const {data}: any = await API.graphql({
         query: updatePremiumInformation,
@@ -282,7 +280,7 @@ class ApiManager {
     try {
       const { data }: any = await API.graphql({
         query: listPremiumFeatures,
-        authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
+          authMode: <GRAPHQL_AUTH_MODE>'AWS_IAM'
       });
       console.log(data);
       return data.listPremiumFeatures.items;

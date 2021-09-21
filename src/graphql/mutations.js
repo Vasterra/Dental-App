@@ -32,7 +32,7 @@ export const createDentist = /* GraphQL */ `
           name
           createdAt
           updatedAt
-          owner
+          
         }
         nextToken
       }
@@ -45,7 +45,7 @@ export const createDentist = /* GraphQL */ `
           postCode
           createdAt
           updatedAt
-          owner
+          
         }
         nextToken
       }
@@ -62,7 +62,7 @@ export const createDentist = /* GraphQL */ `
           nameAfter
           createdAt
           updatedAt
-          owner
+          
         }
         nextToken
       }
@@ -102,7 +102,7 @@ export const updateDentist = /* GraphQL */ `
           name
           createdAt
           updatedAt
-          owner
+          
         }
         nextToken
       }
@@ -115,7 +115,7 @@ export const updateDentist = /* GraphQL */ `
           postCode
           createdAt
           updatedAt
-          owner
+          
         }
         nextToken
       }
@@ -132,7 +132,7 @@ export const updateDentist = /* GraphQL */ `
           nameAfter
           createdAt
           updatedAt
-          owner
+          
         }
         nextToken
       }
@@ -172,7 +172,7 @@ export const deleteDentist = /* GraphQL */ `
           name
           createdAt
           updatedAt
-          owner
+          
         }
         nextToken
       }
@@ -185,7 +185,7 @@ export const deleteDentist = /* GraphQL */ `
           postCode
           createdAt
           updatedAt
-          owner
+          
         }
         nextToken
       }
@@ -202,7 +202,7 @@ export const deleteDentist = /* GraphQL */ `
           nameAfter
           createdAt
           updatedAt
-          owner
+          
         }
         nextToken
       }
@@ -222,7 +222,7 @@ export const createService = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -237,7 +237,7 @@ export const updateService = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -252,7 +252,7 @@ export const deleteService = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -269,7 +269,7 @@ export const createLocation = /* GraphQL */ `
       postCode
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -286,7 +286,7 @@ export const updateLocation = /* GraphQL */ `
       postCode
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -303,7 +303,7 @@ export const deleteLocation = /* GraphQL */ `
       postCode
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -317,7 +317,7 @@ export const createServiceForDental = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -331,7 +331,7 @@ export const updateServiceForDental = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -344,50 +344,50 @@ export const deleteServiceForDental = /* GraphQL */ `
       id
       name
       createdAt
-      updatedAt
-      owner
+      updatedAt 
+    
     }
   }
 `;
 export const createPremiumFeatures = /* GraphQL */ `
-  mutation CreatePremiumFeatures(
-    $input: CreatePremiumFeaturesInput!
-    $condition: ModelPremiumFeaturesConditionInput
+  mutation CreatePremiumFeature(
+    $input: CreatePremiumFeatureInput!
+    $condition: ModelPremiumFeatureConditionInput
   ) {
-    createPremiumFeatures(input: $input, condition: $condition) {
+    createPremiumFeature(input: $input, condition: $condition) {
       id
       name
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
 export const updatePremiumFeatures = /* GraphQL */ `
   mutation UpdatePremiumFeatures(
-    $input: UpdatePremiumFeaturesInput!
-    $condition: ModelPremiumFeaturesConditionInput
+    $input: UpdatePremiumFeatureInput!
+    $condition: ModelPremiumFeatureConditionInput
   ) {
-    updatePremiumFeatures(input: $input, condition: $condition) {
+    updatePremiumFeature(input: $input, condition: $condition) {
       id
       name
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
 export const deletePremiumFeatures = /* GraphQL */ `
   mutation DeletePremiumFeatures(
-    $input: DeletePremiumFeaturesInput!
-    $condition: ModelPremiumFeaturesConditionInput
+    $input: DeletePremiumFeatureInput!
+    $condition: ModelPremiumFeatureConditionInput
   ) {
-    deletePremiumFeatures(input: $input, condition: $condition) {
+    deletePremiumFeature(input: $input, condition: $condition) {
       id
       name
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -405,7 +405,7 @@ export const createWatermark = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -423,7 +423,7 @@ export const updateWatermark = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -441,7 +441,7 @@ export const deleteWatermark = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -456,7 +456,7 @@ export const createPremiumInformation = /* GraphQL */ `
       termsAndConditions
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -471,7 +471,7 @@ export const updatePremiumInformation = /* GraphQL */ `
       termsAndConditions
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -486,7 +486,7 @@ export const deletePremiumInformation = /* GraphQL */ `
       termsAndConditions
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -507,7 +507,7 @@ export const createImage = /* GraphQL */ `
       nameAfter
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -528,7 +528,7 @@ export const updateImage = /* GraphQL */ `
       nameAfter
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -549,7 +549,7 @@ export const deleteImage = /* GraphQL */ `
       nameAfter
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -630,7 +630,7 @@ export const createClosedAccount = /* GraphQL */ `
       closedAccount
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -645,7 +645,7 @@ export const updateClosedAccount = /* GraphQL */ `
       closedAccount
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -660,7 +660,7 @@ export const deleteClosedAccount = /* GraphQL */ `
       closedAccount
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -675,7 +675,7 @@ export const createClosedSubscription = /* GraphQL */ `
       closedSubscription
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;
@@ -690,8 +690,8 @@ export const updateClosedSubscription = /* GraphQL */ `
       closedSubscription
       createdAt
       updatedAt
-      owner
-    }
+      
+    }   
   }
 `;
 export const deleteClosedSubscription = /* GraphQL */ `
@@ -705,7 +705,7 @@ export const deleteClosedSubscription = /* GraphQL */ `
       closedSubscription
       createdAt
       updatedAt
-      owner
+      
     }
   }
 `;

@@ -314,8 +314,8 @@ export const onDeleteServiceForDental = /* GraphQL */ `
   }
 `;
 export const onCreatePremiumFeatures = /* GraphQL */ `
-  subscription OnCreatePremiumFeatures {
-    onCreatePremiumFeatures {
+  subscription OnCreatePremiumFeature {
+    onCreatePremiumFeature {
       id
       name
       createdAt
@@ -325,8 +325,8 @@ export const onCreatePremiumFeatures = /* GraphQL */ `
   }
 `;
 export const onUpdatePremiumFeatures = /* GraphQL */ `
-  subscription OnUpdatePremiumFeatures {
-    onUpdatePremiumFeatures {
+  subscription OnUpdatePremiumFeature {
+    onUpdatePremiumFeature {
       id
       name
       createdAt
@@ -337,7 +337,7 @@ export const onUpdatePremiumFeatures = /* GraphQL */ `
 `;
 export const onDeletePremiumFeatures = /* GraphQL */ `
   subscription OnDeletePremiumFeatures {
-    onDeletePremiumFeatures {
+    onDeletePremiumFeature {
       id
       name
       createdAt

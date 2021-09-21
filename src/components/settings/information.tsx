@@ -84,7 +84,7 @@ const Information = () => {
     }
     setOpenSnackbar(false);
   };
-
+  console.log(premiumInformation);
   return (
     <div className="profile-box-form">
       <div className="form-info-block">
@@ -128,10 +128,8 @@ const Information = () => {
               <label className="form-profile-label">Price</label>
             </p>
             <p>
-              {premiumInformation &&
-                <input className="form-profile-input" type="text" name="" id=""
-                                            value={priceValue ? priceValue : premiumInformation.price} onChange={(e: any) => setPriceValue(e.target.value)} />
-              }
+              <input className="form-profile-input" type="text" name="" id=""
+                                            value={priceValue ? priceValue : premiumInformation && premiumInformation.price} onChange={(e: any) => setPriceValue(e.target.value)} />
             </p>
           </div>
           <div>
@@ -139,9 +137,8 @@ const Information = () => {
               <label className="form-profile-label">Terms and Conditions</label>
             </p>
             <p>
-              {premiumInformation && <input className="form-profile-input" type="text" name="" id=""
-                                            value={termsAndConditions ? termsAndConditions : premiumInformation.termsAndConditions} onChange={(e: any) => setTermsAndConditions(e.target.value)}  />
-              }
+              <input className="form-profile-input" type="text" name="" id=""
+                                            value={termsAndConditions ? termsAndConditions : premiumInformation && premiumInformation.termsAndConditions} onChange={(e: any) => setTermsAndConditions(e.target.value)}  />
             </p>
           </div>
           <p className="row-content">
