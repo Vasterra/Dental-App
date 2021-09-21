@@ -11,6 +11,36 @@ const awsmobile = {
             "name": "AdminQueries",
             "endpoint": "https://qav7uzc66e.execute-api.eu-west-1.amazonaws.com/dev",
             "region": "eu-west-1"
+        },
+        {
+            "name": "createChargesStripe",
+            "endpoint": "https://ehbk44wj26.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
+        },
+        {
+            "name": "createCustomerStripe",
+            "endpoint": "https://oturud4nhh.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
+        },
+        {
+            "name": "createRefundsStripe",
+            "endpoint": "https://ll5ypoqii4.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
+        },
+        {
+            "name": "createSubscriptionStripe",
+            "endpoint": "https://47i14tfm5l.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
+        },
+        {
+            "name": "getListCouponsStripe",
+            "endpoint": "https://mtlqpca6hl.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
+        },
+        {
+            "name": "retrieveCouponStripe",
+            "endpoint": "https://digqqptq53.execute-api.eu-west-1.amazonaws.com/dev",
+            "region": "eu-west-1"
         }
     ],
     "aws_cognito_identity_pool_id": "eu-west-1:7601c6b6-815e-4d2e-a444-1b436a0edd76",
@@ -24,7 +54,7 @@ const awsmobile = {
     "aws_cognito_signup_attributes": [
         "EMAIL"
     ],
-    "aws_cognito_mfa_configuration": "OFF",
+    "aws_cognito_mfa_configuration": "OPTIONAL",
     "aws_cognito_mfa_types": [
         "SMS"
     ],
