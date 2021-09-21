@@ -26,7 +26,7 @@ const Profile = ({ dentist }: any) => {
   const [route, setRoute] = useState('');
   const [adminSettingSubscriber, setAdminSettingSubscriber] = useState();
   const [userName, setUserName] = useState();
-  const [changeAddress, setChangeAddress] = useState<any>(null);
+  const [changeAddress, setChangeAddress] = useState<any>();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
