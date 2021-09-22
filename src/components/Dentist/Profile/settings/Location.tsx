@@ -374,7 +374,7 @@ const Location: React.FunctionComponent<Props> = ({
                   <FormLoginInput>
                     <input
                       type='text'
-                      value={address === null ? '' : address}
+                      value={address === null || address === undefined  ? '' : address}
                     />
                   </FormLoginInput>
                 );
