@@ -1,6 +1,64 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const syncDentists = /* GraphQL */ `
+  query SyncDentists(
+    $filter: ModelDentistFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncDentists(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        firstName
+        lastName
+        phone
+        qualifications
+        bio
+        website
+        gdcNumber
+        address
+        city
+        street
+        postIndex
+        email
+        lat
+        lng
+        registered
+        isDisabled
+        customerID
+        paymentMethodID
+        subscriptionID
+        hasPaidPlan
+        services {
+          nextToken
+          startedAt
+        }
+        locations {
+          nextToken
+          startedAt
+        }
+        images {
+          nextToken
+          startedAt
+        }
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const getDentist = /* GraphQL */ `
   query GetDentist($id: ID!) {
     getDentist(id: $id) {
@@ -30,10 +88,14 @@ export const getDentist = /* GraphQL */ `
           id
           dentistId
           name
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
       locations {
         items {
@@ -42,10 +104,14 @@ export const getDentist = /* GraphQL */ `
           city
           address
           postCode
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
       images {
         items {
@@ -58,11 +124,18 @@ export const getDentist = /* GraphQL */ `
           service
           nameBefore
           nameAfter
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -99,17 +172,52 @@ export const listDentists = /* GraphQL */ `
         hasPaidPlan
         services {
           nextToken
+          startedAt
         }
         locations {
           nextToken
+          startedAt
         }
         images {
           nextToken
+          startedAt
         }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncServices = /* GraphQL */ `
+  query SyncServices(
+    $filter: ModelServiceFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncServices(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        dentistId
+        name
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -119,6 +227,9 @@ export const getService = /* GraphQL */ `
       id
       dentistId
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -135,10 +246,44 @@ export const listServices = /* GraphQL */ `
         id
         dentistId
         name
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncLocations = /* GraphQL */ `
+  query SyncLocations(
+    $filter: ModelLocationFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncLocations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        dentistId
+        city
+        address
+        postCode
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -150,6 +295,9 @@ export const getLocation = /* GraphQL */ `
       city
       address
       postCode
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -168,10 +316,41 @@ export const listLocations = /* GraphQL */ `
         city
         address
         postCode
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncServiceForDentals = /* GraphQL */ `
+  query SyncServiceForDentals(
+    $filter: ModelServiceForDentalFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncServiceForDentals(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -180,6 +359,9 @@ export const getServiceForDental = /* GraphQL */ `
     getServiceForDental(id: $id) {
       id
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -199,10 +381,41 @@ export const listServiceForDentals = /* GraphQL */ `
       items {
         id
         name
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPremiumFeatures = /* GraphQL */ `
+  query SyncPremiumFeatures(
+    $filter: ModelPremiumFeatureFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPremiumFeatures(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -211,6 +424,9 @@ export const getPremiumFeature = /* GraphQL */ `
     getPremiumFeature(id: $id) {
       id
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -226,10 +442,45 @@ export const listPremiumFeatures = /* GraphQL */ `
       items {
         id
         name
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncWatermarks = /* GraphQL */ `
+  query SyncWatermarks(
+    $filter: ModelWatermarkFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncWatermarks(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        dentistId
+        lastModifiedDate
+        name
+        size
+        type
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -242,6 +493,9 @@ export const getWatermark = /* GraphQL */ `
       name
       size
       type
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -261,10 +515,42 @@ export const listWatermarks = /* GraphQL */ `
         name
         size
         type
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPremiumInformations = /* GraphQL */ `
+  query SyncPremiumInformations(
+    $filter: ModelPremiumInformationFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPremiumInformations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        price
+        termsAndConditions
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -274,6 +560,9 @@ export const getPremiumInformation = /* GraphQL */ `
       id
       price
       termsAndConditions
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -294,10 +583,48 @@ export const listPremiumInformations = /* GraphQL */ `
         id
         price
         termsAndConditions
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncImages = /* GraphQL */ `
+  query SyncImages(
+    $filter: ModelImageFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncImages(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        dentistId
+        titleBefore
+        tagsBefore
+        titleAfter
+        tagsAfter
+        service
+        nameBefore
+        nameAfter
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -313,6 +640,9 @@ export const getImage = /* GraphQL */ `
       service
       nameBefore
       nameAfter
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -335,10 +665,50 @@ export const listImages = /* GraphQL */ `
         service
         nameBefore
         nameAfter
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncAdminSettingsSubscribers = /* GraphQL */ `
+  query SyncAdminSettingsSubscribers(
+    $filter: ModelAdminSettingsSubscriberFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncAdminSettingsSubscribers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        paidMaxLocations
+        paidMaxServices
+        paidWebsiteAddress
+        paidPhoneNumber
+        paidAppearVerified
+        freeMaxLocations
+        freeMaxServices
+        freeWebsiteAddress
+        freePhoneNumber
+        freeAppearVerified
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -356,6 +726,9 @@ export const getAdminSettingsSubscriber = /* GraphQL */ `
       freeWebsiteAddress
       freePhoneNumber
       freeAppearVerified
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -384,10 +757,42 @@ export const listAdminSettingsSubscribers = /* GraphQL */ `
         freeWebsiteAddress
         freePhoneNumber
         freeAppearVerified
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncClosedAccounts = /* GraphQL */ `
+  query SyncClosedAccounts(
+    $filter: ModelclosedAccountFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncClosedAccounts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        dentistId
+        closedAccount
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -397,6 +802,9 @@ export const getClosedAccount = /* GraphQL */ `
       id
       dentistId
       closedAccount
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -413,10 +821,42 @@ export const listClosedAccounts = /* GraphQL */ `
         id
         dentistId
         closedAccount
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncClosedSubscriptions = /* GraphQL */ `
+  query SyncClosedSubscriptions(
+    $filter: ModelclosedSubscriptionFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncClosedSubscriptions(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        dentistId
+        closedSubscription
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -426,6 +866,9 @@ export const getClosedSubscription = /* GraphQL */ `
       id
       dentistId
       closedSubscription
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -446,10 +889,14 @@ export const listClosedSubscriptions = /* GraphQL */ `
         id
         dentistId
         closedSubscription
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
     }
   }
 `;

@@ -33,10 +33,14 @@ export const createDentist = /* GraphQL */ `
           id
           dentistId
           name
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
       locations {
         items {
@@ -45,10 +49,14 @@ export const createDentist = /* GraphQL */ `
           city
           address
           postCode
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
       images {
         items {
@@ -61,11 +69,18 @@ export const createDentist = /* GraphQL */ `
           service
           nameBefore
           nameAfter
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -103,10 +118,14 @@ export const updateDentist = /* GraphQL */ `
           id
           dentistId
           name
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
       locations {
         items {
@@ -115,10 +134,14 @@ export const updateDentist = /* GraphQL */ `
           city
           address
           postCode
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
       images {
         items {
@@ -131,11 +154,18 @@ export const updateDentist = /* GraphQL */ `
           service
           nameBefore
           nameAfter
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -173,10 +203,14 @@ export const deleteDentist = /* GraphQL */ `
           id
           dentistId
           name
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
       locations {
         items {
@@ -185,10 +219,14 @@ export const deleteDentist = /* GraphQL */ `
           city
           address
           postCode
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
       images {
         items {
@@ -201,11 +239,18 @@ export const deleteDentist = /* GraphQL */ `
           service
           nameBefore
           nameAfter
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -220,6 +265,9 @@ export const createService = /* GraphQL */ `
       id
       dentistId
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -234,6 +282,9 @@ export const updateService = /* GraphQL */ `
       id
       dentistId
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -248,6 +299,9 @@ export const deleteService = /* GraphQL */ `
       id
       dentistId
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -264,6 +318,9 @@ export const createLocation = /* GraphQL */ `
       city
       address
       postCode
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -280,6 +337,9 @@ export const updateLocation = /* GraphQL */ `
       city
       address
       postCode
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -296,6 +356,9 @@ export const deleteLocation = /* GraphQL */ `
       city
       address
       postCode
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -309,6 +372,9 @@ export const createServiceForDental = /* GraphQL */ `
     createServiceForDental(input: $input, condition: $condition) {
       id
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -322,6 +388,9 @@ export const updateServiceForDental = /* GraphQL */ `
     updateServiceForDental(input: $input, condition: $condition) {
       id
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -335,6 +404,9 @@ export const deleteServiceForDental = /* GraphQL */ `
     deleteServiceForDental(input: $input, condition: $condition) {
       id
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -348,6 +420,9 @@ export const createPremiumFeature = /* GraphQL */ `
     createPremiumFeature(input: $input, condition: $condition) {
       id
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -361,6 +436,9 @@ export const updatePremiumFeature = /* GraphQL */ `
     updatePremiumFeature(input: $input, condition: $condition) {
       id
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -374,6 +452,9 @@ export const deletePremiumFeature = /* GraphQL */ `
     deletePremiumFeature(input: $input, condition: $condition) {
       id
       name
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -391,6 +472,9 @@ export const createWatermark = /* GraphQL */ `
       name
       size
       type
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -408,6 +492,9 @@ export const updateWatermark = /* GraphQL */ `
       name
       size
       type
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -425,6 +512,9 @@ export const deleteWatermark = /* GraphQL */ `
       name
       size
       type
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -439,6 +529,9 @@ export const createPremiumInformation = /* GraphQL */ `
       id
       price
       termsAndConditions
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -453,6 +546,9 @@ export const updatePremiumInformation = /* GraphQL */ `
       id
       price
       termsAndConditions
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -467,6 +563,9 @@ export const deletePremiumInformation = /* GraphQL */ `
       id
       price
       termsAndConditions
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -487,6 +586,9 @@ export const createImage = /* GraphQL */ `
       service
       nameBefore
       nameAfter
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -507,6 +609,9 @@ export const updateImage = /* GraphQL */ `
       service
       nameBefore
       nameAfter
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -527,6 +632,9 @@ export const deleteImage = /* GraphQL */ `
       service
       nameBefore
       nameAfter
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -549,6 +657,9 @@ export const createAdminSettingsSubscriber = /* GraphQL */ `
       freeWebsiteAddress
       freePhoneNumber
       freeAppearVerified
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -571,6 +682,9 @@ export const updateAdminSettingsSubscriber = /* GraphQL */ `
       freeWebsiteAddress
       freePhoneNumber
       freeAppearVerified
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -593,6 +707,9 @@ export const deleteAdminSettingsSubscriber = /* GraphQL */ `
       freeWebsiteAddress
       freePhoneNumber
       freeAppearVerified
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -607,6 +724,9 @@ export const createClosedAccount = /* GraphQL */ `
       id
       dentistId
       closedAccount
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -621,6 +741,9 @@ export const updateClosedAccount = /* GraphQL */ `
       id
       dentistId
       closedAccount
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -635,6 +758,9 @@ export const deleteClosedAccount = /* GraphQL */ `
       id
       dentistId
       closedAccount
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -649,6 +775,9 @@ export const createClosedSubscription = /* GraphQL */ `
       id
       dentistId
       closedSubscription
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -663,6 +792,9 @@ export const updateClosedSubscription = /* GraphQL */ `
       id
       dentistId
       closedSubscription
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -677,6 +809,9 @@ export const deleteClosedSubscription = /* GraphQL */ `
       id
       dentistId
       closedSubscription
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
