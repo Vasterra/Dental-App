@@ -131,7 +131,7 @@ const Location: React.FunctionComponent<Props> = ({
       setLoaderButtonSubmit(false);
       return false;
     }
-    if (currentDentist.locations.items.length >= Number(adminSettingSubscriber.paidMaxLocations)) {
+    if (currentDentist.locations.items.length >= (Number(adminSettingSubscriber.paidMaxLocations) - 1)) {
       setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.paidMaxLocations} locations.`);
       setSeverity('warning');
       setOpenSnackbar(true);
@@ -365,6 +365,23 @@ const Location: React.FunctionComponent<Props> = ({
                   value={`${changeAddress !== null ? changeAddress : currentDentist.address}`}
                 />
               </FormLoginInput>
+              {currentDentist && currentDentist.locations.items.map((el: any) => {
+                const location = `${el.address} ${el.city} ${el.postCode}`
+                const address = location === null ? '' : location
+                return (
+                  <FormLoginInput>
+                    <input
+                      type='text'
+                      value={address === null ? '' : address}
+                    />
+                    <IconUpdate src='../../../images/edit.svg' alt='edit'
+                                onClick={() => setUpdateDateLocation(el)} />
+                    <IconClose src='../../../images/close.svg' alt='close'
+                               onClick={() => handleDelete(el)} />
+                  </FormLoginInput>
+                );
+              })
+              }
             </div>
           </div>}
         </div>
