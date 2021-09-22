@@ -18,7 +18,7 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
 }
 
-const Account = ({ dentist }: any) => {
+const Account = ({ dentist, error }: any) => {
   const router = useRouter();
 
   const [currentDentist, setCurrentDentist] = useState(dentist);
@@ -77,6 +77,8 @@ const Account = ({ dentist }: any) => {
     setOpenSnackbar(false);
   };
 
+  if (error) return false;
+
   if (!currentDentist) return <WrapperFlex><CircularProgress size={120} /></WrapperFlex>;
 
   return (
@@ -130,29 +132,38 @@ const Account = ({ dentist }: any) => {
   );
 };
 
-// @ts-ignore
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const { API } = withSSRContext(context);
-  let dentistData;
+export default Account;
+
+export async function getServerSideProps({ req }: any) {
+  const { Auth, API } = withSSRContext({ req });
   try {
-    if (context.params.slug[0] === null) return;
-    dentistData = await API.graphql({
+    const dentist = await Auth.currentAuthenticatedUser();
+    const  response  = await API.graphql({
       query: getDentist,
       variables: {
-        id: context.params.slug[0]
+        id: dentist.attributes.sub
       },
       authMode: 'AWS_IAM'
     });
-  } catch (e: any) {
-    console.log(e);
-  }
-  return {
-    props: {
-      dentist: dentistData ? dentistData.data.getDentist : null
+    if (response.data.getDentist) {
+      return {
+        props: {
+          dentist: response.data.getDentist,
+          error: false,
+        },
+      };
+    } else {
+      return {
+        props: {
+          error: false,
+        },
+      };
     }
-  };
+  } catch (err) {
+    return {
+      props: {
+        error: true,
+      },
+    };
+  }
 };
-
-export default Account;
-
-

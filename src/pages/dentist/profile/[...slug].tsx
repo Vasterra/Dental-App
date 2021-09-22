@@ -9,16 +9,14 @@ import Services from 'src/components/Dentist/Profile/settings/Services';
 import DisplayPhotos from 'src/components/Dentist/Profile/settings/DisplayPhotos';
 import ApiManager from 'src/services/ApiManager';
 import { Snackbar } from '@material-ui/core';
-import { getDentist } from 'src/graphql/queries';
-import { GetServerSideProps } from 'next';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { getDentist } from '../../../graphql/queries';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
 }
 
-const Profile = ({ dentist }: any) => {
-  const router = useRouter();
+const Profile = ({ dentist, error }: any) => {
 
   const [currentDentist, setCurrentDentist] = useState<any>(dentist);
   const [currentAvatar, setCurrentAvatar] = useState('');
@@ -26,23 +24,24 @@ const Profile = ({ dentist }: any) => {
   const [route, setRoute] = useState('');
   const [adminSettingSubscriber, setAdminSettingSubscriber] = useState();
   const [userName, setUserName] = useState();
-  const [changeAddress, setChangeAddress] = useState<any>(null);
+  const [changeAddress, setChangeAddress] = useState<any>();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [messageSnackbar, setMessageSnackbar] = useState('');
   const [severity, setSeverity] = useState('');
 
   useEffect(() => {
-    if (router.query.slug !== undefined) {
-      const { slug } = router.query;
-      setRoute(slug[0]);
-      void authListener().then(() => {
-        downloadAvatar(currentDentist);
-        void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
-      });
+    void getCurrentDentist()
+    void authListener().then(() => {
+      downloadAvatar(currentDentist);
+      void getAdminSettingSubscriber().then((item: React.SetStateAction<undefined>) => setAdminSettingSubscriber(item));
+    });
+  }, []);
 
-    }
-  }, [router]);
+  const getCurrentDentist = async () => {
+    const dentist = await Auth.currentAuthenticatedUser();
+    setRoute(dentist.attributes.sub);
+  }
 
   const getAdminSettingSubscriber = () => {
     return ApiManager.GET_ADMIN_SETTINGS_SUBSCRIBER();
@@ -87,11 +86,11 @@ const Profile = ({ dentist }: any) => {
         setCurrentAvatar(signedFiles);
         downloadAvatar(currentDentist);
       })
-      .catch((_error: any) => {
-        setMessageSnackbar('The avatar was not uploaded!');
-        setSeverity('warning');
-        setOpenSnackbar(true);
-      });
+        .catch((_error: any) => {
+          setMessageSnackbar('The avatar was not uploaded!');
+          setSeverity('warning');
+          setOpenSnackbar(true);
+        });
     } catch (error: any) {
       setMessageSnackbar(`Error uploading file: ${error}`);
       setSeverity('warning');
@@ -105,6 +104,8 @@ const Profile = ({ dentist }: any) => {
     }
     setOpenSnackbar(false);
   };
+
+  if (error) return false;
 
   return (
     <>
@@ -149,28 +150,38 @@ const Profile = ({ dentist }: any) => {
   );
 };
 
-
-// @ts-ignore
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const { API } = withSSRContext(context);
-  let dentistData;
+export async function getServerSideProps({ req }: any) {
+  const { Auth, API } = withSSRContext({ req });
   try {
-    if (context.params.slug[0] === null) return;
-    dentistData = await API.graphql({
+    const dentist = await Auth.currentAuthenticatedUser();
+    const  response  = await API.graphql({
       query: getDentist,
       variables: {
-        id: context.params.slug[0]
+        id: dentist.attributes.sub
       },
       authMode: 'AWS_IAM'
     });
-  } catch (e: any) {
-    console.log(e);
-  }
-  return {
-    props: {
-      dentist: dentistData ? dentistData.data.getDentist : null
+    if (response.data.getDentist) {
+      return {
+        props: {
+          dentist: response.data.getDentist,
+          error: false,
+        },
+      };
+    } else {
+      return {
+        props: {
+          error: false,
+        },
+      };
     }
-  };
+  } catch (err) {
+    return {
+      props: {
+        error: true,
+      },
+    };
+  }
 };
 
 export default Profile;
