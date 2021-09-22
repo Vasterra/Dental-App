@@ -57,7 +57,7 @@ const Services: React.FunctionComponent<Props> = ({ saveService, services }) => 
         closeMenuOnSelect={false}
         isMulti
         options={opts}
-        defaultValue={opts[0]}
+        // defaultValue={opts[0]}
         onChange={handleChange}
       />
     </SelectBox>

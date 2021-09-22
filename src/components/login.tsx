@@ -141,7 +141,7 @@ const Login = () => {
         } else {
           await createNewDentist(user);
         }
-        setMessageSnackbar('The Login successfully!');
+        setMessageSnackbar('Login Successful');
         setSeverity('success');
         setOpenSnackbar(true);
       } catch (error: any) {
