@@ -18,7 +18,7 @@
       "function": {
         "AdminQueries414eca1d": {
           "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",
-          "s3Key": "amplify-builds/AdminQueries414eca1d-706666364d52354f5759-build.zip"
+          "s3Key": "amplify-builds/AdminQueries414eca1d-6166596165794e77324c-build.zip"
         },
         "getListCouponsStripe": {
           "deploymentBucketName": "amplify-apidentalapp-dev-185021-deployment",

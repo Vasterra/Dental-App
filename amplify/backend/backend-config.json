@@ -11,11 +11,7 @@
               "userPoolId": "authapidentalappe04d8269"
             }
           },
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AWS_IAM"
-            }
-          ]
+          "additionalAuthenticationProviders": []
         }
       }
     },
