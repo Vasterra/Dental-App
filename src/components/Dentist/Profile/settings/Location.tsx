@@ -93,8 +93,10 @@ const Location: React.FunctionComponent<Props> = ({
 
   const getDentist = async () => {
     return await ApiManager.GET_DENTIST(route).then((result: any) => {
-      setCurrentDentist(result.data.getDentist);
-      setLoaderButtonSubmit(false);
+      if (result !== undefined) {
+        setCurrentDentist(result.data.getDentist);
+        setLoaderButtonSubmit(false);
+      }
     });
   };
 
@@ -374,10 +376,6 @@ const Location: React.FunctionComponent<Props> = ({
                       type='text'
                       value={address === null ? '' : address}
                     />
-                    <IconUpdate src='../../../images/edit.svg' alt='edit'
-                                onClick={() => setUpdateDateLocation(el)} />
-                    <IconClose src='../../../images/close.svg' alt='close'
-                               onClick={() => handleDelete(el)} />
                   </FormLoginInput>
                 );
               })

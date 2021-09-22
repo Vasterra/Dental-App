@@ -8,7 +8,6 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
 import ForgotPassword from 'src/components/forgotPassword';
 import { createDentist } from 'src/graphql/mutations';
-import { listDentists } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
 import { AuthInputError, AuthInputWrapper } from '../styles/Auth.module';
 import ApiManager from 'src/services/ApiManager';
