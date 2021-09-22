@@ -8,9 +8,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
 import ForgotPassword from 'src/components/forgotPassword';
 import { createDentist } from 'src/graphql/mutations';
-import { listDentists } from 'src/graphql/queries';
 import { convertCityCoords } from 'src/utils/search/converCityCoords';
 import { AuthInputError, AuthInputWrapper } from '../styles/Auth.module';
+import ApiManager from 'src/services/ApiManager';
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
@@ -129,14 +129,12 @@ const Login = () => {
         const user = await Auth.signIn(val.email, val.password);
         setValues({ ...values, user });
 
-        const dentists: any = await API.graphql({
-          query: listDentists,
-          // @ts-ignore
-          authMode: 'AWS_IAM'
-        });
-        const dentistEmail = dentists.data.listDentists.items.find((item: { email: any; }) => item.email === user.attributes.email);
+        const dentists: any[] = await ApiManager.getListDentists()
+        ;
+        const dentistEmail = dentists.find((item: { email: any; }) => item.email === user.attributes.email);
         setValues({ ...values, loader: true });
-        if (dentists.data.listDentists.items.length !== 0) {
+        console.log(dentists);
+        if (dentists.length !== 0) {
           if (!dentistEmail) {
             await createNewDentist(user);
           }
@@ -177,7 +175,7 @@ const Login = () => {
       });
 
       const url: any = localStorage.getItem('site')
-      if (url.host === 'dev.d1x2glchgshk0s.amplifyapp.com/purchase') {
+      if (url.host === 'dev.d2qap6yh626x1j.amplifyapp.com/purchase') {
         return await Router.replace('/purchase');
       }
       await Router.replace('/');

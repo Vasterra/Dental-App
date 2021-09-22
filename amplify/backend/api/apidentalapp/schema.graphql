@@ -28,8 +28,7 @@ type Dentist
 
 type Service
 @model
-@key(name: "byDentist", fields: ["dentistId", "name"])
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+@key(name: "byDentist", fields: ["dentistId", "name"])  {
   id: ID!
   dentistId: ID!
   name: String!
@@ -37,8 +36,7 @@ type Service
 
 type Location
 @model
-@key(name: "byDentist", fields: ["dentistId", "city", "address", "postCode"])
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+@key(name: "byDentist", fields: ["dentistId", "city", "address", "postCode"])  {
   id: ID!
   dentistId: ID!
   city: String!
@@ -47,22 +45,19 @@ type Location
 }
 
 type ServiceForDental
-@model
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+@model  {
   id: ID!
   name: String!
 }
 
-type PremiumFeatures
-@model
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+type PremiumFeature
+@model {
   id: ID!
   name: String!
 }
 
 type Watermark
-@model
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+@model {
   id: ID!
   dentistId: ID!
   lastModifiedDate: String!
@@ -72,8 +67,7 @@ type Watermark
 }
 
 type PremiumInformation
-@model
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+@model  {
   id: ID!
   price: String!
   termsAndConditions: String!
@@ -81,8 +75,7 @@ type PremiumInformation
 
 type Image
 @model
-@key(name: "byDentist", fields: ["dentistId", "titleBefore", "tagsBefore", "titleAfter", "tagsAfter", "service", "nameBefore", "nameAfter"])
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+@key(name: "byDentist", fields: ["dentistId", "titleBefore", "tagsBefore", "titleAfter", "tagsAfter", "service", "nameBefore", "nameAfter"]) {
   id: ID!
   dentistId: ID!
   titleBefore: String!
@@ -111,8 +104,7 @@ type AdminSettingsSubscriber
 
 type closedAccount
 @model
-@key(name: "byDentist", fields: ["dentistId", "closedAccount"])
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+@key(name: "byDentist", fields: ["dentistId", "closedAccount"]) {
   id: ID!
   dentistId: ID!
   closedAccount: String!
@@ -120,8 +112,7 @@ type closedAccount
 
 type closedSubscription
 @model
-@key(name: "byDentist", fields: ["dentistId", "closedSubscription"])
-@auth(rules: [{ allow: owner, ownerField: "owner", operations: [create, update, delete] }]) {
+@key(name: "byDentist", fields: ["dentistId", "closedSubscription"]) {
   id: ID!
   dentistId: ID!
   closedSubscription: String!

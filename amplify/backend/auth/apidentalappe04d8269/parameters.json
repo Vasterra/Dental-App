@@ -1,5 +1,5 @@
 {
-    "identityPoolName": "apidentalappe04d8269_identitypool_e04d8269",
+    "identityPoolName": "apidentalappd90b1f92_identitypool_d90b1f92",
     "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "apidene04d8269",
     "userPoolName": "apidentalappe04d8269_userpool_e04d8269",
@@ -25,12 +25,8 @@
     ],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [
-        "email"
-    ],
-    "userpoolClientReadAttributes": [
-        "email"
-    ],
+    "userpoolClientWriteAttributes": [],
+    "userpoolClientReadAttributes": [],
     "userpoolClientLambdaRole": "apidene04d8269_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
     "sharedId": "e04d8269",
@@ -48,7 +44,7 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
+    "useDefault": "manual",
     "triggers": "{}",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
@@ -57,5 +53,10 @@
     },
     "breakCircularDependency": false,
     "permissions": [],
-    "dependsOn": []
+    "dependsOn": [],
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "hostedUI": false,
+    "authProviders": [],
+    "thirdPartyAuth": false
 }

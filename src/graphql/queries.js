@@ -206,9 +206,9 @@ export const listServiceForDentals = /* GraphQL */ `
     }
   }
 `;
-export const getPremiumFeatures = /* GraphQL */ `
-  query GetPremiumFeatures($id: ID!) {
-    getPremiumFeatures(id: $id) {
+export const getPremiumFeature = /* GraphQL */ `
+  query GetPremiumFeature($id: ID!) {
+    getPremiumFeature(id: $id) {
       id
       name
       createdAt
@@ -216,17 +216,13 @@ export const getPremiumFeatures = /* GraphQL */ `
     }
   }
 `;
-export const listPremiumFeaturess = /* GraphQL */ `
-  query ListPremiumFeaturess(
-    $filter: ModelPremiumFeaturesFilterInput
+export const listPremiumFeatures = /* GraphQL */ `
+  query ListPremiumFeatures(
+    $filter: ModelPremiumFeatureFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPremiumFeaturess(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
+    listPremiumFeatures(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         name

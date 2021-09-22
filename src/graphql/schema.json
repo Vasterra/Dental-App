@@ -263,7 +263,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "getPremiumFeatures",
+          "name" : "getPremiumFeature",
           "description" : null,
           "args" : [ {
             "name" : "id",
@@ -281,20 +281,20 @@
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "PremiumFeatures",
+            "name" : "PremiumFeature",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "listPremiumFeaturess",
+          "name" : "listPremiumFeatures",
           "description" : null,
           "args" : [ {
             "name" : "filter",
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelPremiumFeaturesFilterInput",
+              "name" : "ModelPremiumFeatureFilterInput",
               "ofType" : null
             },
             "defaultValue" : null
@@ -319,7 +319,7 @@
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "ModelPremiumFeaturesConnection",
+            "name" : "ModelPremiumFeatureConnection",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -3181,7 +3181,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "PremiumFeatures",
+        "name" : "PremiumFeature",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -3250,7 +3250,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "ModelPremiumFeaturesConnection",
+        "name" : "ModelPremiumFeatureConnection",
         "description" : null,
         "fields" : [ {
           "name" : "items",
@@ -3261,7 +3261,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
-              "name" : "PremiumFeatures",
+              "name" : "PremiumFeature",
               "ofType" : null
             }
           },
@@ -3285,7 +3285,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "ModelPremiumFeaturesFilterInput",
+        "name" : "ModelPremiumFeatureFilterInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -3314,7 +3314,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelPremiumFeaturesFilterInput",
+              "name" : "ModelPremiumFeatureFilterInput",
               "ofType" : null
             }
           },
@@ -3327,7 +3327,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelPremiumFeaturesFilterInput",
+              "name" : "ModelPremiumFeatureFilterInput",
               "ofType" : null
             }
           },
@@ -3337,7 +3337,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "ModelPremiumFeaturesFilterInput",
+            "name" : "ModelPremiumFeatureFilterInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -5050,7 +5050,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "createPremiumFeatures",
+          "name" : "createPremiumFeature",
           "description" : null,
           "args" : [ {
             "name" : "input",
@@ -5060,7 +5060,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "CreatePremiumFeaturesInput",
+                "name" : "CreatePremiumFeatureInput",
                 "ofType" : null
               }
             },
@@ -5070,20 +5070,20 @@
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelPremiumFeaturesConditionInput",
+              "name" : "ModelPremiumFeatureConditionInput",
               "ofType" : null
             },
             "defaultValue" : null
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "PremiumFeatures",
+            "name" : "PremiumFeature",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "updatePremiumFeatures",
+          "name" : "updatePremiumFeature",
           "description" : null,
           "args" : [ {
             "name" : "input",
@@ -5093,7 +5093,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "UpdatePremiumFeaturesInput",
+                "name" : "UpdatePremiumFeatureInput",
                 "ofType" : null
               }
             },
@@ -5103,20 +5103,20 @@
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelPremiumFeaturesConditionInput",
+              "name" : "ModelPremiumFeatureConditionInput",
               "ofType" : null
             },
             "defaultValue" : null
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "PremiumFeatures",
+            "name" : "PremiumFeature",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "deletePremiumFeatures",
+          "name" : "deletePremiumFeature",
           "description" : null,
           "args" : [ {
             "name" : "input",
@@ -5126,7 +5126,7 @@
               "name" : null,
               "ofType" : {
                 "kind" : "INPUT_OBJECT",
-                "name" : "DeletePremiumFeaturesInput",
+                "name" : "DeletePremiumFeatureInput",
                 "ofType" : null
               }
             },
@@ -5136,14 +5136,14 @@
             "description" : null,
             "type" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelPremiumFeaturesConditionInput",
+              "name" : "ModelPremiumFeatureConditionInput",
               "ofType" : null
             },
             "defaultValue" : null
           } ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "PremiumFeatures",
+            "name" : "PremiumFeature",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -6930,7 +6930,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "CreatePremiumFeaturesInput",
+        "name" : "CreatePremiumFeatureInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -6961,7 +6961,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "ModelPremiumFeaturesConditionInput",
+        "name" : "ModelPremiumFeatureConditionInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -6981,7 +6981,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelPremiumFeaturesConditionInput",
+              "name" : "ModelPremiumFeatureConditionInput",
               "ofType" : null
             }
           },
@@ -6994,7 +6994,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "INPUT_OBJECT",
-              "name" : "ModelPremiumFeaturesConditionInput",
+              "name" : "ModelPremiumFeatureConditionInput",
               "ofType" : null
             }
           },
@@ -7004,7 +7004,7 @@
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
-            "name" : "ModelPremiumFeaturesConditionInput",
+            "name" : "ModelPremiumFeatureConditionInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -7014,7 +7014,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "UpdatePremiumFeaturesInput",
+        "name" : "UpdatePremiumFeatureInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -7045,7 +7045,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "DeletePremiumFeaturesInput",
+        "name" : "DeletePremiumFeatureInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -8733,34 +8733,34 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "onCreatePremiumFeatures",
+          "name" : "onCreatePremiumFeature",
           "description" : null,
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "PremiumFeatures",
+            "name" : "PremiumFeature",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "onUpdatePremiumFeatures",
+          "name" : "onUpdatePremiumFeature",
           "description" : null,
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "PremiumFeatures",
+            "name" : "PremiumFeature",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "onDeletePremiumFeatures",
+          "name" : "onDeletePremiumFeature",
           "description" : null,
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "PremiumFeatures",
+            "name" : "PremiumFeature",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -9900,23 +9900,6 @@
         "onFragment" : false,
         "onField" : false
       }, {
-        "name" : "deprecated",
-        "description" : null,
-        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
-        "args" : [ {
-          "name" : "reason",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : "\"No longer supported\""
-        } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
         "name" : "aws_iam",
         "description" : "Tells the service this field/object has access authorized by sigv4 signing.",
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
@@ -9941,6 +9924,23 @@
             }
           },
           "defaultValue" : null
+        } ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "deprecated",
+        "description" : null,
+        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
+        "args" : [ {
+          "name" : "reason",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : "\"No longer supported\""
         } ],
         "onOperation" : false,
         "onFragment" : false,

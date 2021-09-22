@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/retrieveCouponStripe",
+      "lambdaFunction": "retrieveCouponStripe",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/retrieveCouponStripe"
+    }
+  ],
+  "resourceName": "retrieveCouponStripe",
+  "apiName": "retrieveCouponStripe",
+  "functionArns": [
+    {
+      "lambdaFunction": "retrieveCouponStripe"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-apidentalapp-dev-185021-authRole",
+    "unAuthRoleName": "amplify-apidentalapp-dev-185021-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "retrieveCouponStripe",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
