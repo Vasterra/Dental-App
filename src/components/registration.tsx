@@ -154,7 +154,7 @@ const Registration = ({}) => {
   return (
     <div className='main bg-singup main-box'>
       {nextStep &&
-        <ValidateCard username={values.username} onSubmit={ async ()=>{
+        <ValidateCard username={values.username.trim()} onSubmit={ async ()=>{
           try {
             await SubmitForm(values)
             onCancel()

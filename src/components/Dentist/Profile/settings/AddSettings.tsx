@@ -221,7 +221,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                              id='website'
                              value={props.values.website}
                              placeholder='dental.co.uk'
-                             disabled={!!currentDentist.hasPaidPlan}
+                             disabled={!currentDentist.hasPaidPlan}
                       />
                     </p>
                   </div>
@@ -236,7 +236,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                              id='phone'
                              value={props.values.phone}
                              placeholder='0203 123 4567'
-                             disabled={!!currentDentist.hasPaidPlan}
+                             disabled={!currentDentist.hasPaidPlan}
                       />
                     </p>
                   </div>

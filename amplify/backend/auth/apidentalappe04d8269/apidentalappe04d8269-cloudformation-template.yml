@@ -539,7 +539,7 @@ Resources:
   # Always created
     Type: AWS::Cognito::IdentityPool
     Properties:
-      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'apidentalappe04d8269_identitypool_e04d8269', !Join ['',['apidentalappe04d8269_identitypool_e04d8269', '__', !Ref env]]]
+      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'apidentalappd90b1f92_identitypool_d90b1f92', !Join ['',['apidentalappd90b1f92_identitypool_d90b1f92', '__', !Ref env]]]
       
       CognitoIdentityProviders:
         - ClientId:  !Ref UserPoolClient

@@ -340,12 +340,12 @@ export const deleteServiceForDental = /* GraphQL */ `
     }
   }
 `;
-export const createPremiumFeatures = /* GraphQL */ `
-  mutation CreatePremiumFeatures(
-    $input: CreatePremiumFeaturesInput!
-    $condition: ModelPremiumFeaturesConditionInput
+export const createPremiumFeature = /* GraphQL */ `
+  mutation CreatePremiumFeature(
+    $input: CreatePremiumFeatureInput!
+    $condition: ModelPremiumFeatureConditionInput
   ) {
-    createPremiumFeatures(input: $input, condition: $condition) {
+    createPremiumFeature(input: $input, condition: $condition) {
       id
       name
       createdAt
@@ -353,12 +353,12 @@ export const createPremiumFeatures = /* GraphQL */ `
     }
   }
 `;
-export const updatePremiumFeatures = /* GraphQL */ `
-  mutation UpdatePremiumFeatures(
-    $input: UpdatePremiumFeaturesInput!
-    $condition: ModelPremiumFeaturesConditionInput
+export const updatePremiumFeature = /* GraphQL */ `
+  mutation UpdatePremiumFeature(
+    $input: UpdatePremiumFeatureInput!
+    $condition: ModelPremiumFeatureConditionInput
   ) {
-    updatePremiumFeatures(input: $input, condition: $condition) {
+    updatePremiumFeature(input: $input, condition: $condition) {
       id
       name
       createdAt
@@ -366,12 +366,12 @@ export const updatePremiumFeatures = /* GraphQL */ `
     }
   }
 `;
-export const deletePremiumFeatures = /* GraphQL */ `
-  mutation DeletePremiumFeatures(
-    $input: DeletePremiumFeaturesInput!
-    $condition: ModelPremiumFeaturesConditionInput
+export const deletePremiumFeature = /* GraphQL */ `
+  mutation DeletePremiumFeature(
+    $input: DeletePremiumFeatureInput!
+    $condition: ModelPremiumFeatureConditionInput
   ) {
-    deletePremiumFeatures(input: $input, condition: $condition) {
+    deletePremiumFeature(input: $input, condition: $condition) {
       id
       name
       createdAt
