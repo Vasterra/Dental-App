@@ -18,12 +18,14 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   try {
     dentistsData = await API.graphql({
       query: listDentists,
+      authMode: 'AWS_IAM'
     });
 
     // var randomGeoPoints: any = generateRandomPoints({'lat':55.85, 'lng':37.71}, 2000, 40);
 
     listServiceForDentalsData = await API.graphql({
       query: listServiceForDentals,
+      authMode: 'AWS_IAM'
     });
   } catch (e: any) {
     console.log(e);
