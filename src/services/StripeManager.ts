@@ -9,19 +9,17 @@ class StripeManager {
       if (!email || !firstName) {
         throw Error('Email or username not found.');
       }
-      const apiName = 'createCustomerStripe'
-      const apiEndpoint = '/createCustomerStripe'
-
-      const myInit = {
+      const request = await fetch('https://ht9ocbnynh.execute-api.eu-west-1.amazonaws.com/dev/createCustomerStripe-dev', {
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           email,
           username: firstName,
         }),
-      };
-      return await API.post(apiName, apiEndpoint, myInit);
+      });
+      return await request.json() as IStripeSubscription;
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +65,7 @@ class StripeManager {
           messageError: 'Unable to upgrade. Please try again'
         };
       }
-      if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
+      if (subscription.status === 'requires_payment_method') {
         return {
           messageError: 'You credit card was declined. Please try again with another card.'
         };
@@ -112,16 +110,13 @@ class StripeManager {
 
   public static async listCoupons() {
       try {
-        const apiName = 'getListCoupons'
-        const apiEndpoint = '/getListCoupons'
-
-        const myInit = {
-           headers: {
-             'Content-Type': 'application/json',
-           },
-        };
-        const coupons = await API.post(apiName, apiEndpoint, myInit)
-        return coupons.coupons.data
+        const request: any = await fetch('https://ner441b3c3.execute-api.eu-west-1.amazonaws.com/dev/getListCouponsStripe-dev ', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+        });
+        return await request.json();
       } catch (error) {
         console.log(error);
       }
