@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/getListCouponsStripe",
+      "lambdaFunction": "getListCouponsStripe",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/getListCouponsStripe"
+    }
+  ],
+  "resourceName": "getListCouponsStripe",
+  "apiName": "getListCouponsStripe",
+  "functionArns": [
+    {
+      "lambdaFunction": "getListCouponsStripe"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-apidentalapp-dev-185021-authRole",
+    "unAuthRoleName": "amplify-apidentalapp-dev-185021-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "getListCouponsStripe",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
