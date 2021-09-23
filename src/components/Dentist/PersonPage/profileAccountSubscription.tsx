@@ -44,8 +44,6 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
   }) => {
   const [notFound, setNotFound] = useState(false);
 
-
-
   useEffect(() => {
     const canvas: any = document.getElementById('canvas');
     void QRCode.toCanvas(canvas, window.location.href);
@@ -65,14 +63,29 @@ const ProfileAccountSubscription: React.FunctionComponent<Props> = ({
   const filterImagesByService = (e: { target: { value: string; }; }) => {
     setImages(null);
     if (e.target.value === 'All Service') {
-      return downloadImages();
+      downloadImages();
     }else{
-      const filterImages = oldIMages.filter((slider: any)=>{
-        const target = slider[0].service as string
-        const stringToArray = target.substring(1, target.length-1).split(', ')
-        return stringToArray.includes(e.target.value)
+      let newListImages: any[] = [];
+      let filterImages: any[] = [];
+      oldIMages.forEach((slider: any) => {
+        const c: any[] = slider[0].service.replace(/[\])}[{(]/g, '').split(', ');
+        c.forEach((item: any) => {
+          if (item === e.target.value) {
+            filterImages.push(slider);
+          }
+        })
+        return filterImages;
       });
-      setImages(filterImages);
+      filterImages.forEach((arr: any) => {
+        if (arr.length !== 0) {
+          newListImages.push(arr);
+        }
+      });
+      if(!newListImages.length){
+        setNotFound(true)
+        return;
+      }
+      setImages(newListImages);
     }
   };
 
