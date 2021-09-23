@@ -225,7 +225,7 @@ const CheckoutForm = ({dentist}: any) => {
       setSeverity('success');
       setOpenSnackbar(true);
       setTimeout(() => {
-         router.push('/login');
+        router.push('/');
       }, 2000)
     } catch (err: any) {
       setMessageSnackbar('Please try again later!');
