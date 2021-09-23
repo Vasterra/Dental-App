@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "apidentalapp",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authapidentalappe04d8269",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
