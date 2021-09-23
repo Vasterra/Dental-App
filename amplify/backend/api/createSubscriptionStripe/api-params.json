@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/createSubscriptionStripe",
+      "lambdaFunction": "createSubscriptionStripe",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/createSubscriptionStripe"
+    }
+  ],
+  "resourceName": "createSubscriptionStripe",
+  "apiName": "createSubscriptionStripe",
+  "functionArns": [
+    {
+      "lambdaFunction": "createSubscriptionStripe"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-apidentalapp-dev-185021-authRole",
+    "unAuthRoleName": "amplify-apidentalapp-dev-185021-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "createSubscriptionStripe",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
