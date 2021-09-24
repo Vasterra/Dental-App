@@ -9,6 +9,7 @@ import CircularProgress, { CircularProgressProps } from '@material-ui/core/Circu
 
 import styled from 'styled-components';
 import { IconClose, IconUpdate } from '../../../../styles/Main.module';
+import ButtonUpgrade from '../../../Buttons/ButtonUpgrade';
 
 export const FormLoginInput = styled('div')`
   display: flex;
@@ -190,10 +191,7 @@ const Location: React.FunctionComponent<Props> = ({
             <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
           </div>
           {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
-            <button className='button-green-outline' onClick={() => {
-              void Router.push(`../../dentist/account/${currentDentist.id}`);
-            }}>Upgrade
-            </button>
+            <ButtonUpgrade />
           </p>}
         </div>
         <div className='box-2-box'>

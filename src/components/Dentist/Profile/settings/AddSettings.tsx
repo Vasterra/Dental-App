@@ -8,6 +8,7 @@ import { updateDentist } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
+import ButtonUpgrade from '../../../Buttons/ButtonUpgrade';
 
 const useStylesFacebook = makeStyles((theme: Theme) =>
   createStyles({
@@ -92,10 +93,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
             <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
           </div>
           {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
-            <button className='button-green-outline' onClick={() => {
-              void Router.push(`../../dentist/account/${currentDentist.id}`);
-            }}>Upgrade
-            </button>
+            <ButtonUpgrade />
           </p>}
         </div>
         {currentDentist &&

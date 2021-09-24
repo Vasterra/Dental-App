@@ -165,14 +165,14 @@ const AddWatermark: React.FunctionComponent<Props> = ({ currentDentist }) => {
           </>}
           {currentCover && <>
             <button className='button-green'
-                    onClick={() => {
-                      if (currentDentist.hasPaidPlan) {
-                        setCurrentCover(null);
-                        setWatermarkImg(null);
-                      } else {
-                        return false;
-                      }
-                    }}
+            onClick={() => {
+              if (currentDentist.hasPaidPlan) {
+                setCurrentCover(null);
+                setWatermarkImg(null);
+              } else {
+                return false;
+              }
+            }}
             >
               Clear Cover
             </button>

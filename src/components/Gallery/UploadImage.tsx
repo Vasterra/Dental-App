@@ -66,7 +66,12 @@ const UploadImage: React.FunctionComponent<Props> = ({
         return;
       }
       if (cropper.getCroppedCanvas().toBlob) {
-        cropper.getCroppedCanvas().toBlob(function(blob: any) {
+        cropper.getCroppedCanvas({
+          width: 300,
+          height: 300,
+          minWidth: 300,
+          minHeight: 300
+        }).toBlob(function(blob: any) {
           const b: any = blob;
           b.lastModifiedDate = new Date();
           b.name = nameUpdateImg ? nameUpdateImg : file[0].name;
@@ -91,6 +96,8 @@ const UploadImage: React.FunctionComponent<Props> = ({
         <Cropper
           style={{ height: 316, width: '100%' }}
           initialAspectRatio={1}
+          cropBoxResizable={false}
+          aspectRatio={1}
           preview='.img-preview'
           src={image}
           viewMode={1}
