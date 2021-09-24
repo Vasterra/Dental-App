@@ -67,10 +67,8 @@ const UploadImage: React.FunctionComponent<Props> = ({
       }
       if (cropper.getCroppedCanvas().toBlob) {
         cropper.getCroppedCanvas({
-          width: 300,
-          height: 300,
-          minWidth: 300,
-          minHeight: 300
+          width: 1024,
+          height: 1024
         }).toBlob(function(blob: any) {
           const b: any = blob;
           b.lastModifiedDate = new Date();
