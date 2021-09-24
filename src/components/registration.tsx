@@ -170,7 +170,7 @@ const Registration = ({}) => {
       {!nextStep && !values.loader &&
       <div className='form-login'>
         <p className='form-login-title green'>Sign Up</p>
-        <p className='form-login-subtitle gray'>Create An Account with FYD
+        <p className='form-login-subtitle gray'>A confirmation email has been sent to your email address with a code. Please input the code here to confirm your address.
         </p>
         {!values.user &&
         <form onSubmit={formik.handleSubmit}>
