@@ -4,6 +4,7 @@ import { createService, deleteService } from 'src/graphql/mutations';
 import ApiManager from '../../../../services/ApiManager';
 import Router from 'next/router';
 import styled from 'styled-components';
+import ButtonUpgrade from '../../../Buttons/ButtonUpgrade';
 
 export const FormLoginInput = styled('div')`
   display: flex;
@@ -145,10 +146,7 @@ const Services: React.FunctionComponent<Props> = ({
           <p className='form-login-subtitle gray px12 mb-6px'>Information For Patients</p>
         </div>
         {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
-          <button className='button-green-outline' onClick={() => {
-            void Router.push(`../../dentist/account/${currentDentist.id}`);
-          }}>Upgrade
-          </button>
+          <ButtonUpgrade />
         </p>}
       </div>
       <div className='box-2-box'>

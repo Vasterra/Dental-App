@@ -1,6 +1,7 @@
 import React from "react";
 import AddWatermark from "./AddWatermark";
 import Router from 'next/router';
+import ButtonUpgrade from '../../../Buttons/ButtonUpgrade';
 
 type Props = {
   currentDentist: any,
@@ -17,10 +18,7 @@ const DisplayPhotos: React.FunctionComponent<Props> = ({currentDentist, currentA
           <p className="form-login-subtitle gray px12 ">Information For Patients</p>
         </div>
         {currentDentist && !currentDentist.hasPaidPlan && <p className='form-login-buttons'>
-          <button className='button-green-outline' onClick={() => {
-            void Router.push(`../../dentist/account/${currentDentist.id}`);
-          }}>Upgrade
-          </button>
+          <ButtonUpgrade />
         </p>}
       </div>
       <div className="box-2-box">
