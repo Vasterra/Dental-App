@@ -87,7 +87,7 @@ const GalleryPage = ({ dentist, error }: any) => {
       setSignedInUser(true);
     } catch (e: any) {
       void await Router.push('/login');
-      }
+    }
   };
 
   const downloadWatermark = async () => {
@@ -182,7 +182,7 @@ const GalleryPage = ({ dentist, error }: any) => {
       setMessageSnackBar('Please complete all fields in order to upload!');
       setStatusSnackBar('error');
       setCheck(false)
-      return 
+      return
     }
     setCheck(target.checked);
   };
@@ -286,11 +286,11 @@ const GalleryPage = ({ dentist, error }: any) => {
           setStatusSnackBar('success');
           setOpenSnackBar(true);
         })
-        .catch((error: any) => {
-          setMessageSnackBar(error);
-          setStatusSnackBar('error');
-          setOpenSnackBar(true);
-        });
+          .catch((error: any) => {
+            setMessageSnackBar(error);
+            setStatusSnackBar('error');
+            setOpenSnackBar(true);
+          });
       } catch (error: any) {
         setMessageSnackBar(error);
         setStatusSnackBar('error');
@@ -313,11 +313,11 @@ const GalleryPage = ({ dentist, error }: any) => {
           setStatusSnackBar('success');
           setOpenSnackBar(true);
         })
-        .catch((error: any) => {
-          setMessageSnackBar(error);
-          setStatusSnackBar('error');
-          setOpenSnackBar(true);
-        });
+          .catch((error: any) => {
+            setMessageSnackBar(error);
+            setStatusSnackBar('error');
+            setOpenSnackBar(true);
+          });
       } catch (error: any) {
         setMessageSnackBar(error);
         setStatusSnackBar('error');
@@ -478,14 +478,14 @@ const GalleryPage = ({ dentist, error }: any) => {
 
   return (
     <>
-       <Snackbar 
-        open={openSnackBar} 
-        autoHideDuration={3000} 
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={3000}
         onClose={()=>{setOpenSnackBar(false)}}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert onClose={()=>{setOpenSnackBar(false)}}
-          severity={statusSnackBar as any}>
+               severity={statusSnackBar as any}>
           {messageSnackBar}
         </Alert>
       </Snackbar>
@@ -508,7 +508,7 @@ const GalleryPage = ({ dentist, error }: any) => {
                      onChange={e => searchImagesByTitle(e.target.value)}
                      placeholder='Search Images' />
               <img className='search-button' src='../../images/search.svg' alt='search' />
-              <button className='button-green centered' disabled={imagesData && imagesData.length >= 2} onClick={handlerShowUloadGallery}>Upload to gallery</button>
+              <button className='button-green centered' onClick={handlerShowUloadGallery}>Upload to gallery</button>
             </div>
           </div>}
           {showServicesPanel && oldIMages && oldIMages.length !== 0 && <div className='flex-end'>
