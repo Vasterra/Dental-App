@@ -93,8 +93,10 @@ const Location: React.FunctionComponent<Props> = ({
 
   const getDentist = async () => {
     return await ApiManager.GET_DENTIST(route).then((result: any) => {
-      setCurrentDentist(result.data.getDentist);
-      setLoaderButtonSubmit(false);
+      if (result !== undefined) {
+        setCurrentDentist(result.data.getDentist);
+        setLoaderButtonSubmit(false);
+      }
     });
   };
 
@@ -131,7 +133,7 @@ const Location: React.FunctionComponent<Props> = ({
       setLoaderButtonSubmit(false);
       return false;
     }
-    if (currentDentist.locations.items.length >= Number(adminSettingSubscriber.paidMaxLocations)) {
+    if (currentDentist.locations.items.length >= (Number(adminSettingSubscriber.paidMaxLocations) - 1)) {
       setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.paidMaxLocations} locations.`);
       setSeverity('warning');
       setOpenSnackbar(true);
@@ -333,8 +335,9 @@ const Location: React.FunctionComponent<Props> = ({
                 <p className='form-profile-label'>
                   <label className='form-profile-label'>Additional Locations</label>
                 </p>
-                {currentDentist && currentDentist.locations.items.map((el: any, key: any) => {
-                  const address = `${el.address} ${el.city} ${el.postCode}`
+                {currentDentist && currentDentist.locations.items.map((el: any) => {
+                  const location = `${el.address} ${el.city} ${el.postCode}`
+                  const address = location === null ? '' : location
                   return (
                     <FormLoginInput>
                       <input
@@ -357,13 +360,26 @@ const Location: React.FunctionComponent<Props> = ({
               <p className='form-profile-label'>
                 <label className='form-profile-label'>Locations</label>
               </p>
-                <FormLoginInput>
-                  <input
-                    type='text'
-                    disabled={!currentDentist.hasPaidPla}
-                    value={`${changeAddress !== null ? changeAddress : currentDentist.address}`}
-                  />
-                </FormLoginInput>
+              <FormLoginInput>
+                <input
+                  type='text'
+                  disabled={!currentDentist.hasPaidPlan}
+                  value={`${changeAddress !== null ? changeAddress : currentDentist.address}`}
+                />
+              </FormLoginInput>
+              {currentDentist && currentDentist.locations.items.map((el: any) => {
+                const location = `${el.address} ${el.city} ${el.postCode}`
+                const address = location === null ? '' : location
+                return (
+                  <FormLoginInput>
+                    <input
+                      type='text'
+                      value={address === null || address === undefined  ? '' : address}
+                    />
+                  </FormLoginInput>
+                );
+              })
+              }
             </div>
           </div>}
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { API, Auth } from 'aws-amplify';
 import Router from 'next/router';
@@ -101,9 +101,8 @@ const AddSettings: React.FunctionComponent<Props> = ({
         {currentDentist &&
         <Formik
           onSubmit={async (data: any) => {
-            console.log('data', data.address.length);
             setLoaderButtonSubmit(true);
-            await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${data.address.length === 0 ? 'Cambridge' : data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
+            await fetch(`https://maps.google.com/maps/api/geocode/json?sensor=false&address=${ data.address !== null ? 'Cambridge' : data.address}&key=AIzaSyDMYrZZhMGlK5PKOMQRQMVffXnUJwgyatY`)
             .then(response => response.json())
             .then(async (result) => {
               data.lng = result.results[0].geometry.location.lng;
@@ -222,7 +221,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                              id='website'
                              value={props.values.website}
                              placeholder='dental.co.uk'
-                             disabled={!!currentDentist.hasPaidPlan}
+                             disabled={!currentDentist.hasPaidPlan}
                       />
                     </p>
                   </div>
@@ -237,7 +236,7 @@ const AddSettings: React.FunctionComponent<Props> = ({
                              id='phone'
                              value={props.values.phone}
                              placeholder='0203 123 4567'
-                             disabled={!!currentDentist.hasPaidPlan}
+                             disabled={!currentDentist.hasPaidPlan}
                       />
                     </p>
                   </div>

@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import { Alert } from '@material-ui/lab';
 import { AuthInputError, AuthInputWrapper } from 'src/styles/Auth.module';
 import ValidateCard from './checkCard';
+import { v4 as uuidv4 } from 'uuid';
 
 interface State {
   username: string;
@@ -42,6 +43,7 @@ const Registration = ({}) => {
   const [messageSnackbar, setMessageSnackbar] = useState('');
   const [severity, setSeverity] = useState('');
   const [nextStep, setNextStep] = useState(false);
+  const [uniqUuid, setUniqUuid] = useState(uuidv4());
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -90,7 +92,7 @@ const Registration = ({}) => {
   const SubmitForm = async (values: any)=>{
     try {
       const { user }: any = await Auth.signUp({
-        username: values.username,
+        username: uniqUuid,
         password: values.password,
         attributes: {
           email: values.email,
@@ -132,7 +134,7 @@ const Registration = ({}) => {
     try {
       setValues({ ...values, user: null });
       setValues({ ...values, loader: true });
-      await Auth.confirmSignUp(values.email, values.code);
+      await Auth.confirmSignUp(uniqUuid, values.code);
       setMessageSnackbar('The Register successfully!');
       setSeverity('success');
       setOpenSnackbar(true);
@@ -151,8 +153,8 @@ const Registration = ({}) => {
 
   return (
     <div className='main bg-singup main-box'>
-      {nextStep && 
-        <ValidateCard username={values.username} onSubmit={ async ()=>{ 
+      {nextStep &&
+        <ValidateCard username={values.username.trim()} onSubmit={ async ()=>{
           try {
             await SubmitForm(values)
             onCancel()
@@ -161,11 +163,12 @@ const Registration = ({}) => {
             setSeverity('warning');
             setOpenSnackbar(true);
             // onCancel()
-          } 
-        }} 
+          }
+        }}
         onCancel={onCancel}/>
       }
-      {!nextStep && !values.loader && <div className='form-login'>
+      {!nextStep && !values.loader &&
+      <div className='form-login'>
         <p className='form-login-title green'>Sign Up</p>
         <p className='form-login-subtitle gray'>Create An Account with FYD
         </p>

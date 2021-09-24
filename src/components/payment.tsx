@@ -13,6 +13,15 @@ import ErrorRoundedIcon from '@material-ui/icons/ErrorRounded';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ApiManager from '../services/ApiManager';
 import StripeManager from '../services/StripeManager';
+import { updateDentist } from '../graphql/mutations';
+import { API } from 'aws-amplify';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { Snackbar } from '@material-ui/core';
+import { useRouter } from 'next/router';
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -137,6 +146,10 @@ const CheckoutForm = ({dentist}: any) => {
     phone: dentist.phone,
     qualifications: dentist.qualifications
   }
+  const router = useRouter();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState('');
+  const [severity, setSeverity] = useState('');
 
   useEffect(() => {
     if (document.referrer) {
@@ -169,14 +182,14 @@ const CheckoutForm = ({dentist}: any) => {
     if (cardComplete) {
       setProcessing(true);
     }
-    console.log(elements.getElement(CardElement));
+
     const payload: any = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(CardElement) as any,
       billing_details: billingDetails
     });
 
-    console.log('payload', payload);
+
     if (error || !payload.paymentMethod) {
       console.log(error?.message || 'Something is not right...');
     }
@@ -184,27 +197,41 @@ const CheckoutForm = ({dentist}: any) => {
     const customer = await StripeManager.getStripeCustomerID(dentist);
 
     if (!customer) {
-      throw Error('Could not identify customer');
+      console.log('Could not identify customer');
     }
     const subscription: any = await StripeManager.createSubscription(customer.id, payload.paymentMethod.id, premiumInformation && Number(Math.ceil(premiumInformation.price)));
-    console.log('subscription', subscription);
-    // try {s
-    //   await API.graphql({
-    //     query: updateDentist,
-    //     variables: {
-    //       input: {
-    //         ...initialValues,
-    //         customerID: customer.id,
-    //         paymentMethodID: paymentMethodID,
-    //         hasPaidPlan: hasPaidPlan,
-    //         subscriptionID: subscription.id,
-    //       }
-    //     },
-    //     // @ts-ignore
-    //     authMode: 'AWS_IAM'
-    //   })
-    // } catch (err: any) {
-    // }
+
+    if (!subscription.subscription.id) {
+      setMessageSnackbar('Please try again later!');
+      setSeverity('warning');
+      setOpenSnackbar(true);
+    }
+    try {
+      await API.graphql({
+        query: updateDentist,
+        variables: {
+          input: {
+            ...initialValues,
+            customerID: customer.id,
+            paymentMethodID: payload.paymentMethod,
+            hasPaidPlan: true,
+            subscriptionID: subscription.id,
+          }
+        },
+        // @ts-ignore
+        authMode: 'AWS_IAM'
+      })
+      setMessageSnackbar('The payment was successful!');
+      setSeverity('success');
+      setOpenSnackbar(true);
+      setTimeout(() => {
+        router.push('/');
+      }, 2000)
+    } catch (err: any) {
+      setMessageSnackbar('Please try again later!');
+      setSeverity('warning');
+      setOpenSnackbar(true);
+    }
 
     setProcessing(false);
 
@@ -278,11 +305,11 @@ const CheckoutForm = ({dentist}: any) => {
     }
     proccessCheckingCupon(true)
 
-    const {coupons}  = await StripeManager.listCoupons();
+    const coupons = await StripeManager.listCoupons();
     let calculationPrice = null;
 
     if (coupons !== undefined) {
-      coupons.data.forEach((item: any) => {
+      coupons.coupons.data.forEach((item: any) => {
         if (item.name === couponValue) {
           setTimeout(() => {
             calculationPrice = (premiumInformation.price * item.percent_off) / 100
@@ -317,6 +344,13 @@ const CheckoutForm = ({dentist}: any) => {
       setCuponStatus(null)
     }
   }
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   return paymentMethod ? (
     <div className="Result">
@@ -399,8 +433,15 @@ const CheckoutForm = ({dentist}: any) => {
           </button>
         }
       </div>
-
+      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar}
+          // @ts-ignore
+               severity={severity}>
+          {messageSnackbar}
+        </Alert>
+      </Snackbar>
     </form>
+
   );
 };
 

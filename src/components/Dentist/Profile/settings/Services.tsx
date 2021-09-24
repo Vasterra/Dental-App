@@ -80,15 +80,15 @@ const Services: React.FunctionComponent<Props> = ({
       });
     }
     if (!currentDentist.hasPaidPlan) {
-      if (currentDentist.services.items.length >= Number(adminSettingSubscriber.freeMaxServices)) {
-        setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxServices} services.`);
+      if (currentDentist.services.items.length >= Number(adminSettingSubscriber.freeMaxServices && adminSettingSubscriber.freeMaxServices)) {
+        setMessageSnackbar(`A free account allows no more than ${adminSettingSubscriber.freeMaxServices && adminSettingSubscriber.freeMaxServices} services.`);
         setSeverity('warning');
         setOpenSnackbar(true);
         return false;
       }
     } else {
-      if ( currentDentist.services.items.length >= Number(adminSettingSubscriber.paidMaxServices)) {
-        setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.paidMaxServices} services.`);
+      if ( currentDentist.services.items.length >= Number(adminSettingSubscriber.paidMaxServices && adminSettingSubscriber.paidMaxServices)) {
+        setMessageSnackbar(`A paid account allows no more than ${adminSettingSubscriber.paidMaxServices && adminSettingSubscriber.paidMaxServices} services.`);
         setSeverity('warning');
         setOpenSnackbar(true);
         return false;
@@ -180,7 +180,7 @@ const Services: React.FunctionComponent<Props> = ({
               <label className='form-profile-label'>Selected Services</label>
             </p>
             {currentDentist && adminSettingSubscriber && currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
-              if (key < Number(adminSettingSubscriber.freeMaxServices)) {
+              if (key < Number(adminSettingSubscriber.freeMaxServices && adminSettingSubscriber.freeMaxServices)) {
                 return (
                   <FormLoginInput key={key}>
                     <input type='text' value={el.name} />
@@ -198,7 +198,7 @@ const Services: React.FunctionComponent<Props> = ({
               <label className='form-profile-label'>Additional Services</label>
             </p>
             {currentDentist && currentDentist.hasPaidPlan && currentDentist.services.items.map((el: { name: any; id: any; }, key: any) => {
-              if (key < Number(adminSettingSubscriber.paidMaxServices)) {
+              if (key < Number(adminSettingSubscriber.paidMaxServices && adminSettingSubscriber.paidMaxServices)) {
                 return (
                   <FormLoginInput key={key}>
                     <input type='text' value={el.name} />
